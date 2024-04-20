@@ -1,0 +1,684 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/config.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/food-journal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FoodJournal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "header",
+              "type": {
+                "text": "string"
+              },
+              "default": "'My app'"
+            },
+            {
+              "kind": "field",
+              "name": "view",
+              "type": {
+                "text": "ActionView"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_activeView"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FoodJournal",
+          "declaration": {
+            "name": "FoodJournal",
+            "module": "src/food-journal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "stories/food-journal.stories.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "App"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "stories/food-journal.stories.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "App",
+          "declaration": {
+            "name": "App",
+            "module": "stories/food-journal.stories.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/food-journal.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "FoodJournal",
+          "default": "class FoodJournal extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.header = 'My app';\n        this.view = ActionView.LIST;\n    }\n    /*\n    static styles = css`\n      :host {\n        min-height: 100vh;\n        display: flex;\n        flex-direction: column;\n        align-items: center;\n        justify-content: flex-start;\n        font-size: calc(10px + 2vmin);\n        color: #1a2b42;\n        max-width: 960px;\n        margin: 0 auto;\n        text-align: center;\n        background-color: var(--food-journal-background-color);\n      }\n  \n      main {\n        flex-grow: 1;\n      }\n    `;\n  */\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            const event = e;\n            this.view = event.detail;\n        });\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FoodJournal",
+          "declaration": {
+            "name": "FoodJournal",
+            "module": "out-tsc/src/food-journal.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/stories/food-journal.stories.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "App"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "out-tsc/stories/food-journal.stories.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "App",
+          "declaration": {
+            "name": "App",
+            "module": "out-tsc/stories/food-journal.stories.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_handleClick",
+              "privacy": "private",
+              "default": "(e: CustomEvent): void => {\n    this.dispatchEvent(\n      new CustomEvent('action-button-clicked', {\n        bubbles: true,\n        composed: true,\n      })\n    );\n  }"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionButton",
+          "declaration": {
+            "name": "ActionButton",
+            "module": "src/components/action-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-form.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionForm",
+          "members": [
+            {
+              "kind": "field",
+              "name": "action",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "method",
+              "name": "_saveAction",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionForm",
+          "declaration": {
+            "name": "ActionForm",
+            "module": "src/components/action-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-input.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_value",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputField",
+              "type": {
+                "text": "HTMLInputElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_handleChange",
+              "privacy": "private",
+              "default": "(e: CustomEvent): boolean => {\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    this.dispatchEvent(\n      new CustomEvent('action-input-changed', {\n        bubbles: true,\n        composed: true,\n        detail: {\n          value,\n        },\n      })\n    );\n    if (e.target instanceof HTMLInputElement) {\n      e.target.value = this._value;\n    }\n    e.preventDefault();\n    return false;\n  }"
+            },
+            {
+              "kind": "field",
+              "name": "_handleKeyDown",
+              "privacy": "private",
+              "default": "(e: Event): boolean => {\n    if (!(e.target instanceof HTMLInputElement)) {\n      return false;\n    }\n    console.log('keyDown', e.target.value);\n    //e.preventDefault();\n    return true;\n  }"
+            },
+            {
+              "kind": "field",
+              "name": "_handleInput",
+              "privacy": "private",
+              "default": "(e: Event): boolean => {\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    console.log('handleInput', value);\n    return true;\n  }"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionInput",
+          "declaration": {
+            "name": "ActionInput",
+            "module": "src/components/action-input.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-list-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionListItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "desc",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "time",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "readableTime"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionListItem",
+          "declaration": {
+            "name": "ActionListItem",
+            "module": "src/components/action-list-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionList",
+          "members": [
+            {
+              "kind": "field",
+              "name": "items",
+              "type": {
+                "text": "ActionItem[]"
+              },
+              "default": "[]"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionList",
+          "declaration": {
+            "name": "ActionList",
+            "module": "src/components/action-list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-nav.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionNav",
+          "members": [
+            {
+              "kind": "field",
+              "name": "active",
+              "type": {
+                "text": "ActionView"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_setActiveView",
+              "parameters": [
+                {
+                  "name": "view",
+                  "type": {
+                    "text": "ActionView"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "view-changed",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionNav",
+          "declaration": {
+            "name": "ActionNav",
+            "module": "src/components/action-nav.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/models/Action.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/models/Config.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "config",
+          "type": {
+            "text": "Config"
+          },
+          "default": "{\n  apiUrl: 'https://sikosoft.azurewebsites.net/api/action',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "config",
+          "declaration": {
+            "name": "config",
+            "module": "src/models/Config.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/theme.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "theme",
+          "default": "css`\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n    overflow: hidden;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "theme",
+          "declaration": {
+            "name": "theme",
+            "module": "src/styles/theme.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-button.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionButton",
+          "default": "class ActionButton extends LitElement {\n    constructor() {\n        super(...arguments);\n        this._handleClick = (e) => {\n            this.dispatchEvent(new CustomEvent('action-button-clicked', {\n                bubbles: true,\n                composed: true,\n            }));\n        };\n    }\n    render() {\n        return html ` <button @click=${this._handleClick}>Add</button> `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionButton",
+          "declaration": {
+            "name": "ActionButton",
+            "module": "out-tsc/src/components/action-button.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-form.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionForm",
+          "default": "class ActionForm extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.action = '';\n    }\n    async _saveAction() {\n        console.log('saveAction', this.action);\n        const response = await fetch(config.apiUrl, {\n            method: 'POST',\n            body: JSON.stringify({ type: 'food', desc: this.action }),\n        });\n        this.action = '';\n    }\n    _handleChange(e) {\n        this.action = e.detail.value;\n    }\n    _handleClick(e) {\n        this._saveAction();\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <action-input\n            @action-input-changed=${this._handleChange}\n            value=${this.action}\n          ></action-input>\n        </div>\n        <div>\n          <action-button @click=${this._handleClick}></action-button>\n        </div>\n      </form>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionForm",
+          "declaration": {
+            "name": "ActionForm",
+            "module": "out-tsc/src/components/action-form.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-input.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionInput",
+          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.value = '';\n        this._value = this.value;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return false;\n            }\n            console.log('keyDown', e.target.value);\n            //e.preventDefault();\n            return true;\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            console.log('handleInput', value);\n            return true;\n        };\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    render() {\n        return html `\n      <input\n        id=\"input-field\"\n        type=\"text\"\n        value=${this.value}\n        @change=${this._handleChange}\n        @keydown=${this._handleKeyDown}\n        @input=${this._handleInput}\n      />\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionInput",
+          "declaration": {
+            "name": "ActionInput",
+            "module": "out-tsc/src/components/action-input.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-list-item.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionListItem",
+          "default": "class ActionListItem extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.desc = '';\n        this.time = 0;\n    }\n    get readableTime() {\n        const date = new Date(this.time * 1000);\n        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate() + 1).padStart(2, '0')} @ ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;\n    }\n    render() {\n        return html `\n      <div class=\"action-list-item\">\n        <div class=\"desc\">${this.desc}</div>\n        <div class=\"time\">${this.readableTime}</div>\n      </div>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionListItem",
+          "declaration": {
+            "name": "ActionListItem",
+            "module": "out-tsc/src/components/action-list-item.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-list.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionList",
+          "default": "class ActionList extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.items = [];\n    }\n    async connectedCallback() {\n        super.connectedCallback();\n        let json;\n        try {\n            const response = await fetch(config.apiUrl);\n            json = await response.json();\n            if (json.actions) {\n                this.items = json.actions;\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n    }\n    render() {\n        return html `\n      <div class=\"box\">\n        ${this.items.map(item => html `\n              <action-list-item\n                id=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                time=${item.time}\n              ></action-list-item>\n            `)}\n      </div>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionList",
+          "declaration": {
+            "name": "ActionList",
+            "module": "out-tsc/src/components/action-list.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-nav.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionNav",
+          "default": "class ActionNav extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.active = ActionView.INPUT;\n    }\n    _setActiveView(view) {\n        this.dispatchEvent(new CustomEvent('view-changed', {\n            bubbles: true,\n            composed: true,\n            detail: view,\n        }));\n    }\n    render() {\n        return html `\n      <nav class=\"box\">\n        ${views.map(view => html `<span\n              @click=\"${() => {\n            this._setActiveView(view.id);\n        }}\"\n              class=${this.active === view.id ? 'active' : ''}\n              >${view.label}</span\n            >`)}\n      </nav>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionNav",
+          "declaration": {
+            "name": "ActionNav",
+            "module": "out-tsc/src/components/action-nav.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/models/Action.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionView"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionView",
+          "declaration": {
+            "name": "ActionView",
+            "module": "out-tsc/src/models/Action.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/models/Config.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "config",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n    apiUrl: 'https://sikosoft.azurewebsites.net/api/action',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "config",
+          "declaration": {
+            "name": "config",
+            "module": "out-tsc/src/models/Config.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/styles/theme.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "theme",
+          "default": "css `\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n    overflow: hidden;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "theme",
+          "declaration": {
+            "name": "theme",
+            "module": "out-tsc/src/styles/theme.js"
+          }
+        }
+      ]
+    }
+  ]
+}
