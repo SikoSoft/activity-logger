@@ -16,6 +16,10 @@ export class ActionNav extends LitElement {
   static styles = [
     theme,
     css`
+      .box {
+        overflow: hidden;
+      }
+
       nav span {
         display: inline-block;
         height: 32px;
