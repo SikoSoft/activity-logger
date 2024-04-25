@@ -16,6 +16,5 @@ export const theme = css`
     background-color: #fff;
     border-radius: 8px;
     border: 1px #aaa solid;
-    overflow: hidden;
   }
 `;

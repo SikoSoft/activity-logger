@@ -1,13 +1,24 @@
-import { LitElement, html, css, PropertyValueMap } from 'lit';
+import { LitElement, html, PropertyValueMap, nothing } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
+
+import './action-input-auto';
 
 @customElement('action-input')
 export class ActionInput extends LitElement {
   static styles = [theme];
+
   @property() value: string = '';
+  @property({ type: Boolean }) autoComplete: boolean = true;
   @state() _value: string = this.value;
   @query('#input-field') inputField!: HTMLInputElement;
+  @query('action-input-auto') autoCompleteNode!: HTMLElement;
+
+  @state() hasFocus: boolean = false;
+  @state()
+  get showAutoComplete(): boolean {
+    return this.autoComplete && this.hasFocus && this._value.length > 0;
+  }
 
   updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
@@ -19,7 +30,6 @@ export class ActionInput extends LitElement {
   }
 
   private _handleChange = (e: Event): boolean => {
-    console.log('_handleChange', e);
     let value = '';
     if (e.target instanceof HTMLInputElement) {
       value = e.target.value;
@@ -41,23 +51,37 @@ export class ActionInput extends LitElement {
     return false;
   };
 
-  private _handleKeyDown = (e: KeyboardEvent): boolean => {
+  private _handleKeyDown = (e: KeyboardEvent): void => {
     if (!(e.target instanceof HTMLInputElement)) {
-      return false;
+      return;
     }
-    console.log('keyDown', e);
-    if (e.code === 'Enter') {
-      console.log('in here for keydown');
-      const changeEvent = new CustomEvent('action-input-submitted', {
-        bubbles: true,
-        composed: true,
-      });
-      this.inputField.dispatchEvent(changeEvent);
+    switch (e.code) {
+      case 'ArrowUp':
+        this._sendSuggestionUpEvent();
+        e.preventDefault();
+        return;
+      case 'ArrowDown':
+        this._sendSuggestionDownEvent();
+        e.preventDefault();
+        return;
+      case 'Enter':
+        this._sendSuggestionSelectEvent();
+        e.preventDefault();
+        return;
     }
-    //e.preventDefault();
-    return true;
   };
 
+  private _sendSuggestionUpEvent() {
+    this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));
+  }
+
+  private _sendSuggestionDownEvent() {
+    this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));
+  }
+
+  private _sendSuggestionSelectEvent() {
+    this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));
+  }
   private _handleInput = (e: Event): boolean => {
     let value = '';
     if (e.target instanceof HTMLInputElement) {
@@ -67,16 +91,44 @@ export class ActionInput extends LitElement {
     return true;
   };
 
+  private _handleFocus = (e: Event): void => {
+    this.hasFocus = true;
+  };
+
+  private _handleBlur = (e: Event): void => {
+    setTimeout(() => {
+      this.hasFocus = false;
+    }, 200);
+  };
+
+  private _suggestionSelectHandler = (e: CustomEvent): void => {
+    this.inputField.value = e.detail;
+    this.inputField.blur();
+  };
+
   render() {
     return html`
-      <input
-        id="input-field"
-        type="text"
-        value=${this.value}
-        @change=${this._handleChange}
-        @keydown=${this._handleKeyDown}
-        @input=${this._handleInput}
-      />
+      <span>
+        <input
+          id="input-field"
+          type="text"
+          value=${this.value}
+          @change=${this._handleChange}
+          @keydown=${this._handleKeyDown}
+          @input=${this._handleInput}
+          @focus=${this._handleFocus}
+          @blur=${this._handleBlur}
+          autocomplete="off"
+        />
+        ${this.showAutoComplete
+          ? html`
+              <action-input-auto
+                input=${this._value}
+                @suggestion-selected=${this._suggestionSelectHandler}
+              ></action-input-auto>
+            `
+          : nothing}
+      </span>
     `;
   }
 }

@@ -1,5 +1,6 @@
-import { LitElement, html, css } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
+import { html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
+import { config } from './models/Config';
 
 import './components/action-nav';
 import './components/action-form';
@@ -7,14 +8,20 @@ import './components/action-list';
 import { ActionView } from './models/Action';
 import { theme } from './styles/theme';
 
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from './state';
+
 export interface ViewChangedEvent extends Event {
   detail: ActionView;
 }
 
 @customElement('food-journal')
-export class FoodJournal extends LitElement {
+export class FoodJournal extends MobxLitElement {
+  private state = appState;
+
   static styles = [theme];
-  @property({ type: String }) header = 'My app';
+
+  header = 'My app';
   @state() view: ActionView = ActionView.INPUT;
 
   connectedCallback(): void {
@@ -23,6 +30,18 @@ export class FoodJournal extends LitElement {
       const event = e as ViewChangedEvent;
       this.view = event.detail;
     });
+
+    this._getSuggestions();
+  }
+
+  private async _getSuggestions() {
+    try {
+      const res = await fetch(`${config.apiUrl}actionSuggestion`);
+      const json = (await res.json()) as { suggestions: string[] };
+      this.state.setAutoSuggestions(json.suggestions);
+    } catch (error) {
+      console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
+    }
   }
 
   _activeView() {

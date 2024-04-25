@@ -25,7 +25,7 @@ export default {
       serviceWorkerPath: 'dist/sw.js',
     }),
     /** Resolve bare module imports */
-    nodeResolve(),
+    nodeResolve({ jsnext: true }),
     /** Minify JS, compile JS to a lower language target */
     esbuild({
       minify: true,
@@ -35,6 +35,7 @@ export default {
     importMetaAssets(),
     /** Minify html and css tagged template literals */
     babel({
+      exclude: 'node_modules/**',
       plugins: [
         [
           require.resolve('babel-plugin-template-html-minifier'),

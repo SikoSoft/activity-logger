@@ -1,11 +1,13 @@
-import { LitElement, html, css } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
+import { LitElement, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { ActionItem } from '../models/Action';
 
 import './action-list-item';
 import { config } from '../models/Config';
 import { theme } from '../styles/theme';
+
+const apiUrl = `${config.apiUrl}action`;
 
 @customElement('action-list')
 export class ActionList extends LitElement {
@@ -16,7 +18,7 @@ export class ActionList extends LitElement {
     super.connectedCallback();
     let json: { actions: ActionItem[] };
     try {
-      const response = await fetch(config.apiUrl);
+      const response = await fetch(apiUrl);
       json = await response.json();
       if (json.actions) {
         this.items = json.actions;

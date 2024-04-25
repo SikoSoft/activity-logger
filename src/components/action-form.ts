@@ -35,7 +35,9 @@ export class ActionForm extends LitElement {
   }
 
   get apiUrl(): string {
-    return this.actionId ? `${config.apiUrl}/${this.actionId}` : config.apiUrl;
+    return this.actionId
+      ? `${config.apiUrl}action/${this.actionId}`
+      : `${config.apiUrl}action`;
   }
 
   private async _saveAction() {

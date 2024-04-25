@@ -3,5 +3,5 @@ export interface Config {
 }
 
 export const config: Config = {
-  apiUrl: 'https://sikosoft.azurewebsites.net/api/action',
+  apiUrl: process.env.API_URL || '',
 };

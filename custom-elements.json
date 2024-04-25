@@ -10,53 +10,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/food-journal.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FoodJournal",
-          "members": [
-            {
-              "kind": "field",
-              "name": "header",
-              "type": {
-                "text": "string"
-              },
-              "default": "'My app'"
-            },
-            {
-              "kind": "field",
-              "name": "view",
-              "type": {
-                "text": "ActionView"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_activeView"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FoodJournal",
-          "declaration": {
-            "name": "FoodJournal",
-            "module": "src/food-journal.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "stories/food-journal.stories.ts",
       "declarations": [
         {
@@ -84,12 +37,162 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/appContext.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "appContext"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "appContext",
+          "declaration": {
+            "name": "appContext",
+            "module": "src/appContext.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/food-journal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FoodJournal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "state",
+              "privacy": "private",
+              "default": "appState"
+            },
+            {
+              "kind": "field",
+              "name": "header",
+              "type": {
+                "text": "string"
+              },
+              "default": "'My app'"
+            },
+            {
+              "kind": "field",
+              "name": "view",
+              "type": {
+                "text": "ActionView"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_activeView"
+            }
+          ],
+          "superclass": {
+            "name": "MobxLitElement",
+            "package": "@adobe/lit-mobx"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FoodJournal",
+          "declaration": {
+            "name": "FoodJournal",
+            "module": "src/food-journal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/state.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AppState",
+          "members": [
+            {
+              "kind": "field",
+              "name": "autoSuggestions",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "public",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "setAutoSuggestions",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "suggestions",
+                  "type": {
+                    "text": "string[]"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "appState",
+          "default": "new AppState()"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AppState",
+          "declaration": {
+            "name": "AppState",
+            "module": "src/state.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "appState",
+          "declaration": {
+            "name": "appState",
+            "module": "src/state.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/appContext.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "appContext"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "appContext",
+          "declaration": {
+            "name": "appContext",
+            "module": "out-tsc/src/appContext.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "out-tsc/src/food-journal.js",
       "declarations": [
         {
           "kind": "variable",
           "name": "FoodJournal",
-          "default": "class FoodJournal extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.header = 'My app';\n        this.view = ActionView.LIST;\n    }\n    /*\n    static styles = css`\n      :host {\n        min-height: 100vh;\n        display: flex;\n        flex-direction: column;\n        align-items: center;\n        justify-content: flex-start;\n        font-size: calc(10px + 2vmin);\n        color: #1a2b42;\n        max-width: 960px;\n        margin: 0 auto;\n        text-align: center;\n        background-color: var(--food-journal-background-color);\n      }\n  \n      main {\n        flex-grow: 1;\n      }\n    `;\n  */\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            const event = e;\n            this.view = event.detail;\n        });\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n    `;\n    }\n}"
+          "default": "class FoodJournal extends MobxLitElement {\n    state = appState;\n    static styles = [theme];\n    //@provide({ context: appContext })\n    //@property({ type: String })\n    header = 'My app';\n    view = ActionView.INPUT;\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            const event = e;\n            this.view = event.detail;\n        });\n        this.state.setAutoSuggestions(['abc', 'test', 'shit']);\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -99,6 +202,59 @@
           "declaration": {
             "name": "FoodJournal",
             "module": "out-tsc/src/food-journal.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/state.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AppState",
+          "members": [
+            {
+              "kind": "field",
+              "name": "autoSuggestions",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "setAutoSuggestions",
+              "parameters": [
+                {
+                  "name": "suggestions"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "appState",
+          "default": "new AppState()"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AppState",
+          "declaration": {
+            "name": "AppState",
+            "module": "out-tsc/src/state.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "appState",
+          "declaration": {
+            "name": "appState",
+            "module": "out-tsc/src/state.js"
           }
         }
       ]
@@ -141,6 +297,14 @@
           "members": [
             {
               "kind": "field",
+              "name": "text",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
               "name": "_handleClick",
               "privacy": "private",
               "default": "(e: CustomEvent): void => {\n    this.dispatchEvent(\n      new CustomEvent('action-button-clicked', {\n        bubbles: true,\n        composed: true,\n      })\n    );\n  }"
@@ -175,15 +339,66 @@
           "members": [
             {
               "kind": "field",
-              "name": "action",
+              "name": "actionId",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "type",
               "type": {
                 "text": "string"
               },
               "default": "''"
             },
             {
+              "kind": "field",
+              "name": "desc",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "time",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "action",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "initialDesc",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "apiUrl",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
               "kind": "method",
               "name": "_saveAction",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_deleteAction",
               "privacy": "private"
             },
             {
@@ -201,7 +416,7 @@
             },
             {
               "kind": "method",
-              "name": "_handleClick",
+              "name": "_handleSaveClick",
               "privacy": "private",
               "parameters": [
                 {
@@ -211,6 +426,39 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleDeleteClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "action-item-updated",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "action-item-canceled",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "action-item-deleted",
+              "type": {
+                "text": "CustomEvent"
+              }
             }
           ],
           "superclass": {
@@ -227,6 +475,54 @@
           "declaration": {
             "name": "ActionForm",
             "module": "src/components/action-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/action-input-auto.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionInputAuto",
+          "members": [
+            {
+              "kind": "field",
+              "name": "state",
+              "privacy": "private",
+              "default": "appState"
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "suggestions",
+              "type": {
+                "text": "string[]"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "MobxLitElement",
+            "package": "@adobe/lit-mobx"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionInputAuto",
+          "declaration": {
+            "name": "ActionInputAuto",
+            "module": "src/components/action-input-auto.ts"
           }
         }
       ]
@@ -250,6 +546,14 @@
             },
             {
               "kind": "field",
+              "name": "autoComplete",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "_value",
               "type": {
                 "text": "string"
@@ -266,19 +570,19 @@
               "kind": "field",
               "name": "_handleChange",
               "privacy": "private",
-              "default": "(e: CustomEvent): boolean => {\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    this.dispatchEvent(\n      new CustomEvent('action-input-changed', {\n        bubbles: true,\n        composed: true,\n        detail: {\n          value,\n        },\n      })\n    );\n    if (e.target instanceof HTMLInputElement) {\n      e.target.value = this._value;\n    }\n    e.preventDefault();\n    return false;\n  }"
+              "default": "(e: Event): boolean => {\n    console.log('_handleChange', e);\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    this.dispatchEvent(\n      new CustomEvent('action-input-changed', {\n        bubbles: true,\n        composed: true,\n        detail: {\n          value,\n        },\n      })\n    );\n    if (e.target instanceof HTMLInputElement) {\n      e.target.value = this._value;\n    }\n    e.preventDefault();\n    return false;\n  }"
             },
             {
               "kind": "field",
               "name": "_handleKeyDown",
               "privacy": "private",
-              "default": "(e: Event): boolean => {\n    if (!(e.target instanceof HTMLInputElement)) {\n      return false;\n    }\n    console.log('keyDown', e.target.value);\n    //e.preventDefault();\n    return true;\n  }"
+              "default": "(e: KeyboardEvent): boolean => {\n    if (!(e.target instanceof HTMLInputElement)) {\n      return false;\n    }\n    console.log('keyDown', e);\n    if (e.code === 'Enter') {\n      console.log('in here for keydown');\n      const changeEvent = new CustomEvent('action-input-submitted', {\n        bubbles: true,\n        composed: true,\n      });\n      this.inputField.dispatchEvent(changeEvent);\n    }\n    //e.preventDefault();\n    return true;\n  }"
             },
             {
               "kind": "field",
               "name": "_handleInput",
               "privacy": "private",
-              "default": "(e: Event): boolean => {\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    console.log('handleInput', value);\n    return true;\n  }"
+              "default": "(e: Event): boolean => {\n    let value = '';\n    if (e.target instanceof HTMLInputElement) {\n      value = e.target.value;\n    }\n    this._value = value;\n    return true;\n  }"
             }
           ],
           "superclass": {
@@ -310,6 +614,22 @@
           "members": [
             {
               "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "actionId",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
               "name": "desc",
               "type": {
                 "text": "string"
@@ -326,7 +646,27 @@
             },
             {
               "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "ActionListItemMode"
+              }
+            },
+            {
+              "kind": "field",
               "name": "readableTime"
+            },
+            {
+              "kind": "method",
+              "name": "_setMode",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "mode",
+                  "type": {
+                    "text": "ActionListItemMode"
+                  }
+                }
+              ]
             }
           ],
           "superclass": {
@@ -491,132 +831,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-button.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionButton",
-          "default": "class ActionButton extends LitElement {\n    constructor() {\n        super(...arguments);\n        this._handleClick = (e) => {\n            this.dispatchEvent(new CustomEvent('action-button-clicked', {\n                bubbles: true,\n                composed: true,\n            }));\n        };\n    }\n    render() {\n        return html ` <button @click=${this._handleClick}>Add</button> `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionButton",
-          "declaration": {
-            "name": "ActionButton",
-            "module": "out-tsc/src/components/action-button.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-form.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionForm",
-          "default": "class ActionForm extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.action = '';\n    }\n    async _saveAction() {\n        console.log('saveAction', this.action);\n        const response = await fetch(config.apiUrl, {\n            method: 'POST',\n            body: JSON.stringify({ type: 'food', desc: this.action }),\n        });\n        this.action = '';\n    }\n    _handleChange(e) {\n        this.action = e.detail.value;\n    }\n    _handleClick(e) {\n        this._saveAction();\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <action-input\n            @action-input-changed=${this._handleChange}\n            value=${this.action}\n          ></action-input>\n        </div>\n        <div>\n          <action-button @click=${this._handleClick}></action-button>\n        </div>\n      </form>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionForm",
-          "declaration": {
-            "name": "ActionForm",
-            "module": "out-tsc/src/components/action-form.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-input.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionInput",
-          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.value = '';\n        this._value = this.value;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return false;\n            }\n            console.log('keyDown', e.target.value);\n            //e.preventDefault();\n            return true;\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            console.log('handleInput', value);\n            return true;\n        };\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    render() {\n        return html `\n      <input\n        id=\"input-field\"\n        type=\"text\"\n        value=${this.value}\n        @change=${this._handleChange}\n        @keydown=${this._handleKeyDown}\n        @input=${this._handleInput}\n      />\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionInput",
-          "declaration": {
-            "name": "ActionInput",
-            "module": "out-tsc/src/components/action-input.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-list-item.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionListItem",
-          "default": "class ActionListItem extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.desc = '';\n        this.time = 0;\n    }\n    get readableTime() {\n        const date = new Date(this.time * 1000);\n        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate() + 1).padStart(2, '0')} @ ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;\n    }\n    render() {\n        return html `\n      <div class=\"action-list-item\">\n        <div class=\"desc\">${this.desc}</div>\n        <div class=\"time\">${this.readableTime}</div>\n      </div>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionListItem",
-          "declaration": {
-            "name": "ActionListItem",
-            "module": "out-tsc/src/components/action-list-item.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-list.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionList",
-          "default": "class ActionList extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.items = [];\n    }\n    async connectedCallback() {\n        super.connectedCallback();\n        let json;\n        try {\n            const response = await fetch(config.apiUrl);\n            json = await response.json();\n            if (json.actions) {\n                this.items = json.actions;\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n    }\n    render() {\n        return html `\n      <div class=\"box\">\n        ${this.items.map(item => html `\n              <action-list-item\n                id=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                time=${item.time}\n              ></action-list-item>\n            `)}\n      </div>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionList",
-          "declaration": {
-            "name": "ActionList",
-            "module": "out-tsc/src/components/action-list.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-nav.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionNav",
-          "default": "class ActionNav extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.active = ActionView.INPUT;\n    }\n    _setActiveView(view) {\n        this.dispatchEvent(new CustomEvent('view-changed', {\n            bubbles: true,\n            composed: true,\n            detail: view,\n        }));\n    }\n    render() {\n        return html `\n      <nav class=\"box\">\n        ${views.map(view => html `<span\n              @click=\"${() => {\n            this._setActiveView(view.id);\n        }}\"\n              class=${this.active === view.id ? 'active' : ''}\n              >${view.label}</span\n            >`)}\n      </nav>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionNav",
-          "declaration": {
-            "name": "ActionNav",
-            "module": "out-tsc/src/components/action-nav.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "out-tsc/src/models/Action.js",
       "declarations": [
         {
@@ -676,6 +890,171 @@
           "declaration": {
             "name": "theme",
             "module": "out-tsc/src/styles/theme.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-button.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionButton",
+          "default": "class ActionButton extends LitElement {\n    static styles = [theme];\n    text = '';\n    _handleClick = (e) => {\n        this.dispatchEvent(new CustomEvent('action-button-clicked', {\n            bubbles: true,\n            composed: true,\n        }));\n    };\n    render() {\n        return html ` <button @click=${this._handleClick}>${this.text}</button> `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionButton",
+          "declaration": {
+            "name": "ActionButton",
+            "module": "out-tsc/src/components/action-button.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-form.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionForm",
+          "default": "class ActionForm extends LitElement {\n    static styles = [\n        theme,\n        css `\n      form {\n        padding: 1rem;\n      }\n\n      div:last-child {\n        margin-top: 1rem;\n      }\n    `,\n    ];\n    actionId = 0;\n    type = '';\n    desc = '';\n    time = 0;\n    action = this.desc;\n    initialDesc = '';\n    connectedCallback() {\n        super.connectedCallback();\n        this.action = this.desc.trim();\n        this.initialDesc = this.action;\n    }\n    get apiUrl() {\n        return this.actionId ? `${config.apiUrl}/${this.actionId}` : config.apiUrl;\n    }\n    async _saveAction() {\n        console.log('saveAction', this.action);\n        const desc = this.action.trim();\n        const hasChanged = desc !== this.initialDesc;\n        try {\n            if (desc && hasChanged) {\n                await fetch(this.apiUrl, {\n                    method: 'POST',\n                    body: JSON.stringify({ type: 'food', desc }),\n                });\n                this.action = '';\n                this.dispatchEvent(new CustomEvent('action-item-updated', {\n                    bubbles: true,\n                    composed: true,\n                    detail: { id: this.actionId, desc },\n                }));\n                return;\n            }\n            this.dispatchEvent(new CustomEvent('action-item-canceled', {\n                bubbles: true,\n                composed: true,\n                detail: { id: this.actionId },\n            }));\n        }\n        catch (error) {\n            console.error(`Error encountered in when saving action: ${error}`);\n        }\n    }\n    async _deleteAction() {\n        console.log('deleteAction', this.action);\n        try {\n            await fetch(this.apiUrl, {\n                method: 'DELETE',\n            });\n        }\n        catch (error) {\n            console.error(`Error encountered when deleting action: ${error}`);\n        }\n        this.dispatchEvent(new CustomEvent('action-item-deleted', {\n            bubbles: true,\n            composed: true,\n            detail: this.actionId,\n        }));\n        this.action = '';\n    }\n    _handleChange(e) {\n        this.action = e.detail.value;\n    }\n    _handleSaveClick(e) {\n        this._saveAction();\n    }\n    _handleDeleteClick(e) {\n        this._deleteAction();\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <action-input\n            @action-input-submitted=${this._handleSaveClick}\n            @action-input-changed=${this._handleChange}\n            value=${this.action}\n          ></action-input>\n        </div>\n        <div>\n          <action-button\n            @click=${this._handleSaveClick}\n            text=${this.actionId ? 'Update' : 'Add'}\n          ></action-button>\n          ${this.actionId\n            ? html `\n                <action-button\n                  @click=${this._handleDeleteClick}\n                  text=\"Delete\"\n                ></action-button>\n              `\n            : nothing}\n        </div>\n      </form>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionForm",
+          "declaration": {
+            "name": "ActionForm",
+            "module": "out-tsc/src/components/action-form.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-input-auto-complete.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-input-auto.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionInputAuto",
+          "default": "class ActionInputAuto extends MobxLitElement {\n    state = appState;\n    input = '';\n    //@consume({context: appContext})\n    get suggestions() {\n        return this.state.autoSuggestions;\n        //return ['a', 'test', 'asgasg'];\n    }\n    render() {\n        return html `<div>\n      Auto complete\n      <ul>\n        ${repeat(this.suggestions, suggestion => suggestion, suggestion => html `<li>${suggestion}</li> `)}\n      </ul>\n    </div>`;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionInputAuto",
+          "declaration": {
+            "name": "ActionInputAuto",
+            "module": "out-tsc/src/components/action-input-auto.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-input.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionInput",
+          "default": "class ActionInput extends LitElement {\n    static styles = [theme];\n    value = '';\n    autoComplete = false;\n    _value = this.value;\n    inputField;\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    _handleChange = (e) => {\n        console.log('_handleChange', e);\n        let value = '';\n        if (e.target instanceof HTMLInputElement) {\n            value = e.target.value;\n        }\n        this._value = value;\n        this.dispatchEvent(new CustomEvent('action-input-changed', {\n            bubbles: true,\n            composed: true,\n            detail: {\n                value,\n            },\n        }));\n        if (e.target instanceof HTMLInputElement) {\n            e.target.value = this._value;\n        }\n        e.preventDefault();\n        return false;\n    };\n    _handleKeyDown = (e) => {\n        if (!(e.target instanceof HTMLInputElement)) {\n            return false;\n        }\n        console.log('keyDown', e);\n        if (e.code === 'Enter') {\n            console.log('in here for keydown');\n            const changeEvent = new CustomEvent('action-input-submitted', {\n                bubbles: true,\n                composed: true,\n            });\n            this.inputField.dispatchEvent(changeEvent);\n        }\n        //e.preventDefault();\n        return true;\n    };\n    _handleInput = (e) => {\n        let value = '';\n        if (e.target instanceof HTMLInputElement) {\n            value = e.target.value;\n        }\n        this._value = value;\n        return true;\n    };\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=\"text\"\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n        />\n        ${this.autoComplete\n            ? html ` <action-input-auto input=${this._value}></action-input-auto> `\n            : nothing}\n      </span>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionInput",
+          "declaration": {
+            "name": "ActionInput",
+            "module": "out-tsc/src/components/action-input.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-list-item.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionListItemMode"
+        },
+        {
+          "kind": "variable",
+          "name": "ActionListItem",
+          "default": "class ActionListItem extends LitElement {\n    static styles = css `\n    .action-list-item {\n      padding: 0.5rem;\n      text-align: center;\n    }\n\n    .time {\n      color: #888;\n      font-size: 0.9rem;\n    }\n  `;\n    type = '';\n    actionId = 0;\n    desc = '';\n    time = 0;\n    mode = ActionListItemMode.VIEW;\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('action-item-updated', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n        this.addEventListener('action-item-canceled', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n    }\n    get readableTime() {\n        const date = new Date(this.time * 1000);\n        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} @ ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;\n    }\n    _setMode(mode) {\n        this.mode = mode;\n    }\n    render() {\n        return html `\n      <div class=\"action-list-item\">\n        ${this.mode === ActionListItemMode.EDIT\n            ? html `\n              <action-form\n                actionId=${this.actionId}\n                desc=${this.desc}\n                time=${this.time}\n                type=${this.type}\n              ></action-form>\n            `\n            : html `\n              <div\n                @click=\"${() => {\n                this._setMode(ActionListItemMode.EDIT);\n            }}\"\n              >\n                <div class=\"desc\">${this.desc}</div>\n                <div class=\"time\">${this.readableTime}</div>\n              </div>\n            `}\n      </div>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionListItemMode",
+          "declaration": {
+            "name": "ActionListItemMode",
+            "module": "out-tsc/src/components/action-list-item.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ActionListItem",
+          "declaration": {
+            "name": "ActionListItem",
+            "module": "out-tsc/src/components/action-list-item.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-list.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionList",
+          "default": "class ActionList extends LitElement {\n    static styles = [theme];\n    items = [];\n    async connectedCallback() {\n        super.connectedCallback();\n        let json;\n        try {\n            const response = await fetch(apiUrl);\n            json = await response.json();\n            if (json.actions) {\n                this.items = json.actions;\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n        this.addEventListener('action-item-deleted', e => {\n            const event = e;\n            this.items = this.items.filter(item => item.id !== event.detail);\n        });\n        this.addEventListener('action-item-updated', e => {\n            const event = e;\n            this.items = this.items.map(item => item.id === event.detail.id\n                ? { ...item, desc: event.detail.desc }\n                : item);\n        });\n    }\n    render() {\n        return html `\n      <div class=\"box\">\n        ${repeat(this.items, item => item.id, item => html `\n              <action-list-item\n                actionId=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                time=${item.time}\n              ></action-list-item>\n            `)}\n      </div>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionList",
+          "declaration": {
+            "name": "ActionList",
+            "module": "out-tsc/src/components/action-list.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-nav.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionNav",
+          "default": "class ActionNav extends LitElement {\n    static styles = [\n        theme,\n        css `\n      nav span {\n        display: inline-block;\n        height: 32px;\n        line-height: 32px;\n        width: 50%;\n        text-align: center;\n      }\n\n      nav span {\n        background-color: #ececec;\n      }\n\n      nav span.active {\n        background-color: #fff;\n      }\n    `,\n    ];\n    active = ActionView.INPUT;\n    _setActiveView(view) {\n        this.dispatchEvent(new CustomEvent('view-changed', {\n            bubbles: true,\n            composed: true,\n            detail: view,\n        }));\n    }\n    render() {\n        return html `\n      <nav class=\"box\">\n        ${views.map(view => html `<span\n              @click=\"${() => {\n            this._setActiveView(view.id);\n        }}\"\n              class=${this.active === view.id ? 'active' : ''}\n              >${view.label}</span\n            >`)}\n      </nav>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionNav",
+          "declaration": {
+            "name": "ActionNav",
+            "module": "out-tsc/src/components/action-nav.js"
           }
         }
       ]
