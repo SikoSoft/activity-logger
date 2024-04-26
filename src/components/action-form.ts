@@ -99,11 +99,12 @@ export class ActionForm extends LitElement {
   }
 
   private _handleChange(e: CustomEvent) {
+    console.log('_handleChange', e);
     this.action = e.detail.value;
   }
 
   private _handleSubmitted(e: CustomEvent) {
-    this.action = e.detail;
+    //this.action = e.detail;
     this._saveAction();
   }
 

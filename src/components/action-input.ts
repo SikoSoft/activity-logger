@@ -127,7 +127,13 @@ export class ActionInput extends LitElement {
   private _suggestionSelectHandler = (e: CustomEvent): void => {
     this.autoDismissed = true;
     this.inputField.value = e.detail;
-    this.inputField.dispatchEvent(new CustomEvent('change'));
+    this.inputField.dispatchEvent(
+      new CustomEvent('action-input-changed', {
+        bubbles: true,
+        composed: true,
+        detail: { value: e.detail },
+      })
+    );
   };
 
   render() {
