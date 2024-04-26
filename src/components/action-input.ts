@@ -42,6 +42,7 @@ export class ActionInput extends LitElement {
       value = e.target.value;
     }
     this._value = value;
+    /*
     this.dispatchEvent(
       new CustomEvent('action-input-changed', {
         bubbles: true,
@@ -51,6 +52,7 @@ export class ActionInput extends LitElement {
         },
       })
     );
+    */
     if (e.target instanceof HTMLInputElement) {
       e.target.value = this._value;
     }
@@ -94,6 +96,17 @@ export class ActionInput extends LitElement {
     if (e.target instanceof HTMLInputElement) {
       value = e.target.value;
     }
+
+    this.dispatchEvent(
+      new CustomEvent('action-input-changed', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          value,
+        },
+      })
+    );
+
     this._value = value;
     return true;
   };

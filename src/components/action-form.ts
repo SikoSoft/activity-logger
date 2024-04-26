@@ -40,14 +40,16 @@ export class ActionForm extends LitElement {
       : `${config.apiUrl}action`;
   }
 
-  private async _saveAction() {
-    console.log('saveAction', this.action);
+  @state()
+  get hasChanged(): boolean {
+    return this.action.trim() !== this.initialDesc;
+  }
 
+  private async _saveAction() {
     const desc = this.action.trim();
-    const hasChanged = desc !== this.initialDesc;
 
     try {
-      if (desc && hasChanged) {
+      if (desc && this.hasChanged) {
         await fetch(this.apiUrl, {
           method: 'POST',
           body: JSON.stringify({ type: 'food', desc }),
@@ -78,8 +80,6 @@ export class ActionForm extends LitElement {
   }
 
   private async _deleteAction() {
-    console.log('deleteAction', this.action);
-
     try {
       await fetch(this.apiUrl, {
         method: 'DELETE',
@@ -124,7 +124,11 @@ export class ActionForm extends LitElement {
         <div>
           <action-button
             @click=${this._handleSaveClick}
-            text=${this.actionId ? 'Update' : 'Add'}
+            text=${this.actionId
+              ? this.hasChanged
+                ? 'Update'
+                : 'Cancel'
+              : 'Add'}
           ></action-button>
           ${this.actionId
             ? html`
