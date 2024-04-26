@@ -1,4 +1,4 @@
-import { LitElement, html, PropertyValueMap, nothing } from 'lit';
+import { LitElement, html, PropertyValueMap, nothing, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 
@@ -6,7 +6,14 @@ import './action-input-auto';
 
 @customElement('action-input')
 export class ActionInput extends LitElement {
-  static styles = [theme];
+  static styles = [
+    theme,
+    css`
+      input:focus {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+    `,
+  ];
 
   @property() value: string = '';
   @property({ type: Boolean }) autoComplete: boolean = true;
