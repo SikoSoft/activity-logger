@@ -110,6 +110,7 @@ export class ActionInput extends LitElement {
       })
     );
     this._value = value;
+    this.autoDismissed = false;
     return true;
   };
 
