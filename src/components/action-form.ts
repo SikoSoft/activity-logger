@@ -54,7 +54,6 @@ export class ActionForm extends LitElement {
           method: 'POST',
           body: JSON.stringify({ type: 'food', desc }),
         });
-
         this.action = '';
 
         this.dispatchEvent(
@@ -103,6 +102,11 @@ export class ActionForm extends LitElement {
     this.action = e.detail.value;
   }
 
+  private _handleSubmitted(e: CustomEvent) {
+    this.action = e.detail;
+    this._saveAction();
+  }
+
   private _handleSaveClick(e: CustomEvent) {
     this._saveAction();
   }
@@ -116,7 +120,7 @@ export class ActionForm extends LitElement {
       <form class="box">
         <div>
           <action-input
-            @action-input-submitted=${this._handleSaveClick}
+            @action-input-submitted=${this._handleSubmitted}
             @action-input-changed=${this._handleChange}
             value=${this.action}
           ></action-input>

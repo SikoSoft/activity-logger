@@ -22,9 +22,10 @@ export class ActionInput extends LitElement {
   @query('action-input-auto') autoCompleteNode!: HTMLElement;
 
   @state() hasFocus: boolean = false;
+  @state() autoDismissed: boolean = false;
   @state()
   get showAutoComplete(): boolean {
-    return this.autoComplete && this.hasFocus && this._value.length > 0;
+    return this.autoComplete && !this.autoDismissed && this._value.length > 0;
   }
 
   updated(
@@ -42,17 +43,6 @@ export class ActionInput extends LitElement {
       value = e.target.value;
     }
     this._value = value;
-    /*
-    this.dispatchEvent(
-      new CustomEvent('action-input-changed', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          value,
-        },
-      })
-    );
-    */
     if (e.target instanceof HTMLInputElement) {
       e.target.value = this._value;
     }
@@ -74,7 +64,11 @@ export class ActionInput extends LitElement {
         e.preventDefault();
         return;
       case 'Enter':
-        this._sendSuggestionSelectEvent();
+        if (this.showAutoComplete) {
+          this._sendSuggestionSelectEvent();
+        } else {
+          this._sendSubmittedEvent();
+        }
         e.preventDefault();
         return;
     }
@@ -91,12 +85,21 @@ export class ActionInput extends LitElement {
   private _sendSuggestionSelectEvent() {
     this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));
   }
+
+  private _sendSubmittedEvent() {
+    const changeEvent = new CustomEvent('action-input-submitted', {
+      bubbles: true,
+      composed: true,
+      detail: this._value,
+    });
+    this.inputField.dispatchEvent(changeEvent);
+  }
+
   private _handleInput = (e: Event): boolean => {
     let value = '';
     if (e.target instanceof HTMLInputElement) {
       value = e.target.value;
     }
-
     this.dispatchEvent(
       new CustomEvent('action-input-changed', {
         bubbles: true,
@@ -106,13 +109,13 @@ export class ActionInput extends LitElement {
         },
       })
     );
-
     this._value = value;
     return true;
   };
 
   private _handleFocus = (e: Event): void => {
     this.hasFocus = true;
+    this.autoDismissed = false;
   };
 
   private _handleBlur = (e: Event): void => {
@@ -122,8 +125,9 @@ export class ActionInput extends LitElement {
   };
 
   private _suggestionSelectHandler = (e: CustomEvent): void => {
+    this.autoDismissed = true;
     this.inputField.value = e.detail;
-    this.inputField.blur();
+    this.inputField.dispatchEvent(new CustomEvent('change'));
   };
 
   render() {
