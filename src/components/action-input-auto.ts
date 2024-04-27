@@ -74,7 +74,11 @@ export class ActionInputAuto extends MobxLitElement {
     });
 
     this.addEventListener('select', () => {
-      this._sendSelectedEvent(this.suggestionMatches[this.selectedIndex]);
+      if (this.suggestionMatches.length) {
+        this._sendSelectedEvent(this.suggestionMatches[this.selectedIndex]);
+      } else {
+        this._sendSubmitEvent();
+      }
     });
   }
 
@@ -95,6 +99,15 @@ export class ActionInputAuto extends MobxLitElement {
         bubbles: true,
         composed: true,
         detail: suggestion,
+      })
+    );
+  }
+
+  private _sendSubmitEvent() {
+    this.dispatchEvent(
+      new CustomEvent('submit', {
+        bubbles: true,
+        composed: true,
       })
     );
   }

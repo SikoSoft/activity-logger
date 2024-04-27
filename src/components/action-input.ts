@@ -95,6 +95,10 @@ export class ActionInput extends LitElement {
     this.inputField.dispatchEvent(changeEvent);
   }
 
+  private _handleSubmit() {
+    this._sendSubmittedEvent();
+  }
+
   private _handleInput = (e: Event): boolean => {
     let value = '';
     if (e.target instanceof HTMLInputElement) {
@@ -155,6 +159,7 @@ export class ActionInput extends LitElement {
           ? html`
               <action-input-auto
                 input=${this._value}
+                @submit=${this._handleSubmit}
                 @suggestion-selected=${this._suggestionSelectHandler}
               ></action-input-auto>
             `

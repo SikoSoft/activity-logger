@@ -26,10 +26,8 @@ export class ActionNav extends LitElement {
         line-height: 32px;
         width: 50%;
         text-align: center;
-      }
-
-      nav span {
         background-color: #ececec;
+        cursor: pointer;
       }
 
       nav span.active {
