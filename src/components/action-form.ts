@@ -4,6 +4,7 @@ import { config } from '../models/Config';
 
 import './action-input';
 import './action-button';
+import './action-confirm-modal';
 import { theme } from '../styles/theme';
 
 @customElement('action-form')
@@ -26,6 +27,7 @@ export class ActionForm extends LitElement {
   @property({ type: Number }) time: number = 0;
   @state() action: string = this.desc;
   @state() initialDesc: string = '';
+  @state() confirmModalShown: boolean = false;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -113,7 +115,7 @@ export class ActionForm extends LitElement {
   }
 
   private _handleDeleteClick(e: CustomEvent) {
-    this._deleteAction();
+    this.confirmModalShown = true;
   }
 
   render() {
@@ -141,6 +143,14 @@ export class ActionForm extends LitElement {
                   @click=${this._handleDeleteClick}
                   text="Delete"
                 ></action-button>
+                ${this.confirmModalShown
+                  ? html`
+                      <action-confirm-modal
+                        @confirm=${this._deleteAction}
+                        @cancel=${() => (this.confirmModalShown = false)}
+                      ></action-confirm-modal>
+                    `
+                  : nothing}
               `
             : nothing}
         </div>
