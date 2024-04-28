@@ -6,9 +6,12 @@ import './action-input';
 import './action-button';
 import './action-confirm-modal';
 import { theme } from '../styles/theme';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '../state';
 
 @customElement('action-form')
-export class ActionForm extends LitElement {
+export class ActionForm extends MobxLitElement {
+  private state = appState;
   static styles = [
     theme,
     css`
@@ -65,6 +68,8 @@ export class ActionForm extends LitElement {
             detail: { id: this.actionId, desc },
           })
         );
+
+        this.state.addToast('Added!');
         return;
       }
 
@@ -85,6 +90,8 @@ export class ActionForm extends LitElement {
       await fetch(this.apiUrl, {
         method: 'DELETE',
       });
+
+      this.state.addToast('Removed!');
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }
@@ -143,7 +150,6 @@ export class ActionForm extends LitElement {
                   @click=${this._handleDeleteClick}
                   text="Delete"
                 ></action-button>
-
                 <action-confirm-modal
                   @confirm=${this._deleteAction}
                   @cancel=${() => (this.confirmModalShown = false)}

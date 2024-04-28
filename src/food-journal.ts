@@ -5,6 +5,7 @@ import { config } from './models/Config';
 import './components/action-nav';
 import './components/action-form';
 import './components/action-list';
+import './components/action-toasts';
 import { ActionView } from './models/Action';
 import { theme } from './styles/theme';
 
@@ -56,6 +57,7 @@ export class FoodJournal extends MobxLitElement {
     return html`
       <action-nav active=${this.view}></action-nav>
       <main>${this._activeView()}</main>
+      <action-toasts></action-toasts>
     `;
   }
 }
