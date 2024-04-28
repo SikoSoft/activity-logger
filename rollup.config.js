@@ -5,6 +5,16 @@ import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import esbuild from 'rollup-plugin-esbuild';
 import { generateSW } from 'rollup-plugin-workbox';
 import path from 'path';
+import json from '@rollup/plugin-json';
+import replace from '@rollup/plugin-replace';
+import 'dotenv/config';
+
+process.env.NODE_ENV = 'production';
+
+const safeEnv = {};
+[...Object.keys(process.env), 'NODE_ENV'].forEach(key => {
+  safeEnv[`process.env.${key}`] = `"${process.env[key]}"`;
+});
 
 export default {
   input: 'index.html',
@@ -18,6 +28,8 @@ export default {
   preserveEntrySignatures: false,
 
   plugins: [
+    replace({ ...safeEnv }),
+    json(),
     /** Enable using HTML as rollup entrypoint */
     html({
       minify: true,
