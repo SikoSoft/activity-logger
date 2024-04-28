@@ -143,14 +143,12 @@ export class ActionForm extends LitElement {
                   @click=${this._handleDeleteClick}
                   text="Delete"
                 ></action-button>
-                ${this.confirmModalShown
-                  ? html`
-                      <action-confirm-modal
-                        @confirm=${this._deleteAction}
-                        @cancel=${() => (this.confirmModalShown = false)}
-                      ></action-confirm-modal>
-                    `
-                  : nothing}
+
+                <action-confirm-modal
+                  @confirm=${this._deleteAction}
+                  @cancel=${() => (this.confirmModalShown = false)}
+                  ?open=${this.confirmModalShown}
+                ></action-confirm-modal>
               `
             : nothing}
         </div>

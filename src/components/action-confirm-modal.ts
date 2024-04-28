@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { property, customElement, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
 @customElement('action-confirm-modal')
@@ -7,6 +8,16 @@ export class ActionConfirmModal extends LitElement {
   static styles = [
     theme,
     css`
+      .container.open .overlay {
+        opacity: 1;
+        pointer-events: initial;
+      }
+
+      .container.open .modal {
+        transform: initial;
+        opacity: 1;
+      }
+
       .overlay {
         position: fixed;
         width: 100%;
@@ -15,6 +26,8 @@ export class ActionConfirmModal extends LitElement {
         left: 0;
         z-index: 1;
         background-color: rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        pointer-events: none;
       }
 
       .modal {
@@ -31,13 +44,27 @@ export class ActionConfirmModal extends LitElement {
         margin: auto;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         padding: 1rem;
+        transform: translateY(200%);
+        transition: 0.3s;
+        opacity: 0;
       }
 
       .buttons {
         padding: 1rem;
       }
+
+      .buttons action-button {
+        margin-top: 1rem;
+        display: block;
+      }
     `,
   ];
+
+  @property({ type: Boolean }) open: boolean = false;
+
+  @state() get classes() {
+    return { container: true, open: this.open };
+  }
 
   private _sendConfirmEvent() {
     this.dispatchEvent(
@@ -53,18 +80,20 @@ export class ActionConfirmModal extends LitElement {
 
   render() {
     return html`
-      <div class="overlay"></div>
-      <div class="box modal">
-        Are you sure?
-        <div class="buttons">
-          <action-button
-            @click=${this._sendCancelEvent}
-            text="Cancel"
-          ></action-button>
-          <action-button
-            @click=${this._sendConfirmEvent}
-            text="Confirm"
-          ></action-button>
+      <div class=${classMap(this.classes)}>
+        <div class="overlay"></div>
+        <div class="box modal">
+          Are you sure?
+          <div class="buttons">
+            <action-button
+              @click=${this._sendConfirmEvent}
+              text="Yes!"
+            ></action-button>
+            <action-button
+              @click=${this._sendCancelEvent}
+              text="Cancel"
+            ></action-button>
+          </div>
         </div>
       </div>
     `;
