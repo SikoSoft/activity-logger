@@ -1,0 +1,18 @@
+import en from '../../assets/localization/en.json' assert { type: 'json' };
+import { Language, StringMap } from '../models/Localization';
+
+export let LANGUAGE = Language.EN;
+
+//const en = {};
+
+const strings: StringMap = {
+  [Language.EN]: en,
+  [Language.SE]: en,
+};
+
+export function translate(key: string) {
+  if (strings[LANGUAGE][key]) {
+    return strings[LANGUAGE][key];
+  }
+  return key;
+}

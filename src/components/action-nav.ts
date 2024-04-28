@@ -2,13 +2,14 @@ import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { ActionView } from '../models/Action';
 import { theme } from '../styles/theme';
+import { translate } from '../util/strings';
 
 const views: { id: ActionView; label: string }[] = [
   {
     id: ActionView.INPUT,
-    label: 'Add',
+    label: translate('new'),
   },
-  { id: ActionView.LIST, label: 'List' },
+  { id: ActionView.LIST, label: translate('list') },
 ];
 
 @customElement('action-nav')

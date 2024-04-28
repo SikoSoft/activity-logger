@@ -8,6 +8,7 @@ import './action-confirm-modal';
 import { theme } from '../styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
+import { translate } from '../util/strings';
 
 @customElement('action-form')
 export class ActionForm extends MobxLitElement {
@@ -140,15 +141,15 @@ export class ActionForm extends MobxLitElement {
             @click=${this._handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
-                ? 'Update'
-                : 'Cancel'
-              : 'Add'}
+                ? translate('update')
+                : translate('cancel')
+              : translate('add')}
           ></action-button>
           ${this.actionId
             ? html`
                 <action-button
                   @click=${this._handleDeleteClick}
-                  text="Delete"
+                  text=${translate('delete')}
                 ></action-button>
                 <action-confirm-modal
                   @confirm=${this._deleteAction}
