@@ -3,5 +3,6 @@
   "list": "List",
   "add": "Add",
   "update": "Update",
+  "cancel": "Cancel",
   "delete": "Delete"
 }

@@ -9,6 +9,7 @@ import { theme } from '../styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
 import { translate } from '../util/strings';
+import { InputType } from '../models/Input';
 
 @customElement('action-form')
 export class ActionForm extends MobxLitElement {
@@ -27,17 +28,18 @@ export class ActionForm extends MobxLitElement {
   ];
   @property({ type: Number }) actionId: number = 0;
   @property() type: string = '';
-  @property() desc: string = '';
-  @property({ type: Number }) time: number = 0;
-  @state() action: string = this.desc;
+  @property({ reflect: true }) desc: string = '';
+  @property({ reflect: true }) time: string = '';
+
+  //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
   @state() confirmModalShown: boolean = false;
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.action = this.desc.trim();
-    this.initialDesc = this.action;
+    this.desc = this.desc.trim();
+    this.initialDesc = this.desc;
   }
 
   get apiUrl(): string {
@@ -48,19 +50,20 @@ export class ActionForm extends MobxLitElement {
 
   @state()
   get hasChanged(): boolean {
-    return this.action.trim() !== this.initialDesc;
+    return this.desc.trim() !== this.initialDesc;
   }
 
   private async _saveAction() {
-    const desc = this.action.trim();
+    const desc = this.desc.trim();
 
     try {
       if (desc && this.hasChanged) {
+        const time = this.time;
         await fetch(this.apiUrl, {
           method: 'POST',
-          body: JSON.stringify({ type: 'food', desc }),
+          body: JSON.stringify({ type: 'food', desc, time }),
         });
-        this.action = '';
+        this.desc = '';
 
         this.dispatchEvent(
           new CustomEvent('action-item-updated', {
@@ -105,15 +108,25 @@ export class ActionForm extends MobxLitElement {
       })
     );
 
-    this.action = '';
+    this.desc = '';
   }
 
-  private _handleChange(e: CustomEvent) {
+  private _handleDescChanged(e: CustomEvent) {
     //console.log('_handleChange', e);
-    this.action = e.detail.value;
+    this.desc = e.detail.value;
   }
 
-  private _handleSubmitted(e: CustomEvent) {
+  private _handleDescSubmitted(e: CustomEvent) {
+    //this.action = e.detail;
+    this._saveAction();
+  }
+
+  private _handleTimeChanged(e: CustomEvent) {
+    //console.log('_handleChange', e);
+    this.time = e.detail.value;
+  }
+
+  private _handleTimeSubmitted(e: CustomEvent) {
     //this.action = e.detail;
     this._saveAction();
   }
@@ -131,11 +144,23 @@ export class ActionForm extends MobxLitElement {
       <form class="box">
         <div>
           <action-input
-            @action-input-submitted=${this._handleSubmitted}
-            @action-input-changed=${this._handleChange}
-            value=${this.action}
+            @action-input-submitted=${this._handleDescSubmitted}
+            @action-input-changed=${this._handleDescChanged}
+            value=${this.desc}
           ></action-input>
         </div>
+        ${this.actionId
+          ? html`
+              <div>
+                <action-input
+                  type=${InputType.DATETIME_LOCAL}
+                  @action-input-submitted=${this._handleTimeSubmitted}
+                  @action-input-changed=${this._handleTimeChanged}
+                  value=${this.time}
+                ></action-input>
+              </div>
+            `
+          : nothing}
         <div>
           <action-button
             @click=${this._handleSaveClick}

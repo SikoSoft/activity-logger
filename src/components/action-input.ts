@@ -3,6 +3,8 @@ import { property, customElement, state, query } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 
 import './action-input-auto';
+import { InputType } from '../models/Input';
+import { dateTime } from '../util/time';
 
 @customElement('action-input')
 export class ActionInput extends LitElement {
@@ -15,6 +17,7 @@ export class ActionInput extends LitElement {
     `,
   ];
 
+  @property() type: InputType = InputType.TEXT;
   @property() value: string = '';
   @property({ type: Boolean }) autoComplete: boolean = true;
   @state() _value: string = this.value;
@@ -28,12 +31,28 @@ export class ActionInput extends LitElement {
     return this.autoComplete && !this.autoDismissed && this._value.length > 0;
   }
 
+  get fieldValue(): string {
+    return this.value;
+    /*
+    switch (this.type) {
+      case InputType.DATETIME_LOCAL:
+        return this._dateTimeFromEpoch(parseInt(this.value));
+      default:
+        return this.value;
+    }
+    */
+  }
+
+  private _dateTimeFromEpoch(time: number): string {
+    return dateTime(time);
+  }
+
   updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
   ) {
     super.updated(changedProperties);
     if (changedProperties.has('value')) {
-      this.inputField.value = this.value;
+      this.inputField.value = this.fieldValue;
     }
   }
 
@@ -146,8 +165,8 @@ export class ActionInput extends LitElement {
       <span>
         <input
           id="input-field"
-          type="text"
-          value=${this.value}
+          type=${this.type}
+          value=${this.fieldValue}
           @change=${this._handleChange}
           @keydown=${this._handleKeyDown}
           @input=${this._handleInput}

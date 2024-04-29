@@ -5,8 +5,12 @@ import { Toast } from './models/Toast';
 export class AppState {
   @observable
   public suggestions: string[] = [];
+
   @observable
   public toasts: Toast[] = [];
+
+  @observable
+  public loading: boolean = false;
 
   @action
   public setAutoSuggestions(suggestions: string[]) {
@@ -27,8 +31,14 @@ export class AppState {
     }, 3000);
   }
 
-  @action removeToast(id: string) {
+  @action
+  removeToast(id: string) {
     this.toasts = this.toasts.filter(toast => toast.id !== id);
+  }
+
+  @action
+  setLoading(state: boolean) {
+    this.loading = state;
   }
 
   constructor() {

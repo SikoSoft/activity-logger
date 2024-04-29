@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { ActionItem } from '../models/Action';
+import { dateTime } from '../util/time';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -40,13 +41,7 @@ export class ActionListItem extends LitElement {
   }
 
   get readableTime() {
-    const date = new Date(this.time * 1000);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-      2,
-      '0'
-    )}-${String(date.getDate()).padStart(2, '0')} @ ${String(
-      date.getHours()
-    ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return dateTime(this.time);
   }
 
   private _setMode(mode: ActionListItemMode) {
@@ -61,7 +56,7 @@ export class ActionListItem extends LitElement {
               <action-form
                 actionId=${this.actionId}
                 desc=${this.desc}
-                time=${this.time}
+                time=${dateTime(this.time)}
                 type=${this.type}
               ></action-form>
             `
