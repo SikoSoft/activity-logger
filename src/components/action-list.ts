@@ -90,7 +90,7 @@ export class ActionList extends LitElement {
                 actionId=${item.id}
                 type=${item.type}
                 desc=${item.desc}
-                time=${item.time}
+                occurredAt=${item.occurredAt}
               ></action-list-item>
             `
         )}

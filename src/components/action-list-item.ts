@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { ActionItem } from '../models/Action';
-import { dateTime } from '../util/time';
+import { dateTime, formatDate } from '../util/time';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -24,7 +24,9 @@ export class ActionListItem extends LitElement {
   @property() type: string = '';
   @property({ type: Number }) actionId: number = 0;
   @property() desc: string = '';
-  @property({ type: Number }) time: number = 0;
+  @property() createdAt: string = '';
+  @property() updatedAt: string = '';
+  @property() occurredAt: string = '';
 
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
 
@@ -41,7 +43,9 @@ export class ActionListItem extends LitElement {
   }
 
   get readableTime() {
-    return dateTime(this.time);
+    const date = new Date(this.occurredAt);
+    console.log('readableTime', this.occurredAt, date);
+    return formatDate(date);
   }
 
   private _setMode(mode: ActionListItemMode) {
@@ -56,7 +60,7 @@ export class ActionListItem extends LitElement {
               <action-form
                 actionId=${this.actionId}
                 desc=${this.desc}
-                time=${dateTime(this.time)}
+                occurredAt=${this.occurredAt}
                 type=${this.type}
               ></action-form>
             `

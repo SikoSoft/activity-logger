@@ -2,7 +2,9 @@ export interface ActionItem {
   id: number;
   type: string;
   desc: string;
-  time: number;
+  createdAt: string;
+  updatedAt: string;
+  occurredAt: string;
 }
 
 export enum ActionView {

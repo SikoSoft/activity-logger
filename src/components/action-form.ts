@@ -10,6 +10,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
 import { translate } from '../util/strings';
 import { InputType } from '../models/Input';
+import { formatDate } from '../util/time';
 
 @customElement('action-form')
 export class ActionForm extends MobxLitElement {
@@ -29,17 +30,22 @@ export class ActionForm extends MobxLitElement {
   @property({ type: Number }) actionId: number = 0;
   @property() type: string = '';
   @property({ reflect: true }) desc: string = '';
-  @property({ reflect: true }) time: string = '';
+  @property({ reflect: true }) occurredAt: string = '';
 
   //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
+  @state() initialOccurredAt: string = '';
   @state() confirmModalShown: boolean = false;
 
   connectedCallback(): void {
     super.connectedCallback();
 
     this.desc = this.desc.trim();
+    this.occurredAt = formatDate(new Date(this.occurredAt)); //.substring(0, 16));
     this.initialDesc = this.desc;
+    this.initialOccurredAt = this.occurredAt;
+
+    //console.log('occurredAt', this.occurredAt);
   }
 
   get apiUrl(): string {
@@ -58,10 +64,10 @@ export class ActionForm extends MobxLitElement {
 
     try {
       if (desc && this.hasChanged) {
-        const time = this.time;
+        const occurredAt = this.occurredAt;
         await fetch(this.apiUrl, {
           method: 'POST',
-          body: JSON.stringify({ type: 'food', desc, time }),
+          body: JSON.stringify({ type: 'food', desc, occurredAt }),
         });
         this.desc = '';
 
@@ -121,12 +127,12 @@ export class ActionForm extends MobxLitElement {
     this._saveAction();
   }
 
-  private _handleTimeChanged(e: CustomEvent) {
+  private _handleOccurredAtChanged(e: CustomEvent) {
     //console.log('_handleChange', e);
-    this.time = e.detail.value;
+    this.occurredAt = e.detail.value;
   }
 
-  private _handleTimeSubmitted(e: CustomEvent) {
+  private _handleOccurredAtSubmitted(e: CustomEvent) {
     //this.action = e.detail;
     this._saveAction();
   }
@@ -154,9 +160,9 @@ export class ActionForm extends MobxLitElement {
               <div>
                 <action-input
                   type=${InputType.DATETIME_LOCAL}
-                  @action-input-submitted=${this._handleTimeSubmitted}
-                  @action-input-changed=${this._handleTimeChanged}
-                  value=${this.time}
+                  @action-input-submitted=${this._handleOccurredAtSubmitted}
+                  @action-input-changed=${this._handleOccurredAtChanged}
+                  value=${this.occurredAt}
                 ></action-input>
               </div>
             `
