@@ -44,7 +44,6 @@ export class ActionListItem extends LitElement {
 
   get readableTime() {
     const date = new Date(this.occurredAt);
-    console.log('readableTime', this.occurredAt, date);
     return formatDate(date);
   }
 
