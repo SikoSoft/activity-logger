@@ -66,6 +66,7 @@ export class ActionForm extends MobxLitElement {
     try {
       if (desc && this.hasChanged) {
         const occurredAt = this.occurredAt;
+        console.log({ occurredAt });
         await fetch(this.apiUrl, {
           method: 'POST',
           body: JSON.stringify({ type: 'food', desc, occurredAt }),
@@ -76,7 +77,7 @@ export class ActionForm extends MobxLitElement {
           new CustomEvent('action-item-updated', {
             bubbles: true,
             composed: true,
-            detail: { id: this.actionId, desc },
+            detail: { id: this.actionId, desc, occurredAt },
           })
         );
 

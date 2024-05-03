@@ -49,7 +49,11 @@ export class ActionList extends LitElement {
       const event = e as CustomEvent;
       this.items = this.items.map(item =>
         item.id === event.detail.id
-          ? { ...item, desc: event.detail.desc }
+          ? {
+              ...item,
+              desc: event.detail.desc,
+              occurredAt: event.detail.occurredAt,
+            }
           : item
       );
     });
