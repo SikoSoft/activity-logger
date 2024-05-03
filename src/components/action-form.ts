@@ -41,11 +41,9 @@ export class ActionForm extends MobxLitElement {
     super.connectedCallback();
 
     this.desc = this.desc.trim();
-    this.occurredAt = formatDate(new Date(this.occurredAt)); //.substring(0, 16));
+    this.occurredAt = formatDate(new Date(this.occurredAt));
     this.initialDesc = this.desc;
     this.initialOccurredAt = this.occurredAt;
-
-    //console.log('occurredAt', this.occurredAt);
   }
 
   get apiUrl(): string {
@@ -56,7 +54,10 @@ export class ActionForm extends MobxLitElement {
 
   @state()
   get hasChanged(): boolean {
-    return this.desc.trim() !== this.initialDesc;
+    return (
+      this.desc.trim() !== this.initialDesc ||
+      this.occurredAt !== this.initialOccurredAt
+    );
   }
 
   private async _saveAction() {
