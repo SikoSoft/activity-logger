@@ -10,6 +10,33 @@
     },
     {
       "kind": "javascript-module",
+      "path": "stories/food-journal.stories.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "App"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "stories/food-journal.stories.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "App",
+          "declaration": {
+            "name": "App",
+            "module": "stories/food-journal.stories.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/food-journal.ts",
       "declarations": [
         {
@@ -93,6 +120,15 @@
               "default": "[]"
             },
             {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "public",
+              "default": "false"
+            },
+            {
               "kind": "method",
               "name": "setAutoSuggestions",
               "privacy": "public",
@@ -129,6 +165,18 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "setLoading",
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -153,33 +201,6 @@
           "declaration": {
             "name": "appState",
             "module": "src/state.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "stories/food-journal.stories.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "App"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "module": "stories/food-journal.stories.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "App",
-          "declaration": {
-            "name": "App",
-            "module": "stories/food-journal.stories.ts"
           }
         }
       ]
@@ -262,6 +283,15 @@
               ]
             },
             {
+              "kind": "method",
+              "name": "setLoading",
+              "parameters": [
+                {
+                  "name": "state"
+                }
+              ]
+            },
+            {
               "kind": "field",
               "name": "suggestions",
               "type": {
@@ -276,6 +306,14 @@
                 "text": "array"
               },
               "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
             }
           ]
         },
@@ -478,22 +516,23 @@
             },
             {
               "kind": "field",
-              "name": "time",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "action",
+              "name": "occurredAt",
               "type": {
                 "text": "string"
-              }
+              },
+              "default": "''"
             },
             {
               "kind": "field",
               "name": "initialDesc",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "initialOccurredAt",
               "type": {
                 "text": "string"
               },
@@ -533,7 +572,7 @@
             },
             {
               "kind": "method",
-              "name": "_handleChange",
+              "name": "_handleDescChanged",
               "privacy": "private",
               "parameters": [
                 {
@@ -546,7 +585,33 @@
             },
             {
               "kind": "method",
-              "name": "_handleSubmitted",
+              "name": "_handleDescSubmitted",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleOccurredAtChanged",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleOccurredAtSubmitted",
               "privacy": "private",
               "parameters": [
                 {
@@ -753,6 +818,13 @@
           "members": [
             {
               "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "InputType"
+              }
+            },
+            {
+              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
@@ -810,6 +882,31 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "kind": "field",
+              "name": "fieldValue",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_dateTimeFromEpoch",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "time",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",
@@ -926,11 +1023,27 @@
             },
             {
               "kind": "field",
-              "name": "time",
+              "name": "createdAt",
               "type": {
-                "text": "number"
+                "text": "string"
               },
-              "default": "0"
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "updatedAt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "occurredAt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
             },
             {
               "kind": "field",
@@ -1077,6 +1190,33 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/action-loader.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ActionLoader",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionLoader",
+          "declaration": {
+            "name": "ActionLoader",
+            "module": "src/components/action-loader.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/action-nav.ts",
       "declarations": [
         {
@@ -1213,27 +1353,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/styles/theme.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "theme",
-          "default": "css`\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "theme",
-          "declaration": {
-            "name": "theme",
-            "module": "src/styles/theme.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/models/Action.ts",
       "declarations": [],
       "exports": []
@@ -1264,6 +1383,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/models/Input.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/models/Localization.ts",
       "declarations": [],
       "exports": []
@@ -1273,6 +1398,27 @@
       "path": "src/models/Toast.ts",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/theme.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "theme",
+          "default": "css`\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "theme",
+          "declaration": {
+            "name": "theme",
+            "module": "src/styles/theme.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -1310,6 +1456,64 @@
           "declaration": {
             "name": "translate",
             "module": "src/util/strings.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/util/time.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "dateTime",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "time",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "formatDate",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "date",
+              "type": {
+                "text": "Date"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "dateTime",
+          "declaration": {
+            "name": "dateTime",
+            "module": "src/util/time.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "formatDate",
+          "declaration": {
+            "name": "formatDate",
+            "module": "src/util/time.ts"
           }
         }
       ]
@@ -1360,6 +1564,26 @@
     },
     {
       "kind": "javascript-module",
+      "path": "out-tsc/src/models/Input.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "InputType"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputType",
+          "declaration": {
+            "name": "InputType",
+            "module": "out-tsc/src/models/Input.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "out-tsc/src/models/Localization.js",
       "declarations": [
         {
@@ -1383,6 +1607,27 @@
       "path": "out-tsc/src/models/Toast.js",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/styles/theme.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "theme",
+          "default": "css `\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "theme",
+          "declaration": {
+            "name": "theme",
+            "module": "out-tsc/src/styles/theme.js"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -1433,7 +1678,7 @@
         {
           "kind": "variable",
           "name": "ActionForm",
-          "default": "class ActionForm extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.actionId = 0;\n        this.type = '';\n        this.desc = '';\n        this.time = 0;\n        this.action = this.desc;\n        this.initialDesc = '';\n        this.confirmModalShown = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      form {\n        padding: 1rem;\n      }\n\n      div:last-child {\n        margin-top: 1rem;\n      }\n    `,\n    ]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.action = this.desc.trim();\n        this.initialDesc = this.action;\n    }\n    get apiUrl() {\n        return this.actionId\n            ? `${config.apiUrl}action/${this.actionId}`\n            : `${config.apiUrl}action`;\n    }\n    get hasChanged() {\n        return this.action.trim() !== this.initialDesc;\n    }\n    async _saveAction() {\n        const desc = this.action.trim();\n        try {\n            if (desc && this.hasChanged) {\n                await fetch(this.apiUrl, {\n                    method: 'POST',\n                    body: JSON.stringify({ type: 'food', desc }),\n                });\n                this.action = '';\n                this.dispatchEvent(new CustomEvent('action-item-updated', {\n                    bubbles: true,\n                    composed: true,\n                    detail: { id: this.actionId, desc },\n                }));\n                this.state.addToast('Added!');\n                return;\n            }\n            this.dispatchEvent(new CustomEvent('action-item-canceled', {\n                bubbles: true,\n                composed: true,\n                detail: { id: this.actionId },\n            }));\n        }\n        catch (error) {\n            console.error(`Error encountered in when saving action: ${error}`);\n        }\n    }\n    async _deleteAction() {\n        try {\n            await fetch(this.apiUrl, {\n                method: 'DELETE',\n            });\n            this.state.addToast('Removed!');\n        }\n        catch (error) {\n            console.error(`Error encountered when deleting action: ${error}`);\n        }\n        this.dispatchEvent(new CustomEvent('action-item-deleted', {\n            bubbles: true,\n            composed: true,\n            detail: this.actionId,\n        }));\n        this.action = '';\n    }\n    _handleChange(e) {\n        //console.log('_handleChange', e);\n        this.action = e.detail.value;\n    }\n    _handleSubmitted(e) {\n        //this.action = e.detail;\n        this._saveAction();\n    }\n    _handleSaveClick(e) {\n        this._saveAction();\n    }\n    _handleDeleteClick(e) {\n        this.confirmModalShown = true;\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <action-input\n            @action-input-submitted=${this._handleSubmitted}\n            @action-input-changed=${this._handleChange}\n            value=${this.action}\n          ></action-input>\n        </div>\n        <div>\n          <action-button\n            @click=${this._handleSaveClick}\n            text=${this.actionId\n            ? this.hasChanged\n                ? 'Update'\n                : 'Cancel'\n            : 'Add'}\n          ></action-button>\n          ${this.actionId\n            ? html `\n                <action-button\n                  @click=${this._handleDeleteClick}\n                  text=\"Delete\"\n                ></action-button>\n                <action-confirm-modal\n                  @confirm=${this._deleteAction}\n                  @cancel=${() => (this.confirmModalShown = false)}\n                  ?open=${this.confirmModalShown}\n                ></action-confirm-modal>\n              `\n            : nothing}\n        </div>\n      </form>\n    `;\n    }\n}"
+          "default": "class ActionForm extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.actionId = 0;\n        this.type = '';\n        this.desc = '';\n        this.occurredAt = '';\n        //@state() desc: string = this.desc;\n        this.initialDesc = '';\n        this.initialOccurredAt = '';\n        this.confirmModalShown = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      form {\n        padding: 1rem;\n      }\n\n      div:last-child {\n        margin-top: 1rem;\n      }\n    `,\n    ]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.desc = this.desc.trim();\n        this.occurredAt = formatDate(new Date(this.occurredAt));\n        this.initialDesc = this.desc;\n        this.initialOccurredAt = this.occurredAt;\n    }\n    get apiUrl() {\n        return this.actionId\n            ? `${config.apiUrl}action/${this.actionId}`\n            : `${config.apiUrl}action`;\n    }\n    get hasChanged() {\n        return (this.desc.trim() !== this.initialDesc ||\n            this.occurredAt !== this.initialOccurredAt);\n    }\n    async _saveAction() {\n        const desc = this.desc.trim();\n        try {\n            if (desc && this.hasChanged) {\n                const occurredAt = this.occurredAt;\n                console.log({ occurredAt });\n                await fetch(this.apiUrl, {\n                    method: 'POST',\n                    body: JSON.stringify({ type: 'food', desc, occurredAt }),\n                });\n                this.desc = '';\n                this.dispatchEvent(new CustomEvent('action-item-updated', {\n                    bubbles: true,\n                    composed: true,\n                    detail: { id: this.actionId, desc, occurredAt },\n                }));\n                this.state.addToast('Added!');\n                return;\n            }\n            this.dispatchEvent(new CustomEvent('action-item-canceled', {\n                bubbles: true,\n                composed: true,\n                detail: { id: this.actionId },\n            }));\n        }\n        catch (error) {\n            console.error(`Error encountered in when saving action: ${error}`);\n        }\n    }\n    async _deleteAction() {\n        try {\n            await fetch(this.apiUrl, {\n                method: 'DELETE',\n            });\n            this.state.addToast('Removed!');\n        }\n        catch (error) {\n            console.error(`Error encountered when deleting action: ${error}`);\n        }\n        this.dispatchEvent(new CustomEvent('action-item-deleted', {\n            bubbles: true,\n            composed: true,\n            detail: this.actionId,\n        }));\n        this.desc = '';\n    }\n    _handleDescChanged(e) {\n        //console.log('_handleChange', e);\n        this.desc = e.detail.value;\n    }\n    _handleDescSubmitted(e) {\n        //this.action = e.detail;\n        this._saveAction();\n    }\n    _handleOccurredAtChanged(e) {\n        //console.log('_handleChange', e);\n        this.occurredAt = e.detail.value;\n    }\n    _handleOccurredAtSubmitted(e) {\n        //this.action = e.detail;\n        this._saveAction();\n    }\n    _handleSaveClick(e) {\n        this._saveAction();\n    }\n    _handleDeleteClick(e) {\n        this.confirmModalShown = true;\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <action-input\n            @action-input-submitted=${this._handleDescSubmitted}\n            @action-input-changed=${this._handleDescChanged}\n            value=${this.desc}\n          ></action-input>\n        </div>\n        ${this.actionId\n            ? html `\n              <div>\n                <action-input\n                  type=${InputType.DATETIME_LOCAL}\n                  @action-input-submitted=${this._handleOccurredAtSubmitted}\n                  @action-input-changed=${this._handleOccurredAtChanged}\n                  value=${this.occurredAt}\n                ></action-input>\n              </div>\n            `\n            : nothing}\n        <div>\n          <action-button\n            @click=${this._handleSaveClick}\n            text=${this.actionId\n            ? this.hasChanged\n                ? translate('update')\n                : translate('cancel')\n            : translate('add')}\n          ></action-button>\n          ${this.actionId\n            ? html `\n                <action-button\n                  @click=${this._handleDeleteClick}\n                  text=${translate('delete')}\n                ></action-button>\n                <action-confirm-modal\n                  @confirm=${this._deleteAction}\n                  @cancel=${() => (this.confirmModalShown = false)}\n                  ?open=${this.confirmModalShown}\n                ></action-confirm-modal>\n              `\n            : nothing}\n        </div>\n      </form>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -1481,7 +1726,7 @@
         {
           "kind": "variable",
           "name": "ActionInput",
-          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.value = '';\n        this.autoComplete = true;\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=\"text\"\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <action-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></action-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
+          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = InputType.TEXT;\n        this.value = '';\n        this.autoComplete = true;\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    get fieldValue() {\n        return this.value;\n        /*\n        switch (this.type) {\n          case InputType.DATETIME_LOCAL:\n            return this._dateTimeFromEpoch(parseInt(this.value));\n          default:\n            return this.value;\n        }\n        */\n    }\n    _dateTimeFromEpoch(time) {\n        return dateTime(time);\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.fieldValue;\n        }\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=${this.type}\n          value=${this.fieldValue}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <action-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></action-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -1506,7 +1751,7 @@
         {
           "kind": "variable",
           "name": "ActionListItem",
-          "default": "class ActionListItem extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = '';\n        this.actionId = 0;\n        this.desc = '';\n        this.time = 0;\n        this.mode = ActionListItemMode.VIEW;\n    }\n    static { this.styles = css `\n    .action-list-item {\n      padding: 0.5rem;\n      text-align: center;\n    }\n\n    .time {\n      color: #888;\n      font-size: 0.9rem;\n    }\n  `; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('action-item-updated', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n        this.addEventListener('action-item-canceled', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n    }\n    get readableTime() {\n        const date = new Date(this.time * 1000);\n        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} @ ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;\n    }\n    _setMode(mode) {\n        this.mode = mode;\n    }\n    render() {\n        return html `\n      <div class=\"action-list-item\">\n        ${this.mode === ActionListItemMode.EDIT\n            ? html `\n              <action-form\n                actionId=${this.actionId}\n                desc=${this.desc}\n                time=${this.time}\n                type=${this.type}\n              ></action-form>\n            `\n            : html `\n              <div\n                @click=\"${() => {\n                this._setMode(ActionListItemMode.EDIT);\n            }}\"\n              >\n                <div class=\"desc\">${this.desc}</div>\n                <div class=\"time\">${this.readableTime}</div>\n              </div>\n            `}\n      </div>\n    `;\n    }\n}"
+          "default": "class ActionListItem extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = '';\n        this.actionId = 0;\n        this.desc = '';\n        this.createdAt = '';\n        this.updatedAt = '';\n        this.occurredAt = '';\n        this.mode = ActionListItemMode.VIEW;\n    }\n    static { this.styles = css `\n    .action-list-item {\n      padding: 0.5rem;\n      text-align: center;\n    }\n\n    .time {\n      color: #888;\n      font-size: 0.9rem;\n    }\n  `; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('action-item-updated', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n        this.addEventListener('action-item-canceled', e => {\n            this.mode = ActionListItemMode.VIEW;\n        });\n    }\n    get readableTime() {\n        const date = new Date(this.occurredAt);\n        return formatDate(date);\n    }\n    _setMode(mode) {\n        this.mode = mode;\n    }\n    render() {\n        return html `\n      <div class=\"action-list-item\">\n        ${this.mode === ActionListItemMode.EDIT\n            ? html `\n              <action-form\n                actionId=${this.actionId}\n                desc=${this.desc}\n                occurredAt=${this.occurredAt}\n                type=${this.type}\n              ></action-form>\n            `\n            : html `\n              <div\n                @click=\"${() => {\n                this._setMode(ActionListItemMode.EDIT);\n            }}\"\n              >\n                <div class=\"desc\">${this.desc}</div>\n                <div class=\"time\">${this.readableTime}</div>\n              </div>\n            `}\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -1535,7 +1780,7 @@
         {
           "kind": "variable",
           "name": "ActionList",
-          "default": "class ActionList extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.items = [];\n        this.start = 0;\n        this.reachedEnd = false;\n        this.loading = false;\n    }\n    static { this.styles = [theme]; }\n    get totalShown() {\n        return this.start + config.perPage;\n    }\n    get lazyLoaderIsVisible() {\n        var rect = this.lazyLoader.getBoundingClientRect();\n        return (rect.bottom <=\n            (window.innerHeight || document.documentElement.clientHeight));\n    }\n    async connectedCallback() {\n        super.connectedCallback();\n        this._load();\n        window.addEventListener('scroll', () => {\n            if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {\n                this._load(true);\n            }\n        });\n        this.addEventListener('action-item-deleted', e => {\n            const event = e;\n            this.items = this.items.filter(item => item.id !== event.detail);\n        });\n        this.addEventListener('action-item-updated', e => {\n            const event = e;\n            this.items = this.items.map(item => item.id === event.detail.id\n                ? { ...item, desc: event.detail.desc }\n                : item);\n        });\n    }\n    async _load(more = false) {\n        this.loading = true;\n        if (more) {\n            this.start += config.perPage;\n        }\n        const url = this.start > 0 ? `${apiUrl}?start=${this.start}` : apiUrl;\n        let json;\n        try {\n            const response = await fetch(url);\n            json = await response.json();\n            if (json.actions) {\n                this.items = [...this.items, ...json.actions];\n            }\n            if (json.total) {\n                this.reachedEnd = json.total <= this.totalShown ? true : false;\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n        finally {\n            this.loading = false;\n        }\n    }\n    render() {\n        return html `\n      <div class=\"box\">\n        ${repeat(this.items, item => item.id, item => html `\n              <action-list-item\n                actionId=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                time=${item.time}\n              ></action-list-item>\n            `)}\n        <div id=\"lazy-loader\"></div>\n      </div>\n    `;\n    }\n}"
+          "default": "class ActionList extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.items = [];\n        this.start = 0;\n        this.reachedEnd = false;\n        this.loading = false;\n    }\n    static { this.styles = [theme]; }\n    get totalShown() {\n        return this.start + config.perPage;\n    }\n    get lazyLoaderIsVisible() {\n        var rect = this.lazyLoader.getBoundingClientRect();\n        return (rect.bottom <=\n            (window.innerHeight || document.documentElement.clientHeight));\n    }\n    async connectedCallback() {\n        super.connectedCallback();\n        this._load();\n        window.addEventListener('scroll', () => {\n            if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {\n                this._load(true);\n            }\n        });\n        this.addEventListener('action-item-deleted', e => {\n            const event = e;\n            this.items = this.items.filter(item => item.id !== event.detail);\n        });\n        this.addEventListener('action-item-updated', e => {\n            const event = e;\n            this.items = this.items.map(item => item.id === event.detail.id\n                ? {\n                    ...item,\n                    desc: event.detail.desc,\n                    occurredAt: event.detail.occurredAt,\n                }\n                : item);\n        });\n    }\n    async _load(more = false) {\n        this.loading = true;\n        if (more) {\n            this.start += config.perPage;\n        }\n        const url = this.start > 0 ? `${apiUrl}?start=${this.start}` : apiUrl;\n        let json;\n        try {\n            const response = await fetch(url);\n            json = await response.json();\n            if (json.actions) {\n                this.items = [...this.items, ...json.actions];\n            }\n            if (json.total) {\n                this.reachedEnd = json.total <= this.totalShown ? true : false;\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n        finally {\n            this.loading = false;\n        }\n    }\n    render() {\n        return html `\n      <div class=\"box\">\n        ${repeat(this.items, item => item.id, item => html `\n              <action-list-item\n                actionId=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                occurredAt=${item.occurredAt}\n              ></action-list-item>\n            `)}\n        <div id=\"lazy-loader\"></div>\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -1545,6 +1790,27 @@
           "declaration": {
             "name": "ActionList",
             "module": "out-tsc/src/components/action-list.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/action-loader.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActionLoader",
+          "default": "class ActionLoader extends LitElement {\n    static { this.styles = css `\n    .container {\n      height: 5rem;\n    }\n    .loader {\n      width: 8px;\n      height: 40px;\n      border-radius: 4px;\n      display: block;\n      margin: 20px auto;\n      position: relative;\n      background: currentColor;\n      color: #fff;\n      box-sizing: border-box;\n      animation: animloader 0.3s 0.3s linear infinite alternate;\n    }\n\n    .loader::after,\n    .loader::before {\n      content: '';\n      width: 8px;\n      height: 40px;\n      border-radius: 4px;\n      background: currentColor;\n      position: absolute;\n      top: 50%;\n      transform: translateY(-50%);\n      left: 20px;\n      box-sizing: border-box;\n      animation: animloader 0.3s 0.45s linear infinite alternate;\n    }\n    .loader::before {\n      left: -20px;\n      animation-delay: 0s;\n    }\n\n    @keyframes animloader {\n      0% {\n        height: 48px;\n      }\n      100% {\n        height: 4px;\n      }\n    }\n  `; }\n    render() {\n        return html `<div class=\"container\">\n      <span class=\"loader\"></span>\n    </div>`;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActionLoader",
+          "declaration": {
+            "name": "ActionLoader",
+            "module": "out-tsc/src/components/action-loader.js"
           }
         }
       ]
@@ -1614,27 +1880,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "out-tsc/src/styles/theme.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "theme",
-          "default": "css `\n  input,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "theme",
-          "declaration": {
-            "name": "theme",
-            "module": "out-tsc/src/styles/theme.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "out-tsc/src/util/strings.js",
       "declarations": [
         {
@@ -1666,6 +1911,48 @@
           "declaration": {
             "name": "translate",
             "module": "out-tsc/src/util/strings.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/util/time.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "dateTime",
+          "parameters": [
+            {
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "formatDate",
+          "parameters": [
+            {
+              "name": "date"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "dateTime",
+          "declaration": {
+            "name": "dateTime",
+            "module": "out-tsc/src/util/time.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "formatDate",
+          "declaration": {
+            "name": "formatDate",
+            "module": "out-tsc/src/util/time.js"
           }
         }
       ]
