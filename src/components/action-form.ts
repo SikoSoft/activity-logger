@@ -66,10 +66,11 @@ export class ActionForm extends MobxLitElement {
     try {
       if (desc && this.hasChanged) {
         const occurredAt = this.occurredAt;
-        console.log({ occurredAt });
+        const timeZone = new Date().getTimezoneOffset();
+        console.log({ occurredAt, timeZone });
         await fetch(this.apiUrl, {
           method: 'POST',
-          body: JSON.stringify({ type: 'food', desc, occurredAt }),
+          body: JSON.stringify({ type: 'food', desc, occurredAt, timeZone }),
         });
         this.desc = '';
 
