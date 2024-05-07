@@ -5,6 +5,7 @@ import { config } from '../models/Config';
 import './action-input';
 import './action-button';
 import './action-confirm-modal';
+import './tag/tag-manager';
 import { theme } from '../styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
@@ -36,6 +37,7 @@ export class ActionForm extends MobxLitElement {
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
   @state() confirmModalShown: boolean = false;
+  @state() advancedMode: boolean = false;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -190,6 +192,7 @@ export class ActionForm extends MobxLitElement {
                   @cancel=${() => (this.confirmModalShown = false)}
                   ?open=${this.confirmModalShown}
                 ></action-confirm-modal>
+                <tag-manager></tag-manager>
               `
             : nothing}
         </div>
