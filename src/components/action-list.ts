@@ -12,6 +12,7 @@ const apiUrl = `${config.apiUrl}action`;
 @customElement('action-list')
 export class ActionList extends LitElement {
   static styles = [theme];
+  private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @state() items: ActionItem[] = [];
   @state() start: number = 0;
@@ -24,21 +25,16 @@ export class ActionList extends LitElement {
 
   get lazyLoaderIsVisible(): boolean {
     var rect = this.lazyLoader.getBoundingClientRect();
-    return (
-      rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight)
-    );
+    const docHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+    return rect.bottom <= docHeight;
   }
 
-  async connectedCallback(): Promise<void> {
+  connectedCallback(): void {
     super.connectedCallback();
     this._load();
 
-    window.addEventListener('scroll', () => {
-      if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
-        this._load(true);
-      }
-    });
+    window.addEventListener('scroll', this.scrollHandler);
 
     this.addEventListener('action-item-deleted', e => {
       const event = e as CustomEvent;
@@ -57,6 +53,17 @@ export class ActionList extends LitElement {
           : item
       );
     });
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener('scroll', this.scrollHandler);
+  }
+
+  private _handleScroll() {
+    if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
+      this._load(true);
+    }
   }
 
   private async _load(more: boolean = false): Promise<void> {
