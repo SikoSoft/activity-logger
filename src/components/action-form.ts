@@ -2,7 +2,7 @@ import { LitElement, html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { config } from '../models/Config';
 
-import './action-input';
+import './ss-input';
 import './action-button';
 import './action-confirm-modal';
 import './tag/tag-manager';
@@ -154,21 +154,21 @@ export class ActionForm extends MobxLitElement {
     return html`
       <form class="box">
         <div>
-          <action-input
+          <ss-input
             @action-input-submitted=${this._handleDescSubmitted}
             @action-input-changed=${this._handleDescChanged}
             value=${this.desc}
-          ></action-input>
+          ></ss-input>
         </div>
         ${this.actionId
           ? html`
               <div>
-                <action-input
+                <ss-input
                   type=${InputType.DATETIME_LOCAL}
                   @action-input-submitted=${this._handleOccurredAtSubmitted}
                   @action-input-changed=${this._handleOccurredAtChanged}
                   value=${this.occurredAt}
-                ></action-input>
+                ></ss-input>
               </div>
             `
           : nothing}

@@ -2,11 +2,11 @@ import { LitElement, html, PropertyValueMap, nothing, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 
-import './action-input-auto';
+import './ss-input-auto';
 import { InputType } from '../models/Input';
 
-@customElement('action-input')
-export class ActionInput extends LitElement {
+@customElement('ss-input')
+export class SSInput extends LitElement {
   static styles = [
     theme,
     css`
@@ -21,7 +21,7 @@ export class ActionInput extends LitElement {
   @property({ type: Boolean }) autoComplete: boolean = true;
   @state() _value: string = this.value;
   @query('#input-field') inputField!: HTMLInputElement;
-  @query('action-input-auto') autoCompleteNode!: HTMLElement;
+  @query('ss-input-auto') autoCompleteNode!: HTMLElement;
 
   @state() hasFocus: boolean = false;
   @state() autoDismissed: boolean = false;
@@ -159,11 +159,11 @@ export class ActionInput extends LitElement {
         />
         ${this.showAutoComplete
           ? html`
-              <action-input-auto
+              <ss-input-auto
                 input=${this._value}
                 @submit=${this._handleSubmit}
                 @suggestion-selected=${this._suggestionSelectHandler}
-              ></action-input-auto>
+              ></ss-input-auto>
             `
           : nothing}
       </span>

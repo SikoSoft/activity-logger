@@ -5,8 +5,8 @@ import { repeat } from 'lit/directives/repeat.js';
 import { appState } from '../state';
 import { theme } from '../styles/theme';
 
-@customElement('action-input-auto')
-export class ActionInputAuto extends MobxLitElement {
+@customElement('ss-input-auto')
+export class SSInputAuto extends MobxLitElement {
   static styles = [
     theme,
     css`
