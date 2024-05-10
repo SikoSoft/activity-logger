@@ -192,9 +192,9 @@ export class ActionForm extends MobxLitElement {
                   @cancel=${() => (this.confirmModalShown = false)}
                   ?open=${this.confirmModalShown}
                 ></action-confirm-modal>
-                <tag-manager></tag-manager>
               `
             : nothing}
+          <tag-manager></tag-manager>
         </div>
       </form>
     `;

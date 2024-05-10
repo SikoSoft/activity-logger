@@ -3,6 +3,8 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
+import './ss-button';
+
 @customElement('action-confirm-modal')
 export class ActionConfirmModal extends LitElement {
   static styles = [
@@ -53,7 +55,7 @@ export class ActionConfirmModal extends LitElement {
         padding: 1rem;
       }
 
-      .buttons action-button {
+      .buttons ss-button {
         margin-top: 1rem;
         display: block;
       }
@@ -85,14 +87,11 @@ export class ActionConfirmModal extends LitElement {
         <div class="box modal">
           Are you sure?
           <div class="buttons">
-            <action-button
-              @click=${this._sendConfirmEvent}
-              text="Yes!"
-            ></action-button>
-            <action-button
+            <ss-button @click=${this._sendConfirmEvent} text="Yes!"></ss-button>
+            <ss-button
               @click=${this._sendCancelEvent}
               text="Cancel"
-            ></action-button>
+            ></ss-button>
           </div>
         </div>
       </div>
