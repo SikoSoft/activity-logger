@@ -11,6 +11,7 @@ import { theme } from './styles/theme';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from './state';
+import { api } from './lib/Api';
 
 export interface ViewChangedEvent extends Event {
   detail: ActionView;
@@ -37,9 +38,13 @@ export class FoodJournal extends MobxLitElement {
 
   private async _getSuggestions() {
     try {
-      const res = await fetch(`${config.apiUrl}actionSuggestion`);
-      const json = (await res.json()) as { suggestions: string[] };
-      this.state.setAutoSuggestions(json.suggestions);
+      const json = await api.get<{ suggestions: string[] }>('actionSuggestion');
+
+      //const res = await fetch(`${config.apiUrl}actionSuggestion`);
+      //const json = (await res.json()) as { suggestions: string[] };
+      if (json) {
+        this.state.setAutoSuggestions(json.suggestions);
+      }
     } catch (error) {
       console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }

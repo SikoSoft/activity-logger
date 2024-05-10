@@ -3,7 +3,7 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { config } from '../models/Config';
 
 import './ss-input';
-import './action-button';
+import './ss-button';
 import './action-confirm-modal';
 import './tag/tag-manager';
 import { theme } from '../styles/theme';
@@ -12,6 +12,14 @@ import { appState } from '../state';
 import { translate } from '../util/strings';
 import { InputType } from '../models/Input';
 import { formatDate } from '../util/time';
+import { api } from '../lib/Api';
+
+export interface PostRequestBody {
+  type: string;
+  desc: string;
+  occurredAt: string;
+  timeZone: number;
+}
 
 @customElement('action-form')
 export class ActionForm extends MobxLitElement {
@@ -49,9 +57,7 @@ export class ActionForm extends MobxLitElement {
   }
 
   get apiUrl(): string {
-    return this.actionId
-      ? `${config.apiUrl}action/${this.actionId}`
-      : `${config.apiUrl}action`;
+    return this.actionId ? `action/${this.actionId}` : `action`;
   }
 
   @state()
@@ -70,10 +76,14 @@ export class ActionForm extends MobxLitElement {
         const occurredAt = this.occurredAt;
         const timeZone = new Date().getTimezoneOffset();
         console.log({ occurredAt, timeZone });
-        await fetch(this.apiUrl, {
-          method: 'POST',
-          body: JSON.stringify({ type: 'food', desc, occurredAt, timeZone }),
+
+        await api.post<PostRequestBody, null>(this.apiUrl, {
+          type: 'food',
+          desc,
+          occurredAt,
+          timeZone,
         });
+
         this.desc = '';
 
         this.dispatchEvent(
@@ -102,9 +112,7 @@ export class ActionForm extends MobxLitElement {
 
   private async _deleteAction() {
     try {
-      await fetch(this.apiUrl, {
-        method: 'DELETE',
-      });
+      await api.delete(this.apiUrl);
 
       this.state.addToast('Removed!');
     } catch (error) {
@@ -173,20 +181,20 @@ export class ActionForm extends MobxLitElement {
             `
           : nothing}
         <div>
-          <action-button
+          <ss-button
             @click=${this._handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
                 ? translate('update')
                 : translate('cancel')
               : translate('add')}
-          ></action-button>
+          ></ss-button>
           ${this.actionId
             ? html`
-                <action-button
+                <ss-button
                   @click=${this._handleDeleteClick}
                   text=${translate('delete')}
-                ></action-button>
+                ></ss-button>
                 <action-confirm-modal
                   @confirm=${this._deleteAction}
                   @cancel=${() => (this.confirmModalShown = false)}
