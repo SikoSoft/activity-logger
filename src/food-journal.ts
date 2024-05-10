@@ -39,9 +39,6 @@ export class FoodJournal extends MobxLitElement {
   private async _getSuggestions() {
     try {
       const json = await api.get<{ suggestions: string[] }>('actionSuggestion');
-
-      //const res = await fetch(`${config.apiUrl}actionSuggestion`);
-      //const json = (await res.json()) as { suggestions: string[] };
       if (json) {
         this.state.setAutoSuggestions(json.suggestions);
       }

@@ -6,8 +6,9 @@ import { ActionItem } from '../models/Action';
 import './action-list-item';
 import { config } from '../models/Config';
 import { theme } from '../styles/theme';
+import { api } from '../lib/Api';
 
-const apiUrl = `${config.apiUrl}action`;
+const apiUrl = 'action';
 
 @customElement('action-list')
 export class ActionList extends LitElement {
@@ -72,15 +73,15 @@ export class ActionList extends LitElement {
       this.start += config.perPage;
     }
     const url = this.start > 0 ? `${apiUrl}?start=${this.start}` : apiUrl;
-    let json: { actions: ActionItem[]; total: number };
     try {
-      const response = await fetch(url);
-      json = await response.json();
-      if (json.actions) {
-        this.items = [...this.items, ...json.actions];
-      }
-      if (json.total) {
-        this.reachedEnd = json.total <= this.totalShown ? true : false;
+      const json = await api.get<{ actions: ActionItem[]; total: number }>(url);
+      if (json) {
+        if (json.actions) {
+          this.items = [...this.items, ...json.actions];
+        }
+        if (json.total) {
+          this.reachedEnd = json.total <= this.totalShown ? true : false;
+        }
       }
     } catch (error) {
       console.error(`Failed to get list: ${JSON.stringify(error)}`);
