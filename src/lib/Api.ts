@@ -53,7 +53,7 @@ export class Api {
     body: RequestType,
     config?: RequestInit
   ) {
-    return await this.httpRequest(path, {
+    return await this.httpRequest<ResponseType>(path, {
       method: 'post',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body),
@@ -61,8 +61,11 @@ export class Api {
     });
   }
 
-  async delete(path: string, config?: RequestInit) {
-    return await this.httpRequest(path, { method: 'delete', ...config });
+  async delete<ResponseType>(path: string, config?: RequestInit) {
+    return await this.httpRequest<ResponseType>(path, {
+      method: 'delete',
+      ...config,
+    });
   }
 }
 
