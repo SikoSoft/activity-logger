@@ -103,6 +103,7 @@ export class ActionList extends LitElement {
                 type=${item.type}
                 desc=${item.desc}
                 occurredAt=${item.occurredAt}
+                .tags=${item.tags}
               ></action-list-item>
             `
         )}

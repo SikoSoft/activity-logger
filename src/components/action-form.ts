@@ -19,6 +19,7 @@ export interface PostRequestBody {
   desc: string;
   occurredAt: string;
   timeZone: number;
+  tags: string[];
 }
 
 @customElement('action-form')
@@ -40,12 +41,14 @@ export class ActionForm extends MobxLitElement {
   @property() type: string = '';
   @property({ reflect: true }) desc: string = '';
   @property({ reflect: true }) occurredAt: string = '';
+  @property({ reflect: true, type: Array }) tags: string[] = [];
 
   //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
+  //@state() tags: string[] = [];
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -82,6 +85,7 @@ export class ActionForm extends MobxLitElement {
           desc,
           occurredAt,
           timeZone,
+          tags: this.tags,
         });
 
         this.desc = '';
@@ -158,6 +162,11 @@ export class ActionForm extends MobxLitElement {
     this.confirmModalShown = true;
   }
 
+  private _handleTagsUpdated(e: CustomEvent) {
+    this.tags = e.detail.tags;
+    console.log('tags Updated', this.tags);
+  }
+
   render() {
     return html`
       <form class="box">
@@ -168,6 +177,12 @@ export class ActionForm extends MobxLitElement {
             value=${this.desc}
           ></ss-input>
         </div>
+        <tag-manager
+          .tags=${this.tags}
+          @updated=${(e: CustomEvent) => {
+            this._handleTagsUpdated(e);
+          }}
+        ></tag-manager>
         ${this.actionId
           ? html`
               <div>
@@ -202,7 +217,6 @@ export class ActionForm extends MobxLitElement {
                 ></action-confirm-modal>
               `
             : nothing}
-          <tag-manager></tag-manager>
         </div>
       </form>
     `;

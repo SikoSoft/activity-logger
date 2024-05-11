@@ -5,6 +5,7 @@ export interface ActionItem {
   createdAt: string;
   updatedAt: string;
   occurredAt: string;
+  tags: string[];
 }
 
 export enum ActionView {

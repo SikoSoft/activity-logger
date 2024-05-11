@@ -27,6 +27,7 @@ export class ActionListItem extends LitElement {
   @property() createdAt: string = '';
   @property() updatedAt: string = '';
   @property() occurredAt: string = '';
+  @property({ type: Array }) tags: string[] = [];
 
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
 
@@ -61,6 +62,7 @@ export class ActionListItem extends LitElement {
                 desc=${this.desc}
                 occurredAt=${this.occurredAt}
                 type=${this.type}
+                .tags=${this.tags}
               ></action-form>
             `
           : html`
