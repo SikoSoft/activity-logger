@@ -33,7 +33,8 @@ export class TagList extends LitElement {
       .tag-list li .delete {
         display: inline-block;
         background-color: var(--negative-color);
-        border-radius: 0.125rem;
+        border-radius: 0.25rem;
+        border: 1px rgba(255, 255, 255, 0.5) outset;
         padding: 0.25rem;
         color: #fff;
         font-size: 1.5rem;
