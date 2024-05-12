@@ -96,7 +96,7 @@ export class ActionForm extends MobxLitElement {
           new CustomEvent('action-item-updated', {
             bubbles: true,
             composed: true,
-            detail: { id: this.actionId, desc, occurredAt },
+            detail: { id: this.actionId, desc, occurredAt, tags: this.tags },
           })
         );
 

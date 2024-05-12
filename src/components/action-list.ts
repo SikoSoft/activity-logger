@@ -50,6 +50,7 @@ export class ActionList extends LitElement {
               ...item,
               desc: event.detail.desc,
               occurredAt: event.detail.occurredAt,
+              tags: event.detail.tags,
             }
           : item
       );
