@@ -118,7 +118,9 @@ export class ActionForm extends MobxLitElement {
 
   private reset(): void {
     this.desc = '';
-    this.tags = [];
+    if (!this.actionId) {
+      this.tags = [];
+    }
   }
 
   private async _deleteAction() {
