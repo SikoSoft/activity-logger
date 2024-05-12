@@ -46,6 +46,7 @@ export class ActionForm extends MobxLitElement {
   //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
+  @state() initialTags: string = '';
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   //@state() tags: string[] = [];
@@ -57,6 +58,7 @@ export class ActionForm extends MobxLitElement {
     this.occurredAt = formatDate(new Date(this.occurredAt));
     this.initialDesc = this.desc;
     this.initialOccurredAt = this.occurredAt;
+    this.initialTags = JSON.stringify(this.tags);
   }
 
   get apiUrl(): string {
@@ -67,7 +69,8 @@ export class ActionForm extends MobxLitElement {
   get hasChanged(): boolean {
     return (
       this.desc.trim() !== this.initialDesc ||
-      this.occurredAt !== this.initialOccurredAt
+      this.occurredAt !== this.initialOccurredAt ||
+      JSON.stringify(this.tags) !== this.initialTags
     );
   }
 
