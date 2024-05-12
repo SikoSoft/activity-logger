@@ -1,12 +1,12 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { html, css, nothing } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { appState } from '../state';
 import { theme } from '../styles/theme';
 
 @customElement('ss-input-auto')
-export class SSInputAuto extends MobxLitElement {
+export class SSInputAuto extends LitElement {
   static styles = [
     theme,
     css`
@@ -15,6 +15,7 @@ export class SSInputAuto extends MobxLitElement {
       }
 
       ul {
+        z-index: 100;
         position: absolute;
         top: 0;
         left: 0;
@@ -53,9 +54,13 @@ export class SSInputAuto extends MobxLitElement {
 
   @state()
   get suggestionMatches(): string[] {
-    return this.state.suggestions
-      .filter(suggestion => suggestion.match(new RegExp(`^${this.input}`)))
-      .slice(0, this.maxMatches);
+    return this.state.suggestions.length
+      ? this.state.suggestions
+          .filter(suggestion => {
+            return suggestion.match(new RegExp(`^${this.input}`));
+          })
+          .slice(0, this.maxMatches)
+      : [];
   }
 
   get maxSelectedIndex(): number {
