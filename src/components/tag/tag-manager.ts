@@ -13,7 +13,12 @@ export class TagManager extends LitElement {
   @property({ type: Array, reflect: true }) tags: string[] = [];
 
   private _handleAdded(e: CustomEvent) {
-    this.tags.push(e.detail.value);
+    this.tags = [...this.tags, e.detail.value];
+    this._sendUpdatedEvent();
+  }
+
+  private _handleDeleted(e: CustomEvent) {
+    this.tags = this.tags.filter(tag => tag !== e.detail.value);
     this._sendUpdatedEvent();
   }
 
@@ -47,7 +52,12 @@ export class TagManager extends LitElement {
             this._handleAdded(e);
           }}
         ></tag-input>
-        <tag-list .tags=${this.tags}></tag-list>
+        <tag-list
+          .tags=${this.tags}
+          @deleted=${(e: CustomEvent) => {
+            this._handleDeleted(e);
+          }}
+        ></tag-list>
       </fieldset>
     `;
   }

@@ -33,6 +33,8 @@ export class TagInput extends MobxLitElement {
   ];
 
   @state() value: string = '';
+  @state() lastHitValue: string = '';
+  @state() lastHitTags: string[] = [];
 
   get showButton(): boolean {
     return this.value.length > 0;
@@ -42,13 +44,45 @@ export class TagInput extends MobxLitElement {
     this._save();
   }
 
+  private _get() {}
+
   private async _handleChanged(e: CustomEvent) {
     this.value = e.detail.value;
 
+    /*
+    console.log(
+      'lastHitValue',
+      this.lastHitValue,
+      'lastHitTags',
+      this.lastHitTags,
+      'lastHitMatchOnInput',
+      this.value.match(new RegExp(`^${this.lastHitValue}`))
+    );
+    */
+    if (
+      this.lastHitValue.length &&
+      this.value.match(new RegExp(`^${this.lastHitValue}`)) &&
+      this.lastHitTags.length === 0
+    ) {
+      console.log('use empty tags, avoid http request');
+      this.state.setAutoSuggestions([]);
+      return;
+    }
+
+    let tags: string[] = [];
+
     const json = await api.get<{ tags: string[] }>(`tag/${this.value}`);
     if (json) {
-      this.state.setAutoSuggestions(json.tags);
+      tags = json.tags;
     }
+
+    if (tags.length) {
+      this.lastHitValue = this.value;
+    }
+
+    this.lastHitTags = tags;
+
+    this.state.setAutoSuggestions(tags);
   }
 
   private _handleSaveClick(e: CustomEvent) {

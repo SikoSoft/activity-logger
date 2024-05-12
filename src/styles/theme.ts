@@ -1,6 +1,11 @@
 import { css } from 'lit';
 
 export const theme = css`
+  :host {
+    --negative-color: #600;
+    --positive-color: #060;
+  }
+
   input,
   button {
     font-family: Poppins;
