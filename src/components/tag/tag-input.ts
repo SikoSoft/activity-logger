@@ -44,27 +44,15 @@ export class TagInput extends MobxLitElement {
     this._save();
   }
 
-  private _get() {}
-
   private async _handleChanged(e: CustomEvent) {
     this.value = e.detail.value;
 
-    /*
-    console.log(
-      'lastHitValue',
-      this.lastHitValue,
-      'lastHitTags',
-      this.lastHitTags,
-      'lastHitMatchOnInput',
-      this.value.match(new RegExp(`^${this.lastHitValue}`))
-    );
-    */
     if (
       this.lastHitValue.length &&
       this.value.match(new RegExp(`^${this.lastHitValue}`)) &&
       this.lastHitTags.length === 0
     ) {
-      console.log('use empty tags, avoid http request');
+      //console.log('use empty tags, avoid http request');
       this.state.setAutoSuggestions([]);
       return;
     }
@@ -90,8 +78,6 @@ export class TagInput extends MobxLitElement {
   }
 
   private _save() {
-    console.log('save', this.value);
-
     this._sendAddedEvent();
     this.value = '';
   }

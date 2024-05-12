@@ -78,7 +78,6 @@ export class ActionForm extends MobxLitElement {
       if (desc && this.hasChanged) {
         const occurredAt = this.occurredAt;
         const timeZone = new Date().getTimezoneOffset();
-        console.log({ occurredAt, timeZone });
 
         await api.post<PostRequestBody, null>(this.apiUrl, {
           type: 'food',
@@ -135,22 +134,18 @@ export class ActionForm extends MobxLitElement {
   }
 
   private _handleDescChanged(e: CustomEvent) {
-    //console.log('_handleChange', e);
     this.desc = e.detail.value;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
-    //this.action = e.detail;
     this._saveAction();
   }
 
   private _handleOccurredAtChanged(e: CustomEvent) {
-    //console.log('_handleChange', e);
     this.occurredAt = e.detail.value;
   }
 
   private _handleOccurredAtSubmitted(e: CustomEvent) {
-    //this.action = e.detail;
     this._saveAction();
   }
 
@@ -164,7 +159,6 @@ export class ActionForm extends MobxLitElement {
 
   private _handleTagsUpdated(e: CustomEvent) {
     this.tags = e.detail.tags;
-    console.log('tags Updated', this.tags);
   }
 
   render() {

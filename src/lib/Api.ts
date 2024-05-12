@@ -15,7 +15,6 @@ export class Api {
     path: string,
     config: RequestInit
   ): Promise<ApiResponse<ResponseType>> {
-    console.log('httpRequest', path);
     let json: unknown;
 
     const headers = new Headers(config.headers);

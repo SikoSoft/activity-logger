@@ -50,12 +50,9 @@ export class TagList extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-
-    console.log('connectedCallback', this.tags);
   }
 
   private _deleteTag(tag: string) {
-    console.log('_deleteTag', tag);
     this.dispatchEvent(
       new CustomEvent('deleted', {
         bubbles: true,

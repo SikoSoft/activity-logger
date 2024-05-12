@@ -23,7 +23,6 @@ export class TagManager extends LitElement {
   }
 
   private _sendUpdatedEvent() {
-    console.log('TAGS', this.tags);
     this.dispatchEvent(
       new CustomEvent('updated', {
         composed: true,
