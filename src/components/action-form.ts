@@ -90,7 +90,7 @@ export class ActionForm extends MobxLitElement {
           tags: this.tags,
         });
 
-        this.desc = '';
+        this.reset();
 
         this.dispatchEvent(
           new CustomEvent('action-item-updated', {
@@ -114,6 +114,11 @@ export class ActionForm extends MobxLitElement {
     } catch (error) {
       console.error(`Error encountered in when saving action: ${error}`);
     }
+  }
+
+  private reset(): void {
+    this.desc = '';
+    this.tags = [];
   }
 
   private async _deleteAction() {
