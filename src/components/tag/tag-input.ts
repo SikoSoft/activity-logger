@@ -93,6 +93,7 @@ export class TagInput extends MobxLitElement {
     console.log('save', this.value);
 
     this._sendAddedEvent();
+    this.value = '';
   }
 
   private _sendAddedEvent() {
@@ -112,6 +113,7 @@ export class TagInput extends MobxLitElement {
           @action-input-submitted=${this._handleSubmitted}
           @action-input-changed=${this._handleChanged}
           placeholder="Tag"
+          value=${this.value}
         ></ss-input>
         ${this.showButton
           ? html`
