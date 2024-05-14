@@ -27,6 +27,7 @@ export class TagManager extends LitElement {
   ];
 
   @property({ type: Array, reflect: true }) tags: string[] = [];
+  @property({ type: String, reflect: true }) value: string = '';
 
   private _handleAdded(e: CustomEvent) {
     this.tags = [...this.tags, e.detail.value];
@@ -36,6 +37,10 @@ export class TagManager extends LitElement {
   private _handleDeleted(e: CustomEvent) {
     this.tags = this.tags.filter(tag => tag !== e.detail.value);
     this._sendUpdatedEvent();
+  }
+
+  private _handleChanged(e: CustomEvent) {
+    this.value = e.detail.value;
   }
 
   private _sendUpdatedEvent() {
@@ -53,6 +58,10 @@ export class TagManager extends LitElement {
       <fieldset class="tag-manager">
         <legend>Tags</legend>
         <tag-input
+          value=${this.value}
+          @changed=${(e: CustomEvent) => {
+            this._handleChanged(e);
+          }}
           @added=${(e: CustomEvent) => {
             this._handleAdded(e);
           }}

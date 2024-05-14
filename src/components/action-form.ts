@@ -42,6 +42,7 @@ export class ActionForm extends MobxLitElement {
   @property({ reflect: true }) desc: string = '';
   @property({ reflect: true }) occurredAt: string = '';
   @property({ reflect: true, type: Array }) tags: string[] = [];
+  @property({ reflect: true }) tagValue: string = '';
 
   //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
@@ -118,6 +119,7 @@ export class ActionForm extends MobxLitElement {
 
   private reset(): void {
     this.desc = '';
+    this.tagValue = '';
     if (!this.actionId) {
       this.tags = [];
     }
@@ -182,6 +184,7 @@ export class ActionForm extends MobxLitElement {
           ></ss-input>
         </div>
         <tag-manager
+          value=${this.tagValue}
           .tags=${this.tags}
           @updated=${(e: CustomEvent) => {
             this._handleTagsUpdated(e);

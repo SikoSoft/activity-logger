@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '../ss-input';
 import '../ss-button';
@@ -32,7 +32,7 @@ export class TagInput extends MobxLitElement {
     `,
   ];
 
-  @state() value: string = '';
+  @property({ type: String, reflect: true }) value: string = '';
   @state() lastHitValue: string = '';
   @state() lastHitTags: string[] = [];
 
@@ -46,6 +46,14 @@ export class TagInput extends MobxLitElement {
 
   private async _handleChanged(e: CustomEvent) {
     this.value = e.detail.value;
+
+    this.dispatchEvent(
+      new CustomEvent('changed', {
+        bubbles: true,
+        composed: true,
+        detail: { value: this.value },
+      })
+    );
 
     if (
       this.lastHitValue.length &&
