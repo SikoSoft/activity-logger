@@ -100,7 +100,7 @@ export class ActionForm extends MobxLitElement {
           })
         );
 
-        this.state.addToast('Added!');
+        this.state.addToast(this.actionId ? 'Updated!' : 'Added!');
         return;
       }
 
