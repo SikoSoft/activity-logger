@@ -4,5 +4,10 @@
   "add": "Add",
   "update": "Update",
   "cancel": "Cancel",
-  "delete": "Delete"
+  "delete": "Delete",
+  "removed": "Removed!",
+  "added": "Added!",
+  "updated": "Updated!",
+  "areYouSure": "Are you sure?",
+  "yes": "Yes"
 }

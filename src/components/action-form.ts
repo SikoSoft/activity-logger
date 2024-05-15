@@ -101,7 +101,9 @@ export class ActionForm extends MobxLitElement {
           })
         );
 
-        this.state.addToast(this.actionId ? 'Updated!' : 'Added!');
+        this.state.addToast(
+          this.actionId ? translate('updated') : translate('added')
+        );
         return;
       }
 
@@ -129,7 +131,7 @@ export class ActionForm extends MobxLitElement {
     try {
       await api.delete(this.apiUrl);
 
-      this.state.addToast('Removed!');
+      this.state.addToast(translate('removed'));
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }

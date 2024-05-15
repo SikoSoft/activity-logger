@@ -4,6 +4,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
 import './ss-button';
+import { translate } from '../util/strings';
 
 @customElement('action-confirm-modal')
 export class ActionConfirmModal extends LitElement {
@@ -85,12 +86,15 @@ export class ActionConfirmModal extends LitElement {
       <div class=${classMap(this.classes)}>
         <div class="overlay"></div>
         <div class="box modal">
-          Are you sure?
+          ${translate('areYouSure')}
           <div class="buttons">
-            <ss-button @click=${this._sendConfirmEvent} text="Yes!"></ss-button>
+            <ss-button
+              @click=${this._sendConfirmEvent}
+              text=${translate('yes')}
+            ></ss-button>
             <ss-button
               @click=${this._sendCancelEvent}
-              text="Cancel"
+              text=${translate('cancel')}
             ></ss-button>
           </div>
         </div>
