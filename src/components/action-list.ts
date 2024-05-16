@@ -4,9 +4,12 @@ import { repeat } from 'lit/directives/repeat.js';
 import { ActionItem } from '../models/Action';
 
 import './action-list-item';
+import './list-filter';
+import './ss-collapsable';
 import { config } from '../models/Config';
 import { theme } from '../styles/theme';
 import { api } from '../lib/Api';
+import { translate } from '../util/strings';
 
 const apiUrl = 'action';
 
@@ -19,6 +22,7 @@ export class ActionList extends LitElement {
   @state() start: number = 0;
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
+  @state() filterIsOpen: boolean = true;
 
   get totalShown(): number {
     return this.start + config.perPage;
@@ -91,8 +95,28 @@ export class ActionList extends LitElement {
     }
   }
 
+  private _handleFilterUpdated(e: CustomEvent) {
+    this.filterIsOpen = false;
+    console.log('handleFilterUpdated', this.filterIsOpen);
+  }
+
+  private _toggleFilter() {
+    this.filterIsOpen = !this.filterIsOpen;
+  }
+
   render() {
     return html`
+      <ss-collapsable
+        title=${translate('filter')}
+        ?open=${this.filterIsOpen}
+        @toggled=${this._toggleFilter}
+      >
+        <list-filter
+          @updated=${(e: CustomEvent) => {
+            this._handleFilterUpdated(e);
+          }}
+        ></list-filter>
+      </ss-collapsable>
       <div class="box">
         ${repeat(
           this.items,

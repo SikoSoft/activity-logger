@@ -43,18 +43,29 @@ export class SSCollapsable extends LitElement {
   ];
 
   @property() title: string = '';
-  @state() isOpen: boolean = false;
+  @property({ type: Boolean }) open: boolean = false;
 
   get classes(): string {
     const classes = ['box', 'collapsable'];
-    if (this.isOpen) {
+    if (this.open) {
       classes.push('open');
     }
     return classes.join(' ');
   }
 
   private _handleIconClick() {
-    this.isOpen = !this.isOpen;
+    this._toggle();
+  }
+
+  private _toggle() {
+    //this.open = !this.open;
+    this.dispatchEvent(
+      new CustomEvent('toggled', {
+        bubbles: true,
+        composed: true,
+        detail: this.open,
+      })
+    );
   }
 
   render() {
@@ -64,7 +75,7 @@ export class SSCollapsable extends LitElement {
           <div class="title">${this.title}</div>
           <div class="icon">
             <button @click=${() => this._handleIconClick()}>
-              ${this.isOpen ? '-' : '+'}
+              ${this.open ? '-' : '+'}
             </button>
           </div>
         </div>
