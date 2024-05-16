@@ -1,5 +1,6 @@
 import { LitElement, html, PropertyValueMap, nothing, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
 import './ss-input-auto';
@@ -32,12 +33,13 @@ export class SSCollapsable extends LitElement {
       }
 
       .body {
-        display: none;
+        max-height: 0;
+        transition: all 0.3s;
+        overflow: hidden;
       }
 
       .collapsable.open .body {
-        display: initial;
-        padding: 1rem;
+        max-height: 600px;
       }
     `,
   ];
@@ -45,12 +47,9 @@ export class SSCollapsable extends LitElement {
   @property() title: string = '';
   @property({ type: Boolean }) open: boolean = false;
 
-  get classes(): string {
-    const classes = ['box', 'collapsable'];
-    if (this.open) {
-      classes.push('open');
-    }
-    return classes.join(' ');
+  @state()
+  get classes() {
+    return { box: true, collapsable: true, open: this.open };
   }
 
   private _handleIconClick() {
@@ -58,7 +57,6 @@ export class SSCollapsable extends LitElement {
   }
 
   private _toggle() {
-    //this.open = !this.open;
     this.dispatchEvent(
       new CustomEvent('toggled', {
         bubbles: true,
@@ -70,7 +68,7 @@ export class SSCollapsable extends LitElement {
 
   render() {
     return html`
-      <div class=${this.classes}>
+      <div class=${classMap(this.classes)}>
         <div class="head">
           <div class="title">${this.title}</div>
           <div class="icon">
