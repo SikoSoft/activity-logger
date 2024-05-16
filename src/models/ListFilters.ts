@@ -6,4 +6,5 @@ export enum ListFilterType {
 export interface ListFilters {
   tagging: Record<ListFilterType, string[]>;
   includeUntagged: boolean;
+  includeAll: boolean;
 }

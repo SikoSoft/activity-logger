@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
 import './tag/tag-manager';
@@ -16,8 +17,13 @@ export class ListFilter extends MobxLitElement {
   static styles = [
     theme,
     css`
-      .filter {
+      .list-filter {
         padding: 1rem;
+      }
+
+      .list-filter.all .filters {
+        opacity: 0.3;
+        pointer-events: none;
       }
 
       fieldset {
@@ -29,54 +35,83 @@ export class ListFilter extends MobxLitElement {
   @state() [ListFilterType.CONTAINS_ONE_OF]: string[] = [];
   @state() [ListFilterType.CONTAINS_ALL_OF]: string[] = [];
   @state() includeUntagged: boolean = false;
+  @state() includeAll: boolean = true;
+
+  @state() get classes() {
+    return { box: true, 'list-filter': true, all: this.includeAll };
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    Object.values(ListFilterType).forEach(type => {
+      this[type] = this.state.listFilters.tagging[type];
+    });
+    this.includeUntagged = this.state.listFilters.includeUntagged;
+    this.includeAll = this.state.listFilters.includeAll;
+  }
 
   private _handleIncludeUntaggedChanged() {
-    console.log('handleIncludeUntaggedChanged');
     this.includeUntagged = !this.includeUntagged;
   }
 
-  private _handleUpdateClick(e: CustomEvent): void {
-    console.log('handleUpdateClick');
+  private _handleIncludeAllChanged() {
+    this.includeAll = !this.includeAll;
+  }
 
+  private _handleUpdateClick(e: CustomEvent): void {
     Object.values(ListFilterType).forEach(type => {
       this.state.setListFilterTagging(type, this[type]);
     });
     this.state.setListFilterIncludeUntagged(this.includeUntagged);
+    this.state.setListFilterIncludeAll(this.includeAll);
     this.dispatchEvent(
       new CustomEvent('filter-updated', { bubbles: true, composed: true })
     );
   }
 
   private updateTags(type: ListFilterType, tags: string[]) {
-    console.log('updateTags', type, tags);
     this[type] = tags;
   }
 
   render() {
     return html`
-      <div class="box filter">
-        ${repeat(
-          Object.values(ListFilterType),
-          type => type,
-          type => html`
-            <fieldset>
-              <legend>${translate(type)}</legend>
-              <tag-manager
-                @updated=${(e: CustomEvent) => {
-                  this.updateTags(type, e.detail.tags);
-                }}
-              ></tag-manager>
-            </fieldset>
-          `
-        )}
-        <div>
+      <div class=${classMap(this.classes)}>
+        <div class="all">
           <input
-            id="include-unchanged"
+            id="include-all"
             type="checkbox"
-            ?checked=${this.includeUntagged}
-            @change=${this._handleIncludeUntaggedChanged}
+            ?checked=${this.includeAll}
+            @change=${this._handleIncludeAllChanged}
           />
-          <label for="include-unchanged">${translate('includeUntagged')}</label>
+          <label for="include-all">${translate('includeAll')}</label>
+        </div>
+        <div class="filters">
+          ${repeat(
+            Object.values(ListFilterType),
+            type => type,
+            type => html`
+              <fieldset>
+                <legend>${translate(type)}</legend>
+                <tag-manager
+                  .tags=${this[type]}
+                  @updated=${(e: CustomEvent) => {
+                    this.updateTags(type, e.detail.tags);
+                  }}
+                ></tag-manager>
+              </fieldset>
+            `
+          )}
+          <div>
+            <input
+              id="include-unchanged"
+              type="checkbox"
+              ?checked=${this.includeUntagged}
+              @change=${this._handleIncludeUntaggedChanged}
+            />
+            <label for="include-unchanged"
+              >${translate('includeUntagged')}</label
+            >
+          </div>
         </div>
         <ss-button
           @click=${(e: CustomEvent) => {

@@ -13,8 +13,6 @@ import { translate } from '../util/strings';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
 
-const apiUrl = 'action';
-
 @customElement('action-list')
 export class ActionList extends MobxLitElement {
   public state = appState;
@@ -26,7 +24,7 @@ export class ActionList extends MobxLitElement {
   @state() start: number = 0;
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
-  @state() filterIsOpen: boolean = true;
+  @state() filterIsOpen: boolean = false;
 
   get totalShown(): number {
     return this.start + config.perPage;
@@ -81,12 +79,26 @@ export class ActionList extends MobxLitElement {
     if (more) {
       this.start += config.perPage;
     }
-    const url = this.start > 0 ? `${apiUrl}?start=${this.start}` : apiUrl;
+
+    const queryParams = {
+      ...(this.start > 0 ? { start: `${this.start}` } : {}),
+      ...(!this.state.listFilters.includeAll
+        ? { filter: JSON.stringify(this.state.listFilters) }
+        : {}),
+    };
+
+    const url = `action${
+      Object.keys(queryParams).length
+        ? `?${new URLSearchParams(queryParams)}`
+        : ''
+    }`;
     try {
       const json = await api.get<{ actions: ActionItem[]; total: number }>(url);
       if (json) {
         if (json.actions) {
-          this.items = [...this.items, ...json.actions];
+          this.items = more
+            ? [...this.items, ...json.actions]
+            : [...json.actions];
         }
         if (json.total) {
           this.reachedEnd = json.total <= this.totalShown ? true : false;
@@ -101,11 +113,7 @@ export class ActionList extends MobxLitElement {
 
   private _handleFilterUpdated(e: CustomEvent) {
     this.filterIsOpen = false;
-    console.log(
-      'handleFilterUpdated',
-      this.filterIsOpen,
-      JSON.stringify(this.state.listFilters)
-    );
+    this._load();
   }
 
   private _toggleFilter() {

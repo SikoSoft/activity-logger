@@ -25,6 +25,7 @@ export interface PostRequestBody {
 @customElement('action-form')
 export class ActionForm extends MobxLitElement {
   private state = appState;
+
   static styles = [
     theme,
     css`
@@ -37,6 +38,7 @@ export class ActionForm extends MobxLitElement {
       }
     `,
   ];
+
   @property({ type: Number }) actionId: number = 0;
   @property() type: string = '';
   @property({ reflect: true }) desc: string = '';

@@ -9,5 +9,12 @@
   "added": "Added!",
   "updated": "Updated!",
   "areYouSure": "Are you sure?",
-  "yes": "Yes"
+  "yes": "Yes",
+  "containsOneOf": "Contains one of",
+  "containsAllOf": "Contains all of",
+  "includeUntagged": "Include actions without tags",
+  "includeAll": "Include all actions",
+  "updateFilter": "Update filter",
+  "filterUpdated": "Filter updated!",
+  "filter": "Filter"
 }

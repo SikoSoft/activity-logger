@@ -20,6 +20,7 @@ export class AppState {
       [ListFilterType.CONTAINS_ONE_OF]: [],
     },
     includeUntagged: true,
+    includeAll: true,
   };
 
   @action
@@ -59,6 +60,11 @@ export class AppState {
   @action
   setListFilterIncludeUntagged(state: boolean) {
     this.listFilters.includeUntagged = state;
+  }
+
+  @action
+  setListFilterIncludeAll(state: boolean) {
+    this.listFilters.includeAll = state;
   }
 
   constructor() {
