@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { action, makeObservable, observable } from 'mobx';
 import { Toast } from './models/Toast';
-import { ListFilters, ListFilterType } from './models/ListFilters';
+import { ListFilter, ListFilterType } from './models/ListFilter';
 
 export class AppState {
   @observable
@@ -14,7 +14,7 @@ export class AppState {
   public loading: boolean = false;
 
   @observable
-  public listFilters: ListFilters = {
+  public listFilter: ListFilter = {
     tagging: {
       [ListFilterType.CONTAINS_ALL_OF]: [],
       [ListFilterType.CONTAINS_ONE_OF]: [],
@@ -54,17 +54,22 @@ export class AppState {
 
   @action
   setListFilterTagging(type: ListFilterType, tags: string[]) {
-    this.listFilters.tagging[type] = tags;
+    this.listFilter.tagging[type] = tags;
   }
 
   @action
   setListFilterIncludeUntagged(state: boolean) {
-    this.listFilters.includeUntagged = state;
+    this.listFilter.includeUntagged = state;
   }
 
   @action
   setListFilterIncludeAll(state: boolean) {
-    this.listFilters.includeAll = state;
+    this.listFilter.includeAll = state;
+  }
+
+  @action
+  setListFilter(filter: ListFilter) {
+    this.listFilter = filter;
   }
 
   constructor() {

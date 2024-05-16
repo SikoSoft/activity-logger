@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, css, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { ActionItem } from '../models/Action';
@@ -17,7 +17,18 @@ import { appState } from '../state';
 export class ActionList extends MobxLitElement {
   public state = appState;
 
-  static styles = [theme];
+  static styles = [
+    theme,
+    css`
+      .filter-body {
+        padding-top: 1rem;
+      }
+
+      .list-items {
+        margin-top: 1rem;
+      }
+    `,
+  ];
   private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @state() items: ActionItem[] = [];
@@ -82,8 +93,8 @@ export class ActionList extends MobxLitElement {
 
     const queryParams = {
       ...(this.start > 0 ? { start: `${this.start}` } : {}),
-      ...(!this.state.listFilters.includeAll
-        ? { filter: JSON.stringify(this.state.listFilters) }
+      ...(!this.state.listFilter.includeAll
+        ? { filter: JSON.stringify(this.state.listFilter) }
         : {}),
     };
 
@@ -127,13 +138,16 @@ export class ActionList extends MobxLitElement {
         ?open=${this.filterIsOpen}
         @toggled=${this._toggleFilter}
       >
-        <list-filter
-          @filter-updated=${(e: CustomEvent) => {
-            this._handleFilterUpdated(e);
-          }}
-        ></list-filter>
+        <div class="filter-body">
+          <list-filter
+            @filter-updated=${(e: CustomEvent) => {
+              this._handleFilterUpdated(e);
+            }}
+          ></list-filter>
+        </div>
       </ss-collapsable>
-      <div class="box">
+
+      <div class="box list-items">
         ${repeat(
           this.items,
           item => item.id,

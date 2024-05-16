@@ -12,6 +12,7 @@ import { theme } from './styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from './state';
 import { api } from './lib/Api';
+import { storage } from './lib/Storage';
 
 export interface ViewChangedEvent extends Event {
   detail: ActionView;
@@ -34,6 +35,8 @@ export class FoodJournal extends MobxLitElement {
     });
 
     this._getSuggestions();
+
+    storage.loadFilter();
   }
 
   private async _getSuggestions() {

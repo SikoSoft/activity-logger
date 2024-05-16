@@ -3,7 +3,7 @@ export enum ListFilterType {
   CONTAINS_ALL_OF = 'containsAllOf',
 }
 
-export interface ListFilters {
+export interface ListFilter {
   tagging: Record<ListFilterType, string[]>;
   includeUntagged: boolean;
   includeAll: boolean;

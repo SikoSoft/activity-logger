@@ -5,10 +5,11 @@ import { theme } from '../styles/theme';
 
 import './tag/tag-manager';
 import { translate } from '../util/strings';
-import { ListFilterType } from '../models/ListFilters';
+import { ListFilterType } from '../models/ListFilter';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
+import { storage } from '../lib/Storage';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -44,10 +45,10 @@ export class ListFilter extends MobxLitElement {
   connectedCallback(): void {
     super.connectedCallback();
     Object.values(ListFilterType).forEach(type => {
-      this[type] = this.state.listFilters.tagging[type];
+      this[type] = this.state.listFilter.tagging[type];
     });
-    this.includeUntagged = this.state.listFilters.includeUntagged;
-    this.includeAll = this.state.listFilters.includeAll;
+    this.includeUntagged = this.state.listFilter.includeUntagged;
+    this.includeAll = this.state.listFilter.includeAll;
   }
 
   private _handleIncludeUntaggedChanged() {
@@ -64,6 +65,7 @@ export class ListFilter extends MobxLitElement {
     });
     this.state.setListFilterIncludeUntagged(this.includeUntagged);
     this.state.setListFilterIncludeAll(this.includeAll);
+    storage.saveFilter(this.state.listFilter);
     this.dispatchEvent(
       new CustomEvent('filter-updated', { bubbles: true, composed: true })
     );
