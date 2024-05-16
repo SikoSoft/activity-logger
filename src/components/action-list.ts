@@ -10,11 +10,15 @@ import { config } from '../models/Config';
 import { theme } from '../styles/theme';
 import { api } from '../lib/Api';
 import { translate } from '../util/strings';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '../state';
 
 const apiUrl = 'action';
 
 @customElement('action-list')
-export class ActionList extends LitElement {
+export class ActionList extends MobxLitElement {
+  public state = appState;
+
   static styles = [theme];
   private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
@@ -97,7 +101,11 @@ export class ActionList extends LitElement {
 
   private _handleFilterUpdated(e: CustomEvent) {
     this.filterIsOpen = false;
-    console.log('handleFilterUpdated', this.filterIsOpen);
+    console.log(
+      'handleFilterUpdated',
+      this.filterIsOpen,
+      JSON.stringify(this.state.listFilters)
+    );
   }
 
   private _toggleFilter() {
@@ -112,7 +120,7 @@ export class ActionList extends LitElement {
         @toggled=${this._toggleFilter}
       >
         <list-filter
-          @updated=${(e: CustomEvent) => {
+          @filter-updated=${(e: CustomEvent) => {
             this._handleFilterUpdated(e);
           }}
         ></list-filter>

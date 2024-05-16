@@ -6,7 +6,7 @@ export const theme = css`
     --positive-color: #060;
   }
 
-  input,
+  input[type='text'],
   button {
     font-family: Poppins;
     padding: 0.5rem;
