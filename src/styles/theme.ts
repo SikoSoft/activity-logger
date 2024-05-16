@@ -7,6 +7,7 @@ export const theme = css`
   }
 
   input[type='text'],
+  input[type='datetime-local'],
   button {
     font-family: Poppins;
     padding: 0.5rem;
