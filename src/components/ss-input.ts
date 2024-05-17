@@ -44,6 +44,19 @@ export class SSInput extends LitElement {
     this.inputField.focus();
   }
 
+  clear() {
+    this.inputField.value = '';
+    this.dispatchEvent(
+      new CustomEvent('action-input-changed', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          value: '',
+        },
+      })
+    );
+  }
+
   private _handleChange = (e: Event): boolean => {
     let value = '';
     if (e.target instanceof HTMLInputElement) {
