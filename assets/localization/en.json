@@ -23,5 +23,6 @@
   "loadFilter": "Load filter",
   "deleteFilter": "Delete filter",
   "filterDeleted": "Filter deleted!",
-  "filterSaved": "Filter saved!"
+  "filterSaved": "Filter saved!",
+  "noActionsFound": "No actions found"
 }

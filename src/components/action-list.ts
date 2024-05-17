@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { ActionItem } from '../models/Action';
@@ -26,6 +26,10 @@ export class ActionList extends MobxLitElement {
 
       .list-items {
         margin-top: 1rem;
+      }
+
+      .no-actions {
+        padding: 1rem;
       }
     `,
   ];
@@ -148,20 +152,22 @@ export class ActionList extends MobxLitElement {
       </ss-collapsable>
 
       <div class="box list-items">
-        ${repeat(
-          this.items,
-          item => item.id,
-          item =>
-            html`
-              <action-list-item
-                actionId=${item.id}
-                type=${item.type}
-                desc=${item.desc}
-                occurredAt=${item.occurredAt}
-                .tags=${item.tags}
-              ></action-list-item>
-            `
-        )}
+        ${this.items.length
+          ? repeat(
+              this.items,
+              item => item.id,
+              item =>
+                html`
+                  <action-list-item
+                    actionId=${item.id}
+                    type=${item.type}
+                    desc=${item.desc}
+                    occurredAt=${item.occurredAt}
+                    .tags=${item.tags}
+                  ></action-list-item>
+                `
+            )
+          : html` <div class="no-actions">${translate('noActionsFound')}</div>`}
         <div id="lazy-loader"></div>
       </div>
     `;
