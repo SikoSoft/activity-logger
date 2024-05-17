@@ -1,15 +1,20 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { LitElement, html, css, nothing } from 'lit';
+import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 
 import './tag/tag-manager';
+import './ss-input';
 import { translate } from '../util/strings';
-import { ListFilterType } from '../models/ListFilter';
+import {
+  ListFilterType,
+  ListFilter as ListFilterModel,
+} from '../models/ListFilter';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
-import { storage } from '../lib/Storage';
+import { SavedListFilter, storage } from '../lib/Storage';
+import { SSInput } from './ss-input';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -30,6 +35,25 @@ export class ListFilter extends MobxLitElement {
       fieldset {
         border-radius: 0.5rem;
       }
+
+      .save {
+        position: relative;
+      }
+
+      .save ss-input {
+        position: absolute;
+        bottom: 0%;
+        width: 100%;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s;
+      }
+
+      .list-filter.save-mode .save ss-input {
+        bottom: 100%;
+        opacity: 1;
+        pointer-events: initial;
+      }
     `,
   ];
 
@@ -38,8 +62,43 @@ export class ListFilter extends MobxLitElement {
   @state() includeUntagged: boolean = false;
   @state() includeAll: boolean = true;
 
+  @state() savedFilters: SavedListFilter[] = [];
+  @state() saveMode: boolean = false;
+  @state() filterName: string = '';
+  @state() selectedSavedFilter: string = '';
+
+  @query('#filter-name') filterNameInput!: SSInput;
+  @query('#saved-filters') savedFiltersInput!: HTMLSelectElement;
+
   @state() get classes() {
-    return { box: true, 'list-filter': true, all: this.includeAll };
+    return {
+      box: true,
+      'list-filter': true,
+      all: this.includeAll,
+      'save-mode': this.saveMode,
+      'valid-filter-name': this.filterNameIsValid,
+    };
+  }
+
+  @state()
+  get filterNameIsValid(): boolean {
+    return this.filterName.length > 0;
+  }
+
+  @state()
+  get saveButtonIsEnabled(): boolean {
+    return !this.saveMode || this.filterNameIsValid;
+  }
+
+  get filter(): ListFilterModel {
+    return {
+      includeAll: this.includeAll,
+      includeUntagged: this.includeUntagged,
+      tagging: {
+        containsOneOf: this.containsOneOf,
+        containsAllOf: this.containsAllOf,
+      },
+    };
   }
 
   connectedCallback(): void {
@@ -49,6 +108,7 @@ export class ListFilter extends MobxLitElement {
     });
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
+    this.savedFilters = storage.getSavedFilters();
   }
 
   private _handleIncludeUntaggedChanged() {
@@ -65,10 +125,49 @@ export class ListFilter extends MobxLitElement {
     });
     this.state.setListFilterIncludeUntagged(this.includeUntagged);
     this.state.setListFilterIncludeAll(this.includeAll);
-    storage.saveFilter(this.state.listFilter);
+    storage.saveActiveFilter(this.state.listFilter);
     this.dispatchEvent(
       new CustomEvent('filter-updated', { bubbles: true, composed: true })
     );
+  }
+
+  private async _handleSaveClick(e: CustomEvent): Promise<void> {
+    if (!this.saveMode) {
+      this.saveMode = true;
+      this.filterNameInput.focus();
+      return;
+    }
+
+    await storage.saveFilter(this.filter, this.filterName);
+    this.savedFilters = storage.getSavedFilters();
+  }
+
+  private _handleFilterNameChanged(e: CustomEvent): void {
+    this.filterName = e.detail.value;
+  }
+
+  private _handleSavedFilterChanged(e: Event) {
+    this.selectedSavedFilter = this.savedFiltersInput.value;
+    console.log('selectedSavedFilter', this.selectedSavedFilter);
+    const savedFilter = this.savedFilters.find(
+      savedFilter => savedFilter.id === this.savedFiltersInput.value
+    );
+    if (savedFilter) {
+      this[ListFilterType.CONTAINS_ONE_OF] =
+        savedFilter.filter.tagging[ListFilterType.CONTAINS_ONE_OF];
+      this[ListFilterType.CONTAINS_ALL_OF] =
+        savedFilter.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
+      this.includeUntagged = savedFilter.filter.includeUntagged;
+      this.includeAll = savedFilter.filter.includeAll;
+    }
+  }
+
+  private _handleDeleteSavedFilterClick(e: Event) {
+    if (this.savedFiltersInput.value) {
+      storage.deleteSavedFilter(this.savedFiltersInput.value);
+      this.savedFiltersInput.value = '';
+      this.savedFiltersInput.dispatchEvent(new Event('change'));
+    }
   }
 
   private updateTags(type: ListFilterType, tags: string[]) {
@@ -78,6 +177,33 @@ export class ListFilter extends MobxLitElement {
   render() {
     return html`
       <div class=${classMap(this.classes)}>
+        ${this.savedFilters.length
+          ? html`
+              <div class="saved-filters">
+                <select
+                  id="saved-filters"
+                  @change=${this._handleSavedFilterChanged}
+                >
+                  <option value="">${translate('savedFilters')}</option>
+                  ${repeat(
+                    this.savedFilters,
+                    filter => filter.id,
+                    filter => html`
+                      <option value=${filter.id}>${filter.name}</option>
+                    `
+                  )}
+                </select>
+                ${this.selectedSavedFilter
+                  ? html`
+                      <ss-button
+                        @click=${this._handleDeleteSavedFilterClick}
+                        text=${translate('deleteFilter')}
+                      ></ss-button>
+                    `
+                  : nothing}
+              </div>
+            `
+          : nothing}
         <div class="all">
           <input
             id="include-all"
@@ -119,8 +245,24 @@ export class ListFilter extends MobxLitElement {
           @click=${(e: CustomEvent) => {
             this._handleUpdateClick(e);
           }}
-          text=${translate('updateFilter')}
+          text=${translate('useFilter')}
         ></ss-button>
+        <div class="save">
+          <ss-input
+            @action-input-changed=${(e: CustomEvent) => {
+              this._handleFilterNameChanged(e);
+            }}
+            id="filter-name"
+            placeholder=${translate('filterName')}
+          ></ss-input>
+          <ss-button
+            @click=${(e: CustomEvent) => {
+              this._handleSaveClick(e);
+            }}
+            text=${translate('saveFilter')}
+            ?disabled=${!this.saveButtonIsEnabled}
+          ></ss-button>
+        </div>
       </div>
     `;
   }

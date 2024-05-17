@@ -36,7 +36,7 @@ export class FoodJournal extends MobxLitElement {
 
     this._getSuggestions();
 
-    storage.loadFilter();
+    storage.loadActiveFilter();
   }
 
   private async _getSuggestions() {

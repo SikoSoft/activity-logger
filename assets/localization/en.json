@@ -14,7 +14,14 @@
   "containsAllOf": "Contains all of",
   "includeUntagged": "Include actions without tags",
   "includeAll": "Include all actions",
-  "updateFilter": "Update filter",
+  "useFilter": "Use filter",
+  "saveFilter": "Save filter",
+  "filterName": "Filter name",
   "filterUpdated": "Filter updated!",
-  "filter": "Filter"
+  "filter": "Filter",
+  "savedFilters": "Saved filters",
+  "loadFilter": "Load filter",
+  "deleteFilter": "Delete filter",
+  "filterDeleted": "Filter deleted!",
+  "filterSaved": "Filter saved!"
 }

@@ -18,7 +18,7 @@ export class SSInput extends LitElement {
 
   @property() type: InputType = InputType.TEXT;
   @property() value: string = '';
-  @property({ type: Boolean }) autoComplete: boolean = true;
+  @property({ type: Boolean }) autoComplete: boolean = false;
   @property() placeholder: string = '';
   @state() _value: string = this.value;
   @query('#input-field') inputField!: HTMLInputElement;
@@ -38,6 +38,10 @@ export class SSInput extends LitElement {
     if (changedProperties.has('value')) {
       this.inputField.value = this.value;
     }
+  }
+
+  focus() {
+    this.inputField.focus();
   }
 
   private _handleChange = (e: Event): boolean => {
