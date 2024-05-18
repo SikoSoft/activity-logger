@@ -33,7 +33,6 @@ export class FoodJournal extends MobxLitElement {
       this._handleViewChanged(e);
     });
 
-    this._getSuggestions();
     storage.loadActiveFilter();
     const view = storage.getSavedView();
     if (view) {
@@ -45,17 +44,6 @@ export class FoodJournal extends MobxLitElement {
     const event = e as CustomEvent;
     this.view = event.detail;
     storage.saveView(this.view);
-  }
-
-  private async _getSuggestions() {
-    try {
-      const json = await api.get<{ suggestions: string[] }>('actionSuggestion');
-      if (json) {
-        this.state.setAutoSuggestions(json.suggestions);
-      }
-    } catch (error) {
-      console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
-    }
   }
 
   _activeView() {

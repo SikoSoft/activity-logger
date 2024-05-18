@@ -149,8 +149,18 @@ export class ActionForm extends MobxLitElement {
     this.desc = '';
   }
 
-  private _handleDescChanged(e: CustomEvent) {
+  private async _handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
+
+    console.log('handleDescChanged');
+    try {
+      const json = await api.get<{ suggestions: string[] }>('actionSuggestion');
+      if (json) {
+        this.state.setAutoSuggestions(json.suggestions);
+      }
+    } catch (error) {
+      console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
+    }
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
@@ -185,6 +195,7 @@ export class ActionForm extends MobxLitElement {
             @action-input-submitted=${this._handleDescSubmitted}
             @action-input-changed=${this._handleDescChanged}
             value=${this.desc}
+            autoComplete
           ></ss-input>
         </div>
         <tag-manager

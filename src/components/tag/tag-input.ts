@@ -108,6 +108,7 @@ export class TagInput extends MobxLitElement {
           @action-input-changed=${this._handleChanged}
           placeholder="Tag"
           value=${this.value}
+          autoComplete
         ></ss-input>
         ${this.showButton
           ? html`
