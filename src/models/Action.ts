@@ -12,3 +12,5 @@ export enum ActionView {
   INPUT = 'input',
   LIST = 'list',
 }
+
+export const defaultActionView: ActionView = ActionView.INPUT;

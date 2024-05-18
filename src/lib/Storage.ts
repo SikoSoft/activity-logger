@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ListFilter } from '../models/ListFilter';
 import { AppState, appState } from '../state';
+import { ActionView, defaultActionView } from '../models/Action';
 //import crypto from 'crypto';
 
 export interface SavedListFilter {
@@ -12,6 +13,7 @@ export interface SavedListFilter {
 export class Storage {
   static ACTIVE_LIST_FILTER_KEY = 'listFilter';
   static LIST_FILTERS_KEY = 'listFilters';
+  static VIEW_KEY = 'view';
 
   private state: AppState;
 
@@ -78,6 +80,28 @@ export class Storage {
         )}`
       );
     }
+  }
+
+  saveView(view: ActionView) {
+    localStorage.setItem(Storage.VIEW_KEY, view);
+  }
+
+  getSavedView(): ActionView {
+    let view: ActionView = defaultActionView;
+    try {
+      const storedView = localStorage.getItem(Storage.VIEW_KEY);
+      if (storedView) {
+        view = storedView as ActionView;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load view: ${JSON.stringify(
+          error
+        )}`
+      );
+    }
+
+    return view;
   }
 
   async digestMessage(message: string) {

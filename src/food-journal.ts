@@ -6,7 +6,7 @@ import './components/action-nav';
 import './components/action-form';
 import './components/action-list';
 import './components/action-toasts';
-import { ActionView } from './models/Action';
+import { ActionView, defaultActionView } from './models/Action';
 import { theme } from './styles/theme';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -14,7 +14,7 @@ import { appState } from './state';
 import { api } from './lib/Api';
 import { storage } from './lib/Storage';
 
-export interface ViewChangedEvent extends Event {
+export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
 }
 
@@ -24,19 +24,27 @@ export class FoodJournal extends MobxLitElement {
 
   static styles = [theme];
 
-  header = 'My app';
-  @state() view: ActionView = ActionView.INPUT;
+  @state() view: ActionView = defaultActionView;
 
   connectedCallback(): void {
     super.connectedCallback();
+
     this.addEventListener('view-changed', (e: Event) => {
-      const event = e as ViewChangedEvent;
-      this.view = event.detail;
+      this._handleViewChanged(e);
     });
 
     this._getSuggestions();
-
     storage.loadActiveFilter();
+    const view = storage.getSavedView();
+    if (view) {
+      this.view = view;
+    }
+  }
+
+  private _handleViewChanged(e: Event) {
+    const event = e as CustomEvent;
+    this.view = event.detail;
+    storage.saveView(this.view);
   }
 
   private async _getSuggestions() {
