@@ -6,7 +6,7 @@ import { appState } from '../state';
 import { theme } from '../styles/theme';
 
 @customElement('ss-input-auto')
-export class SSInputAuto extends LitElement {
+export class SSInputAuto extends MobxLitElement {
   static styles = [
     theme,
     css`
@@ -52,38 +52,12 @@ export class SSInputAuto extends LitElement {
   @property({ type: Number }) maxMatches: number = 5;
   @state() selectedIndex: number = 0;
 
-  /*
-  @state()
-  get suggestionMatches(): string[] {
-    console.log(
-      'suggestionMatches',
-      this.input,
-      JSON.stringify(this.state.suggestions)
-    );
-    return this.state.suggestions.length
-      ? this.state.suggestions
-          .filter(suggestion => {
-            return suggestion.match(new RegExp(`^${this.input}`));
-          })
-          .slice(0, this.maxMatches)
-      : [];
-  }
-*/
   get maxSelectedIndex(): number {
     return this.state.suggestions.length - 1;
-    //return this.suggestionMatches.length - 1;
-  }
-
-  updated(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
-  ) {
-    super.updated(changedProperties);
-    console.log({ changedProperties });
   }
 
   connectedCallback(): void {
     super.connectedCallback();
-    console.log('AUTO connectedCallback');
 
     this.addEventListener('select-up', () => {
       this._adjustSelectedIndex(-1);
@@ -96,7 +70,6 @@ export class SSInputAuto extends LitElement {
     this.addEventListener('select', () => {
       if (this.state.suggestions.length) {
         this._sendSelectedEvent(this.state.suggestions[this.selectedIndex]);
-        //this._sendSelectedEvent(this.suggestionMatches[this.selectedIndex]);
       } else {
         this._sendSubmitEvent();
       }
@@ -135,7 +108,6 @@ export class SSInputAuto extends LitElement {
 
   render() {
     return html`
-      <div>state suggestions: ${this.state.suggestions.length}</div>
       <div>
         ${this.state.suggestions.length
           ? html` <ul class="box">

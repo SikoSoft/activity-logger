@@ -120,7 +120,6 @@ export class SSInput extends LitElement {
   }
 
   private _handleInput = (e: Event): boolean => {
-    console.log('handleInput');
     let value = '';
     if (e.target instanceof HTMLInputElement) {
       value = e.target.value;
@@ -151,7 +150,6 @@ export class SSInput extends LitElement {
   };
 
   private _suggestionSelectHandler = (e: CustomEvent): void => {
-    console.log('suggestionSelectHandler');
     this.autoDismissed = true;
     this.inputField.value = e.detail;
     this.inputField.dispatchEvent(
@@ -178,7 +176,6 @@ export class SSInput extends LitElement {
           placeholder=${this.placeholder}
           autocomplete="off"
         />
-        <div>AUTO VALUE ${this._value} |</div>
         ${this.showAutoComplete
           ? html`
               <ss-input-auto
