@@ -25,6 +25,7 @@ export class AppState {
 
   @action
   public setAutoSuggestions(suggestions: string[]) {
+    console.log('setAutoSuggestions', suggestions);
     this.suggestions = suggestions;
   }
 

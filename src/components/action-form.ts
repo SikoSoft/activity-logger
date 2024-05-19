@@ -150,7 +150,7 @@ export class ActionForm extends MobxLitElement {
   }
 
   private async _handleDescChanged(e: CustomEvent) {
-    this.desc = e.detail.value;
+    //this.desc = e.detail.value;
 
     console.log('handleDescChanged');
     try {
@@ -161,6 +161,8 @@ export class ActionForm extends MobxLitElement {
     } catch (error) {
       console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }
+
+    this.desc = e.detail.value;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
