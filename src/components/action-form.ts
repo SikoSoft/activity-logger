@@ -52,6 +52,7 @@ export class ActionForm extends MobxLitElement {
   @state() initialTags: string = '';
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
+  @state() loading: boolean = false;
   //@state() tags: string[] = [];
 
   connectedCallback(): void {
@@ -78,6 +79,7 @@ export class ActionForm extends MobxLitElement {
   }
 
   private async _saveAction() {
+    this.loading = true;
     const desc = this.desc.trim();
 
     try {
@@ -106,6 +108,8 @@ export class ActionForm extends MobxLitElement {
         this.state.addToast(
           this.actionId ? translate('updated') : translate('added')
         );
+
+        this.loading = false;
         return;
       }
 
@@ -119,6 +123,8 @@ export class ActionForm extends MobxLitElement {
     } catch (error) {
       console.error(`Error encountered in when saving action: ${error}`);
     }
+
+    this.loading = false;
   }
 
   private reset(): void {
@@ -130,6 +136,8 @@ export class ActionForm extends MobxLitElement {
   }
 
   private async _deleteAction() {
+    this.loading = true;
+
     try {
       await api.delete(this.apiUrl);
 
@@ -147,6 +155,7 @@ export class ActionForm extends MobxLitElement {
     );
 
     this.desc = '';
+    this.loading = false;
   }
 
   private async _handleDescChanged(e: CustomEvent) {
@@ -229,6 +238,7 @@ export class ActionForm extends MobxLitElement {
                 ? translate('update')
                 : translate('cancel')
               : translate('add')}
+            ?loading=${this.loading}
           ></ss-button>
           ${this.actionId
             ? html`

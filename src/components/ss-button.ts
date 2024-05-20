@@ -3,6 +3,7 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
 
+import './ss-loader';
 @customElement('ss-button')
 export class SSButton extends LitElement {
   static styles = [
@@ -16,6 +17,7 @@ export class SSButton extends LitElement {
 
   @property() text: string = '';
   @property({ type: Boolean }) disabled: boolean = false;
+  @property({ type: Boolean }) loading: boolean = false;
 
   @state()
   get classes() {
@@ -38,7 +40,7 @@ export class SSButton extends LitElement {
         @click=${this._handleClick}
         ?disabled=${this.disabled}
       >
-        ${this.text}
+        ${this.loading ? html` <ss-loader></ss-loader> ` : this.text}
       </button>
     `;
   }

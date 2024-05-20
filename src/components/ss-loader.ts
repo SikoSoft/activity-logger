@@ -5,46 +5,33 @@ import { customElement, query, state } from 'lit/decorators.js';
 export class SSLoader extends LitElement {
   static styles = css`
     .container {
-      height: 5rem;
+      height: auto;
     }
+
     .loader {
-      width: 8px;
-      height: 40px;
-      border-radius: 4px;
-      display: block;
-      margin: 20px auto;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #000;
+      box-shadow: 32px 0 #000, -32px 0 #000;
       position: relative;
-      background: currentColor;
-      color: #fff;
-      box-sizing: border-box;
-      animation: animloader 0.3s 0.3s linear infinite alternate;
+      animation: flash 0.5s ease-out infinite alternate;
+      transform: skewX(50%);
     }
 
-    .loader::after,
-    .loader::before {
-      content: '';
-      width: 8px;
-      height: 40px;
-      border-radius: 4px;
-      background: currentColor;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 20px;
-      box-sizing: border-box;
-      animation: animloader 0.3s 0.45s linear infinite alternate;
-    }
-    .loader::before {
-      left: -20px;
-      animation-delay: 0s;
-    }
-
-    @keyframes animloader {
+    @keyframes flash {
       0% {
-        height: 48px;
+        background-color: #0002;
+        box-shadow: 32px 0 #0002, -32px 0 #000;
+      }
+      50% {
+        background-color: #000;
+        box-shadow: 32px 0 #0002, -32px 0 #0002;
       }
       100% {
-        height: 4px;
+        background-color: #0002;
+        box-shadow: 32px 0 #000, -32px 0 #0002;
       }
     }
   `;
