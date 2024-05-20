@@ -150,11 +150,13 @@ export class ActionForm extends MobxLitElement {
   }
 
   private async _handleDescChanged(e: CustomEvent) {
-    //this.desc = e.detail.value;
+    this.desc = e.detail.value;
 
     console.log('handleDescChanged');
     try {
-      const json = await api.get<{ suggestions: string[] }>('actionSuggestion');
+      const json = await api.get<{ suggestions: string[] }>(
+        `actionSuggestion/${this.desc}`
+      );
       if (json) {
         this.state.setAutoSuggestions(json.suggestions);
       }
@@ -162,7 +164,7 @@ export class ActionForm extends MobxLitElement {
       console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }
 
-    this.desc = e.detail.value;
+    //this.desc = e.detail.value;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {

@@ -50,7 +50,15 @@ export class SSInputAuto extends MobxLitElement {
 
   @property() input: string = '';
   @property({ type: Number }) maxMatches: number = 5;
+  @property({ type: Number }) minInput: number = 1;
   @state() selectedIndex: number = 0;
+
+  @state()
+  get show(): boolean {
+    return (
+      this.state.suggestions.length > 0 && this.input.length >= this.minInput
+    );
+  }
 
   get maxSelectedIndex(): number {
     return this.state.suggestions.length - 1;
@@ -109,7 +117,7 @@ export class SSInputAuto extends MobxLitElement {
   render() {
     return html`
       <div>
-        ${this.state.suggestions.length
+        ${this.show
           ? html` <ul class="box">
               ${repeat(
                 this.state.suggestions,
