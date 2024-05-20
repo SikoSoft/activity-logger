@@ -1,8 +1,8 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 
-@customElement('action-loader')
-export class ActionLoader extends LitElement {
+@customElement('ss-loader')
+export class SSLoader extends LitElement {
   static styles = css`
     .container {
       height: 5rem;
