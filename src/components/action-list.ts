@@ -167,7 +167,9 @@ export class ActionList extends MobxLitElement {
                   ></action-list-item>
                 `
             )
-          : html` <div class="no-actions">${translate('noActionsFound')}</div>`}
+          : !this.loading
+          ? html` <div class="no-actions">${translate('noActionsFound')}</div>`
+          : nothing}
         <div id="lazy-loader"></div>
       </div>
     `;
