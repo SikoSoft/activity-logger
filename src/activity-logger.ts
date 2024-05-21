@@ -9,17 +9,14 @@ import { ActionView, defaultActionView } from './models/Action';
 import { theme } from './styles/theme';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from './state';
 import { storage } from './lib/Storage';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
 }
 
-@customElement('food-journal')
-export class FoodJournal extends MobxLitElement {
-  private state = appState;
-
+@customElement('activity-logger')
+export class ActivityLogger extends MobxLitElement {
   static styles = [theme];
 
   @state() view: ActionView = defaultActionView;

@@ -1,9 +1,9 @@
 import { html, TemplateResult } from 'lit';
-import '../src/food-journal.js';
+import '../src/activity-logger.js';
 
 export default {
-  title: 'FoodJournal',
-  component: 'food-journal',
+  title: 'ActivityLogger',
+  component: 'activity-logger',
   argTypes: {
     backgroundColor: { control: 'color' },
   },
@@ -20,8 +20,14 @@ interface ArgTypes {
   backgroundColor?: string;
 }
 
-const Template: Story<ArgTypes> = ({ header, backgroundColor = 'white' }: ArgTypes) => html`
-  <food-journal style="--food-journal-background-color: ${backgroundColor}" .header=${header}></food-journal>
+const Template: Story<ArgTypes> = ({
+  header,
+  backgroundColor = 'white',
+}: ArgTypes) => html`
+  <activity-logger
+    style="--food-journal-background-color: ${backgroundColor}"
+    .header=${header}
+  ></activity-logger>
 `;
 
 export const App = Template.bind({});
