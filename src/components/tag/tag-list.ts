@@ -1,12 +1,9 @@
 import { LitElement, css, html } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import '../ss-input';
-import { config } from '../../models/Config';
 import { theme } from '../../styles/theme';
 import { repeat } from 'lit/directives/repeat.js';
-
-const apiUrl = `${config.apiUrl}action`;
 
 @customElement('tag-list')
 export class TagList extends LitElement {

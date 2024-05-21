@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { LitElement, html, css, nothing, PropertyValueMap } from 'lit';
+import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { appState } from '../state';

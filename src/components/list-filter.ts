@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { html, css, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';

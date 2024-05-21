@@ -1,5 +1,5 @@
-import { LitElement, css, html } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
+import { css, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 import { theme } from '../styles/theme';
 import { appState } from '../state';

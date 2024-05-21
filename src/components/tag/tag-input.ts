@@ -1,5 +1,5 @@
-import { LitElement, css, html, nothing } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { css, html, nothing } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '../ss-input';
 import '../ss-button';
@@ -60,7 +60,6 @@ export class TagInput extends MobxLitElement {
       this.value.match(new RegExp(`^${this.lastHitValue}`)) &&
       this.lastHitTags.length === 0
     ) {
-      //console.log('use empty tags, avoid http request');
       this.state.setAutoSuggestions([]);
       return;
     }

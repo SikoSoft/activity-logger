@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { ActionItem } from '../models/Action';
-import { dateTime, formatDate } from '../util/time';
+import { formatDate } from '../util/time';
 
 export enum ActionListItemMode {
   VIEW = 'view',

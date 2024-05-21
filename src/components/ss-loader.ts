@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 @customElement('ss-loader')
 export class SSLoader extends LitElement {

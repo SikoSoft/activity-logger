@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { config } from './models/Config';
 
 import './components/action-nav';
 import './components/action-form';
@@ -11,7 +10,6 @@ import { theme } from './styles/theme';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from './state';
-import { api } from './lib/Api';
 import { storage } from './lib/Storage';
 
 export interface ViewChangedEvent extends CustomEvent {

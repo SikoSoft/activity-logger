@@ -1,5 +1,5 @@
-import { LitElement, html, PropertyValueMap, nothing, css } from 'lit';
-import { property, customElement, state, query } from 'lit/decorators.js';
+import { LitElement, html, css } from 'lit';
+import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { theme } from '../styles/theme';
 

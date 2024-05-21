@@ -1,6 +1,5 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { config } from '../models/Config';
 
 import './ss-input';
 import './ss-button';
@@ -46,14 +45,12 @@ export class ActionForm extends MobxLitElement {
   @property({ reflect: true, type: Array }) tags: string[] = [];
   @property({ reflect: true }) tagValue: string = '';
 
-  //@state() desc: string = this.desc;
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
   @state() initialTags: string = '';
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   @state() loading: boolean = false;
-  //@state() tags: string[] = [];
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -161,7 +158,6 @@ export class ActionForm extends MobxLitElement {
   private async _handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
 
-    console.log('handleDescChanged');
     try {
       const json = await api.get<{ suggestions: string[] }>(
         `actionSuggestion/${this.desc}`
@@ -172,8 +168,6 @@ export class ActionForm extends MobxLitElement {
     } catch (error) {
       console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }
-
-    //this.desc = e.detail.value;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
