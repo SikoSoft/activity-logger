@@ -4,38 +4,33 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/food-journal.ts",
+      "path": "src/activity-logger.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "FoodJournal",
+          "name": "ActivityLogger",
           "members": [
-            {
-              "kind": "field",
-              "name": "state",
-              "privacy": "private",
-              "default": "appState"
-            },
-            {
-              "kind": "field",
-              "name": "header",
-              "type": {
-                "text": "string"
-              },
-              "default": "'My app'"
-            },
             {
               "kind": "field",
               "name": "view",
               "type": {
                 "text": "ActionView"
-              }
+              },
+              "default": "defaultActionView"
             },
             {
               "kind": "method",
-              "name": "_getSuggestions",
-              "privacy": "private"
+              "name": "_handleViewChanged",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -51,10 +46,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "FoodJournal",
+          "name": "ActivityLogger",
           "declaration": {
-            "name": "FoodJournal",
-            "module": "src/food-journal.ts"
+            "name": "ActivityLogger",
+            "module": "src/activity-logger.ts"
           }
         }
       ]
@@ -237,7 +232,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "stories/food-journal.stories.ts",
+      "path": "stories/activity-logger.stories.ts",
       "declarations": [
         {
           "kind": "variable",
@@ -249,7 +244,7 @@
           "kind": "js",
           "name": "default",
           "declaration": {
-            "module": "stories/food-journal.stories.ts"
+            "module": "stories/activity-logger.stories.ts"
           }
         },
         {
@@ -257,7 +252,34 @@
           "name": "App",
           "declaration": {
             "name": "App",
-            "module": "stories/food-journal.stories.ts"
+            "module": "stories/activity-logger.stories.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/activity-logger.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/activity-logger.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ActivityLogger",
+          "default": "class ActivityLogger extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.view = defaultActionView;\n    }\n    static { this.styles = [theme]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            this._handleViewChanged(e);\n        });\n        storage.loadActiveFilter();\n        const view = storage.getSavedView();\n        if (view) {\n            this.view = view;\n        }\n    }\n    _handleViewChanged(e) {\n        const event = e;\n        this.view = event.detail;\n        storage.saveView(this.view);\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n      <action-toasts></action-toasts>\n    `;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ActivityLogger",
+          "declaration": {
+            "name": "ActivityLogger",
+            "module": "out-tsc/src/activity-logger.js"
           }
         }
       ]
@@ -269,7 +291,7 @@
         {
           "kind": "variable",
           "name": "FoodJournal",
-          "default": "class FoodJournal extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.header = 'My app';\n        this.view = ActionView.INPUT;\n    }\n    static { this.styles = [theme]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            const event = e;\n            this.view = event.detail;\n        });\n        this._getSuggestions();\n        storage.loadFilter();\n    }\n    async _getSuggestions() {\n        try {\n            const json = await api.get('actionSuggestion');\n            if (json) {\n                this.state.setAutoSuggestions(json.suggestions);\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);\n        }\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n      <action-toasts></action-toasts>\n    `;\n    }\n}"
+          "default": "class FoodJournal extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.view = defaultActionView;\n    }\n    static { this.styles = [theme]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('view-changed', (e) => {\n            this._handleViewChanged(e);\n        });\n        storage.loadActiveFilter();\n        const view = storage.getSavedView();\n        if (view) {\n            this.view = view;\n        }\n    }\n    _handleViewChanged(e) {\n        const event = e;\n        this.view = event.detail;\n        storage.saveView(this.view);\n    }\n    _activeView() {\n        switch (this.view) {\n            case ActionView.INPUT:\n                return html `<action-form></action-form>`;\n        }\n        return html `<action-list></action-list>`;\n    }\n    render() {\n        return html `\n      <action-nav active=${this.view}></action-nav>\n      <main>${this._activeView()}</main>\n      <action-toasts></action-toasts>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -428,6 +450,33 @@
     },
     {
       "kind": "javascript-module",
+      "path": "out-tsc/stories/activity-logger.stories.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "App"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "out-tsc/stories/activity-logger.stories.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "App",
+          "declaration": {
+            "name": "App",
+            "module": "out-tsc/stories/activity-logger.stories.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "out-tsc/stories/food-journal.stories.js",
       "declarations": [
         {
@@ -452,6 +501,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/test/activity-logger.js",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -615,6 +670,14 @@
             {
               "kind": "field",
               "name": "advancedMode",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
               "type": {
                 "text": "boolean"
               },
@@ -1038,33 +1101,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/action-loader.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ActionLoader",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionLoader",
-          "declaration": {
-            "name": "ActionLoader",
-            "module": "src/components/action-loader.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/action-nav.ts",
       "declarations": [
         {
@@ -1248,7 +1284,74 @@
             },
             {
               "kind": "field",
+              "name": "savedFilters",
+              "type": {
+                "text": "SavedListFilter[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "saveMode",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "filterName",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "selectedSavedFilter",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "filterNameInput",
+              "type": {
+                "text": "SSInput"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "savedFiltersInput",
+              "type": {
+                "text": "HTMLSelectElement"
+              }
+            },
+            {
+              "kind": "field",
               "name": "classes"
+            },
+            {
+              "kind": "field",
+              "name": "filterNameIsValid",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "saveButtonIsEnabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "filter",
+              "type": {
+                "text": "ListFilterModel"
+              }
             },
             {
               "kind": "method",
@@ -1274,6 +1377,91 @@
                   "name": "e",
                   "type": {
                     "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_saveFilter",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleSaveClick",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleFilterNameChanged",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleFilterNameSubmitted",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleSavedFilterChanged",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleDeleteSavedFilterClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
                   }
                 }
               ]
@@ -1339,6 +1527,26 @@
                 "text": "string"
               },
               "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "classes"
             },
             {
               "kind": "field",
@@ -1464,6 +1672,14 @@
             },
             {
               "kind": "field",
+              "name": "minInput",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
               "name": "selectedIndex",
               "type": {
                 "text": "number"
@@ -1472,9 +1688,9 @@
             },
             {
               "kind": "field",
-              "name": "suggestionMatches",
+              "name": "show",
               "type": {
-                "text": "string[]"
+                "text": "boolean"
               }
             },
             {
@@ -1536,10 +1752,9 @@
             }
           ],
           "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
+            "name": "MobxLitElement",
+            "package": "@adobe/lit-mobx"
+          }
         }
       ],
       "exports": [
@@ -1583,7 +1798,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true"
+              "default": "false"
             },
             {
               "kind": "field",
@@ -1636,6 +1851,14 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "kind": "method",
+              "name": "focus"
+            },
+            {
+              "kind": "method",
+              "name": "clear"
             },
             {
               "kind": "field",
@@ -1699,6 +1922,14 @@
               "default": "(e: CustomEvent): void => {\n    this.autoDismissed = true;\n    this.inputField.value = e.detail;\n    this.inputField.dispatchEvent(\n      new CustomEvent('action-input-changed', {\n        bubbles: true,\n        composed: true,\n        detail: { value: e.detail },\n      })\n    );\n  }"
             }
           ],
+          "events": [
+            {
+              "name": "action-input-changed",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1713,6 +1944,33 @@
           "declaration": {
             "name": "SSInput",
             "module": "src/components/ss-input.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/ss-loader.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SSLoader",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SSLoader",
+          "declaration": {
+            "name": "SSLoader",
+            "module": "src/components/ss-loader.ts"
           }
         }
       ]
@@ -1855,12 +2113,30 @@
           "members": [
             {
               "kind": "field",
-              "name": "LIST_FILTER_KEY",
+              "name": "ACTIVE_LIST_FILTER_KEY",
               "type": {
                 "text": "string"
               },
               "static": true,
               "default": "'listFilter'"
+            },
+            {
+              "kind": "field",
+              "name": "LIST_FILTERS_KEY",
+              "type": {
+                "text": "string"
+              },
+              "static": true,
+              "default": "'listFilters'"
+            },
+            {
+              "kind": "field",
+              "name": "VIEW_KEY",
+              "type": {
+                "text": "string"
+              },
+              "static": true,
+              "default": "'view'"
             },
             {
               "kind": "field",
@@ -1874,6 +2150,55 @@
             {
               "kind": "method",
               "name": "saveFilter",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "filter",
+                  "type": {
+                    "text": "ListFilter"
+                  }
+                },
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getSavedFilters",
+              "return": {
+                "type": {
+                  "text": "SavedListFilter[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "deleteSavedFilter",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "saveActiveFilter",
               "parameters": [
                 {
                   "name": "filter",
@@ -1885,7 +2210,40 @@
             },
             {
               "kind": "method",
-              "name": "loadFilter"
+              "name": "loadActiveFilter"
+            },
+            {
+              "kind": "method",
+              "name": "saveView",
+              "parameters": [
+                {
+                  "name": "view",
+                  "type": {
+                    "text": "ActionView"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getSavedView",
+              "return": {
+                "type": {
+                  "text": "ActionView"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "digestMessage",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -1917,8 +2275,25 @@
     {
       "kind": "javascript-module",
       "path": "src/models/Action.ts",
-      "declarations": [],
-      "exports": []
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "defaultActionView",
+          "type": {
+            "text": "ActionView"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defaultActionView",
+          "declaration": {
+            "name": "defaultActionView",
+            "module": "src/models/Action.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -1975,7 +2350,7 @@
         {
           "kind": "variable",
           "name": "theme",
-          "default": "css`\n  :host {\n    --negative-color: #600;\n    --positive-color: #060;\n  }\n\n  input[type='text'],\n  input[type='datetime-local'],\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
+          "default": "css`\n  :host {\n    --negative-color: #600;\n    --positive-color: #060;\n  }\n\n  input[type='text'],\n  input[type='datetime-local'],\n  select,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
         }
       ],
       "exports": [
@@ -2089,158 +2464,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "out-tsc/src/lib/Api.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Api",
-          "members": [
-            {
-              "kind": "method",
-              "name": "httpRequest",
-              "parameters": [
-                {
-                  "name": "path"
-                },
-                {
-                  "name": "config"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get",
-              "parameters": [
-                {
-                  "name": "path"
-                },
-                {
-                  "name": "config"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "post",
-              "parameters": [
-                {
-                  "name": "path"
-                },
-                {
-                  "name": "body"
-                },
-                {
-                  "name": "config"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "delete",
-              "parameters": [
-                {
-                  "name": "path"
-                },
-                {
-                  "name": "config"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "config",
-              "default": "config"
-            }
-          ]
-        },
-        {
-          "kind": "variable",
-          "name": "api",
-          "default": "new Api(config)"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Api",
-          "declaration": {
-            "name": "Api",
-            "module": "out-tsc/src/lib/Api.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "api",
-          "declaration": {
-            "name": "api",
-            "module": "out-tsc/src/lib/Api.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/lib/Storage.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Storage",
-          "members": [
-            {
-              "kind": "method",
-              "name": "saveFilter",
-              "parameters": [
-                {
-                  "name": "filter"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "loadFilter"
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "default": "appState"
-            }
-          ]
-        },
-        {
-          "kind": "variable",
-          "name": "storage",
-          "default": "new Storage(appState)"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Storage",
-          "declaration": {
-            "name": "Storage",
-            "module": "out-tsc/src/lib/Storage.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "storage",
-          "declaration": {
-            "name": "storage",
-            "module": "out-tsc/src/lib/Storage.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "out-tsc/src/styles/theme.js",
       "declarations": [
         {
           "kind": "variable",
           "name": "theme",
-          "default": "css `\n  :host {\n    --negative-color: #600;\n    --positive-color: #060;\n  }\n\n  input[type='text'],\n  input[type='datetime-local'],\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
+          "default": "css `\n  :host {\n    --negative-color: #600;\n    --positive-color: #060;\n  }\n\n  input[type='text'],\n  input[type='datetime-local'],\n  select,\n  button {\n    font-family: Poppins;\n    padding: 0.5rem;\n    box-sizing: border-box;\n    width: 100%;\n  }\n  main {\n    margin-top: 1rem;\n  }\n\n  .box {\n    background-color: #fff;\n    border-radius: 8px;\n    border: 1px #aaa solid;\n  }\n`"
         }
       ],
       "exports": [
@@ -2261,6 +2490,10 @@
         {
           "kind": "variable",
           "name": "ActionView"
+        },
+        {
+          "kind": "variable",
+          "name": "defaultActionView"
         }
       ],
       "exports": [
@@ -2269,6 +2502,14 @@
           "name": "ActionView",
           "declaration": {
             "name": "ActionView",
+            "module": "out-tsc/src/models/Action.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defaultActionView",
+          "declaration": {
+            "name": "defaultActionView",
             "module": "out-tsc/src/models/Action.js"
           }
         }
@@ -2334,26 +2575,6 @@
           "declaration": {
             "name": "ListFilterType",
             "module": "out-tsc/src/models/ListFilter.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/models/ListFilters.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ListFilterType"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ListFilterType",
-          "declaration": {
-            "name": "ListFilterType",
-            "module": "out-tsc/src/models/ListFilters.js"
           }
         }
       ]
@@ -2465,27 +2686,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-button.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionButton",
-          "default": "class ActionButton extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.text = '';\n        this._handleClick = (e) => {\n            this.dispatchEvent(new CustomEvent('action-button-clicked', {\n                bubbles: true,\n                composed: true,\n            }));\n        };\n    }\n    static { this.styles = [theme]; }\n    render() {\n        return html ` <button @click=${this._handleClick}>${this.text}</button> `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionButton",
-          "declaration": {
-            "name": "ActionButton",
-            "module": "out-tsc/src/components/action-button.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "out-tsc/src/components/action-confirm-modal.js",
       "declarations": [
         {
@@ -2512,7 +2712,7 @@
         {
           "kind": "variable",
           "name": "ActionForm",
-          "default": "class ActionForm extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.actionId = 0;\n        this.type = '';\n        this.desc = '';\n        this.occurredAt = '';\n        this.tags = [];\n        this.tagValue = '';\n        //@state() desc: string = this.desc;\n        this.initialDesc = '';\n        this.initialOccurredAt = '';\n        this.initialTags = '';\n        this.confirmModalShown = false;\n        this.advancedMode = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      form {\n        padding: 1rem;\n      }\n\n      div:last-child {\n        margin-top: 1rem;\n      }\n    `,\n    ]; }\n    //@state() tags: string[] = [];\n    connectedCallback() {\n        super.connectedCallback();\n        this.desc = this.desc.trim();\n        this.occurredAt = formatDate(new Date(this.occurredAt));\n        this.initialDesc = this.desc;\n        this.initialOccurredAt = this.occurredAt;\n        this.initialTags = JSON.stringify(this.tags);\n    }\n    get apiUrl() {\n        return this.actionId ? `action/${this.actionId}` : `action`;\n    }\n    get hasChanged() {\n        return (this.desc.trim() !== this.initialDesc ||\n            this.occurredAt !== this.initialOccurredAt ||\n            JSON.stringify(this.tags) !== this.initialTags);\n    }\n    async _saveAction() {\n        const desc = this.desc.trim();\n        try {\n            if (desc && this.hasChanged) {\n                const occurredAt = this.occurredAt;\n                const timeZone = new Date().getTimezoneOffset();\n                await api.post(this.apiUrl, {\n                    type: 'food',\n                    desc,\n                    occurredAt,\n                    timeZone,\n                    tags: this.tags,\n                });\n                this.reset();\n                this.dispatchEvent(new CustomEvent('action-item-updated', {\n                    bubbles: true,\n                    composed: true,\n                    detail: { id: this.actionId, desc, occurredAt, tags: this.tags },\n                }));\n                this.state.addToast(this.actionId ? translate('updated') : translate('added'));\n                return;\n            }\n            this.dispatchEvent(new CustomEvent('action-item-canceled', {\n                bubbles: true,\n                composed: true,\n                detail: { id: this.actionId },\n            }));\n        }\n        catch (error) {\n            console.error(`Error encountered in when saving action: ${error}`);\n        }\n    }\n    reset() {\n        this.desc = '';\n        this.tagValue = '';\n        if (!this.actionId) {\n            this.tags = [];\n        }\n    }\n    async _deleteAction() {\n        try {\n            await api.delete(this.apiUrl);\n            this.state.addToast(translate('removed'));\n        }\n        catch (error) {\n            console.error(`Error encountered when deleting action: ${error}`);\n        }\n        this.dispatchEvent(new CustomEvent('action-item-deleted', {\n            bubbles: true,\n            composed: true,\n            detail: this.actionId,\n        }));\n        this.desc = '';\n    }\n    _handleDescChanged(e) {\n        this.desc = e.detail.value;\n    }\n    _handleDescSubmitted(e) {\n        this._saveAction();\n    }\n    _handleOccurredAtChanged(e) {\n        this.occurredAt = e.detail.value;\n    }\n    _handleOccurredAtSubmitted(e) {\n        this._saveAction();\n    }\n    _handleSaveClick(e) {\n        this._saveAction();\n    }\n    _handleDeleteClick(e) {\n        this.confirmModalShown = true;\n    }\n    _handleTagsUpdated(e) {\n        this.tags = e.detail.tags;\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <ss-input\n            @action-input-submitted=${this._handleDescSubmitted}\n            @action-input-changed=${this._handleDescChanged}\n            value=${this.desc}\n          ></ss-input>\n        </div>\n        <tag-manager\n          value=${this.tagValue}\n          .tags=${this.tags}\n          @updated=${(e) => {\n            this._handleTagsUpdated(e);\n        }}\n        ></tag-manager>\n        ${this.actionId\n            ? html `\n              <div>\n                <ss-input\n                  type=${InputType.DATETIME_LOCAL}\n                  @action-input-submitted=${this._handleOccurredAtSubmitted}\n                  @action-input-changed=${this._handleOccurredAtChanged}\n                  value=${this.occurredAt}\n                ></ss-input>\n              </div>\n            `\n            : nothing}\n        <div>\n          <ss-button\n            @click=${this._handleSaveClick}\n            text=${this.actionId\n            ? this.hasChanged\n                ? translate('update')\n                : translate('cancel')\n            : translate('add')}\n          ></ss-button>\n          ${this.actionId\n            ? html `\n                <ss-button\n                  @click=${this._handleDeleteClick}\n                  text=${translate('delete')}\n                ></ss-button>\n                <action-confirm-modal\n                  @confirm=${this._deleteAction}\n                  @cancel=${() => (this.confirmModalShown = false)}\n                  ?open=${this.confirmModalShown}\n                ></action-confirm-modal>\n              `\n            : nothing}\n        </div>\n      </form>\n    `;\n    }\n}"
+          "default": "class ActionForm extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.actionId = 0;\n        this.type = '';\n        this.desc = '';\n        this.occurredAt = '';\n        this.tags = [];\n        this.tagValue = '';\n        this.initialDesc = '';\n        this.initialOccurredAt = '';\n        this.initialTags = '';\n        this.confirmModalShown = false;\n        this.advancedMode = false;\n        this.loading = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      form {\n        padding: 1rem;\n      }\n\n      div:last-child {\n        margin-top: 1rem;\n      }\n    `,\n    ]; }\n    connectedCallback() {\n        super.connectedCallback();\n        this.desc = this.desc.trim();\n        this.occurredAt = formatDate(new Date(this.occurredAt));\n        this.initialDesc = this.desc;\n        this.initialOccurredAt = this.occurredAt;\n        this.initialTags = JSON.stringify(this.tags);\n    }\n    get apiUrl() {\n        return this.actionId ? `action/${this.actionId}` : `action`;\n    }\n    get hasChanged() {\n        return (this.desc.trim() !== this.initialDesc ||\n            this.occurredAt !== this.initialOccurredAt ||\n            JSON.stringify(this.tags) !== this.initialTags);\n    }\n    async _saveAction() {\n        this.loading = true;\n        const desc = this.desc.trim();\n        try {\n            if (desc && this.hasChanged) {\n                const occurredAt = this.occurredAt;\n                const timeZone = new Date().getTimezoneOffset();\n                await api.post(this.apiUrl, {\n                    type: 'food',\n                    desc,\n                    occurredAt,\n                    timeZone,\n                    tags: this.tags,\n                });\n                this.reset();\n                this.dispatchEvent(new CustomEvent('action-item-updated', {\n                    bubbles: true,\n                    composed: true,\n                    detail: { id: this.actionId, desc, occurredAt, tags: this.tags },\n                }));\n                this.state.addToast(this.actionId ? translate('updated') : translate('added'));\n                this.loading = false;\n                return;\n            }\n            this.dispatchEvent(new CustomEvent('action-item-canceled', {\n                bubbles: true,\n                composed: true,\n                detail: { id: this.actionId },\n            }));\n        }\n        catch (error) {\n            console.error(`Error encountered in when saving action: ${error}`);\n        }\n        this.loading = false;\n    }\n    reset() {\n        this.desc = '';\n        this.tagValue = '';\n        if (!this.actionId) {\n            this.tags = [];\n        }\n    }\n    async _deleteAction() {\n        this.loading = true;\n        try {\n            await api.delete(this.apiUrl);\n            this.state.addToast(translate('removed'));\n        }\n        catch (error) {\n            console.error(`Error encountered when deleting action: ${error}`);\n        }\n        this.dispatchEvent(new CustomEvent('action-item-deleted', {\n            bubbles: true,\n            composed: true,\n            detail: this.actionId,\n        }));\n        this.desc = '';\n        this.loading = false;\n    }\n    async _handleDescChanged(e) {\n        this.desc = e.detail.value;\n        try {\n            const json = await api.get(`actionSuggestion/${this.desc}`);\n            if (json) {\n                this.state.setAutoSuggestions(json.suggestions);\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);\n        }\n    }\n    _handleDescSubmitted(e) {\n        this._saveAction();\n    }\n    _handleOccurredAtChanged(e) {\n        this.occurredAt = e.detail.value;\n    }\n    _handleOccurredAtSubmitted(e) {\n        this._saveAction();\n    }\n    _handleSaveClick(e) {\n        this._saveAction();\n    }\n    _handleDeleteClick(e) {\n        this.confirmModalShown = true;\n    }\n    _handleTagsUpdated(e) {\n        this.tags = e.detail.tags;\n    }\n    render() {\n        return html `\n      <form class=\"box\">\n        <div>\n          <ss-input\n            @action-input-submitted=${this._handleDescSubmitted}\n            @action-input-changed=${this._handleDescChanged}\n            value=${this.desc}\n            autoComplete\n          ></ss-input>\n        </div>\n        <tag-manager\n          value=${this.tagValue}\n          .tags=${this.tags}\n          @updated=${(e) => {\n            this._handleTagsUpdated(e);\n        }}\n        ></tag-manager>\n        ${this.actionId\n            ? html `\n              <div>\n                <ss-input\n                  type=${InputType.DATETIME_LOCAL}\n                  @action-input-submitted=${this._handleOccurredAtSubmitted}\n                  @action-input-changed=${this._handleOccurredAtChanged}\n                  value=${this.occurredAt}\n                ></ss-input>\n              </div>\n            `\n            : nothing}\n        <div>\n          <ss-button\n            @click=${this._handleSaveClick}\n            text=${this.actionId\n            ? this.hasChanged\n                ? translate('update')\n                : translate('cancel')\n            : translate('add')}\n            ?loading=${this.loading}\n          ></ss-button>\n          ${this.actionId\n            ? html `\n                <ss-button\n                  @click=${this._handleDeleteClick}\n                  text=${translate('delete')}\n                ></ss-button>\n                <action-confirm-modal\n                  @confirm=${this._deleteAction}\n                  @cancel=${() => (this.confirmModalShown = false)}\n                  ?open=${this.confirmModalShown}\n                ></action-confirm-modal>\n              `\n            : nothing}\n        </div>\n      </form>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2522,48 +2722,6 @@
           "declaration": {
             "name": "ActionForm",
             "module": "out-tsc/src/components/action-form.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-input-auto.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionInputAuto",
-          "default": "class ActionInputAuto extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.input = '';\n        this.maxMatches = 5;\n        this.selectedIndex = 0;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      div {\n        position: relative;\n      }\n\n      ul {\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        list-style: none;\n        padding: 0;\n        margin: 0;\n        box-sizing: border-box;\n        overflow: hidden;\n      }\n\n      li {\n        padding: 0.5rem;\n        background-color: #fff;\n        transition: all 0.2s;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n        height: 2rem;\n        line-height: 2rem;\n        color: #888;\n      }\n\n      li.selected {\n        color: #000;\n        background-color: #ddd;\n      }\n    `,\n    ]; }\n    get suggestionMatches() {\n        return this.state.suggestions\n            .filter(suggestion => suggestion.match(new RegExp(`^${this.input}`)))\n            .slice(0, this.maxMatches);\n    }\n    get maxSelectedIndex() {\n        return this.suggestionMatches.length - 1;\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('select-up', () => {\n            this._adjustSelectedIndex(-1);\n        });\n        this.addEventListener('select-down', () => {\n            this._adjustSelectedIndex(1);\n        });\n        this.addEventListener('select', () => {\n            if (this.suggestionMatches.length) {\n                this._sendSelectedEvent(this.suggestionMatches[this.selectedIndex]);\n            }\n            else {\n                this._sendSubmitEvent();\n            }\n        });\n    }\n    _adjustSelectedIndex(adjustment) {\n        let newIndex = this.selectedIndex + adjustment;\n        if (newIndex < 0) {\n            newIndex = this.maxSelectedIndex;\n        }\n        if (newIndex > this.maxSelectedIndex) {\n            newIndex = 0;\n        }\n        this.selectedIndex = newIndex;\n    }\n    _sendSelectedEvent(suggestion) {\n        this.dispatchEvent(new CustomEvent('suggestion-selected', {\n            bubbles: true,\n            composed: true,\n            detail: suggestion,\n        }));\n    }\n    _sendSubmitEvent() {\n        this.dispatchEvent(new CustomEvent('submit', {\n            bubbles: true,\n            composed: true,\n        }));\n    }\n    render() {\n        return html `\n      <div>\n        ${this.suggestionMatches.length\n            ? html ` <ul class=\"box\">\n              ${repeat(this.suggestionMatches, suggestion => suggestion, (suggestion, index) => html `\n                    <li\n                      class=${index === this.selectedIndex ? 'selected' : ''}\n                      @mouseover=${() => (this.selectedIndex = index)}\n                      @click=${() => this._sendSelectedEvent(suggestion)}\n                    >\n                      ${suggestion}\n                    </li>\n                  `)}\n            </ul>`\n            : nothing}\n      </div>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionInputAuto",
-          "declaration": {
-            "name": "ActionInputAuto",
-            "module": "out-tsc/src/components/action-input-auto.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "out-tsc/src/components/action-input.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionInput",
-          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = InputType.TEXT;\n        this.value = '';\n        this.autoComplete = true;\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=${this.type}\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <action-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></action-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionInput",
-          "declaration": {
-            "name": "ActionInput",
-            "module": "out-tsc/src/components/action-input.js"
           }
         }
       ]
@@ -2608,7 +2766,7 @@
         {
           "kind": "variable",
           "name": "ActionList",
-          "default": "class ActionList extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.scrollHandler = () => this._handleScroll();\n        this.items = [];\n        this.start = 0;\n        this.reachedEnd = false;\n        this.loading = false;\n        this.filterIsOpen = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      .filter-body {\n        padding-top: 1rem;\n      }\n\n      .list-items {\n        margin-top: 1rem;\n      }\n    `,\n    ]; }\n    get totalShown() {\n        return this.start + config.perPage;\n    }\n    get lazyLoaderIsVisible() {\n        var rect = this.lazyLoader.getBoundingClientRect();\n        const docHeight = window.innerHeight || document.documentElement.clientHeight;\n        return rect.bottom <= docHeight;\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this._load();\n        window.addEventListener('scroll', this.scrollHandler);\n        this.addEventListener('action-item-deleted', e => {\n            const event = e;\n            this.items = this.items.filter(item => item.id !== event.detail);\n        });\n        this.addEventListener('action-item-updated', e => {\n            const event = e;\n            this.items = this.items.map(item => item.id === event.detail.id\n                ? {\n                    ...item,\n                    desc: event.detail.desc,\n                    occurredAt: event.detail.occurredAt,\n                    tags: event.detail.tags,\n                }\n                : item);\n        });\n    }\n    disconnectedCallback() {\n        super.disconnectedCallback();\n        window.removeEventListener('scroll', this.scrollHandler);\n    }\n    _handleScroll() {\n        if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {\n            this._load(true);\n        }\n    }\n    async _load(more = false) {\n        this.loading = true;\n        if (more) {\n            this.start += config.perPage;\n        }\n        const queryParams = {\n            ...(this.start > 0 ? { start: `${this.start}` } : {}),\n            ...(!this.state.listFilter.includeAll\n                ? { filter: JSON.stringify(this.state.listFilter) }\n                : {}),\n        };\n        const url = `action${Object.keys(queryParams).length\n            ? `?${new URLSearchParams(queryParams)}`\n            : ''}`;\n        try {\n            const json = await api.get(url);\n            if (json) {\n                if (json.actions) {\n                    this.items = more\n                        ? [...this.items, ...json.actions]\n                        : [...json.actions];\n                }\n                if (json.total) {\n                    this.reachedEnd = json.total <= this.totalShown ? true : false;\n                }\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n        finally {\n            this.loading = false;\n        }\n    }\n    _handleFilterUpdated(e) {\n        this.filterIsOpen = false;\n        this._load();\n    }\n    _toggleFilter() {\n        this.filterIsOpen = !this.filterIsOpen;\n    }\n    render() {\n        return html `\n      <ss-collapsable\n        title=${translate('filter')}\n        ?open=${this.filterIsOpen}\n        @toggled=${this._toggleFilter}\n      >\n        <div class=\"filter-body\">\n          <list-filter\n            @filter-updated=${(e) => {\n            this._handleFilterUpdated(e);\n        }}\n          ></list-filter>\n        </div>\n      </ss-collapsable>\n\n      <div class=\"box list-items\">\n        ${repeat(this.items, item => item.id, item => html `\n              <action-list-item\n                actionId=${item.id}\n                type=${item.type}\n                desc=${item.desc}\n                occurredAt=${item.occurredAt}\n                .tags=${item.tags}\n              ></action-list-item>\n            `)}\n        <div id=\"lazy-loader\"></div>\n      </div>\n    `;\n    }\n}"
+          "default": "class ActionList extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.scrollHandler = () => this._handleScroll();\n        this.items = [];\n        this.start = 0;\n        this.reachedEnd = false;\n        this.loading = false;\n        this.filterIsOpen = false;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      .filter-body {\n        padding-top: 1rem;\n      }\n\n      .list-items {\n        margin-top: 1rem;\n      }\n\n      .no-actions {\n        padding: 1rem;\n      }\n    `,\n    ]; }\n    get totalShown() {\n        return this.start + config.perPage;\n    }\n    get lazyLoaderIsVisible() {\n        var rect = this.lazyLoader.getBoundingClientRect();\n        const docHeight = window.innerHeight || document.documentElement.clientHeight;\n        return rect.bottom <= docHeight;\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this._load();\n        window.addEventListener('scroll', this.scrollHandler);\n        this.addEventListener('action-item-deleted', e => {\n            const event = e;\n            this.items = this.items.filter(item => item.id !== event.detail);\n        });\n        this.addEventListener('action-item-updated', e => {\n            const event = e;\n            this.items = this.items.map(item => item.id === event.detail.id\n                ? {\n                    ...item,\n                    desc: event.detail.desc,\n                    occurredAt: event.detail.occurredAt,\n                    tags: event.detail.tags,\n                }\n                : item);\n        });\n    }\n    disconnectedCallback() {\n        super.disconnectedCallback();\n        window.removeEventListener('scroll', this.scrollHandler);\n    }\n    _handleScroll() {\n        if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {\n            this._load(true);\n        }\n    }\n    async _load(more = false) {\n        this.loading = true;\n        if (more) {\n            this.start += config.perPage;\n        }\n        const queryParams = {\n            ...(this.start > 0 ? { start: `${this.start}` } : {}),\n            ...(!this.state.listFilter.includeAll\n                ? { filter: JSON.stringify(this.state.listFilter) }\n                : {}),\n        };\n        const url = `action${Object.keys(queryParams).length\n            ? `?${new URLSearchParams(queryParams)}`\n            : ''}`;\n        try {\n            const json = await api.get(url);\n            if (json) {\n                if (json.actions) {\n                    this.items = more\n                        ? [...this.items, ...json.actions]\n                        : [...json.actions];\n                }\n                if (json.total) {\n                    this.reachedEnd = json.total <= this.totalShown ? true : false;\n                }\n            }\n        }\n        catch (error) {\n            console.error(`Failed to get list: ${JSON.stringify(error)}`);\n        }\n        finally {\n            this.loading = false;\n        }\n    }\n    _handleFilterUpdated(e) {\n        this.filterIsOpen = false;\n        this._load();\n    }\n    _toggleFilter() {\n        this.filterIsOpen = !this.filterIsOpen;\n    }\n    render() {\n        return html `\n      <ss-collapsable\n        title=${translate('filter')}\n        ?open=${this.filterIsOpen}\n        @toggled=${this._toggleFilter}\n      >\n        <div class=\"filter-body\">\n          <list-filter\n            @filter-updated=${(e) => {\n            this._handleFilterUpdated(e);\n        }}\n          ></list-filter>\n        </div>\n      </ss-collapsable>\n\n      <div class=\"box list-items\">\n        ${this.items.length\n            ? repeat(this.items, item => item.id, item => html `\n                  <action-list-item\n                    actionId=${item.id}\n                    type=${item.type}\n                    desc=${item.desc}\n                    occurredAt=${item.occurredAt}\n                    .tags=${item.tags}\n                  ></action-list-item>\n                `)\n            : !this.loading\n                ? html ` <div class=\"no-actions\">${translate('noActionsFound')}</div>`\n                : nothing}\n        <div id=\"lazy-loader\"></div>\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2708,33 +2866,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "out-tsc/src/components/generic-input.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ActionInput",
-          "default": "class ActionInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = InputType.TEXT;\n        this.value = '';\n        this.autoComplete = true;\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=${this.type}\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <action-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></action-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ActionInput",
-          "declaration": {
-            "name": "ActionInput",
-            "module": "out-tsc/src/components/generic-input.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "out-tsc/src/components/list-filter.js",
       "declarations": [
         {
           "kind": "variable",
           "name": "ListFilter",
-          "default": "class ListFilter extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this[_a] = [];\n        this[_b] = [];\n        this.includeUntagged = false;\n        this.includeAll = true;\n    }\n    static { _a = ListFilterType.CONTAINS_ONE_OF, _b = ListFilterType.CONTAINS_ALL_OF; }\n    static { this.styles = [\n        theme,\n        css `\n      .list-filter {\n        padding: 1rem;\n      }\n\n      .list-filter.all .filters {\n        opacity: 0.3;\n        pointer-events: none;\n      }\n\n      fieldset {\n        border-radius: 0.5rem;\n      }\n    `,\n    ]; }\n    get classes() {\n        return { box: true, 'list-filter': true, all: this.includeAll };\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        Object.values(ListFilterType).forEach(type => {\n            this[type] = this.state.listFilter.tagging[type];\n        });\n        this.includeUntagged = this.state.listFilter.includeUntagged;\n        this.includeAll = this.state.listFilter.includeAll;\n    }\n    _handleIncludeUntaggedChanged() {\n        this.includeUntagged = !this.includeUntagged;\n    }\n    _handleIncludeAllChanged() {\n        this.includeAll = !this.includeAll;\n    }\n    _handleUpdateClick(e) {\n        Object.values(ListFilterType).forEach(type => {\n            this.state.setListFilterTagging(type, this[type]);\n        });\n        this.state.setListFilterIncludeUntagged(this.includeUntagged);\n        this.state.setListFilterIncludeAll(this.includeAll);\n        storage.saveFilter(this.state.listFilter);\n        this.dispatchEvent(new CustomEvent('filter-updated', { bubbles: true, composed: true }));\n    }\n    updateTags(type, tags) {\n        this[type] = tags;\n    }\n    render() {\n        return html `\n      <div class=${classMap(this.classes)}>\n        <div class=\"all\">\n          <input\n            id=\"include-all\"\n            type=\"checkbox\"\n            ?checked=${this.includeAll}\n            @change=${this._handleIncludeAllChanged}\n          />\n          <label for=\"include-all\">${translate('includeAll')}</label>\n        </div>\n        <div class=\"filters\">\n          ${repeat(Object.values(ListFilterType), type => type, type => html `\n              <fieldset>\n                <legend>${translate(type)}</legend>\n                <tag-manager\n                  .tags=${this[type]}\n                  @updated=${(e) => {\n            this.updateTags(type, e.detail.tags);\n        }}\n                ></tag-manager>\n              </fieldset>\n            `)}\n          <div>\n            <input\n              id=\"include-unchanged\"\n              type=\"checkbox\"\n              ?checked=${this.includeUntagged}\n              @change=${this._handleIncludeUntaggedChanged}\n            />\n            <label for=\"include-unchanged\"\n              >${translate('includeUntagged')}</label\n            >\n          </div>\n        </div>\n        <ss-button\n          @click=${(e) => {\n            this._handleUpdateClick(e);\n        }}\n          text=${translate('updateFilter')}\n        ></ss-button>\n      </div>\n    `;\n    }\n}"
+          "default": "class ListFilter extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this[_a] = [];\n        this[_b] = [];\n        this.includeUntagged = false;\n        this.includeAll = true;\n        this.savedFilters = [];\n        this.saveMode = false;\n        this.filterName = '';\n        this.selectedSavedFilter = '';\n    }\n    static { _a = ListFilterType.CONTAINS_ONE_OF, _b = ListFilterType.CONTAINS_ALL_OF; }\n    static { this.styles = [\n        theme,\n        css `\n      .list-filter {\n        padding: 1rem;\n      }\n\n      .list-filter.all .filters {\n        opacity: 0.3;\n        pointer-events: none;\n      }\n\n      fieldset {\n        border-radius: 0.5rem;\n      }\n\n      .save {\n        position: relative;\n      }\n\n      .save ss-input {\n        position: absolute;\n        bottom: 0%;\n        width: 100%;\n        opacity: 0;\n        pointer-events: none;\n        transition: all 0.3s;\n      }\n\n      .list-filter.save-mode .save ss-input {\n        bottom: 100%;\n        opacity: 1;\n        pointer-events: initial;\n      }\n    `,\n    ]; }\n    get classes() {\n        return {\n            box: true,\n            'list-filter': true,\n            all: this.includeAll,\n            'save-mode': this.saveMode,\n            'valid-filter-name': this.filterNameIsValid,\n        };\n    }\n    get filterNameIsValid() {\n        return this.filterName.length > 0;\n    }\n    get saveButtonIsEnabled() {\n        return !this.saveMode || this.filterNameIsValid;\n    }\n    get filter() {\n        return {\n            includeAll: this.includeAll,\n            includeUntagged: this.includeUntagged,\n            tagging: {\n                containsOneOf: this.containsOneOf,\n                containsAllOf: this.containsAllOf,\n            },\n        };\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        Object.values(ListFilterType).forEach(type => {\n            this[type] = this.state.listFilter.tagging[type];\n        });\n        this.includeUntagged = this.state.listFilter.includeUntagged;\n        this.includeAll = this.state.listFilter.includeAll;\n        this.savedFilters = storage.getSavedFilters();\n    }\n    _handleIncludeUntaggedChanged() {\n        this.includeUntagged = !this.includeUntagged;\n    }\n    _handleIncludeAllChanged() {\n        this.includeAll = !this.includeAll;\n    }\n    _handleUpdateClick(e) {\n        Object.values(ListFilterType).forEach(type => {\n            this.state.setListFilterTagging(type, this[type]);\n        });\n        this.state.setListFilterIncludeUntagged(this.includeUntagged);\n        this.state.setListFilterIncludeAll(this.includeAll);\n        storage.saveActiveFilter(this.state.listFilter);\n        this.dispatchEvent(new CustomEvent('filter-updated', { bubbles: true, composed: true }));\n    }\n    async _saveFilter() {\n        if (!this.saveMode) {\n            this.saveMode = true;\n            this.filterNameInput.focus();\n            return;\n        }\n        await storage.saveFilter(this.filter, this.filterName);\n        this.savedFilters = storage.getSavedFilters();\n        this.filterNameInput.clear();\n        this.saveMode = false;\n        this.state.addToast(translate('filterSaved'));\n    }\n    async _handleSaveClick(e) {\n        await this._saveFilter();\n    }\n    _handleFilterNameChanged(e) {\n        this.filterName = e.detail.value;\n    }\n    _handleFilterNameSubmitted(e) {\n        this._saveFilter();\n    }\n    _handleSavedFilterChanged(e) {\n        this.selectedSavedFilter = this.savedFiltersInput.value;\n        const savedFilter = this.savedFilters.find(savedFilter => savedFilter.id === this.savedFiltersInput.value);\n        if (savedFilter) {\n            this[ListFilterType.CONTAINS_ONE_OF] =\n                savedFilter.filter.tagging[ListFilterType.CONTAINS_ONE_OF];\n            this[ListFilterType.CONTAINS_ALL_OF] =\n                savedFilter.filter.tagging[ListFilterType.CONTAINS_ALL_OF];\n            this.includeUntagged = savedFilter.filter.includeUntagged;\n            this.includeAll = savedFilter.filter.includeAll;\n        }\n    }\n    _handleDeleteSavedFilterClick(e) {\n        if (this.savedFiltersInput.value) {\n            storage.deleteSavedFilter(this.savedFiltersInput.value);\n            this.savedFiltersInput.value = '';\n            this.savedFiltersInput.dispatchEvent(new Event('change'));\n        }\n        this.savedFilters = storage.getSavedFilters();\n        this.state.addToast(translate('filterDeleted'));\n    }\n    updateTags(type, tags) {\n        this[type] = tags;\n    }\n    render() {\n        return html `\n      <div class=${classMap(this.classes)}>\n        ${this.savedFilters.length\n            ? html `\n              <div class=\"saved-filters\">\n                <select\n                  id=\"saved-filters\"\n                  @change=${this._handleSavedFilterChanged}\n                >\n                  <option value=\"\">${translate('savedFilters')}</option>\n                  ${repeat(this.savedFilters, filter => filter.id, filter => html `\n                      <option value=${filter.id}>${filter.name}</option>\n                    `)}\n                </select>\n                ${this.selectedSavedFilter\n                ? html `\n                      <ss-button\n                        @click=${this._handleDeleteSavedFilterClick}\n                        text=${translate('deleteFilter')}\n                      ></ss-button>\n                    `\n                : nothing}\n              </div>\n            `\n            : nothing}\n        <div class=\"all\">\n          <input\n            id=\"include-all\"\n            type=\"checkbox\"\n            ?checked=${this.includeAll}\n            @change=${this._handleIncludeAllChanged}\n          />\n          <label for=\"include-all\">${translate('includeAll')}</label>\n        </div>\n        <div class=\"filters\">\n          ${repeat(Object.values(ListFilterType), type => type, type => html `\n              <fieldset>\n                <legend>${translate(type)}</legend>\n                <tag-manager\n                  .tags=${this[type]}\n                  @updated=${(e) => {\n            this.updateTags(type, e.detail.tags);\n        }}\n                ></tag-manager>\n              </fieldset>\n            `)}\n          <div>\n            <input\n              id=\"include-unchanged\"\n              type=\"checkbox\"\n              ?checked=${this.includeUntagged}\n              @change=${this._handleIncludeUntaggedChanged}\n            />\n            <label for=\"include-unchanged\"\n              >${translate('includeUntagged')}</label\n            >\n          </div>\n        </div>\n        <ss-button\n          @click=${(e) => {\n            this._handleUpdateClick(e);\n        }}\n          text=${translate('useFilter')}\n        ></ss-button>\n        <div class=\"save\">\n          <ss-input\n            @action-input-changed=${(e) => {\n            this._handleFilterNameChanged(e);\n        }}\n            @action-input-submitted=${(e) => {\n            this._handleFilterNameSubmitted(e);\n        }}\n            id=\"filter-name\"\n            placeholder=${translate('filterName')}\n          ></ss-input>\n          <ss-button\n            @click=${(e) => {\n            this._handleSaveClick(e);\n        }}\n            text=${translate('saveFilter')}\n            ?disabled=${!this.saveButtonIsEnabled}\n          ></ss-button>\n        </div>\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2755,7 +2892,7 @@
         {
           "kind": "variable",
           "name": "SSButton",
-          "default": "class SSButton extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.text = '';\n        this._handleClick = (e) => {\n            this.dispatchEvent(new CustomEvent('ss-button-clicked', {\n                bubbles: true,\n                composed: true,\n            }));\n        };\n    }\n    static { this.styles = [theme]; }\n    render() {\n        return html ` <button @click=${this._handleClick}>${this.text}</button> `;\n    }\n}"
+          "default": "class SSButton extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.text = '';\n        this.disabled = false;\n        this.loading = false;\n        this._handleClick = (e) => {\n            this.dispatchEvent(new CustomEvent('ss-button-clicked', {\n                bubbles: true,\n                composed: true,\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      button.disabled {\n        opacity: 0.5;\n      }\n    `,\n    ]; }\n    get classes() {\n        return { disabled: this.disabled };\n    }\n    render() {\n        return html `\n      <button\n        class=${classMap(this.classes)}\n        @click=${this._handleClick}\n        ?disabled=${this.disabled}\n      >\n        ${this.loading ? html ` <ss-loader></ss-loader> ` : this.text}\n      </button>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2797,7 +2934,7 @@
         {
           "kind": "variable",
           "name": "SSInputAuto",
-          "default": "class SSInputAuto extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.input = '';\n        this.maxMatches = 5;\n        this.selectedIndex = 0;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      div {\n        position: relative;\n      }\n\n      ul {\n        z-index: 100;\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        list-style: none;\n        padding: 0;\n        margin: 0;\n        box-sizing: border-box;\n        overflow: hidden;\n      }\n\n      li {\n        padding: 0.5rem;\n        background-color: #fff;\n        transition: all 0.2s;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n        height: 2rem;\n        line-height: 2rem;\n        color: #888;\n      }\n\n      li.selected {\n        color: #000;\n        background-color: #ddd;\n      }\n    `,\n    ]; }\n    get suggestionMatches() {\n        return this.state.suggestions.length\n            ? this.state.suggestions\n                .filter(suggestion => {\n                return suggestion.match(new RegExp(`^${this.input}`));\n            })\n                .slice(0, this.maxMatches)\n            : [];\n    }\n    get maxSelectedIndex() {\n        return this.suggestionMatches.length - 1;\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('select-up', () => {\n            this._adjustSelectedIndex(-1);\n        });\n        this.addEventListener('select-down', () => {\n            this._adjustSelectedIndex(1);\n        });\n        this.addEventListener('select', () => {\n            if (this.suggestionMatches.length) {\n                this._sendSelectedEvent(this.suggestionMatches[this.selectedIndex]);\n            }\n            else {\n                this._sendSubmitEvent();\n            }\n        });\n    }\n    _adjustSelectedIndex(adjustment) {\n        let newIndex = this.selectedIndex + adjustment;\n        if (newIndex < 0) {\n            newIndex = this.maxSelectedIndex;\n        }\n        if (newIndex > this.maxSelectedIndex) {\n            newIndex = 0;\n        }\n        this.selectedIndex = newIndex;\n    }\n    _sendSelectedEvent(suggestion) {\n        this.dispatchEvent(new CustomEvent('suggestion-selected', {\n            bubbles: true,\n            composed: true,\n            detail: suggestion,\n        }));\n    }\n    _sendSubmitEvent() {\n        this.dispatchEvent(new CustomEvent('submit', {\n            bubbles: true,\n            composed: true,\n        }));\n    }\n    render() {\n        return html `\n      <div>\n        ${this.suggestionMatches.length\n            ? html ` <ul class=\"box\">\n              ${repeat(this.suggestionMatches, suggestion => suggestion, (suggestion, index) => html `\n                    <li\n                      class=${index === this.selectedIndex ? 'selected' : ''}\n                      @mouseover=${() => (this.selectedIndex = index)}\n                      @click=${() => this._sendSelectedEvent(suggestion)}\n                    >\n                      ${suggestion}\n                    </li>\n                  `)}\n            </ul>`\n            : nothing}\n      </div>\n    `;\n    }\n}"
+          "default": "class SSInputAuto extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.input = '';\n        this.maxMatches = 5;\n        this.minInput = 1;\n        this.selectedIndex = 0;\n    }\n    static { this.styles = [\n        theme,\n        css `\n      div {\n        position: relative;\n      }\n\n      ul {\n        z-index: 100;\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        list-style: none;\n        padding: 0;\n        margin: 0;\n        box-sizing: border-box;\n        overflow: hidden;\n      }\n\n      li {\n        padding: 0.5rem;\n        background-color: #fff;\n        transition: all 0.2s;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n        height: 2rem;\n        line-height: 2rem;\n        color: #888;\n      }\n\n      li.selected {\n        color: #000;\n        background-color: #ddd;\n      }\n    `,\n    ]; }\n    get show() {\n        return (this.state.suggestions.length > 0 && this.input.length >= this.minInput);\n    }\n    get maxSelectedIndex() {\n        return this.state.suggestions.length - 1;\n    }\n    connectedCallback() {\n        super.connectedCallback();\n        this.addEventListener('select-up', () => {\n            this._adjustSelectedIndex(-1);\n        });\n        this.addEventListener('select-down', () => {\n            this._adjustSelectedIndex(1);\n        });\n        this.addEventListener('select', () => {\n            if (this.state.suggestions.length) {\n                this._sendSelectedEvent(this.state.suggestions[this.selectedIndex]);\n            }\n            else {\n                this._sendSubmitEvent();\n            }\n        });\n    }\n    _adjustSelectedIndex(adjustment) {\n        let newIndex = this.selectedIndex + adjustment;\n        if (newIndex < 0) {\n            newIndex = this.maxSelectedIndex;\n        }\n        if (newIndex > this.maxSelectedIndex) {\n            newIndex = 0;\n        }\n        this.selectedIndex = newIndex;\n    }\n    _sendSelectedEvent(suggestion) {\n        this.dispatchEvent(new CustomEvent('suggestion-selected', {\n            bubbles: true,\n            composed: true,\n            detail: suggestion,\n        }));\n    }\n    _sendSubmitEvent() {\n        this.dispatchEvent(new CustomEvent('submit', {\n            bubbles: true,\n            composed: true,\n        }));\n    }\n    render() {\n        return html `\n      <div>\n        ${this.show\n            ? html ` <ul class=\"box\">\n              ${repeat(this.state.suggestions, suggestion => suggestion, (suggestion, index) => html `\n                    <li\n                      class=${index === this.selectedIndex ? 'selected' : ''}\n                      @mouseover=${() => (this.selectedIndex = index)}\n                      @click=${() => this._sendSelectedEvent(suggestion)}\n                    >\n                      ${suggestion}\n                    </li>\n                  `)}\n            </ul>`\n            : nothing}\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2818,7 +2955,7 @@
         {
           "kind": "variable",
           "name": "SSInput",
-          "default": "class SSInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = InputType.TEXT;\n        this.value = '';\n        this.autoComplete = true;\n        this.placeholder = '';\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=${this.type}\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          placeholder=${this.placeholder}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <ss-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></ss-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
+          "default": "class SSInput extends LitElement {\n    constructor() {\n        super(...arguments);\n        this.type = InputType.TEXT;\n        this.value = '';\n        this.autoComplete = false;\n        this.placeholder = '';\n        this._value = this.value;\n        this.hasFocus = false;\n        this.autoDismissed = false;\n        this._handleChange = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this._value = value;\n            if (e.target instanceof HTMLInputElement) {\n                e.target.value = this._value;\n            }\n            e.preventDefault();\n            return false;\n        };\n        this._handleKeyDown = (e) => {\n            if (!(e.target instanceof HTMLInputElement)) {\n                return;\n            }\n            switch (e.code) {\n                case 'ArrowUp':\n                    this._sendSuggestionUpEvent();\n                    e.preventDefault();\n                    return;\n                case 'ArrowDown':\n                    this._sendSuggestionDownEvent();\n                    e.preventDefault();\n                    return;\n                case 'Enter':\n                    if (this.showAutoComplete) {\n                        this._sendSuggestionSelectEvent();\n                    }\n                    else {\n                        this._sendSubmittedEvent();\n                    }\n                    e.preventDefault();\n                    return;\n            }\n        };\n        this._handleInput = (e) => {\n            let value = '';\n            if (e.target instanceof HTMLInputElement) {\n                value = e.target.value;\n            }\n            this.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: {\n                    value,\n                },\n            }));\n            this._value = value;\n            this.autoDismissed = false;\n            return true;\n        };\n        this._handleFocus = (e) => {\n            this.hasFocus = true;\n            this.autoDismissed = false;\n        };\n        this._handleBlur = (e) => {\n            setTimeout(() => {\n                this.hasFocus = false;\n            }, 200);\n        };\n        this._suggestionSelectHandler = (e) => {\n            this.autoDismissed = true;\n            this.inputField.value = e.detail;\n            this.inputField.dispatchEvent(new CustomEvent('action-input-changed', {\n                bubbles: true,\n                composed: true,\n                detail: { value: e.detail },\n            }));\n        };\n    }\n    static { this.styles = [\n        theme,\n        css `\n      input:focus {\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);\n      }\n    `,\n    ]; }\n    get showAutoComplete() {\n        return this.autoComplete && !this.autoDismissed && this._value.length > 0;\n    }\n    updated(changedProperties) {\n        super.updated(changedProperties);\n        if (changedProperties.has('value')) {\n            this.inputField.value = this.value;\n        }\n    }\n    focus() {\n        this.inputField.focus();\n    }\n    clear() {\n        this.inputField.value = '';\n        this.dispatchEvent(new CustomEvent('action-input-changed', {\n            bubbles: true,\n            composed: true,\n            detail: {\n                value: '',\n            },\n        }));\n    }\n    _sendSuggestionUpEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-up'));\n    }\n    _sendSuggestionDownEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select-down'));\n    }\n    _sendSuggestionSelectEvent() {\n        this.autoCompleteNode.dispatchEvent(new CustomEvent('select'));\n    }\n    _sendSubmittedEvent() {\n        const changeEvent = new CustomEvent('action-input-submitted', {\n            bubbles: true,\n            composed: true,\n            detail: this._value,\n        });\n        this.inputField.dispatchEvent(changeEvent);\n    }\n    _handleSubmit() {\n        this._sendSubmittedEvent();\n    }\n    render() {\n        return html `\n      <span>\n        <input\n          id=\"input-field\"\n          type=${this.type}\n          value=${this.value}\n          @change=${this._handleChange}\n          @keydown=${this._handleKeyDown}\n          @input=${this._handleInput}\n          @focus=${this._handleFocus}\n          @blur=${this._handleBlur}\n          placeholder=${this.placeholder}\n          autocomplete=\"off\"\n        />\n        ${this.showAutoComplete\n            ? html `\n              <ss-input-auto\n                input=${this._value}\n                @submit=${this._handleSubmit}\n                @suggestion-selected=${this._suggestionSelectHandler}\n              ></ss-input-auto>\n            `\n            : nothing}\n      </span>\n    `;\n    }\n}"
         }
       ],
       "exports": [
@@ -2828,6 +2965,27 @@
           "declaration": {
             "name": "SSInput",
             "module": "out-tsc/src/components/ss-input.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/components/ss-loader.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "SSLoader",
+          "default": "class SSLoader extends LitElement {\n    static { this.styles = css `\n    .container {\n      height: auto;\n    }\n\n    .loader {\n      display: inline-block;\n      width: 16px;\n      height: 16px;\n      border-radius: 50%;\n      background-color: #000;\n      box-shadow: 32px 0 #000, -32px 0 #000;\n      position: relative;\n      animation: flash 0.5s ease-out infinite alternate;\n      transform: skewX(50%);\n    }\n\n    @keyframes flash {\n      0% {\n        background-color: #0002;\n        box-shadow: 32px 0 #0002, -32px 0 #000;\n      }\n      50% {\n        background-color: #000;\n        box-shadow: 32px 0 #0002, -32px 0 #0002;\n      }\n      100% {\n        background-color: #0002;\n        box-shadow: 32px 0 #000, -32px 0 #0002;\n      }\n    }\n  `; }\n    render() {\n        return html `<div class=\"container\">\n      <span class=\"loader\"></span>\n    </div>`;\n    }\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SSLoader",
+          "declaration": {
+            "name": "SSLoader",
+            "module": "out-tsc/src/components/ss-loader.js"
           }
         }
       ]
@@ -3133,12 +3291,205 @@
     },
     {
       "kind": "javascript-module",
+      "path": "out-tsc/src/lib/Api.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Api",
+          "members": [
+            {
+              "kind": "method",
+              "name": "httpRequest",
+              "parameters": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "config"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get",
+              "parameters": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "config"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "post",
+              "parameters": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "body"
+                },
+                {
+                  "name": "config"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "delete",
+              "parameters": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "config"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "config",
+              "default": "config"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "api",
+          "default": "new Api(config)"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Api",
+          "declaration": {
+            "name": "Api",
+            "module": "out-tsc/src/lib/Api.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "api",
+          "declaration": {
+            "name": "api",
+            "module": "out-tsc/src/lib/Api.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/lib/Storage.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Storage",
+          "members": [
+            {
+              "kind": "method",
+              "name": "saveFilter",
+              "parameters": [
+                {
+                  "name": "filter"
+                },
+                {
+                  "name": "name"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getSavedFilters"
+            },
+            {
+              "kind": "method",
+              "name": "deleteSavedFilter",
+              "parameters": [
+                {
+                  "name": "id"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "saveActiveFilter",
+              "parameters": [
+                {
+                  "name": "filter"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "loadActiveFilter"
+            },
+            {
+              "kind": "method",
+              "name": "saveView",
+              "parameters": [
+                {
+                  "name": "view"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getSavedView"
+            },
+            {
+              "kind": "method",
+              "name": "digestMessage",
+              "parameters": [
+                {
+                  "name": "message"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "appState"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "storage",
+          "default": "new Storage(appState)"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Storage",
+          "declaration": {
+            "name": "Storage",
+            "module": "out-tsc/src/lib/Storage.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "storage",
+          "declaration": {
+            "name": "storage",
+            "module": "out-tsc/src/lib/Storage.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "out-tsc/src/components/tag/tag-input.js",
       "declarations": [
         {
           "kind": "variable",
           "name": "TagInput",
-          "default": "class TagInput extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.value = '';\n        this.lastHitValue = '';\n        this.lastHitTags = [];\n    }\n    static { this.styles = [\n        theme,\n        css `\n      .tag-input {\n        display: flex;\n      }\n\n      ss-input {\n        flex-grow: 7;\n      }\n\n      ss-button {\n        flex-grow: 3;\n      }\n    `,\n    ]; }\n    get showButton() {\n        return this.value.length > 0;\n    }\n    _handleSubmitted() {\n        this._save();\n    }\n    async _handleChanged(e) {\n        this.value = e.detail.value;\n        this.dispatchEvent(new CustomEvent('changed', {\n            bubbles: true,\n            composed: true,\n            detail: { value: this.value },\n        }));\n        if (this.lastHitValue.length &&\n            this.value.match(new RegExp(`^${this.lastHitValue}`)) &&\n            this.lastHitTags.length === 0) {\n            //console.log('use empty tags, avoid http request');\n            this.state.setAutoSuggestions([]);\n            return;\n        }\n        let tags = [];\n        const json = await api.get(`tag/${this.value}`);\n        if (json) {\n            tags = json.tags;\n        }\n        if (tags.length) {\n            this.lastHitValue = this.value;\n        }\n        this.lastHitTags = tags;\n        this.state.setAutoSuggestions(tags);\n    }\n    _handleSaveClick(e) {\n        this._save();\n    }\n    _save() {\n        this._sendAddedEvent();\n        this.value = '';\n    }\n    _sendAddedEvent() {\n        this.dispatchEvent(new CustomEvent('added', {\n            bubbles: true,\n            composed: true,\n            detail: { value: this.value },\n        }));\n    }\n    render() {\n        return html `\n      <div class=\"tag-input\">\n        <ss-input\n          @action-input-submitted=${this._handleSubmitted}\n          @action-input-changed=${this._handleChanged}\n          placeholder=\"Tag\"\n          value=${this.value}\n        ></ss-input>\n        ${this.showButton\n            ? html `\n              <ss-button text=\"Add\" @click=${this._handleSaveClick}></ss-button>\n            `\n            : nothing}\n      </div>\n    `;\n    }\n}"
+          "default": "class TagInput extends MobxLitElement {\n    constructor() {\n        super(...arguments);\n        this.state = appState;\n        this.value = '';\n        this.lastHitValue = '';\n        this.lastHitTags = [];\n    }\n    static { this.styles = [\n        theme,\n        css `\n      .tag-input {\n        display: flex;\n      }\n\n      ss-input {\n        flex-grow: 7;\n      }\n\n      ss-button {\n        flex-grow: 3;\n      }\n    `,\n    ]; }\n    get showButton() {\n        return this.value.length > 0;\n    }\n    _handleSubmitted() {\n        this._save();\n    }\n    async _handleChanged(e) {\n        this.value = e.detail.value;\n        this.dispatchEvent(new CustomEvent('changed', {\n            bubbles: true,\n            composed: true,\n            detail: { value: this.value },\n        }));\n        if (this.lastHitValue.length &&\n            this.value.match(new RegExp(`^${this.lastHitValue}`)) &&\n            this.lastHitTags.length === 0) {\n            this.state.setAutoSuggestions([]);\n            return;\n        }\n        let tags = [];\n        const json = await api.get(`tag/${this.value}`);\n        if (json) {\n            tags = json.tags;\n        }\n        if (tags.length) {\n            this.lastHitValue = this.value;\n        }\n        this.lastHitTags = tags;\n        this.state.setAutoSuggestions(tags);\n    }\n    _handleSaveClick(e) {\n        this._save();\n    }\n    _save() {\n        this._sendAddedEvent();\n        this.value = '';\n    }\n    _sendAddedEvent() {\n        this.dispatchEvent(new CustomEvent('added', {\n            bubbles: true,\n            composed: true,\n            detail: { value: this.value },\n        }));\n    }\n    render() {\n        return html `\n      <div class=\"tag-input\">\n        <ss-input\n          @action-input-submitted=${this._handleSubmitted}\n          @action-input-changed=${this._handleChanged}\n          placeholder=\"Tag\"\n          value=${this.value}\n          autoComplete\n        ></ss-input>\n        ${this.showButton\n            ? html `\n              <ss-button text=\"Add\" @click=${this._handleSaveClick}></ss-button>\n            `\n            : nothing}\n      </div>\n    `;\n    }\n}"
         }
       ],
       "exports": [

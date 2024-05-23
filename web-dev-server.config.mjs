@@ -1,9 +1,11 @@
 import rollupReplace from '@rollup/plugin-replace';
 import { fromRollup } from '@web/dev-server-rollup';
 import rollupJson from '@rollup/plugin-json';
+import rollupAlias from '@rollup/plugin-alias';
 import 'dotenv/config';
 const replace = fromRollup(rollupReplace);
 const json = fromRollup(rollupJson);
+const alias = fromRollup(rollupAlias);
 import { hmrPlugin, presets } from '@open-wc/dev-server-hmr';
 
 process.env.NODE_ENV = 'development';
@@ -34,6 +36,14 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
 
   plugins: [
     replace({ ...safeEnv }),
+    alias({
+      entries: [
+        {
+          find: /^@\//,
+          replacement: './',
+        },
+      ],
+    }),
     json(),
 
     //replace({ include: ['src/**/*.js'], __environment__: '"development"' }),

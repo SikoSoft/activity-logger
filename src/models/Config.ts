@@ -4,6 +4,6 @@ export interface Config {
 }
 
 export const config: Config = {
-  apiUrl: process.env.API_URL || '',
+  apiUrl: import.meta.env.APP_BASE_API_URL || '',
   perPage: 25,
 };

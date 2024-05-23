@@ -1,8 +1,8 @@
 import { html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import './components/action-nav';
-import './components/action-form';
+import '@/components/action-nav';
+import '@/components/action-form';
 import './components/action-list';
 import './components/action-toasts';
 import { ActionView, defaultActionView } from './models/Action';
