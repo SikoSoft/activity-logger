@@ -1,20 +1,20 @@
 import { html, css, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { theme } from '../styles/theme';
+import { theme } from '@/styles/theme';
 
-import './tag/tag-manager';
-import './ss-input';
-import { translate } from '../util/strings';
+import '@/components/tag/tag-manager';
+import '@/components/ss-input';
+import { translate } from '@/util/strings';
 import {
   ListFilterType,
   ListFilter as ListFilterModel,
-} from '../models/ListFilter';
+} from '@/models/ListFilter';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '../state';
-import { SavedListFilter, storage } from '../lib/Storage';
-import { SSInput } from './ss-input';
+import { appState } from '@/state';
+import { SavedListFilter, storage } from '@/lib/Storage';
+import { SSInput } from '@/components/ss-input';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -228,32 +228,36 @@ export class ListFilter extends MobxLitElement {
           <label for="include-all">${translate('includeAll')}</label>
         </div>
         <div class="filters">
-          ${repeat(
-            Object.values(ListFilterType),
-            type => type,
-            type => html`
-              <fieldset>
-                <legend>${translate(type)}</legend>
-                <tag-manager
-                  .tags=${this[type]}
-                  @updated=${(e: CustomEvent) => {
-                    this.updateTags(type, e.detail.tags);
-                  }}
-                ></tag-manager>
-              </fieldset>
-            `
-          )}
-          <div>
-            <input
-              id="include-unchanged"
-              type="checkbox"
-              ?checked=${this.includeUntagged}
-              @change=${this._handleIncludeUntaggedChanged}
-            />
-            <label for="include-unchanged"
-              >${translate('includeUntagged')}</label
-            >
-          </div>
+          <fieldset>
+            <legend>${translate('tagging')}</legend>
+
+            ${repeat(
+              Object.values(ListFilterType),
+              type => type,
+              type => html`
+                <fieldset>
+                  <legend>${translate(type)}</legend>
+                  <tag-manager
+                    .tags=${this[type]}
+                    @updated=${(e: CustomEvent) => {
+                      this.updateTags(type, e.detail.tags);
+                    }}
+                  ></tag-manager>
+                </fieldset>
+              `
+            )}
+            <div>
+              <input
+                id="include-unchanged"
+                type="checkbox"
+                ?checked=${this.includeUntagged}
+                @change=${this._handleIncludeUntaggedChanged}
+              />
+              <label for="include-unchanged"
+                >${translate('includeUntagged')}</label
+              >
+            </div>
+          </fieldset>
         </div>
         <ss-button
           @click=${(e: CustomEvent) => {

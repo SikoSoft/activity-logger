@@ -4,7 +4,7 @@ import { repeat } from 'lit/directives/repeat.js';
 import { ActionItem } from '../models/Action';
 
 import './action-list-item';
-import './list-filter';
+import '@/components/filter/list-filter';
 import './ss-collapsable';
 import { config } from '../models/Config';
 import { theme } from '../styles/theme';
