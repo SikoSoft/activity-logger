@@ -33,13 +33,13 @@ export class SSCollapsable extends LitElement {
       }
 
       .body {
-        max-height: 0;
+        display: none;
         transition: all 0.3s;
         overflow: hidden;
       }
 
       .collapsable.open .body {
-        max-height: 600px;
+        display: block;
       }
     `,
   ];
@@ -62,7 +62,7 @@ export class SSCollapsable extends LitElement {
         bubbles: true,
         composed: true,
         detail: this.open,
-      })
+      }),
     );
   }
 
