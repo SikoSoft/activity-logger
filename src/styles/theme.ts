@@ -7,6 +7,7 @@ export const theme = css`
   }
 
   input[type='text'],
+  input[type='date'],
   input[type='datetime-local'],
   select,
   button {
