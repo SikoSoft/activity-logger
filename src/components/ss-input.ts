@@ -32,7 +32,7 @@ export class SSInput extends LitElement {
   }
 
   updated(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ) {
     super.updated(changedProperties);
     if (changedProperties.has('value')) {
@@ -53,7 +53,7 @@ export class SSInput extends LitElement {
         detail: {
           value: '',
         },
-      })
+      }),
     );
   }
 
@@ -131,7 +131,7 @@ export class SSInput extends LitElement {
         detail: {
           value,
         },
-      })
+      }),
     );
     this._value = value;
     this.autoDismissed = false;
@@ -157,7 +157,7 @@ export class SSInput extends LitElement {
         bubbles: true,
         composed: true,
         detail: { value: e.detail },
-      })
+      }),
     );
   };
 
