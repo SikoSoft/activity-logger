@@ -20,8 +20,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 import { SSInput } from '@/components/ss-input';
-import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
-import { formatDate } from '@/util/time';
+import { TimeFiltersUpdatedEvent } from '@/lib/Event';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -118,7 +117,6 @@ export class ListFilter extends MobxLitElement {
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
     if (this.state.listFilter.time) {
-      console.log('do this', JSON.stringify(this.state.listFilter.time));
       this.time = this.state.listFilter.time;
     }
 
@@ -134,13 +132,6 @@ export class ListFilter extends MobxLitElement {
   }
 
   private _handleUpdateClick(e: CustomEvent): void {
-    /*
-    Object.values(ListFilterType).forEach(type => {
-      this.state.setListFilterTagging(type, this[type]);
-    });
-    this.state.setListFilterIncludeUntagged(this.includeUntagged);
-    this.state.setListFilterIncludeAll(this.includeAll);
-*/
     this.state.setListFilter(this.filter);
 
     storage.saveActiveFilter(this.state.listFilter);
@@ -203,7 +194,6 @@ export class ListFilter extends MobxLitElement {
   }
 
   private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {
-    console.log('handleTimeChanged', e.detail);
     this.time = e.detail;
   }
 
@@ -283,7 +273,6 @@ export class ListFilter extends MobxLitElement {
             </div>
           </fieldset>
 
-          ${JSON.stringify(this.time)}
           <time-filters
             type=${this.time.type}
             date=${this.time.type === ListFilterTimeType.EXACT_DATE

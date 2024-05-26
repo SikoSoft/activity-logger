@@ -1,24 +1,12 @@
 import { translate } from '@/util/strings';
-import { html, LitElement, nothing, PropertyValueMap } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
-import { repeat } from 'lit/directives/repeat.js';
 
 import '@/components/tag/tag-manager';
-import {
-  AllTimeContext,
-  ListFilterTimeType,
-  ListFilterType,
-  TimeContext,
-} from '@/models/ListFilter';
-import {
-  FilterTagsUpdatedEvent,
-  IncludeUntaggedUpdatedEvent,
-  SelectChangedEvent,
-  TimeFiltersUpdatedEvent,
-} from '@/lib/Event';
+import { ListFilterTimeType, TimeContext } from '@/models/ListFilter';
+import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { InputType } from '@/models/Input';
-import { SSSelect } from '../ss-select';
-import { dateString, formatDate } from '@/util/time';
+import { dateString } from '@/util/time';
 import { SSInput } from '../ss-input';
 
 @customElement('time-filters')
@@ -31,12 +19,9 @@ export class TimeFilters extends LitElement {
 
   @property({ reflect: true }) type: ListFilterTimeType =
     ListFilterTimeType.ALL_TIME;
-  @property({ reflect: true }) date: string = ''; //Date = new Date(dateString(new Date()));
-  @property({ reflect: true }) start: string = ''; /*Date = new Date(
-    dateString(new Date(new Date().getTime() - 86400000)),
-  );
-  */
-  @property({ reflect: true }) end: string = ''; //Date = new Date(dateString(new Date()));
+  @property({ reflect: true }) date: string = '';
+  @property({ reflect: true }) start: string = '';
+  @property({ reflect: true }) end: string = '';
 
   @query('#date') dateNode!: SSInput;
   @query('#start') startNode!: SSInput;
@@ -45,47 +30,37 @@ export class TimeFilters extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    //console.log('initialTime', this.initialTime);
-  }
+    if (!this.date) {
+      this.date = dateString(new Date());
+    }
 
-  updated(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
-  ) {
-    super.updated(changedProperties);
-    console.log({ changedProperties });
-    if (changedProperties.has('value')) {
-      //this.inputField.value = this.value;
+    if (!this.start) {
+      this.start = dateString(new Date(new Date().getTime() - 86400000));
+    }
+
+    if (!this.end) {
+      this.end = dateString(new Date());
     }
   }
 
   private _handleTypeChanged(e: SelectChangedEvent) {
-    console.log('handleTypeChanged', e.detail);
-
     this.type = e.detail.value as ListFilterTimeType;
-
     this._sendUpdatedEvent();
   }
 
   private _handleDateChanged(e: CustomEvent) {
-    console.log('_handleDateChanged', e.detail.value);
-    this.date = e.detail.value; //this._convertTimeString(e.detail.value);
+    this.date = e.detail.value;
     this._sendUpdatedEvent();
   }
 
   private _handleStartChanged(e: CustomEvent) {
-    console.log('_handleStartChanged', e);
-    this.start = e.detail.value; //this._convertTimeString(e.detail.value);
+    this.start = e.detail.value;
     this._sendUpdatedEvent();
   }
 
   private _handleEndChanged(e: CustomEvent) {
-    console.log('_handleEndChanged', e);
-    this.end = e.detail.value; //this._convertTimeString(e.detail.value);
+    this.end = e.detail.value;
     this._sendUpdatedEvent();
-  }
-
-  private _convertTimeString(dateStr: string): Date {
-    return new Date(dateStr);
   }
 
   private _sendUpdatedEvent(): void {

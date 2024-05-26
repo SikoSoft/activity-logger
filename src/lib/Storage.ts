@@ -1,8 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ListFilter } from '../models/ListFilter';
 import { AppState, appState } from '../state';
 import { ActionView, defaultActionView } from '../models/Action';
-//import crypto from 'crypto';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -60,7 +58,6 @@ export class Storage {
   }
 
   saveActiveFilter(filter: ListFilter) {
-    console.log('saveActiveFilter', JSON.stringify(filter));
     localStorage.setItem(
       Storage.ACTIVE_LIST_FILTER_KEY,
       JSON.stringify(filter),
@@ -72,7 +69,6 @@ export class Storage {
       const storedFilter = localStorage.getItem(Storage.ACTIVE_LIST_FILTER_KEY);
       if (storedFilter) {
         const filter = JSON.parse(storedFilter) as ListFilter;
-        console.log('loadActiveFilter', JSON.stringify(filter));
         this.state.setListFilter(filter);
       }
     } catch (error) {
