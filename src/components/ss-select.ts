@@ -16,6 +16,10 @@ export class SSSelect extends LitElement {
   @property({ type: Array }) options: SelectOption[] = [];
   @query('select') selectNode!: HTMLSelectElement;
 
+  get value(): string {
+    return this.selectNode.value;
+  }
+
   private _handleSelectChanged() {
     this.dispatchEvent(
       new SelectChangedEvent({ value: this.selectNode.value }),

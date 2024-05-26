@@ -24,5 +24,12 @@
   "deleteFilter": "Delete filter",
   "filterDeleted": "Filter deleted!",
   "filterSaved": "Filter saved!",
-  "noActionsFound": "No actions found"
+  "noActionsFound": "No actions found",
+  "tagging": "Tagging",
+  "time": "Time",
+  "allTime": "All-time",
+  "exactDate": "Exact date",
+  "range": "Range",
+  "startTime": "Start time",
+  "endTime": "End time"
 }

@@ -1,7 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import { action, makeObservable, observable } from 'mobx';
 import { Toast } from './models/Toast';
-import { ListFilter, ListFilterType } from './models/ListFilter';
+import {
+  ListFilter,
+  ListFilterTimeType,
+  ListFilterType,
+} from './models/ListFilter';
 
 export class AppState {
   @observable
@@ -21,6 +25,7 @@ export class AppState {
     },
     includeUntagged: true,
     includeAll: true,
+    time: { type: ListFilterTimeType.ALL_TIME },
   };
 
   @action

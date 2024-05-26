@@ -5,16 +5,22 @@ import { theme } from '@/styles/theme';
 
 import '@/components/tag/tag-manager';
 import '@/components/ss-input';
+import '@/components/ss-select';
+import '@/components/filter/time-filters';
+
 import { translate } from '@/util/strings';
 import {
   ListFilterType,
   ListFilter as ListFilterModel,
+  ListFilterTimeType,
+  TimeContext,
 } from '@/models/ListFilter';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 import { SSInput } from '@/components/ss-input';
+import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -61,6 +67,7 @@ export class ListFilter extends MobxLitElement {
   @state() [ListFilterType.CONTAINS_ALL_OF]: string[] = [];
   @state() includeUntagged: boolean = false;
   @state() includeAll: boolean = true;
+  @state() time: TimeContext = { type: ListFilterTimeType.ALL_TIME };
 
   @state() savedFilters: SavedListFilter[] = [];
   @state() saveMode: boolean = false;
@@ -98,6 +105,9 @@ export class ListFilter extends MobxLitElement {
         containsOneOf: this.containsOneOf,
         containsAllOf: this.containsAllOf,
       },
+      time: {
+        type: ListFilterTimeType.ALL_TIME,
+      },
     };
   }
 
@@ -108,6 +118,7 @@ export class ListFilter extends MobxLitElement {
     });
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
+
     this.savedFilters = storage.getSavedFilters();
   }
 
@@ -127,7 +138,7 @@ export class ListFilter extends MobxLitElement {
     this.state.setListFilterIncludeAll(this.includeAll);
     storage.saveActiveFilter(this.state.listFilter);
     this.dispatchEvent(
-      new CustomEvent('filter-updated', { bubbles: true, composed: true })
+      new CustomEvent('filter-updated', { bubbles: true, composed: true }),
     );
   }
 
@@ -162,7 +173,7 @@ export class ListFilter extends MobxLitElement {
   private _handleSavedFilterChanged(e: Event) {
     this.selectedSavedFilter = this.savedFiltersInput.value;
     const savedFilter = this.savedFilters.find(
-      savedFilter => savedFilter.id === this.savedFiltersInput.value
+      savedFilter => savedFilter.id === this.savedFiltersInput.value,
     );
     if (savedFilter) {
       this[ListFilterType.CONTAINS_ONE_OF] =
@@ -182,6 +193,11 @@ export class ListFilter extends MobxLitElement {
     }
     this.savedFilters = storage.getSavedFilters();
     this.state.addToast(translate('filterDeleted'));
+  }
+
+  private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {
+    console.log('handleTimeChanged', e.detail);
+    this.time = e.detail;
   }
 
   private updateTags(type: ListFilterType, tags: string[]) {
@@ -204,7 +220,7 @@ export class ListFilter extends MobxLitElement {
                     filter => filter.id,
                     filter => html`
                       <option value=${filter.id}>${filter.name}</option>
-                    `
+                    `,
                   )}
                 </select>
                 ${this.selectedSavedFilter
@@ -218,6 +234,7 @@ export class ListFilter extends MobxLitElement {
               </div>
             `
           : nothing}
+
         <div class="all">
           <input
             id="include-all"
@@ -227,10 +244,10 @@ export class ListFilter extends MobxLitElement {
           />
           <label for="include-all">${translate('includeAll')}</label>
         </div>
+
         <div class="filters">
           <fieldset>
             <legend>${translate('tagging')}</legend>
-
             ${repeat(
               Object.values(ListFilterType),
               type => type,
@@ -244,7 +261,7 @@ export class ListFilter extends MobxLitElement {
                     }}
                   ></tag-manager>
                 </fieldset>
-              `
+              `,
             )}
             <div>
               <input
@@ -258,13 +275,21 @@ export class ListFilter extends MobxLitElement {
               >
             </div>
           </fieldset>
+
+          <time-filters
+            .time=${this.time}
+            @time-filters-updated=${(e: TimeFiltersUpdatedEvent) =>
+              this._handleTimeChanged(e)}
+          ></time-filters>
         </div>
+
         <ss-button
           @click=${(e: CustomEvent) => {
             this._handleUpdateClick(e);
           }}
           text=${translate('useFilter')}
         ></ss-button>
+
         <div class="save">
           <ss-input
             @action-input-changed=${(e: CustomEvent) => {
@@ -276,6 +301,7 @@ export class ListFilter extends MobxLitElement {
             id="filter-name"
             placeholder=${translate('filterName')}
           ></ss-input>
+
           <ss-button
             @click=${(e: CustomEvent) => {
               this._handleSaveClick(e);
