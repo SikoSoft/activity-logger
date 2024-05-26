@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { formatDate } from '../util/time';
+import { formatDateTime } from '../util/time';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -44,7 +44,7 @@ export class ActionListItem extends LitElement {
 
   get readableTime() {
     const date = new Date(this.occurredAt);
-    return formatDate(date);
+    return formatDateTime(date);
   }
 
   private _setMode(mode: ActionListItemMode) {

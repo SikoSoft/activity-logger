@@ -5,6 +5,7 @@ import {
   ListFilter,
   ListFilterTimeType,
   ListFilterType,
+  TimeContext,
 } from './models/ListFilter';
 
 export class AppState {
@@ -70,6 +71,11 @@ export class AppState {
   @action
   setListFilterIncludeAll(state: boolean) {
     this.listFilter.includeAll = state;
+  }
+
+  @action
+  setListFilterTime(time: TimeContext) {
+    this.listFilter.time = time;
   }
 
   @action

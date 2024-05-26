@@ -15,13 +15,13 @@ export interface AllTimeContext {
 
 export interface ExactDateContext {
   type: ListFilterTimeType.EXACT_DATE;
-  date: Date;
+  date: string; //Date;
 }
 
 export interface RangeContext {
   type: ListFilterTimeType.RANGE;
-  start: Date;
-  end: Date;
+  start: string; //Date;
+  end: string; //Date;
 }
 
 export type TimeContext = AllTimeContext | ExactDateContext | RangeContext;

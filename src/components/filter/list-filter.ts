@@ -21,6 +21,7 @@ import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 import { SSInput } from '@/components/ss-input';
 import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { formatDate } from '@/util/time';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -105,9 +106,7 @@ export class ListFilter extends MobxLitElement {
         containsOneOf: this.containsOneOf,
         containsAllOf: this.containsAllOf,
       },
-      time: {
-        type: ListFilterTimeType.ALL_TIME,
-      },
+      time: this.time,
     };
   }
 
@@ -118,6 +117,10 @@ export class ListFilter extends MobxLitElement {
     });
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
+    if (this.state.listFilter.time) {
+      console.log('do this', JSON.stringify(this.state.listFilter.time));
+      this.time = this.state.listFilter.time;
+    }
 
     this.savedFilters = storage.getSavedFilters();
   }
@@ -131,11 +134,15 @@ export class ListFilter extends MobxLitElement {
   }
 
   private _handleUpdateClick(e: CustomEvent): void {
+    /*
     Object.values(ListFilterType).forEach(type => {
       this.state.setListFilterTagging(type, this[type]);
     });
     this.state.setListFilterIncludeUntagged(this.includeUntagged);
     this.state.setListFilterIncludeAll(this.includeAll);
+*/
+    this.state.setListFilter(this.filter);
+
     storage.saveActiveFilter(this.state.listFilter);
     this.dispatchEvent(
       new CustomEvent('filter-updated', { bubbles: true, composed: true }),
@@ -276,8 +283,18 @@ export class ListFilter extends MobxLitElement {
             </div>
           </fieldset>
 
+          ${JSON.stringify(this.time)}
           <time-filters
-            .time=${this.time}
+            type=${this.time.type}
+            date=${this.time.type === ListFilterTimeType.EXACT_DATE
+              ? this.time.date
+              : ''}
+            start=${this.time.type === ListFilterTimeType.RANGE
+              ? this.time.start
+              : ''}
+            end=${this.time.type === ListFilterTimeType.RANGE
+              ? this.time.end
+              : ''}
             @time-filters-updated=${(e: TimeFiltersUpdatedEvent) =>
               this._handleTimeChanged(e)}
           ></time-filters>

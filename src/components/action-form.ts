@@ -10,7 +10,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
 import { translate } from '../util/strings';
 import { InputType } from '../models/Input';
-import { formatDate } from '../util/time';
+import { formatDateTime } from '../util/time';
 import { api } from '../lib/Api';
 
 export interface PostRequestBody {
@@ -56,7 +56,7 @@ export class ActionForm extends MobxLitElement {
     super.connectedCallback();
 
     this.desc = this.desc.trim();
-    this.occurredAt = formatDate(new Date(this.occurredAt));
+    this.occurredAt = formatDateTime(new Date(this.occurredAt));
     this.initialDesc = this.desc;
     this.initialOccurredAt = this.occurredAt;
     this.initialTags = JSON.stringify(this.tags);
@@ -99,11 +99,11 @@ export class ActionForm extends MobxLitElement {
             bubbles: true,
             composed: true,
             detail: { id: this.actionId, desc, occurredAt, tags: this.tags },
-          })
+          }),
         );
 
         this.state.addToast(
-          this.actionId ? translate('updated') : translate('added')
+          this.actionId ? translate('updated') : translate('added'),
         );
 
         this.loading = false;
@@ -115,7 +115,7 @@ export class ActionForm extends MobxLitElement {
           bubbles: true,
           composed: true,
           detail: { id: this.actionId },
-        })
+        }),
       );
     } catch (error) {
       console.error(`Error encountered in when saving action: ${error}`);
@@ -148,7 +148,7 @@ export class ActionForm extends MobxLitElement {
         bubbles: true,
         composed: true,
         detail: this.actionId,
-      })
+      }),
     );
 
     this.desc = '';
@@ -160,7 +160,7 @@ export class ActionForm extends MobxLitElement {
 
     try {
       const json = await api.get<{ suggestions: string[] }>(
-        `actionSuggestion/${this.desc}`
+        `actionSuggestion/${this.desc}`,
       );
       if (json) {
         this.state.setAutoSuggestions(json.suggestions);

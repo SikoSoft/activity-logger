@@ -29,7 +29,7 @@ export class Storage {
       JSON.stringify([
         ...savedFilters.filter(filter => filter.id !== id),
         { filter, id, name },
-      ])
+      ]),
     );
   }
 
@@ -43,8 +43,8 @@ export class Storage {
     } catch (error) {
       console.error(
         `Encountered an error while trying to load filters from storage: ${JSON.stringify(
-          error
-        )}`
+          error,
+        )}`,
       );
     }
 
@@ -55,14 +55,15 @@ export class Storage {
     const savedFilters = this.getSavedFilters();
     localStorage.setItem(
       Storage.LIST_FILTERS_KEY,
-      JSON.stringify([...savedFilters.filter(filter => filter.id !== id)])
+      JSON.stringify([...savedFilters.filter(filter => filter.id !== id)]),
     );
   }
 
   saveActiveFilter(filter: ListFilter) {
+    console.log('saveActiveFilter', JSON.stringify(filter));
     localStorage.setItem(
       Storage.ACTIVE_LIST_FILTER_KEY,
-      JSON.stringify(filter)
+      JSON.stringify(filter),
     );
   }
 
@@ -71,13 +72,14 @@ export class Storage {
       const storedFilter = localStorage.getItem(Storage.ACTIVE_LIST_FILTER_KEY);
       if (storedFilter) {
         const filter = JSON.parse(storedFilter) as ListFilter;
+        console.log('loadActiveFilter', JSON.stringify(filter));
         this.state.setListFilter(filter);
       }
     } catch (error) {
       console.error(
         `Encountered an error while trying to load filter: ${JSON.stringify(
-          error
-        )}`
+          error,
+        )}`,
       );
     }
   }
@@ -96,8 +98,8 @@ export class Storage {
     } catch (error) {
       console.error(
         `Encountered an error while trying to load view: ${JSON.stringify(
-          error
-        )}`
+          error,
+        )}`,
       );
     }
 
@@ -107,7 +109,7 @@ export class Storage {
   async digestMessage(message: string) {
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
-      new TextEncoder().encode(message)
+      new TextEncoder().encode(message),
     );
     const hashHex = Array.from(new Uint8Array(hashBuffer))
       .map(b => b.toString(16).padStart(2, '0'))
