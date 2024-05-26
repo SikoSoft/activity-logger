@@ -14,6 +14,7 @@ export class SSSelect extends LitElement {
   static styles = [theme];
 
   @property({ type: Array }) options: SelectOption[] = [];
+  @property() selected: string = '';
   @query('select') selectNode!: HTMLSelectElement;
 
   get value(): string {
@@ -33,7 +34,12 @@ export class SSSelect extends LitElement {
           this.options,
           option => option.value,
           option => html`
-            <option value=${option.value}>${option.label}</option>
+            <option
+              value=${option.value}
+              ?selected=${this.selected === option.value}
+            >
+              ${option.label}
+            </option>
           `,
         )}
       </select>
