@@ -51,7 +51,7 @@ export class SSInputAuto extends MobxLitElement {
   @property() input: string = '';
   @property({ type: Number }) maxMatches: number = 5;
   @property({ type: Number }) minInput: number = 1;
-  @state() selectedIndex: number = 0;
+  @state() selectedIndex: number = -1;
 
   @state()
   get show(): boolean {
@@ -86,11 +86,11 @@ export class SSInputAuto extends MobxLitElement {
 
   private _adjustSelectedIndex(adjustment: number): void {
     let newIndex = this.selectedIndex + adjustment;
-    if (newIndex < 0) {
+    if (newIndex < -1) {
       newIndex = this.maxSelectedIndex;
     }
     if (newIndex > this.maxSelectedIndex) {
-      newIndex = 0;
+      newIndex = -1;
     }
     this.selectedIndex = newIndex;
   }
@@ -101,7 +101,7 @@ export class SSInputAuto extends MobxLitElement {
         bubbles: true,
         composed: true,
         detail: suggestion,
-      })
+      }),
     );
   }
 
@@ -110,7 +110,7 @@ export class SSInputAuto extends MobxLitElement {
       new CustomEvent('submit', {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -122,16 +122,15 @@ export class SSInputAuto extends MobxLitElement {
               ${repeat(
                 this.state.suggestions,
                 suggestion => suggestion,
-                (suggestion, index) =>
-                  html`
-                    <li
-                      class=${index === this.selectedIndex ? 'selected' : ''}
-                      @mouseover=${() => (this.selectedIndex = index)}
-                      @click=${() => this._sendSelectedEvent(suggestion)}
-                    >
-                      ${suggestion}
-                    </li>
-                  `
+                (suggestion, index) => html`
+                  <li
+                    class=${index === this.selectedIndex ? 'selected' : ''}
+                    @mouseover=${() => (this.selectedIndex = index)}
+                    @click=${() => this._sendSelectedEvent(suggestion)}
+                  >
+                    ${suggestion}
+                  </li>
+                `,
               )}
             </ul>`
           : nothing}
