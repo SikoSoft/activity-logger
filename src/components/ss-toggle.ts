@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ToggleChangedEvent } from './events/toggle-changed';
+import { ToggleChangedEvent } from '@/events/toggle-changed';
 
 @customElement('ss-toggle')
 export class SSToggle extends LitElement {
