@@ -12,6 +12,7 @@ export class Storage {
   static ACTIVE_LIST_FILTER_KEY = 'listFilter';
   static LIST_FILTERS_KEY = 'listFilters';
   static VIEW_KEY = 'view';
+  static ADVANCED_MODE_KEY = 'advancedMode';
 
   private state: AppState;
 
@@ -100,6 +101,29 @@ export class Storage {
     }
 
     return view;
+  }
+
+  saveAdvancedMode(state: boolean) {
+    localStorage.setItem(Storage.ADVANCED_MODE_KEY, state ? '1' : '0');
+  }
+
+  getAdvancedMode(): boolean {
+    let advancedMode = false;
+    try {
+      const storedAdvancedMode = localStorage.getItem(
+        Storage.ADVANCED_MODE_KEY,
+      );
+      if (storedAdvancedMode) {
+        advancedMode = storedAdvancedMode === '1';
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load view: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+    return advancedMode;
   }
 
   async digestMessage(message: string) {

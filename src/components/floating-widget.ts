@@ -10,6 +10,7 @@ import {
 import '@/components/ss-toggle';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import { storage } from '@/lib/Storage';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
@@ -37,8 +38,8 @@ export class FloatingWidget extends MobxLitElement {
   }
 
   private _handleToggleChanged(event: ToggleChangedEvent) {
-    console.log(event);
     this.state.setAdvancedMode(event.detail.on);
+    storage.saveAdvancedMode(event.detail.on);
   }
 
   render() {

@@ -11,6 +11,7 @@ import { theme } from './styles/theme';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { storage } from './lib/Storage';
+import { appState } from './state';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
@@ -18,6 +19,7 @@ export interface ViewChangedEvent extends CustomEvent {
 
 @customElement('activity-logger')
 export class ActivityLogger extends MobxLitElement {
+  public state = appState;
   static styles = [theme];
 
   @state() view: ActionView = defaultActionView;
@@ -34,6 +36,7 @@ export class ActivityLogger extends MobxLitElement {
     if (view) {
       this.view = view;
     }
+    this.state.setAdvancedMode(storage.getAdvancedMode());
   }
 
   private _handleViewChanged(e: Event) {
