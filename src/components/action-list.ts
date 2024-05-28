@@ -73,7 +73,7 @@ export class ActionList extends MobxLitElement {
               occurredAt: event.detail.occurredAt,
               tags: event.detail.tags,
             }
-          : item
+          : item,
       );
     });
   }
@@ -156,20 +156,21 @@ export class ActionList extends MobxLitElement {
           ? repeat(
               this.items,
               item => item.id,
-              item =>
-                html`
-                  <action-list-item
-                    actionId=${item.id}
-                    type=${item.type}
-                    desc=${item.desc}
-                    occurredAt=${item.occurredAt}
-                    .tags=${item.tags}
-                  ></action-list-item>
-                `
+              item => html`
+                <action-list-item
+                  actionId=${item.id}
+                  type=${item.type}
+                  desc=${item.desc}
+                  occurredAt=${item.occurredAt}
+                  .tags=${item.tags}
+                ></action-list-item>
+              `,
             )
           : !this.loading
-          ? html` <div class="no-actions">${translate('noActionsFound')}</div>`
-          : nothing}
+            ? html` <div class="no-actions">
+                ${translate('noActionsFound')}
+              </div>`
+            : html` <ss-loader padded></ss-loader> `}
         <div id="lazy-loader"></div>
       </div>
     `;

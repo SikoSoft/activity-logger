@@ -1,11 +1,17 @@
 import { LitElement, css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('ss-loader')
 export class SSLoader extends LitElement {
   static styles = css`
     .container {
-      height: auto;
+      text-align: center;
+      height: 16px;
+    }
+
+    .container.padded {
+      margin: 1rem;
     }
 
     .loader {
@@ -14,7 +20,9 @@ export class SSLoader extends LitElement {
       height: 16px;
       border-radius: 50%;
       background-color: #000;
-      box-shadow: 32px 0 #000, -32px 0 #000;
+      box-shadow:
+        32px 0 #000,
+        -32px 0 #000;
       position: relative;
       animation: flash 0.5s ease-out infinite alternate;
       transform: skewX(50%);
@@ -23,21 +31,34 @@ export class SSLoader extends LitElement {
     @keyframes flash {
       0% {
         background-color: #0002;
-        box-shadow: 32px 0 #0002, -32px 0 #000;
+        box-shadow:
+          32px 0 #0002,
+          -32px 0 #000;
       }
       50% {
         background-color: #000;
-        box-shadow: 32px 0 #0002, -32px 0 #0002;
+        box-shadow:
+          32px 0 #0002,
+          -32px 0 #0002;
       }
       100% {
         background-color: #0002;
-        box-shadow: 32px 0 #000, -32px 0 #0002;
+        box-shadow:
+          32px 0 #000,
+          -32px 0 #0002;
       }
     }
   `;
 
+  @property({ type: Boolean }) padded: boolean = false;
+
+  @state()
+  get classes() {
+    return { container: true, padded: this.padded };
+  }
+
   render() {
-    return html`<div class="container">
+    return html`<div class=${classMap(this.classes)}>
       <span class="loader"></span>
     </div>`;
   }
