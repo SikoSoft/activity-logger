@@ -12,6 +12,7 @@ import { translate } from '../util/strings';
 import { InputType } from '../models/Input';
 import { formatDateTime } from '../util/time';
 import { api } from '../lib/Api';
+import { classMap } from 'lit/directives/class-map.js';
 
 export interface PostRequestBody {
   type: string;
@@ -30,6 +31,16 @@ export class ActionForm extends MobxLitElement {
     css`
       form {
         padding: 1rem;
+      }
+
+      tag-manager,
+      .time {
+        display: none;
+      }
+
+      form.advanced-mode tag-manager,
+      form.advanced-mode .time {
+        display: initial;
       }
 
       div:last-child {
@@ -51,6 +62,11 @@ export class ActionForm extends MobxLitElement {
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   @state() loading: boolean = false;
+
+  @state()
+  get classes() {
+    return { box: true, 'advanced-mode': this.state.advancedMode };
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -196,7 +212,7 @@ export class ActionForm extends MobxLitElement {
 
   render() {
     return html`
-      <form class="box">
+      <form class=${classMap(this.classes)}>
         <div>
           <ss-input
             @action-input-submitted=${this._handleDescSubmitted}
@@ -214,7 +230,7 @@ export class ActionForm extends MobxLitElement {
         ></tag-manager>
         ${this.actionId
           ? html`
-              <div>
+              <div class="time">
                 <ss-input
                   type=${InputType.DATETIME_LOCAL}
                   @action-input-submitted=${this._handleOccurredAtSubmitted}
