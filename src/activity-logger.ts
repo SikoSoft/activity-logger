@@ -3,8 +3,9 @@ import { customElement, state } from 'lit/decorators.js';
 
 import '@/components/action-nav';
 import '@/components/action-form';
-import './components/action-list';
-import './components/action-toasts';
+import '@/components/action-list';
+import '@/components/action-toasts';
+import '@/components/floating-widget';
 import { ActionView, defaultActionView } from './models/Action';
 import { theme } from './styles/theme';
 
@@ -54,6 +55,7 @@ export class ActivityLogger extends MobxLitElement {
       <action-nav active=${this.view}></action-nav>
       <main>${this._activeView()}</main>
       <action-toasts></action-toasts>
+      <floating-widget></floating-widget>
     `;
   }
 }

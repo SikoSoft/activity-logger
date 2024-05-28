@@ -29,6 +29,9 @@ export class AppState {
     time: { type: ListFilterTimeType.ALL_TIME },
   };
 
+  @observable
+  public advancedMode: boolean = false;
+
   @action
   public setAutoSuggestions(suggestions: string[]) {
     this.suggestions = suggestions;
@@ -81,6 +84,11 @@ export class AppState {
   @action
   setListFilter(filter: ListFilter) {
     this.listFilter = filter;
+  }
+
+  @action
+  setAdvancedMode(state: boolean) {
+    this.advancedMode = state;
   }
 
   constructor() {
