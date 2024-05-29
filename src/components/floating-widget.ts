@@ -11,6 +11,7 @@ import '@/components/ss-toggle';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
+import { translate } from '@/util/strings';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
@@ -18,22 +19,117 @@ export class FloatingWidget extends MobxLitElement {
   static styles = [
     theme,
     css`
+      :host {
+        --background-color: #ccc;
+        --border-color: #999;
+      }
+
       .widget {
         position: fixed;
-        bottom: 0;
-        left: 0;
+        bottom: -5rem;
+        left: 5%;
+        width: 90%;
+        opacity: 0.6;
+        transition: all 0.2s;
+
+        &:hover {
+          opacity: 0.9;
+          bottom: -4rem;
+        }
+
+        &.open {
+          opacity: 1;
+          bottom: 0;
+
+          .head {
+            cursor: s-resize;
+          }
+        }
+      }
+
+      .head {
+        z-index: 2;
+        position: relative;
+        width: 80%;
+        height: 2rem;
+        background-color: var(--background-color);
+        margin: auto;
+        border-top: 1px var(--border-color) solid;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        cursor: n-resize;
+
+        &::before,
+        &::after {
+          z-index: 0;
+          position: absolute;
+          top: 0.4rem;
+          display: inline-block;
+          content: '';
+          width: 3rem;
+          height: 3rem;
+          background-color: var(--background-color);
+          transform: rotate(45deg);
+          border-radius: 8px;
+        }
+
+        &::before {
+          left: -1.5rem;
+          border-left: 1px var(--border-color) solid;
+        }
+
+        &::after {
+          right: -1.5rem;
+          border-top: 1px var(--border-color) solid;
+        }
+
+        .handle {
+          position: absolute;
+          left: 10%;
+          top: 50%;
+          width: 80%;
+          border-radius: 0.25rem;
+          height: 0.25rem;
+          background-color: #666;
+          transform: translateY(-50%);
+          border: 1px #444 solid;
+        }
+      }
+
+      .body {
+        transition: all 0.3s;
+        position: relative;
+        z-index: 3;
+        background-color: var(--background-color);
+        width: 94%;
+        margin: auto;
+        border-left: 1px var(--border-color) solid;
+        border-right: 1px var(--border-color) solid;
+        box-sizing: border-box;
+        margin-top: -2px;
+
+        .option {
+          display: flex;
+          padding: 1rem;
+          flex-direction: row;
+          justify-content: space-between;
+
+          h4 {
+            margin: 0;
+            line-height: 3rem;
+            height: 3rem;
+          }
+        }
       }
     `,
   ];
 
-  @state() isOpen: boolean = false;
+  @state() open: boolean = false;
 
   @state()
   get classes() {
     return {
-      box: true,
       widget: true,
-      open: this.isOpen,
+      open: this.open,
     };
   }
 
@@ -42,14 +138,25 @@ export class FloatingWidget extends MobxLitElement {
     storage.saveAdvancedMode(event.detail.on);
   }
 
+  private _handleToggleOpen() {
+    this.open = !this.open;
+  }
+
   render() {
     return html`
       <div class=${classMap(this.classes)}>
-        <div class="icon"></div>
-        <ss-toggle
-          @toggle-changed=${this._handleToggleChanged}
-          ?on=${this.state.advancedMode}
-        ></ss-toggle>
+        <div class="head" @click=${this._handleToggleOpen}>
+          <div class="handle"></div>
+        </div>
+        <div class="body">
+          <div class="option">
+            <h4>${translate('advancedMode')}</h4>
+            <ss-toggle
+              @toggle-changed=${this._handleToggleChanged}
+              ?on=${this.state.advancedMode}
+            ></ss-toggle>
+          </div>
+        </div>
       </div>
     `;
   }
