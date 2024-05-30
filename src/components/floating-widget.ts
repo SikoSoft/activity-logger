@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, css } from 'lit';
+import { html, unsafeStatic } from 'lit/static-html.js';
 import { property, customElement, state } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
@@ -13,6 +14,7 @@ import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 import { translate } from '@/util/strings';
 
+// square rotated 45 degrees is 1.42 as wide
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
   public state = appState;
@@ -50,7 +52,7 @@ export class FloatingWidget extends MobxLitElement {
       .head {
         z-index: 2;
         position: relative;
-        width: 80%;
+        width: 90%;
         height: 2rem;
         background-color: var(--background-color);
         margin: auto;
@@ -60,10 +62,11 @@ export class FloatingWidget extends MobxLitElement {
 
         &::before,
         &::after {
+          display: none;
           z-index: 0;
           position: absolute;
           top: 0.4rem;
-          display: inline-block;
+          //display: inline-block;
           content: '';
           width: 3rem;
           height: 3rem;
@@ -100,7 +103,7 @@ export class FloatingWidget extends MobxLitElement {
         position: relative;
         z-index: 3;
         background-color: var(--background-color);
-        width: 94%;
+        width: 100%;
         margin: auto;
         border-left: 1px var(--border-color) solid;
         border-right: 1px var(--border-color) solid;
@@ -142,17 +145,22 @@ export class FloatingWidget extends MobxLitElement {
     this.open = !this.open;
   }
 
+  private _handleOpen() {
+    this.open = true;
+  }
+
   render() {
     return html`
       <div class=${classMap(this.classes)}>
         <div class="head" @click=${this._handleToggleOpen}>
           <div class="handle"></div>
         </div>
-        <div class="body">
+        <div class="body" @mouseenter=${this._handleOpen}>
           <div class="option">
             <h4>${translate('advancedMode')}</h4>
             <ss-toggle
-              @toggle-changed=${this._handleToggleChanged}
+              @${unsafeStatic(toggleChangedEventName)}=${this
+                ._handleToggleChanged}
               ?on=${this.state.advancedMode}
             ></ss-toggle>
           </div>
