@@ -4,6 +4,7 @@ import { theme } from '../styles/theme';
 
 import './ss-input-auto';
 import { InputType } from '../models/Input';
+import { InputSubmittedEvent } from '@/events/input-submitted';
 
 @customElement('ss-input')
 export class SSInput extends LitElement {
@@ -112,7 +113,9 @@ export class SSInput extends LitElement {
       composed: true,
       detail: this._value,
     });
-    this.inputField.dispatchEvent(changeEvent);
+    this.inputField.dispatchEvent(
+      new InputSubmittedEvent({ value: this._value }),
+    );
   }
 
   private _handleSubmit() {
