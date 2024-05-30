@@ -76,7 +76,7 @@ export class SSInputAuto extends MobxLitElement {
     });
 
     this.addEventListener('select', () => {
-      if (this.state.suggestions.length) {
+      if (this.state.suggestions.length && this.selectedIndex !== -1) {
         this._sendSelectedEvent(this.state.suggestions[this.selectedIndex]);
       } else {
         this._sendSubmitEvent();

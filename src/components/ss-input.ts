@@ -29,7 +29,7 @@ export class SSInput extends LitElement {
   @state() autoDismissed: boolean = false;
   @state()
   get showAutoComplete(): boolean {
-    return this.autoComplete && !this.autoDismissed && this._value.length > 0;
+    return this.autoComplete && !this.autoDismissed && this.value.length > 0;
   }
 
   updated(
@@ -108,11 +108,6 @@ export class SSInput extends LitElement {
   }
 
   private _sendSubmittedEvent() {
-    const changeEvent = new CustomEvent('action-input-submitted', {
-      bubbles: true,
-      composed: true,
-      detail: this._value,
-    });
     this.inputField.dispatchEvent(
       new InputSubmittedEvent({ value: this._value }),
     );
