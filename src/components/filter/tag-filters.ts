@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import '@/components/tag/tag-manager';
-import { ListFilterType } from '@/models/ListFilter';
+import { ListFilterType } from 'api-spec/models/List';
 import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,

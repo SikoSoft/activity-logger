@@ -3,7 +3,7 @@ import { html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@/components/tag/tag-manager';
-import { ListFilterTimeType, TimeContext } from '@/models/ListFilter';
+import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
 import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { InputType } from '@/models/Input';
 import { dateString } from '@/util/time';

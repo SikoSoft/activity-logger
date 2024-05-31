@@ -3,10 +3,10 @@ import { action, makeObservable, observable } from 'mobx';
 import { Toast } from './models/Toast';
 import {
   ListFilter,
-  ListFilterTimeType,
   ListFilterType,
+  ListFilterTimeType,
   TimeContext,
-} from './models/ListFilter';
+} from 'api-spec/models/List';
 
 export class AppState {
   @observable

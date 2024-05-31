@@ -1,4 +1,4 @@
-import { ListFilterType, TimeContext } from './ListFilter';
+import { ListFilterType, TimeContext } from 'api-spec/models/List';
 
 export enum EventType {
   INCLUDE_UNTAGGED_UPDATED = 'include-untagged-updated',

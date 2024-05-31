@@ -24,6 +24,7 @@ export class FloatingWidget extends MobxLitElement {
       :host {
         --background-color: #ccc;
         --border-color: #999;
+        --head-height: 2rem;
       }
 
       .widget {
@@ -53,7 +54,7 @@ export class FloatingWidget extends MobxLitElement {
         z-index: 2;
         position: relative;
         width: 90%;
-        height: 2rem;
+        height: var(--head-height);
         background-color: var(--background-color);
         margin: auto;
         border-top: 1px var(--border-color) solid;
@@ -62,15 +63,15 @@ export class FloatingWidget extends MobxLitElement {
 
         &::before,
         &::after {
-          display: none;
+          //display: none;
           z-index: 0;
           position: absolute;
           top: 0.4rem;
           //display: inline-block;
           content: '';
-          width: 3rem;
-          height: 3rem;
-          background-color: var(--background-color);
+          width: calc(var(--head-height) / 1.42 * 2);
+          height: calc(var(--head-height) / 1.42 * 2);
+          background-color: #ff0; //var(--background-color);
           transform: rotate(45deg);
           border-radius: 8px;
         }

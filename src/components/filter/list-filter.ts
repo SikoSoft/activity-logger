@@ -14,7 +14,7 @@ import {
   ListFilter as ListFilterModel,
   ListFilterTimeType,
   TimeContext,
-} from '@/models/ListFilter';
+} from 'api-spec/models/List';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';

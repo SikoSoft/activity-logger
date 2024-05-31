@@ -1,4 +1,4 @@
-import { ListFilter } from '../models/ListFilter';
+import { ListFilter } from 'api-spec/models/List';
 import { AppState, appState } from '../state';
 import { ActionView, defaultActionView } from '../models/Action';
 
