@@ -61,6 +61,19 @@ export class FloatingWidget extends MobxLitElement {
         border-top: 1px var(--border-color) solid;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         cursor: n-resize;
+        display: flex;
+        border: 1px #999 solid;
+
+        .left,
+        .right {
+          flex-grow: 1;
+          height: var(--head-height);
+        }
+
+        .center {
+          flex-grow: 10;
+          height: var(--head-height);
+        }
 
         &::before,
         &::after {
@@ -75,6 +88,7 @@ export class FloatingWidget extends MobxLitElement {
           background-color: #ff0; //var(--background-color);
           transform: rotate(45deg);
           border-radius: 8px;
+          opacity: 0.6;
         }
 
         &::before {
@@ -174,7 +188,11 @@ export class FloatingWidget extends MobxLitElement {
         @mouseleave=${this._handleMouseLeave}
       >
         <div class="head" @click=${this._handleToggleOpen}>
-          <div class="handle"></div>
+          <div class="left"></div>
+          <div class="center">
+            <div class="handle"></div>
+          </div>
+          <div class="right"></div>
         </div>
         <div class="body" @mouseenter=${this._handleOpen}>
           <div class="option">
