@@ -54,51 +54,54 @@ export class FloatingWidget extends MobxLitElement {
       .head {
         z-index: 2;
         position: relative;
-        width: 90%;
+        //width: 90%;
         height: var(--head-height);
-        background-color: var(--background-color);
         margin: auto;
-        border-top: 1px var(--border-color) solid;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        //border-top: 1px var(--border-color) solid;
+        //box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         cursor: n-resize;
         display: flex;
-        border: 1px #999 solid;
+        //border: 1px #999 solid;
 
         .left,
         .right {
-          flex-grow: 1;
+          width: var(--head-height);
           height: var(--head-height);
+          position: relative;
+          overflow: hidden;
+
+          &::before {
+            //display: none;
+            z-index: 0;
+            position: absolute;
+            top: 0.4rem;
+            //display: inline-block;
+            content: '';
+            width: calc(var(--head-height) / 1.42 * 2);
+            height: calc(var(--head-height) / 1.42 * 2);
+            background-color: var(--background-color);
+            transform: rotate(45deg);
+            border-radius: 0px;
+            //opacity: 0.6;
+          }
+
+          &.left::before {
+            left: 10px;
+            border-left: 1px var(--border-color) solid;
+          }
+
+          &.right::before {
+            right: 10px;
+            border-top: 1px var(--border-color) solid;
+          }
         }
 
         .center {
+          border-top: 1px var(--border-color) solid;
+          position: relative;
+          background-color: var(--background-color);
           flex-grow: 10;
           height: var(--head-height);
-        }
-
-        &::before,
-        &::after {
-          //display: none;
-          z-index: 0;
-          position: absolute;
-          top: 0.4rem;
-          //display: inline-block;
-          content: '';
-          width: calc(var(--head-height) / 1.42 * 2);
-          height: calc(var(--head-height) / 1.42 * 2);
-          background-color: #ff0; //var(--background-color);
-          transform: rotate(45deg);
-          border-radius: 8px;
-          opacity: 0.6;
-        }
-
-        &::before {
-          left: -1.5rem;
-          border-left: 1px var(--border-color) solid;
-        }
-
-        &::after {
-          right: -1.5rem;
-          border-top: 1px var(--border-color) solid;
         }
 
         .handle {
