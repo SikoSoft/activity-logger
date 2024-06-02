@@ -18,6 +18,7 @@ import { translate } from '@/util/strings';
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
   public state = appState;
+  private timeout: number | undefined;
   static styles = [
     theme,
     css`
@@ -128,6 +129,7 @@ export class FloatingWidget extends MobxLitElement {
   ];
 
   @state() open: boolean = false;
+  @state() mouseIn: boolean = false;
 
   @state()
   get classes() {
@@ -150,9 +152,27 @@ export class FloatingWidget extends MobxLitElement {
     this.open = true;
   }
 
+  private _handleMouseEnter() {
+    this.mouseIn = true;
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
+
+  private _handleMouseLeave() {
+    this.mouseIn = false;
+    this.timeout = setTimeout(() => {
+      this.open = false;
+    }, 500);
+  }
+
   render() {
     return html`
-      <div class=${classMap(this.classes)}>
+      <div
+        class=${classMap(this.classes)}
+        @mouseenter=${this._handleMouseEnter}
+        @mouseleave=${this._handleMouseLeave}
+      >
         <div class="head" @click=${this._handleToggleOpen}>
           <div class="handle"></div>
         </div>
