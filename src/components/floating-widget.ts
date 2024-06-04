@@ -114,6 +114,12 @@ export class FloatingWidget extends MobxLitElement {
           background-color: #666;
           transform: translateY(-50%);
           border: 1px #444 solid;
+          transition: all 0.2s;
+
+          &:hover {
+            transform: translateY(-50%) scale(1.125);
+            box-shadow: 0 0 5px #000;
+          }
         }
       }
 
