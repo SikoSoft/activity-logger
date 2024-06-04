@@ -1,6 +1,6 @@
-import { LitElement, css } from 'lit';
+import { css } from 'lit';
 import { html, unsafeStatic } from 'lit/static-html.js';
-import { property, customElement, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { theme } from '../styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
 import {
@@ -14,7 +14,6 @@ import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 import { translate } from '@/util/strings';
 
-// square rotated 45 degrees is 1.42 as wide
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
   public state = appState;
@@ -39,6 +38,13 @@ export class FloatingWidget extends MobxLitElement {
         &:hover {
           opacity: 0.9;
           bottom: -4rem;
+
+          .head {
+            .handle {
+              transform: translateY(-50%) scale(1.125);
+              box-shadow: 0 0 5px #000;
+            }
+          }
         }
 
         &.open {
@@ -54,14 +60,10 @@ export class FloatingWidget extends MobxLitElement {
       .head {
         z-index: 2;
         position: relative;
-        //width: 90%;
         height: var(--head-height);
         margin: auto;
-        //border-top: 1px var(--border-color) solid;
-        //box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         cursor: n-resize;
         display: flex;
-        //border: 1px #999 solid;
 
         .left,
         .right {
@@ -71,18 +73,15 @@ export class FloatingWidget extends MobxLitElement {
           overflow: hidden;
 
           &::before {
-            //display: none;
             z-index: 0;
             position: absolute;
             top: 0.4rem;
-            //display: inline-block;
             content: '';
             width: calc(var(--head-height) / 1.42 * 2);
             height: calc(var(--head-height) / 1.42 * 2);
             background-color: var(--background-color);
             transform: rotate(45deg);
             border-radius: 0px;
-            //opacity: 0.6;
           }
 
           &.left::before {
@@ -115,11 +114,6 @@ export class FloatingWidget extends MobxLitElement {
           transform: translateY(-50%);
           border: 1px #444 solid;
           transition: all 0.2s;
-
-          &:hover {
-            transform: translateY(-50%) scale(1.125);
-            box-shadow: 0 0 5px #000;
-          }
         }
       }
 
