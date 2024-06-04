@@ -45,6 +45,7 @@ export class TagInput extends MobxLitElement {
   }
 
   private async _handleChanged(e: CustomEvent) {
+    console.log('_handleChanged', e.detail.value);
     this.value = e.detail.value;
 
     this.dispatchEvent(
@@ -52,7 +53,7 @@ export class TagInput extends MobxLitElement {
         bubbles: true,
         composed: true,
         detail: { value: this.value },
-      })
+      }),
     );
 
     if (
@@ -95,7 +96,7 @@ export class TagInput extends MobxLitElement {
         bubbles: true,
         composed: true,
         detail: { value: this.value },
-      })
+      }),
     );
   }
 
@@ -103,8 +104,8 @@ export class TagInput extends MobxLitElement {
     return html`
       <div class="tag-input">
         <ss-input
-          @action-input-submitted=${this._handleSubmitted}
-          @action-input-changed=${this._handleChanged}
+          @input-submitted=${this._handleSubmitted}
+          @input-changed=${this._handleChanged}
           placeholder="Tag"
           value=${this.value}
           autoComplete

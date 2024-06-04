@@ -298,10 +298,10 @@ export class ListFilter extends MobxLitElement {
 
         <div class="save">
           <ss-input
-            @action-input-changed=${(e: CustomEvent) => {
+            @input-changed=${(e: CustomEvent) => {
               this._handleFilterNameChanged(e);
             }}
-            @action-input-submitted=${(e: CustomEvent) => {
+            @input-submitted=${(e: CustomEvent) => {
               this._handleFilterNameSubmitted(e);
             }}
             id="filter-name"

@@ -172,6 +172,7 @@ export class ActionForm extends MobxLitElement {
   }
 
   private async _handleDescChanged(e: CustomEvent) {
+    console.log('_handleDescChanged', e.detail.value);
     this.desc = e.detail.value;
 
     try {
@@ -217,7 +218,7 @@ export class ActionForm extends MobxLitElement {
         <div>
           <ss-input
             @input-submitted=${this._handleDescSubmitted}
-            @action-input-changed=${this._handleDescChanged}
+            @input-changed=${this._handleDescChanged}
             value=${this.desc}
             autoComplete
           ></ss-input>
@@ -235,7 +236,7 @@ export class ActionForm extends MobxLitElement {
                 <ss-input
                   type=${InputType.DATETIME_LOCAL}
                   @input-submitted=${this._handleOccurredAtSubmitted}
-                  @action-input-changed=${this._handleOccurredAtChanged}
+                  @input-changed=${this._handleOccurredAtChanged}
                   value=${this.occurredAt}
                 ></ss-input>
               </div>

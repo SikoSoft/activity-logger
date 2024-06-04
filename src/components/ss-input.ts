@@ -5,6 +5,7 @@ import { theme } from '../styles/theme';
 import './ss-input-auto';
 import { InputType } from '../models/Input';
 import { InputSubmittedEvent } from '@/events/input-submitted';
+import { InputChangedEvent } from '@/events/input-changed';
 
 @customElement('ss-input')
 export class SSInput extends LitElement {
@@ -48,12 +49,8 @@ export class SSInput extends LitElement {
   clear() {
     this.inputField.value = '';
     this.dispatchEvent(
-      new CustomEvent('action-input-changed', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          value: '',
-        },
+      new InputChangedEvent({
+        value: '',
       }),
     );
   }
@@ -123,12 +120,8 @@ export class SSInput extends LitElement {
       value = e.target.value;
     }
     this.dispatchEvent(
-      new CustomEvent('action-input-changed', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          value,
-        },
+      new InputChangedEvent({
+        value,
       }),
     );
     this._value = value;
@@ -150,13 +143,7 @@ export class SSInput extends LitElement {
   private _suggestionSelectHandler = (e: CustomEvent): void => {
     this.autoDismissed = true;
     this.inputField.value = e.detail;
-    this.inputField.dispatchEvent(
-      new CustomEvent('action-input-changed', {
-        bubbles: true,
-        composed: true,
-        detail: { value: e.detail },
-      }),
-    );
+    this.inputField.dispatchEvent(new InputChangedEvent({ value: e.detail }));
   };
 
   render() {
