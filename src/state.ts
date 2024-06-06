@@ -32,6 +32,9 @@ export class AppState {
   @observable
   public advancedMode: boolean = false;
 
+  @observable
+  public debugMode: boolean = false;
+
   @action
   public setAutoSuggestions(suggestions: string[]) {
     this.suggestions = suggestions;
@@ -89,6 +92,11 @@ export class AppState {
   @action
   setAdvancedMode(state: boolean) {
     this.advancedMode = state;
+  }
+
+  @action
+  setDebugMode(state: boolean) {
+    this.debugMode = state;
   }
 
   constructor() {

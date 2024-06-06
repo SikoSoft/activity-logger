@@ -14,6 +14,7 @@ import { appState } from '../../state';
 @customElement('tag-input')
 export class TagInput extends MobxLitElement {
   private state = appState;
+  private minInput = 1;
 
   static styles = [
     theme,
@@ -34,7 +35,7 @@ export class TagInput extends MobxLitElement {
 
   @property({ type: String, reflect: true }) value: string = '';
   @state() lastHitValue: string = '';
-  @state() lastHitTags: string[] = [];
+  @state() lastValueTags: string[] = [];
 
   get showButton(): boolean {
     return this.value.length > 0;
@@ -58,25 +59,28 @@ export class TagInput extends MobxLitElement {
 
     if (
       this.lastHitValue.length &&
-      this.value.match(new RegExp(`^${this.lastHitValue}`)) &&
-      this.lastHitTags.length === 0
+      this.value.match(new RegExp(`^${this.lastHitValue}`))
+      //&& this.lastValueTags.length === 0
     ) {
+      console.log('bail out with no suggestions');
       this.state.setAutoSuggestions([]);
       return;
     }
 
     let tags: string[] = [];
 
-    const json = await api.get<{ tags: string[] }>(`tag/${this.value}`);
-    if (json) {
-      tags = json.tags;
+    if (this.value.length >= this.minInput) {
+      const json = await api.get<{ tags: string[] }>(`tag/${this.value}`);
+      if (json) {
+        tags = json.tags;
+      }
     }
 
     if (tags.length) {
       this.lastHitValue = this.value;
     }
 
-    this.lastHitTags = tags;
+    this.lastValueTags = tags;
 
     this.state.setAutoSuggestions(tags);
   }
@@ -103,6 +107,10 @@ export class TagInput extends MobxLitElement {
   render() {
     return html`
       <div class="tag-input">
+        <div class="debug">
+          <div>last hit value: ${this.lastHitValue}</div>
+          <div>last value tags: ${this.lastValueTags.length}</div>
+        </div>
         <ss-input
           @input-submitted=${this._handleSubmitted}
           @input-changed=${this._handleChanged}

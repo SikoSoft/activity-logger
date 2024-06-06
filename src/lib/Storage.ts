@@ -13,6 +13,7 @@ export class Storage {
   static LIST_FILTERS_KEY = 'listFilters';
   static VIEW_KEY = 'view';
   static ADVANCED_MODE_KEY = 'advancedMode';
+  static DEBUG_MODE_KEY = 'debugMode';
 
   private state: AppState;
 
@@ -105,6 +106,10 @@ export class Storage {
 
   saveAdvancedMode(state: boolean) {
     localStorage.setItem(Storage.ADVANCED_MODE_KEY, state ? '1' : '0');
+  }
+
+  saveDebugMode(state: boolean) {
+    localStorage.setItem(Storage.DEBUG_MODE_KEY, state ? '1' : '0');
   }
 
   getAdvancedMode(): boolean {

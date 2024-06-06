@@ -156,9 +156,14 @@ export class FloatingWidget extends MobxLitElement {
     };
   }
 
-  private _handleToggleChanged(event: ToggleChangedEvent) {
+  private _handleToggleAdvancedChanged(event: ToggleChangedEvent) {
     this.state.setAdvancedMode(event.detail.on);
     storage.saveAdvancedMode(event.detail.on);
+  }
+
+  private _handleToggleDebugChanged(event: ToggleChangedEvent) {
+    this.state.setDebugMode(event.detail.on);
+    storage.saveDebugMode(event.detail.on);
   }
 
   private _handleToggleOpen() {
@@ -202,8 +207,16 @@ export class FloatingWidget extends MobxLitElement {
             <h4>${translate('advancedMode')}</h4>
             <ss-toggle
               @${unsafeStatic(toggleChangedEventName)}=${this
-                ._handleToggleChanged}
+                ._handleToggleAdvancedChanged}
               ?on=${this.state.advancedMode}
+            ></ss-toggle>
+          </div>
+          <div class="option">
+            <h4>${translate('debugMode')}</h4>
+            <ss-toggle
+              @${unsafeStatic(toggleChangedEventName)}=${this
+                ._handleToggleDebugChanged}
+              ?on=${this.state.debugMode}
             ></ss-toggle>
           </div>
         </div>
