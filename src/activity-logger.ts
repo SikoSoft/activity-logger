@@ -12,7 +12,6 @@ import { theme } from './styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { storage } from './lib/Storage';
 import { appState } from './state';
-import { classMap } from 'lit/directives/class-map.js';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
@@ -24,9 +23,6 @@ export class ActivityLogger extends MobxLitElement {
   static styles = [theme];
 
   @state() view: ActionView = defaultActionView;
-  @state() get classes() {
-    return { debug: this.state.debugMode };
-  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -41,6 +37,7 @@ export class ActivityLogger extends MobxLitElement {
       this.view = view;
     }
     this.state.setAdvancedMode(storage.getAdvancedMode());
+    this.state.setDebugMode(storage.getDebugMode());
   }
 
   private _handleViewChanged(e: Event) {
@@ -59,12 +56,10 @@ export class ActivityLogger extends MobxLitElement {
 
   render() {
     return html`
-      <div class=${classMap(this.classes)}>
-        <action-nav active=${this.view}></action-nav>
-        <main>${this._activeView()}</main>
-        <action-toasts></action-toasts>
-        <floating-widget></floating-widget>
-      </div>
+      <action-nav active=${this.view}></action-nav>
+      <main>${this._activeView()}</main>
+      <action-toasts></action-toasts>
+      <floating-widget></floating-widget>
     `;
   }
 }

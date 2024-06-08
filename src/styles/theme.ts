@@ -25,8 +25,4 @@ export const theme = css`
     border-radius: 8px;
     border: 1px #aaa solid;
   }
-
-  .debug {
-    display: none;
-  }
 `;

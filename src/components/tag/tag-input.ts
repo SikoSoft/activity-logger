@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import '../ss-input';
 import '../ss-button';
+import '../ss-debug';
 import './tag-input';
 import './tag-list';
 
@@ -107,10 +108,10 @@ export class TagInput extends MobxLitElement {
   render() {
     return html`
       <div class="tag-input">
-        <div class="debug">
+        <ss-debug>
           <div>last hit value: ${this.lastHitValue}</div>
           <div>last value tags: ${this.lastValueTags.length}</div>
-        </div>
+        </ss-debug>
         <ss-input
           @input-submitted=${this._handleSubmitted}
           @input-changed=${this._handleChanged}

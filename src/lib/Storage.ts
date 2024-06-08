@@ -123,12 +123,29 @@ export class Storage {
       }
     } catch (error) {
       console.error(
-        `Encountered an error while trying to load view: ${JSON.stringify(
+        `Encountered an error while trying to advanced mode: ${JSON.stringify(
           error,
         )}`,
       );
     }
     return advancedMode;
+  }
+
+  getDebugMode(): boolean {
+    let debugMode = false;
+    try {
+      const storedDebugMode = localStorage.getItem(Storage.DEBUG_MODE_KEY);
+      if (storedDebugMode) {
+        debugMode = storedDebugMode === '1';
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to debug mode: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+    return debugMode;
   }
 
   async digestMessage(message: string) {
