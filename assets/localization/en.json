@@ -32,5 +32,6 @@
   "range": "Range",
   "startTime": "Start time",
   "endTime": "End time",
-  "advancedMode": "Advanced mode"
+  "advancedMode": "Advanced mode",
+  "debugMode": "Debug mode"
 }

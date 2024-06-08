@@ -29,7 +29,7 @@ export class FloatingWidget extends MobxLitElement {
 
       .widget {
         position: fixed;
-        bottom: -5rem;
+        bottom: -10rem;
         left: 5%;
         width: 90%;
         opacity: 0.6;
