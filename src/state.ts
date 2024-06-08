@@ -44,6 +44,12 @@ export class AppState {
   @observable
   public debugMode: boolean = false;
 
+  @observable
+  public selectMode: boolean = false;
+
+  @observable
+  public selectedActions: number[] = [];
+
   @action
   public setAutoSuggestions(suggestions: string[]) {
     this.suggestions = suggestions;
@@ -111,6 +117,40 @@ export class AppState {
   @action
   setListSort(sort: ListSort) {
     this.listSort = sort;
+  }
+
+  @action
+  setSelectMode(state: boolean) {
+    this.selectMode = state;
+  }
+
+  @action
+  setSelectedActions(actionIds: number[]) {
+    this.selectedActions = actionIds;
+  }
+
+  @action
+  addActionToSelection(actionId: number) {
+    this.selectMode = true;
+    this.selectedActions = [
+      ...this.selectedActions.filter(id => id !== actionId),
+      actionId,
+    ];
+  }
+
+  @action
+  removeActionFromSelection(actionId: number) {
+    this.selectMode = true;
+    this.selectedActions = [
+      ...this.selectedActions.filter(id => id !== actionId),
+    ];
+  }
+
+  @action
+  toggleActionSelection(actionId: number) {
+    this.selectedActions.includes(actionId)
+      ? this.removeActionFromSelection(actionId)
+      : this.addActionToSelection(actionId);
   }
 
   constructor() {

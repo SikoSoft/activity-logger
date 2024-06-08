@@ -15,6 +15,9 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
 import { SortUpdatedEvent } from '@/events/sort-updated';
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
+import { PointerLongPressEvent } from '@/events/pointer-long-press';
+import { PointerUpEvent } from '@/events/pointer-up';
+import { ActionListItem, ActionListItemMode } from './action-list-item';
 
 @customElement('action-list')
 export class ActionList extends MobxLitElement {
@@ -29,6 +32,7 @@ export class ActionList extends MobxLitElement {
 
       .list-items {
         margin-top: 1rem;
+        overflow: hidden;
       }
 
       .no-actions {
@@ -182,6 +186,18 @@ export class ActionList extends MobxLitElement {
                   desc=${item.desc}
                   occurredAt=${item.occurredAt}
                   .tags=${item.tags}
+                  ?selected=${this.state.selectedActions.includes(item.id)}
+                  @pointer-long-press=${() => {
+                    this.state.toggleActionSelection(item.id);
+                  }}
+                  @pointer-up=${(e: PointerUpEvent) => {
+                    const listItem = e.target as ActionListItem;
+                    if (!this.state.selectMode) {
+                      listItem.setMode(ActionListItemMode.EDIT);
+                      return;
+                    }
+                    this.state.toggleActionSelection(item.id);
+                  }}
                 ></action-list-item>
               `,
             )
