@@ -33,5 +33,8 @@
   "startTime": "Start time",
   "endTime": "End time",
   "advancedMode": "Advanced mode",
-  "debugMode": "Debug mode"
+  "debugMode": "Debug mode",
+  "sortBy": "Sort by",
+  "occurredAt": "Occurred at",
+  "createdAt": "Created at"
 }

@@ -4,6 +4,8 @@ import { theme } from '../styles/theme';
 import { repeat } from 'lit/directives/repeat.js';
 import { SelectChangedEvent } from '@/lib/Event';
 
+import '@/components/ss-debug';
+
 export interface SelectOption {
   value: string;
   label: string;
@@ -29,6 +31,7 @@ export class SSSelect extends LitElement {
 
   render() {
     return html`
+      <ss-debug>${JSON.stringify(this.options)}</ss-debug>
       <select @change=${this._handleSelectChanged}>
         ${repeat(
           this.options,

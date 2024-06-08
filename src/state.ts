@@ -6,6 +6,9 @@ import {
   ListFilterType,
   ListFilterTimeType,
   TimeContext,
+  ListSort,
+  ListSortDirection,
+  ListSortProperty,
 } from 'api-spec/models/List';
 
 export class AppState {
@@ -27,6 +30,12 @@ export class AppState {
     includeUntagged: true,
     includeAll: true,
     time: { type: ListFilterTimeType.ALL_TIME },
+  };
+
+  @observable
+  public listSort: ListSort = {
+    property: ListSortProperty.OCCURRED_AT,
+    direction: ListSortDirection.DESC,
   };
 
   @observable
@@ -97,6 +106,11 @@ export class AppState {
   @action
   setDebugMode(state: boolean) {
     this.debugMode = state;
+  }
+
+  @action
+  setListSort(sort: ListSort) {
+    this.listSort = sort;
   }
 
   constructor() {

@@ -6,12 +6,15 @@ import { ActionItem } from '../models/Action';
 import './action-list-item';
 import '@/components/filter/list-filter';
 import './ss-collapsable';
+import '@/components/list-sort';
 import { config } from '../models/Config';
 import { theme } from '../styles/theme';
 import { api } from '../lib/Api';
 import { translate } from '../util/strings';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '../state';
+import { SortUpdatedEvent } from '@/events/sort-updated';
+import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 
 @customElement('action-list')
 export class ActionList extends MobxLitElement {
@@ -43,6 +46,13 @@ export class ActionList extends MobxLitElement {
 
   get totalShown(): number {
     return this.start + config.perPage;
+  }
+
+  get sortIsDefault(): boolean {
+    return (
+      this.state.listSort.direction === ListSortDirection.DESC &&
+      this.state.listSort.property === ListSortProperty.OCCURRED_AT
+    );
   }
 
   get lazyLoaderIsVisible(): boolean {
@@ -100,6 +110,9 @@ export class ActionList extends MobxLitElement {
       ...(!this.state.listFilter.includeAll
         ? { filter: JSON.stringify(this.state.listFilter) }
         : {}),
+      ...(!this.sortIsDefault
+        ? { sort: JSON.stringify(this.state.listSort) }
+        : {}),
     };
 
     const url = `action${
@@ -131,6 +144,10 @@ export class ActionList extends MobxLitElement {
     this._load();
   }
 
+  private _handleSortUpdated(e: SortUpdatedEvent) {
+    this._load();
+  }
+
   private _toggleFilter() {
     this.filterIsOpen = !this.filterIsOpen;
   }
@@ -150,6 +167,8 @@ export class ActionList extends MobxLitElement {
           ></list-filter>
         </div>
       </ss-collapsable>
+
+      <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
 
       <div class="box list-items">
         ${this.items.length
