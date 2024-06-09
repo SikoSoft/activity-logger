@@ -30,6 +30,7 @@ export class AppState {
     includeUntagged: true,
     includeAll: true,
     time: { type: ListFilterTimeType.ALL_TIME },
+    text: [],
   };
 
   @observable

@@ -8,9 +8,12 @@ import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { InputType } from '@/models/Input';
 import { dateString } from '@/util/time';
 import { SSInput } from '../ss-input';
+import { theme } from '@/styles/theme';
 
 @customElement('time-filters')
 export class TimeFilters extends LitElement {
+  static styles = [theme];
+
   @property() timeStr: string = '';
 
   @state() time: TimeContext = {

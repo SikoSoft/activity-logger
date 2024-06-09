@@ -7,6 +7,7 @@ import '@/components/tag/tag-manager';
 import '@/components/ss-input';
 import '@/components/ss-select';
 import '@/components/filter/time-filters';
+import '@/components/filter/text-filters';
 
 import { translate } from '@/util/strings';
 import {
@@ -14,6 +15,7 @@ import {
   ListFilter as ListFilterModel,
   ListFilterTimeType,
   TimeContext,
+  TextContext,
 } from 'api-spec/models/List';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -21,6 +23,7 @@ import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 import { SSInput } from '@/components/ss-input';
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -36,10 +39,6 @@ export class ListFilter extends MobxLitElement {
       .list-filter.all .filters {
         opacity: 0.3;
         pointer-events: none;
-      }
-
-      fieldset {
-        border-radius: 0.5rem;
       }
 
       .save {
@@ -68,6 +67,7 @@ export class ListFilter extends MobxLitElement {
   @state() includeUntagged: boolean = false;
   @state() includeAll: boolean = true;
   @state() time: TimeContext = { type: ListFilterTimeType.ALL_TIME };
+  @state() text: TextContext[] = [];
 
   @state() savedFilters: SavedListFilter[] = [];
   @state() saveMode: boolean = false;
@@ -106,6 +106,7 @@ export class ListFilter extends MobxLitElement {
         containsAllOf: this.containsAllOf,
       },
       time: this.time,
+      text: this.text,
     };
   }
 
@@ -197,6 +198,10 @@ export class ListFilter extends MobxLitElement {
     this.time = e.detail;
   }
 
+  private _handleTextChanged(e: TextFiltersUpdatedEvent) {
+    this.text = e.detail.text;
+  }
+
   private updateTags(type: ListFilterType, tags: string[]) {
     this[type] = tags;
   }
@@ -243,6 +248,12 @@ export class ListFilter extends MobxLitElement {
         </div>
 
         <div class="filters">
+          <text-filters
+            .filters=${this.text}
+            @text-filters-updated=${(e: TextFiltersUpdatedEvent) =>
+              this._handleTextChanged(e)}
+          ></text-filters>
+
           <fieldset>
             <legend>${translate('tagging')}</legend>
             ${repeat(

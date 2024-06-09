@@ -20,6 +20,10 @@ export const theme = css`
     margin-top: 1rem;
   }
 
+  fieldset {
+    border-radius: 0.5rem;
+  }
+
   .box {
     background-color: #fff;
     border-radius: 8px;
