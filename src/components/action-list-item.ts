@@ -43,6 +43,7 @@ export class ActionListItem extends LitElement {
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
   @state() pointerDown: Date = new Date();
   @state() downTimeout: number = 0;
+  @state() downActivation: boolean = false;
 
   @state() get classes() {
     return { 'action-list-item': true, selected: this.selected };
@@ -76,17 +77,20 @@ export class ActionListItem extends LitElement {
       const time = new Date();
       if (time.getTime() - this.pointerDown.getTime() > holdThreshold) {
         this.dispatchEvent(new PointerLongPressEvent({ time }));
+        this.downActivation = true;
         return;
       }
     }, holdThreshold);
   }
 
   private _handleMouseUp() {
-    this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
+    if (!this.downActivation) {
+      this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
+    }
+    this.downActivation = false;
     if (this.downTimeout) {
       clearTimeout(this.downTimeout);
     }
-    //this._setMode(ActionListItemMode.EDIT);
   }
 
   render() {
