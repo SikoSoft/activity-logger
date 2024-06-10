@@ -45,7 +45,19 @@ export class TextFilters extends LitElement {
         type: textFilter.type,
         subStr: textFilter.subStr,
       };
+      return;
     }
+
+    let filters = this.filters.map((filter, index) =>
+      index === textFilter.index
+        ? { type: textFilter.type, subStr: textFilter.subStr }
+        : filter,
+    );
+    this.dispatchEvent(
+      new TextFiltersUpdatedEvent({
+        filters,
+      }),
+    );
   }
 
   private _handleSave(e: TextFilterSaveEvent) {
