@@ -6,6 +6,7 @@ import '@/components/action-form';
 import '@/components/action-list';
 import '@/components/action-toasts';
 import '@/components/floating-widget';
+import '@/components/bulk-manager';
 import { ActionView, defaultActionView } from './models/Action';
 import { theme } from './styles/theme';
 
@@ -57,6 +58,7 @@ export class ActivityLogger extends MobxLitElement {
   render() {
     return html`
       <action-nav active=${this.view}></action-nav>
+      <bulk-manager></bulk-manager>
       <main>${this._activeView()}</main>
       <action-toasts></action-toasts>
       <floating-widget></floating-widget>
