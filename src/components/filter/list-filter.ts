@@ -183,6 +183,8 @@ export class ListFilter extends MobxLitElement {
         savedFilter.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
       this.includeUntagged = savedFilter.filter.includeUntagged;
       this.includeAll = savedFilter.filter.includeAll;
+      this.time = savedFilter.filter.time;
+      this.text = savedFilter.filter.text;
     }
   }
 
