@@ -1,9 +1,9 @@
 import { TextContext } from 'api-spec/models/List';
 
-export const textFiltersUpdatedEventName = 'input-changed';
+export const textFiltersUpdatedEventName = 'text-filters-updated';
 
 export interface TextFiltersUpdatedEventPayload {
-  text: TextContext[];
+  filters: TextContext[];
 }
 
 export class TextFiltersUpdatedEvent extends CustomEvent<TextFiltersUpdatedEventPayload> {

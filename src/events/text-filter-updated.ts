@@ -1,6 +1,6 @@
 import { TextType } from 'api-spec/models/List';
 
-export const textFilterUpdatedEventName = 'input-changed';
+export const textFilterUpdatedEventName = 'text-filter-updated';
 
 export interface TextFilterUpdatedEventPayload {
   type: TextType;

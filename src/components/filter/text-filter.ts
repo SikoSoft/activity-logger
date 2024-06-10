@@ -10,9 +10,11 @@ import {
   TimeContext,
 } from 'api-spec/models/List';
 import { SelectChangedEvent } from '@/lib/Event';
-import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
+import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
 import { InputChangedEvent } from '@/events/input-changed';
 import { theme } from '@/styles/theme';
+import { InputSubmittedEvent } from '@/events/input-submitted';
+import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
 @customElement('text-filter')
 export class TextFilter extends LitElement {
@@ -22,14 +24,35 @@ export class TextFilter extends LitElement {
   @property({ type: Number }) index: number = -1;
 
   private _handleTypeChanged(e: SelectChangedEvent) {
-    //this.type = e.detail.value as TextType;
-    this._sendUpdatedEvent();
+    const type = e.detail.value as TextType;
+    this.dispatchEvent(
+      new TextFilterUpdatedEvent({
+        index: this.index,
+        type,
+        subStr: this.subStr,
+      }),
+    );
   }
 
-  private _handleSubStrChanged(e: InputChangedEvent) {}
+  private _handleSubStrChanged(e: InputChangedEvent) {
+    const subStr = e.detail.value;
+    this.dispatchEvent(
+      new TextFilterUpdatedEvent({
+        index: this.index,
+        type: this.type,
+        subStr,
+      }),
+    );
+  }
 
-  private _sendUpdatedEvent(): void {
-    this.dispatchEvent(new TextFiltersUpdatedEvent({ text: [] }));
+  private _handleSubStrSubmitted(e: InputChangedEvent) {
+    console.log('subStr Submitted');
+    this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
+  }
+
+  private _handleButtonClicked() {
+    console.log('button clicked');
+    this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
   render() {
@@ -46,9 +69,20 @@ export class TextFilter extends LitElement {
           }))}
         ></ss-select>
 
-        <ss-input></ss-input>
+        <ss-input
+          value=${this.subStr}
+          @input-changed=${(e: InputChangedEvent) => {
+            this._handleSubStrChanged(e);
+          }}
+          @input-submitted=${(e: InputSubmittedEvent) => {
+            this._handleSubStrSubmitted(e);
+          }}
+        ></ss-input>
 
-        <ss-button text=${this.index === -1 ? '+' : '-'}></ss-button>
+        <ss-button
+          text=${this.index === -1 ? '+' : '-'}
+          @click=${this._handleButtonClicked}
+        ></ss-button>
       </fieldset>
     `;
   }

@@ -120,7 +120,9 @@ export class ListFilter extends MobxLitElement {
     if (this.state.listFilter.time) {
       this.time = this.state.listFilter.time;
     }
-
+    if (this.state.listFilter.text) {
+      this.text = this.state.listFilter.text;
+    }
     this.savedFilters = storage.getSavedFilters();
   }
 
@@ -199,7 +201,8 @@ export class ListFilter extends MobxLitElement {
   }
 
   private _handleTextChanged(e: TextFiltersUpdatedEvent) {
-    this.text = e.detail.text;
+    console.log('text changed', e.detail.filters);
+    this.text = e.detail.filters;
   }
 
   private updateTags(type: ListFilterType, tags: string[]) {

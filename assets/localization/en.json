@@ -27,7 +27,7 @@
   "noActionsFound": "No actions found",
   "tagging": "Tagging",
   "text": "Text",
-  "beginsWith": "Begins with",
+  "startsWith": "Starts with",
   "endsWith": "Ends with",
   "contains": "Contains",
   "time": "Time",
