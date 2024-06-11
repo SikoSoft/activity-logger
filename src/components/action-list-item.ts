@@ -70,7 +70,8 @@ export class ActionListItem extends LitElement {
     this.mode = mode;
   }
 
-  private _handleMouseDown() {
+  private _handleMouseDown(e: Event) {
+    console.log('down');
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -81,9 +82,12 @@ export class ActionListItem extends LitElement {
         return;
       }
     }, holdThreshold);
+    e.preventDefault();
+    return false;
   }
 
-  private _handleMouseUp() {
+  private _handleMouseUp(e: Event) {
+    console.log('up');
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -91,6 +95,9 @@ export class ActionListItem extends LitElement {
     if (this.downTimeout) {
       clearTimeout(this.downTimeout);
     }
+
+    e.preventDefault();
+    return false;
   }
 
   render() {
@@ -110,6 +117,8 @@ export class ActionListItem extends LitElement {
               <div
                 @mousedown=${this._handleMouseDown}
                 @mouseup=${this._handleMouseUp}
+                @touchstart=${this._handleMouseDown}
+                @touchend=${this._handleMouseUp}
               >
                 <div class="desc">${this.desc}</div>
                 <div class="time">${this.readableTime}</div>

@@ -156,6 +156,22 @@ export class ActionList extends MobxLitElement {
     this.filterIsOpen = !this.filterIsOpen;
   }
 
+  private _handlePointerLongPress(e: PointerLongPressEvent) {
+    const listItem = e.target as ActionListItem;
+    console.log('handlePointerLongPress', listItem.actionId);
+    this.state.toggleActionSelection(listItem.actionId);
+  }
+
+  private _handlePointerUp(e: PointerUpEvent) {
+    const listItem = e.target as ActionListItem;
+    console.log('handlePointerUp', listItem.actionId);
+    if (!this.state.selectMode) {
+      listItem.setMode(ActionListItemMode.EDIT);
+      return;
+    }
+    this.state.toggleActionSelection(listItem.actionId);
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -187,17 +203,8 @@ export class ActionList extends MobxLitElement {
                   occurredAt=${item.occurredAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
-                  @pointer-long-press=${() => {
-                    this.state.toggleActionSelection(item.id);
-                  }}
-                  @pointer-up=${(e: PointerUpEvent) => {
-                    const listItem = e.target as ActionListItem;
-                    if (!this.state.selectMode) {
-                      listItem.setMode(ActionListItemMode.EDIT);
-                      return;
-                    }
-                    this.state.toggleActionSelection(item.id);
-                  }}
+                  @pointer-long-press=${this._handlePointerLongPress}
+                  @pointer-up=${this._handlePointerUp}
                 ></action-list-item>
               `,
             )
