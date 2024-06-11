@@ -132,19 +132,19 @@ export class AppState {
 
   @action
   addActionToSelection(actionId: number) {
-    this.selectMode = true;
     this.selectedActions = [
       ...this.selectedActions.filter(id => id !== actionId),
       actionId,
     ];
+    this.selectMode = true;
   }
 
   @action
   removeActionFromSelection(actionId: number) {
-    this.selectMode = true;
     this.selectedActions = [
       ...this.selectedActions.filter(id => id !== actionId),
     ];
+    this.selectMode = this.selectedActions.length > 0;
   }
 
   @action
