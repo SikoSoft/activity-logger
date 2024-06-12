@@ -5,6 +5,7 @@ import './tag-input';
 import './tag-list';
 import { config } from '../../models/Config';
 import { theme } from '../../styles/theme';
+import { TagsUpdatedEvent } from '@/events/tags-updated';
 
 const apiUrl = `${config.apiUrl}action`;
 
@@ -44,13 +45,7 @@ export class TagManager extends LitElement {
   }
 
   private _sendUpdatedEvent() {
-    this.dispatchEvent(
-      new CustomEvent('updated', {
-        composed: true,
-        bubbles: true,
-        detail: { tags: this.tags },
-      })
-    );
+    this.dispatchEvent(new TagsUpdatedEvent({ tags: this.tags }));
   }
 
   render() {

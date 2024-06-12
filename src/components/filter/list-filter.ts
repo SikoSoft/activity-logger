@@ -269,7 +269,7 @@ export class ListFilter extends MobxLitElement {
                   <legend>${translate(type)}</legend>
                   <tag-manager
                     .tags=${this[type]}
-                    @updated=${(e: CustomEvent) => {
+                    @tags-updated=${(e: CustomEvent) => {
                       this.updateTags(type, e.detail.tags);
                     }}
                   ></tag-manager>

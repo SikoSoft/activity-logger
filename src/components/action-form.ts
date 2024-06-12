@@ -226,7 +226,7 @@ export class ActionForm extends MobxLitElement {
         <tag-manager
           value=${this.tagValue}
           .tags=${this.tags}
-          @updated=${(e: CustomEvent) => {
+          @tags-updated=${(e: CustomEvent) => {
             this._handleTagsUpdated(e);
           }}
         ></tag-manager>

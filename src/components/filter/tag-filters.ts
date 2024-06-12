@@ -38,7 +38,7 @@ export class TagFilters extends LitElement {
               <legend>${translate(type)}</legend>
               <tag-manager
                 .tags=${this[type]}
-                @updated=${(e: CustomEvent) => {
+                @tags-updated=${(e: CustomEvent) => {
                   this._handleTagsUpdated(type, e.detail.tags);
                 }}
               ></tag-manager>
