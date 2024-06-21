@@ -8,12 +8,8 @@ import { classMap } from 'lit/directives/class-map.js';
 
 import '@/components/tag/tag-manager';
 import { SelectChangedEvent } from '@/lib/Event';
-
-export enum TaggingType {
-  BULK_ADD_TAGS = 'bulkAddTags',
-  BULK_REMOVE_TAGS = 'bulkRemoveTags',
-  BULK_SET_TAGS = 'bulkSetTags',
-}
+import { api } from '../lib/Api';
+import { BulkOperation, OperationType } from 'api-spec/models/Operation';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
@@ -43,7 +39,7 @@ export class BulkManager extends MobxLitElement {
     `,
   ];
 
-  @state() taggingType: TaggingType = TaggingType.BULK_ADD_TAGS;
+  @state() taggingType: OperationType = OperationType.ADD_TAGS;
   @state() tagValue: string = '';
   @state() tags: string[] = [];
 
@@ -58,12 +54,17 @@ export class BulkManager extends MobxLitElement {
 
   private _handleTaggingTypeChanged(e: SelectChangedEvent) {
     console.log('handleTaggingTypeChanged', e);
-    const taggingType = e.detail.value as TaggingType;
+    const taggingType = e.detail.value as OperationType;
     this.taggingType = taggingType;
   }
 
   private _handlePerformOperation() {
     console.log('perform operation', this.taggingType, this.tags);
+
+    const json = api.post<any, BulkOperation>('operation', {
+      operation: { tags: this.tags, type: this.taggingType },
+      actions: this.state.selectedActions,
+    });
   }
 
   private _handleTagsUpdated(e: CustomEvent) {
@@ -80,7 +81,7 @@ export class BulkManager extends MobxLitElement {
           <ss-select
             selected=${this.taggingType}
             @select-changed=${this._handleTaggingTypeChanged}
-            .options=${Object.values(TaggingType).map(type => ({
+            .options=${Object.values(OperationType).map(type => ({
               value: type,
               label: translate(type),
             }))}
