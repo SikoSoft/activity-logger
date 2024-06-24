@@ -163,6 +163,18 @@ export class AppState {
     this.listItems = items;
   }
 
+  @action
+  toggleSelectAll() {
+    this.selectedActions.length
+      ? (this.selectedActions = [])
+      : (this.selectedActions = this.listItems.map(item => item.id));
+  }
+
+  @action
+  selectAll() {
+    this.selectedActions = this.listItems.map(item => item.id);
+  }
+
   constructor() {
     makeObservable(this);
   }

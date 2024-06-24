@@ -48,5 +48,6 @@
   "bulkRemoveTags": "Remove tags",
   "bulkSetTags": "Set tags",
   "performOperation": "Perform operation",
-  "operationPerformed": "The operation has been performed successfully."
+  "operationPerformed": "The operation has been performed successfully.",
+  "selectAll": "Select all"
 }

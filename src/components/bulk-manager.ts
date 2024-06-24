@@ -31,7 +31,8 @@ export class BulkManager extends MobxLitElement {
         }
       }
 
-      .number-selected {
+      .number-selected,
+      .select-all {
         text-align: center;
         color: #555;
         padding: 1rem;
@@ -76,6 +77,11 @@ export class BulkManager extends MobxLitElement {
     this.tags = e.detail.tags;
   }
 
+  private _handleSelectAll() {
+    console.log('handleSelectAll');
+    this.state.selectAll();
+  }
+
   render() {
     return html`
       <div class=${classMap(this.classes)}>
@@ -102,6 +108,13 @@ export class BulkManager extends MobxLitElement {
           ${translate(
             `numItem${this.state.selectedActions.length > 1 ? 's' : ''}Selected`,
           ).replace('{x}', this.state.selectedActions.length.toString())}
+        </div>
+
+        <div class="select-all">
+          <ss-button
+            text=${translate('selectAll')}
+            @click=${this._handleSelectAll}
+          ></ss-button>
         </div>
 
         <ss-button
