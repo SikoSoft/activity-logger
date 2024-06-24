@@ -10,8 +10,12 @@ import {
   ListSortDirection,
   ListSortProperty,
 } from 'api-spec/models/List';
+import { ActionItem } from './models/Action';
 
 export class AppState {
+  @observable
+  public listItems: ActionItem[] = [];
+
   @observable
   public suggestions: string[] = [];
 
@@ -152,6 +156,11 @@ export class AppState {
     this.selectedActions.includes(actionId)
       ? this.removeActionFromSelection(actionId)
       : this.addActionToSelection(actionId);
+  }
+
+  @action
+  setListItems(items: ActionItem[]) {
+    this.listItems = items;
   }
 
   constructor() {

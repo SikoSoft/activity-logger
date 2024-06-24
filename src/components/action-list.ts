@@ -43,7 +43,7 @@ export class ActionList extends MobxLitElement {
   ];
   private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
-  @state() items: ActionItem[] = [];
+  //@state() items: ActionItem[] = [];
   @state() start: number = 0;
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
@@ -76,20 +76,24 @@ export class ActionList extends MobxLitElement {
 
     this.addEventListener('action-item-deleted', e => {
       const event = e as CustomEvent;
-      this.items = this.items.filter(item => item.id !== event.detail);
+      this.state.setListItems(
+        this.state.listItems.filter(item => item.id !== event.detail),
+      );
     });
 
     this.addEventListener('action-item-updated', e => {
       const event = e as CustomEvent;
-      this.items = this.items.map(item =>
-        item.id === event.detail.id
-          ? {
-              ...item,
-              desc: event.detail.desc,
-              occurredAt: event.detail.occurredAt,
-              tags: event.detail.tags,
-            }
-          : item,
+      this.state.setListItems(
+        this.state.listItems.map(item =>
+          item.id === event.detail.id
+            ? {
+                ...item,
+                desc: event.detail.desc,
+                occurredAt: event.detail.occurredAt,
+                tags: event.detail.tags,
+              }
+            : item,
+        ),
       );
     });
   }
@@ -130,9 +134,11 @@ export class ActionList extends MobxLitElement {
       const json = await api.get<{ actions: ActionItem[]; total: number }>(url);
       if (json) {
         if (json.actions) {
-          this.items = more
-            ? [...this.items, ...json.actions]
-            : [...json.actions];
+          this.state.setListItems(
+            more
+              ? [...this.state.listItems, ...json.actions]
+              : [...json.actions],
+          );
         }
         if (json.total) {
           this.reachedEnd = json.total <= this.totalShown ? true : false;
@@ -203,9 +209,9 @@ export class ActionList extends MobxLitElement {
       </ss-collapsable>
 
       <div class="box list-items">
-        ${this.items.length
+        ${this.state.listItems.length
           ? repeat(
-              this.items,
+              this.state.listItems,
               item => item.id,
               item => html`
                 <action-list-item
