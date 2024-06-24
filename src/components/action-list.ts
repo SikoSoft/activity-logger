@@ -26,8 +26,9 @@ export class ActionList extends MobxLitElement {
   static styles = [
     theme,
     css`
-      .filter-body {
-        padding-top: 1rem;
+      ss-collapsable {
+        display: block;
+        margin-top: 1rem;
       }
 
       .list-items {
@@ -47,6 +48,7 @@ export class ActionList extends MobxLitElement {
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
   @state() filterIsOpen: boolean = false;
+  @state() sortIsOpen: boolean = false;
 
   get totalShown(): number {
     return this.start + config.perPage;
@@ -156,6 +158,10 @@ export class ActionList extends MobxLitElement {
     this.filterIsOpen = !this.filterIsOpen;
   }
 
+  private _toggleSort() {
+    this.sortIsOpen = !this.sortIsOpen;
+  }
+
   private _handlePointerLongPress(e: PointerLongPressEvent) {
     const listItem = e.target as ActionListItem;
     console.log('handlePointerLongPress', listItem.actionId);
@@ -188,7 +194,13 @@ export class ActionList extends MobxLitElement {
         </div>
       </ss-collapsable>
 
-      <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
+      <ss-collapsable
+        title=${translate('sort')}
+        ?open=${this.sortIsOpen}
+        @toggled=${this._toggleSort}
+      >
+        <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
+      </ss-collapsable>
 
       <div class="box list-items">
         ${this.items.length

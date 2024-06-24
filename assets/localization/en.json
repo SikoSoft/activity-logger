@@ -39,6 +39,7 @@
   "advancedMode": "Advanced mode",
   "debugMode": "Debug mode",
   "sortBy": "Sort by",
+  "sort": "Sort",
   "occurredAt": "Occurred at",
   "createdAt": "Created at",
   "numItemSelected": "{x} item selected",
