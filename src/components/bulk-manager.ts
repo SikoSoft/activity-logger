@@ -65,6 +65,10 @@ export class BulkManager extends MobxLitElement {
       operation: { tags: this.tags, type: this.taggingType },
       actions: this.state.selectedActions,
     });
+
+    this.state.setSelectedActions([]);
+    this.state.setSelectMode(false);
+    this.state.addToast(translate('operationPerformed'));
   }
 
   private _handleTagsUpdated(e: CustomEvent) {
