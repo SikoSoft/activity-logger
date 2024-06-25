@@ -165,9 +165,10 @@ export class AppState {
 
   @action
   toggleSelectAll() {
-    this.selectedActions.length
-      ? (this.selectedActions = [])
-      : (this.selectedActions = this.listItems.map(item => item.id));
+    this.selectedActions = this.listItems.reduce(
+      (a, b) => (this.selectedActions.includes(b.id) ? [...a] : [...a, b.id]),
+      [] as number[],
+    );
   }
 
   @action

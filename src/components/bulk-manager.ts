@@ -78,8 +78,7 @@ export class BulkManager extends MobxLitElement {
   }
 
   private _handleSelectAll() {
-    console.log('handleSelectAll');
-    this.state.selectAll();
+    this.state.toggleSelectAll();
   }
 
   render() {
