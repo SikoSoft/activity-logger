@@ -40,6 +40,7 @@ export class SSCollapsable extends LitElement {
 
       .collapsable.open .body {
         display: block;
+        padding-top: 1rem;
       }
     `,
   ];
