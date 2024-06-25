@@ -44,9 +44,9 @@
   "createdAt": "Created at",
   "numItemSelected": "{x} item selected",
   "numItemsSelected": "{x} items selected",
-  "bulkAddTags": "Add tags",
-  "bulkRemoveTags": "Remove tags",
-  "bulkSetTags": "Set tags",
+  "addTags": "Add tags",
+  "removeTags": "Remove tags",
+  "replaceTags": "Replace tags",
   "performOperation": "Perform operation",
   "operationPerformed": "The operation has been performed successfully.",
   "selectAll": "Select all"

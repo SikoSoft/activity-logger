@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 
 import '@/components/action-nav';
 import '@/components/action-form';
@@ -13,6 +13,8 @@ import { theme } from './styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { storage } from './lib/Storage';
 import { appState } from './state';
+import { OperationPerformedEvent } from './events/operation-performed';
+import { ViewElement } from './lib/ViewElement';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
@@ -24,6 +26,7 @@ export class ActivityLogger extends MobxLitElement {
   static styles = [theme];
 
   @state() view: ActionView = defaultActionView;
+  @query('main > *') viewComponent!: ViewElement;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -47,6 +50,10 @@ export class ActivityLogger extends MobxLitElement {
     storage.saveView(this.view);
   }
 
+  private _handleOperationPerformed(e: OperationPerformedEvent) {
+    this.viewComponent.sync();
+  }
+
   _activeView() {
     switch (this.view) {
       case ActionView.INPUT:
@@ -58,7 +65,9 @@ export class ActivityLogger extends MobxLitElement {
   render() {
     return html`
       <action-nav active=${this.view}></action-nav>
-      <bulk-manager></bulk-manager>
+      <bulk-manager
+        @operation-performed=${this._handleOperationPerformed}
+      ></bulk-manager>
       <main>${this._activeView()}</main>
       <action-toasts></action-toasts>
       <floating-widget></floating-widget>

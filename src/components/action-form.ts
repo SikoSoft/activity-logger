@@ -13,6 +13,7 @@ import { InputType } from '../models/Input';
 import { formatDateTime } from '../util/time';
 import { api } from '../lib/Api';
 import { classMap } from 'lit/directives/class-map.js';
+import { ViewElement } from '@/lib/ViewElement';
 
 export interface PostRequestBody {
   type: string;
@@ -23,7 +24,7 @@ export interface PostRequestBody {
 }
 
 @customElement('action-form')
-export class ActionForm extends MobxLitElement {
+export class ActionForm extends ViewElement {
   private state = appState;
 
   static styles = [

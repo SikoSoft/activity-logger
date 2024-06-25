@@ -18,9 +18,10 @@ import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { ActionListItem, ActionListItemMode } from './action-list-item';
+import { ViewElement } from '@/lib/ViewElement';
 
 @customElement('action-list')
-export class ActionList extends MobxLitElement {
+export class ActionList extends ViewElement {
   public state = appState;
 
   static styles = [
@@ -70,7 +71,7 @@ export class ActionList extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    this._load();
+    this.load();
 
     window.addEventListener('scroll', this.scrollHandler);
 
@@ -103,13 +104,18 @@ export class ActionList extends MobxLitElement {
     window.removeEventListener('scroll', this.scrollHandler);
   }
 
+  sync() {
+    console.log('action-list sync');
+    this.load();
+  }
+
   private _handleScroll() {
     if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
-      this._load(true);
+      this.load(true);
     }
   }
 
-  private async _load(more: boolean = false): Promise<void> {
+  async load(more: boolean = false): Promise<void> {
     this.loading = true;
     if (more) {
       this.start += config.perPage;
@@ -153,11 +159,11 @@ export class ActionList extends MobxLitElement {
 
   private _handleFilterUpdated(e: CustomEvent) {
     this.filterIsOpen = false;
-    this._load();
+    this.load();
   }
 
   private _handleSortUpdated(e: SortUpdatedEvent) {
-    this._load();
+    this.load();
   }
 
   private _toggleFilter() {
