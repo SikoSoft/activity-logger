@@ -35,14 +35,16 @@ export class FloatingWidget extends MobxLitElement {
         opacity: 0.6;
         transition: all 0.2s;
 
-        &:hover {
-          opacity: 0.9;
-          bottom: -4rem;
+        @media (hover: hover) {
+          &:hover {
+            opacity: 0.9;
+            bottom: -4rem;
 
-          .head {
-            .handle {
-              transform: translateY(-50%) scale(1.125);
-              box-shadow: 0 0 5px #000;
+            .head {
+              .handle {
+                transform: translateY(-50%) scale(1.125);
+                box-shadow: 0 0 5px #000;
+              }
             }
           }
         }
