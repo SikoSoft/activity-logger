@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 
-import { theme } from '../styles/theme';
+import { theme } from '@/styles/theme';
 
 @customElement('action-toast')
 export class ActionToast extends LitElement {

@@ -1,24 +1,26 @@
-import { css, html, nothing } from 'lit';
+import { css, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { ActionItem } from '../models/Action';
 
-import './action-list-item';
-import '@/components/filter/list-filter';
-import './ss-collapsable';
-import '@/components/list-sort';
-import { config } from '../models/Config';
-import { theme } from '../styles/theme';
-import { api } from '../lib/Api';
-import { translate } from '../util/strings';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '../state';
-import { SortUpdatedEvent } from '@/events/sort-updated';
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
+
+import { ActionItem } from '@/models/Action';
+import { config } from '@/models/Config';
+import { theme } from '@/styles/theme';
+import { api } from '@/lib/Api';
+import { translate } from '@/util/strings';
+import { appState } from '@/state';
+
+import { SortUpdatedEvent } from '@/events/sort-updated';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
-import { ActionListItem, ActionListItemMode } from './action-list-item';
 import { ViewElement } from '@/lib/ViewElement';
+
+import { ActionListItem, ActionListItemMode } from './action-list-item';
+import '@/components/action-list-item';
+import '@/components/filter/list-filter';
+import '@/components/ss-collapsable';
+import '@/components/list-sort';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {

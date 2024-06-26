@@ -1,20 +1,18 @@
 import { translate } from '@/util/strings';
-import { html, LitElement, nothing } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-import '@/components/tag/tag-manager';
-import {
-  ListFilterTimeType,
-  TextContext,
-  TextType,
-  TimeContext,
-} from 'api-spec/models/List';
+import { TextType } from 'api-spec/models/List';
+
 import { SelectChangedEvent } from '@/lib/Event';
+import { theme } from '@/styles/theme';
+
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
 import { InputChangedEvent } from '@/events/input-changed';
-import { theme } from '@/styles/theme';
 import { InputSubmittedEvent } from '@/events/input-submitted';
 import { TextFilterSaveEvent } from '@/events/text-filter-save';
+
+import '@/components/tag/tag-manager';
 
 @customElement('text-filter')
 export class TextFilter extends LitElement {

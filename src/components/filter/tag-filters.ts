@@ -1,14 +1,16 @@
-import { translate } from '@/util/strings';
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
-import '@/components/tag/tag-manager';
 import { ListFilterType } from 'api-spec/models/List';
+
+import { translate } from '@/util/strings';
 import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
 } from '@/lib/Event';
+
+import '@/components/tag/tag-manager';
 
 @customElement('tag-filters')
 export class TagFilters extends LitElement {

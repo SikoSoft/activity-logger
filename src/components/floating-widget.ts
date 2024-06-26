@@ -1,18 +1,21 @@
 import { css } from 'lit';
 import { html, unsafeStatic } from 'lit/static-html.js';
 import { customElement, state } from 'lit/decorators.js';
-import { theme } from '../styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
-import {
-  ToggleChangedEvent,
-  toggleChangedEventName,
-} from '../events/toggle-changed';
-
-import '@/components/ss-toggle';
 import { MobxLitElement } from '@adobe/lit-mobx';
+
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 import { translate } from '@/util/strings';
+
+import {
+  ToggleChangedEvent,
+  toggleChangedEventName,
+} from '@/events/toggle-changed';
+
+import '@/components/ss-toggle';
+
+import { theme } from '@/styles/theme';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {

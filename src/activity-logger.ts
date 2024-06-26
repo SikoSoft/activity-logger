@@ -1,5 +1,13 @@
 import { html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
+import { MobxLitElement } from '@adobe/lit-mobx';
+
+import { ActionView, defaultActionView } from '@/models/Action';
+import { storage } from '@/lib/Storage';
+import { appState } from '@/state';
+import { ViewElement } from '@/lib/ViewElement';
+
+import { OperationPerformedEvent } from '@/events/operation-performed';
 
 import '@/components/action-nav';
 import '@/components/action-form';
@@ -7,14 +15,8 @@ import '@/components/action-list';
 import '@/components/action-toasts';
 import '@/components/floating-widget';
 import '@/components/bulk-manager';
-import { ActionView, defaultActionView } from './models/Action';
-import { theme } from './styles/theme';
 
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { storage } from './lib/Storage';
-import { appState } from './state';
-import { OperationPerformedEvent } from './events/operation-performed';
-import { ViewElement } from './lib/ViewElement';
+import { theme } from './styles/theme';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;

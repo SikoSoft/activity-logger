@@ -2,8 +2,10 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { appState } from '../state';
-import { theme } from '../styles/theme';
+
+import { appState } from '@/state';
+
+import { theme } from '@/styles/theme';
 
 @customElement('ss-input-auto')
 export class SSInputAuto extends MobxLitElement {

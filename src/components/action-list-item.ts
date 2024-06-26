@@ -1,10 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { formatDateTime } from '../util/time';
+import { classMap } from 'lit/directives/class-map.js';
+
+import { formatDateTime } from '@/util/time';
 import { PointerDownEvent } from '@/events/pointer-down';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
-import { classMap } from 'lit/directives/class-map.js';
 
 export enum ActionListItemMode {
   VIEW = 'view',

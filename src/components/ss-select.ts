@@ -1,10 +1,12 @@
 import { LitElement, html } from 'lit';
 import { property, customElement, query } from 'lit/decorators.js';
-import { theme } from '../styles/theme';
 import { repeat } from 'lit/directives/repeat.js';
+
 import { SelectChangedEvent } from '@/lib/Event';
 
 import '@/components/ss-debug';
+
+import { theme } from '@/styles/theme';
 
 export interface SelectOption {
   value: string;

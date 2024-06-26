@@ -1,9 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { theme } from '../styles/theme';
 
-import './ss-input-auto';
+import '@/components/ss-input-auto';
+
+import { theme } from '@/styles/theme';
 
 @customElement('ss-collapsable')
 export class SSCollapsable extends LitElement {

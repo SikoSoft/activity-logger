@@ -1,12 +1,13 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-
-import { theme } from '../styles/theme';
-import { appState } from '../state';
 import { repeat } from 'lit/directives/repeat.js';
-
-import './action-toast';
 import { MobxLitElement } from '@adobe/lit-mobx';
+
+import { appState } from '@/state';
+
+import '@/components/action-toast';
+
+import { theme } from '@/styles/theme';
 
 @customElement('action-toasts')
 export class ActionToasts extends MobxLitElement {
@@ -36,7 +37,7 @@ export class ActionToasts extends MobxLitElement {
               message=${toast.message}
               startTime=${toast.startTime.getTime()}
             ></action-toast>
-          `
+          `,
         )}
       </div>
     `;

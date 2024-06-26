@@ -1,14 +1,18 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
-import '@/components/ss-select';
+import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
+
 import { translate } from '@/util/strings';
 import { appState } from '@/state';
+
 import { SelectChangedEvent } from '@/lib/Event';
-import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
-import { theme } from '@/styles/theme';
 import { SortUpdatedEvent } from '@/events/sort-updated';
+
+import '@/components/ss-select';
+
+import { theme } from '@/styles/theme';
 
 @customElement('list-sort')
 export class ListSort extends MobxLitElement {

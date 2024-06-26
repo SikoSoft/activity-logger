@@ -1,6 +1,7 @@
 import { ListFilter } from 'api-spec/models/List';
-import { AppState, appState } from '../state';
-import { ActionView, defaultActionView } from '../models/Action';
+
+import { AppState, appState } from '@/state';
+import { ActionView, defaultActionView } from '@/models/Action';
 
 export interface SavedListFilter {
   filter: ListFilter;

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { action, makeObservable, observable } from 'mobx';
-import { Toast } from './models/Toast';
+
 import {
   ListFilter,
   ListFilterType,
@@ -10,7 +10,9 @@ import {
   ListSortDirection,
   ListSortProperty,
 } from 'api-spec/models/List';
-import { ActionItem } from './models/Action';
+
+import { Toast } from '@/models/Toast';
+import { ActionItem } from '@/models/Action';
 
 export class AppState {
   @observable

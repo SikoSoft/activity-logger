@@ -1,9 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { theme } from '../styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
 
-import './ss-loader';
+import '@/components/ss-loader';
+
+import { theme } from '@/styles/theme';
+
 @customElement('ss-button')
 export class SSButton extends LitElement {
   static styles = [
@@ -29,7 +31,7 @@ export class SSButton extends LitElement {
       new CustomEvent('ss-button-clicked', {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   };
 

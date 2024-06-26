@@ -1,15 +1,9 @@
 import { html, css, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { theme } from '@/styles/theme';
+import { repeat } from 'lit/directives/repeat.js';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
-import '@/components/tag/tag-manager';
-import '@/components/ss-input';
-import '@/components/ss-select';
-import '@/components/filter/time-filters';
-import '@/components/filter/text-filters';
-
-import { translate } from '@/util/strings';
 import {
   ListFilterType,
   ListFilter as ListFilterModel,
@@ -17,13 +11,22 @@ import {
   TimeContext,
   TextContext,
 } from 'api-spec/models/List';
-import { repeat } from 'lit/directives/repeat.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
+
 import { appState } from '@/state';
+import { translate } from '@/util/strings';
 import { SavedListFilter, storage } from '@/lib/Storage';
-import { SSInput } from '@/components/ss-input';
+
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
+
+import { SSInput } from '@/components/ss-input';
+import '@/components/tag/tag-manager';
+import '@/components/ss-input';
+import '@/components/ss-select';
+import '@/components/filter/time-filters';
+import '@/components/filter/text-filters';
+
+import { theme } from '@/styles/theme';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {

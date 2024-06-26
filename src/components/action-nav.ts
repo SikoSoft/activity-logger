@@ -1,8 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
-import { ActionView } from '../models/Action';
-import { theme } from '../styles/theme';
-import { translate } from '../util/strings';
+
+import { ActionView } from '@/models/Action';
+import { translate } from '@/util/strings';
+
+import { theme } from '@/styles/theme';
 
 const views: { id: ActionView; label: string }[] = [
   {
@@ -45,7 +47,7 @@ export class ActionNav extends LitElement {
         bubbles: true,
         composed: true,
         detail: view,
-      })
+      }),
     );
   }
 
@@ -60,7 +62,7 @@ export class ActionNav extends LitElement {
               }}"
               class=${this.active === view.id ? 'active' : ''}
               >${view.label}</span
-            >`
+            >`,
         )}
       </nav>
     `;

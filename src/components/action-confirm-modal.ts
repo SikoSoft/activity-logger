@@ -1,10 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { theme } from '../styles/theme';
 
-import './ss-button';
-import { translate } from '../util/strings';
+import { translate } from '@/util/strings';
+
+import '@/components/ss-button';
+
+import { theme } from '@/styles/theme';
 
 @customElement('action-confirm-modal')
 export class ActionConfirmModal extends LitElement {
@@ -71,13 +73,13 @@ export class ActionConfirmModal extends LitElement {
 
   private _sendConfirmEvent() {
     this.dispatchEvent(
-      new CustomEvent('confirm', { bubbles: true, composed: true })
+      new CustomEvent('confirm', { bubbles: true, composed: true }),
     );
   }
 
   private _sendCancelEvent() {
     this.dispatchEvent(
-      new CustomEvent('cancel', { bubbles: true, composed: true })
+      new CustomEvent('cancel', { bubbles: true, composed: true }),
     );
   }
 

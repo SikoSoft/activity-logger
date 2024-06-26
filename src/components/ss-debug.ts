@@ -1,7 +1,8 @@
-import { appState } from '@/state';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { html, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
+
+import { appState } from '@/state';
 
 @customElement('ss-debug')
 export class SSDebug extends MobxLitElement {

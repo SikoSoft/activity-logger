@@ -1,5 +1,6 @@
+import { Language, StringMap } from '@/models/Localization';
+
 import en from '../../assets/localization/en.json' assert { type: 'json' };
-import { Language, StringMap } from '../models/Localization';
 
 export let LANGUAGE = Language.EN;
 

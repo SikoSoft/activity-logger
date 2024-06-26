@@ -1,16 +1,20 @@
-import { appState } from '@/state';
-import { theme } from '@/styles/theme';
-import { translate } from '@/util/strings';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html, LitElement, nothing } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
-import '@/components/tag/tag-manager';
-import { SelectChangedEvent } from '@/lib/Event';
-import { api } from '../lib/Api';
 import { BulkOperation, OperationType } from 'api-spec/models/Operation';
+
+import { api } from '@/lib/Api';
+import { appState } from '@/state';
+import { translate } from '@/util/strings';
+
+import { SelectChangedEvent } from '@/lib/Event';
 import { OperationPerformedEvent } from '@/events/operation-performed';
+
+import '@/components/tag/tag-manager';
+
+import { theme } from '@/styles/theme';
 
 const taggingOperations = [
   OperationType.ADD_TAGS,

@@ -1,11 +1,14 @@
 import { LitElement, html, PropertyValueMap, nothing, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
-import { theme } from '../styles/theme';
 
-import './ss-input-auto';
-import { InputType } from '../models/Input';
+import { InputType } from '@/models/Input';
+
 import { InputSubmittedEvent } from '@/events/input-submitted';
 import { InputChangedEvent } from '@/events/input-changed';
+
+import '@/components/ss-input-auto';
+
+import { theme } from '@/styles/theme';
 
 @customElement('ss-input')
 export class SSInput extends LitElement {

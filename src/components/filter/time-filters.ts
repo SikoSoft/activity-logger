@@ -1,13 +1,17 @@
-import { translate } from '@/util/strings';
 import { html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
-import '@/components/tag/tag-manager';
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
-import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
+
+import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
 import { dateString } from '@/util/time';
-import { SSInput } from '../ss-input';
+
+import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
+
+import { SSInput } from '@/components/ss-input';
+import '@/components/tag/tag-manager';
+
 import { theme } from '@/styles/theme';
 
 @customElement('time-filters')

@@ -1,16 +1,17 @@
 import { css, html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-
-import '../ss-input';
-import '../ss-button';
-import '../ss-debug';
-import './tag-input';
-import './tag-list';
-
-import { theme } from '../../styles/theme';
-import { api } from '../../lib/Api';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '../../state';
+
+import { api } from '@/lib/Api';
+import { appState } from '@/state';
+
+import '@/components/ss-input';
+import '@/components/ss-button';
+import '@/components/ss-debug';
+import '@/components/tag/tag-input';
+import '@/components/tag/tag-list';
+
+import { theme } from '@/styles/theme';
 
 @customElement('tag-input')
 export class TagInput extends MobxLitElement {

@@ -1,19 +1,21 @@
 import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+
+import { appState } from '@/state';
+import { translate } from '@/util/strings';
+import { InputType } from '@/models/Input';
+import { formatDateTime } from '@/util/time';
+import { api } from '@/lib/Api';
+
+import { ViewElement } from '@/lib/ViewElement';
 
 import './ss-input';
 import './ss-button';
 import './action-confirm-modal';
 import './tag/tag-manager';
-import { theme } from '../styles/theme';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '../state';
-import { translate } from '../util/strings';
-import { InputType } from '../models/Input';
-import { formatDateTime } from '../util/time';
-import { api } from '../lib/Api';
-import { classMap } from 'lit/directives/class-map.js';
-import { ViewElement } from '@/lib/ViewElement';
+
+import { theme } from '@/styles/theme';
 
 export interface PostRequestBody {
   type: string;

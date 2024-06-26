@@ -1,9 +1,10 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-
-import '../ss-input';
-import { theme } from '../../styles/theme';
 import { repeat } from 'lit/directives/repeat.js';
+
+import '@/components/ss-input';
+
+import { theme } from '@/styles/theme';
 
 @customElement('tag-list')
 export class TagList extends LitElement {
@@ -56,7 +57,7 @@ export class TagList extends LitElement {
         bubbles: true,
         composed: true,
         detail: { value: tag },
-      })
+      }),
     );
   }
 
@@ -77,7 +78,7 @@ export class TagList extends LitElement {
                 >&#215;</span
               >
             </li>
-          `
+          `,
         )}
       </ul>
     `;
