@@ -65,6 +65,8 @@ export class ActionForm extends ViewElement {
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   @state() loading: boolean = false;
+  @state() lastInputHadResults: boolean = true;
+  @state() lastInput: string = '';
 
   @state()
   get classes() {
@@ -178,16 +180,31 @@ export class ActionForm extends ViewElement {
     console.log('_handleDescChanged', e.detail.value);
     this.desc = e.detail.value;
 
+    if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
+      this.state.setAutoSuggestions([]);
+      return;
+    }
+
     try {
+      this.lastInputHadResults = false;
       const json = await api.get<{ suggestions: string[] }>(
         `actionSuggestion/${this.desc}`,
       );
+
+      let suggestions: string[] = [];
       if (json) {
-        this.state.setAutoSuggestions(json.suggestions);
+        suggestions = json.suggestions;
       }
+
+      if (suggestions.length) {
+        this.lastInputHadResults = true;
+      }
+      this.state.setAutoSuggestions(suggestions);
     } catch (error) {
       console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }
+
+    this.lastInput = this.desc;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
