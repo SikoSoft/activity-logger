@@ -36,8 +36,8 @@ export class TagInput extends MobxLitElement {
   ];
 
   @property({ type: String, reflect: true }) value: string = '';
-  @state() lastHitValue: string = '';
-  @state() lastValueTags: string[] = [];
+  @state() lastInputHadResults: boolean = true;
+  @state() lastInput: string = '';
 
   get showButton(): boolean {
     return this.value.length > 0;
@@ -48,7 +48,6 @@ export class TagInput extends MobxLitElement {
   }
 
   private async _handleChanged(e: CustomEvent) {
-    console.log('_handleChanged', e.detail.value);
     this.value = e.detail.value;
 
     this.dispatchEvent(
@@ -59,15 +58,13 @@ export class TagInput extends MobxLitElement {
       }),
     );
 
-    if (
-      this.lastHitValue.length &&
-      this.value.match(new RegExp(`^${this.lastHitValue}`))
-      //&& this.lastValueTags.length === 0
-    ) {
-      console.log('bail out with no suggestions');
+    if (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) {
       this.state.setAutoSuggestions([]);
       return;
     }
+
+    this.lastInputHadResults = false;
+    this.lastInput = this.value;
 
     let tags: string[] = [];
 
@@ -79,10 +76,8 @@ export class TagInput extends MobxLitElement {
     }
 
     if (tags.length) {
-      this.lastHitValue = this.value;
+      this.lastInputHadResults = true;
     }
-
-    this.lastValueTags = tags;
 
     this.state.setAutoSuggestions(tags);
   }
@@ -109,10 +104,6 @@ export class TagInput extends MobxLitElement {
   render() {
     return html`
       <div class="tag-input">
-        <ss-debug>
-          <div>last hit value: ${this.lastHitValue}</div>
-          <div>last value tags: ${this.lastValueTags.length}</div>
-        </ss-debug>
         <ss-input
           @input-submitted=${this._handleSubmitted}
           @input-changed=${this._handleChanged}
