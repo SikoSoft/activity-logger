@@ -19,7 +19,6 @@ export class TagFilters extends LitElement {
   @property({ type: Boolean }) includeUntagged: boolean = false;
 
   private _handleIncludeUntaggedChanged() {
-    //this.includeUntagged = !this.includeUntagged;
     this.dispatchEvent(new IncludeUntaggedUpdatedEvent({}));
   }
 

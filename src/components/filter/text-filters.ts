@@ -31,14 +31,8 @@ export class TextFilters extends LitElement {
     super.connectedCallback();
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent) {
-    //this.type = e.detail.value as ListFilterTimeType;
-    //this._sendUpdatedEvent();
-  }
-
   private _handleFilterUpdated(e: TextFilterUpdatedEvent) {
     const textFilter = e.detail;
-    console.log('filterUpdated', e.detail);
     if (textFilter.index === -1) {
       this.newFilter = {
         type: textFilter.type,
@@ -70,10 +64,6 @@ export class TextFilters extends LitElement {
         filters,
       }),
     );
-  }
-
-  private _sendUpdatedEvent(): void {
-    // this.dispatchEvent(new TextFiltersUpdatedEvent({ text: [] }));
   }
 
   render() {

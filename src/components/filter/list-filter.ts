@@ -206,7 +206,6 @@ export class ListFilter extends MobxLitElement {
   }
 
   private _handleTextChanged(e: TextFiltersUpdatedEvent) {
-    console.log('text changed', e.detail.filters);
     this.text = e.detail.filters;
   }
 

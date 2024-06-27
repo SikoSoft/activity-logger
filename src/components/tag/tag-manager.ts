@@ -1,16 +1,12 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { config } from '@/models/Config';
-
 import { TagsUpdatedEvent } from '@/events/tags-updated';
 
 import '@/components/tag/tag-input';
 import '@/components/tag/tag-list';
 
 import { theme } from '@/styles/theme';
-
-const apiUrl = `${config.apiUrl}action`;
 
 @customElement('tag-manager')
 export class TagManager extends LitElement {

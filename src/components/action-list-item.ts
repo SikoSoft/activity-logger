@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
-import { formatDateTime } from '@/util/time';
+import { Time } from '@/lib/Time';
 import { PointerDownEvent } from '@/events/pointer-down';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
@@ -64,7 +64,7 @@ export class ActionListItem extends LitElement {
 
   get readableTime() {
     const date = new Date(this.occurredAt);
-    return formatDateTime(date);
+    return Time.formatDateTime(date);
   }
 
   setMode(mode: ActionListItemMode) {

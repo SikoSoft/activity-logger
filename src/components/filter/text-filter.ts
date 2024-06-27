@@ -44,12 +44,10 @@ export class TextFilter extends LitElement {
   }
 
   private _handleSubStrSubmitted(e: InputChangedEvent) {
-    console.log('subStr Submitted');
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
   private _handleButtonClicked() {
-    console.log('button clicked');
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 

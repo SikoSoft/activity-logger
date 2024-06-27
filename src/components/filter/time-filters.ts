@@ -5,7 +5,7 @@ import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
 
 import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
-import { dateString } from '@/util/time';
+import { Time } from '@/lib/Time';
 
 import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
 
@@ -38,15 +38,15 @@ export class TimeFilters extends LitElement {
     super.connectedCallback();
 
     if (!this.date) {
-      this.date = dateString(new Date());
+      this.date = Time.dateString(new Date());
     }
 
     if (!this.start) {
-      this.start = dateString(new Date(new Date().getTime() - 86400000));
+      this.start = Time.dateString(new Date(new Date().getTime() - 86400000));
     }
 
     if (!this.end) {
-      this.end = dateString(new Date());
+      this.end = Time.dateString(new Date());
     }
   }
 

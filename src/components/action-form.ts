@@ -5,7 +5,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { appState } from '@/state';
 import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
-import { formatDateTime } from '@/util/time';
+import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
 
 import { ViewElement } from '@/lib/ViewElement';
@@ -77,7 +77,7 @@ export class ActionForm extends ViewElement {
     super.connectedCallback();
 
     this.desc = this.desc.trim();
-    this.occurredAt = formatDateTime(new Date(this.occurredAt));
+    this.occurredAt = Time.formatDateTime(new Date(this.occurredAt));
     this.initialDesc = this.desc;
     this.initialOccurredAt = this.occurredAt;
     this.initialTags = JSON.stringify(this.tags);
