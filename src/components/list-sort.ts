@@ -61,7 +61,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
               value: type,
-              label: translate(type),
+              label: translate(`sort.property.${type}`),
             }))}
           >
           </ss-select>
@@ -73,7 +73,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortDirection).map(type => ({
               value: type,
-              label: translate(type),
+              label: translate(`sort.direction.${type}`),
             }))}
           >
           </ss-select>
