@@ -15,6 +15,7 @@ import '@/components/action-list';
 import '@/components/action-toasts';
 import '@/components/floating-widget';
 import '@/components/bulk-manager';
+import '@/components/list-config';
 
 import { theme } from './styles/theme';
 
@@ -38,6 +39,12 @@ export class ActivityLogger extends MobxLitElement {
     });
 
     storage.loadActiveFilter();
+    this.state.setListConfigs(storage.getListConfigs());
+    if (!this.state.listConfigId && this.state.listConfigs.length) {
+      this.state.setListConfigId(this.state.listConfigs[0].id);
+    }
+
+    console.log('from the getter', JSON.stringify(this.state.listConfig));
     const view = storage.getSavedView();
     if (view) {
       this.view = view;
@@ -66,6 +73,7 @@ export class ActivityLogger extends MobxLitElement {
 
   render() {
     return html`
+      <list-config></list-config>
       <action-nav active=${this.view}></action-nav>
       <bulk-manager
         @operation-performed=${this._handleOperationPerformed}

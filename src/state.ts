@@ -9,7 +9,24 @@ import {
   ListSort,
   ListSortDirection,
   ListSortProperty,
+  ListConfig,
 } from 'api-spec/models/List';
+
+const defaultListFilter: ListFilter = {
+  tagging: {
+    [ListFilterType.CONTAINS_ALL_OF]: [],
+    [ListFilterType.CONTAINS_ONE_OF]: [],
+  },
+  includeUntagged: true,
+  includeAll: true,
+  time: { type: ListFilterTimeType.ALL_TIME },
+  text: [],
+};
+
+const defaultListSort: ListSort = {
+  property: ListSortProperty.OCCURRED_AT,
+  direction: ListSortDirection.DESC,
+};
 
 import { Toast } from '@/models/Toast';
 import { ActionItem } from '@/models/Action';
@@ -28,22 +45,10 @@ export class AppState {
   public loading: boolean = false;
 
   @observable
-  public listFilter: ListFilter = {
-    tagging: {
-      [ListFilterType.CONTAINS_ALL_OF]: [],
-      [ListFilterType.CONTAINS_ONE_OF]: [],
-    },
-    includeUntagged: true,
-    includeAll: true,
-    time: { type: ListFilterTimeType.ALL_TIME },
-    text: [],
-  };
+  public listFilter: ListFilter = structuredClone(defaultListFilter);
 
   @observable
-  public listSort: ListSort = {
-    property: ListSortProperty.OCCURRED_AT,
-    direction: ListSortDirection.DESC,
-  };
+  public listSort: ListSort = structuredClone(defaultListSort);
 
   @observable
   public advancedMode: boolean = false;
@@ -56,6 +61,26 @@ export class AppState {
 
   @observable
   public selectedActions: number[] = [];
+
+  get listConfig(): ListConfig {
+    return this.listConfigs.filter(
+      config => this.listConfigId === config.id,
+    )[0];
+  }
+  /*
+  public listConfig: ListConfig = {
+    filter: structuredClone(defaultListFilter),
+    sort: structuredClone(defaultListSort),
+    name: 'My list',
+    id: '',
+  };
+  */
+
+  @observable
+  public listConfigId: string = '';
+
+  @observable
+  public listConfigs: ListConfig[] = [];
 
   @action
   public setAutoSuggestions(suggestions: string[]) {
@@ -109,6 +134,23 @@ export class AppState {
   @action
   setListFilter(filter: ListFilter) {
     this.listFilter = filter;
+  }
+
+  /*
+  @action
+  setListConfig(listConfig: ListConfig) {
+    this.listConfig = listConfig;
+  }
+    */
+
+  @action
+  setListConfigId(id: string) {
+    this.listConfigId = id;
+  }
+
+  @action
+  setListConfigs(listConfigs: ListConfig[]) {
+    this.listConfigs = listConfigs;
   }
 
   @action

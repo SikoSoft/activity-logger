@@ -1,4 +1,4 @@
-import { ListFilter } from 'api-spec/models/List';
+import { ListConfig, ListFilter } from 'api-spec/models/List';
 
 import { AppState, appState } from '@/state';
 import { ActionView, defaultActionView } from '@/models/Action';
@@ -15,6 +15,7 @@ export class Storage {
   static VIEW_KEY = 'view';
   static ADVANCED_MODE_KEY = 'advancedMode';
   static DEBUG_MODE_KEY = 'debugMode';
+  static LIST_CONFIGS_KEY = 'listConfigs';
 
   private state: AppState;
 
@@ -158,6 +159,26 @@ export class Storage {
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
     return hashHex;
+  }
+
+  getListConfigs(): ListConfig[] {
+    console.log('getListConfigs');
+    let listConfigs: ListConfig[] = [];
+    try {
+      const storedListConfigs = localStorage.getItem(Storage.LIST_CONFIGS_KEY);
+      if (storedListConfigs) {
+        listConfigs = JSON.parse(storedListConfigs) as ListConfig[];
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load list configurations from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    console.log(listConfigs);
+    return listConfigs;
   }
 }
 
