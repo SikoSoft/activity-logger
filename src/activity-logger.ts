@@ -38,7 +38,7 @@ export class ActivityLogger extends MobxLitElement {
       this._handleViewChanged(e);
     });
 
-    storage.loadActiveFilter();
+    //storage.loadActiveFilter();
     this.state.setListConfigs(storage.getListConfigs());
     if (!this.state.listConfigId && this.state.listConfigs.length) {
       this.state.setListConfigId(this.state.listConfigs[0].id);
@@ -63,6 +63,10 @@ export class ActivityLogger extends MobxLitElement {
     this.viewComponent.sync();
   }
 
+  private _handleListConfigChanged(e: OperationPerformedEvent) {
+    this.viewComponent.sync();
+  }
+
   _activeView() {
     switch (this.view) {
       case ActionView.INPUT:
@@ -73,7 +77,9 @@ export class ActivityLogger extends MobxLitElement {
 
   render() {
     return html`
-      <list-config></list-config>
+      <list-config
+        @list-config-changed=${this._handleListConfigChanged}
+      ></list-config>
       <action-nav active=${this.view}></action-nav>
       <bulk-manager
         @operation-performed=${this._handleOperationPerformed}

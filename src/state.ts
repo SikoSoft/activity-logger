@@ -133,6 +133,7 @@ export class AppState {
 
   @action
   setListFilter(filter: ListFilter) {
+    console.log('setListFilter', JSON.stringify(filter));
     this.listFilter = filter;
   }
 
@@ -145,7 +146,11 @@ export class AppState {
 
   @action
   setListConfigId(id: string) {
+    console.log('setListConfigId', id);
     this.listConfigId = id;
+    console.log('listConfig', JSON.stringify(this.listConfig));
+    this.setListFilter(this.listConfig.filter);
+    this.setListSort(this.listConfig.sort);
   }
 
   @action
