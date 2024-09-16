@@ -52,5 +52,10 @@
   "replaceTags": "Replace tags",
   "performOperation": "Perform operation",
   "operationPerformed": "The operation has been performed successfully.",
-  "selectAll": "Select all"
+  "selectAll": "Select all",
+  "saveConfig": "Save Configuration",
+  "createConfig": "Create Configuration",
+  "deleteConfig": "Delete Configuration",
+  "name": "Name",
+  "id": "ID"
 }

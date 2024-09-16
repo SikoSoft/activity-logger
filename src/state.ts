@@ -60,6 +60,9 @@ export class AppState {
   public selectMode: boolean = false;
 
   @observable
+  public editListConfigMode: boolean = false;
+
+  @observable
   public selectedActions: number[] = [];
 
   get listConfig(): ListConfig {
@@ -166,6 +169,11 @@ export class AppState {
   @action
   setDebugMode(state: boolean) {
     this.debugMode = state;
+  }
+
+  @action
+  setEditListConfigMode(state: boolean) {
+    this.editListConfigMode = state;
   }
 
   @action

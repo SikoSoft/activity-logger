@@ -180,6 +180,16 @@ export class Storage {
     console.log(listConfigs);
     return listConfigs;
   }
+
+  saveListConfig(listConfig: ListConfig): void {
+    console.log('saveListConfig', listConfig);
+    const listConfigs = this.getListConfigs();
+    console.log('listConfigs', listConfigs);
+  }
+
+  deleteListConfig(id: string) {
+    console.log('deleteListConfig', id);
+  }
 }
 
 export const storage = new Storage(appState);
