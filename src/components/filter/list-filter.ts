@@ -115,6 +115,11 @@ export class ListFilter extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+    this.sync();
+    this.savedFilters = storage.getSavedFilters();
+  }
+
+  sync() {
     Object.values(ListFilterType).forEach(type => {
       this[type] = this.state.listFilter.tagging[type];
     });
@@ -126,7 +131,6 @@ export class ListFilter extends MobxLitElement {
     if (this.state.listFilter.text) {
       this.text = this.state.listFilter.text;
     }
-    this.savedFilters = storage.getSavedFilters();
   }
 
   private _handleIncludeUntaggedChanged() {

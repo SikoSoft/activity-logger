@@ -185,6 +185,15 @@ export class Storage {
     console.log('saveListConfig', listConfig);
     const listConfigs = this.getListConfigs();
     console.log('listConfigs', listConfigs);
+
+    localStorage.setItem(
+      Storage.LIST_CONFIGS_KEY,
+      JSON.stringify(
+        listConfigs.map(config =>
+          listConfig.id === config.id ? listConfig : config,
+        ),
+      ),
+    );
   }
 
   deleteListConfig(id: string) {

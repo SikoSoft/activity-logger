@@ -21,6 +21,7 @@ import '@/components/action-list-item';
 import '@/components/filter/list-filter';
 import '@/components/ss-collapsable';
 import '@/components/list-sort';
+import { ListFilter } from '@/components/filter/list-filter';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -46,6 +47,7 @@ export class ActionList extends ViewElement {
   ];
   private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
+  @query('list-filter') listFilter!: ListFilter;
   //@state() items: ActionItem[] = [];
   @state() start: number = 0;
   @state() reachedEnd: boolean = false;
@@ -108,6 +110,7 @@ export class ActionList extends ViewElement {
 
   sync() {
     console.log('action-list sync');
+    this.listFilter.sync();
     this.load();
   }
 
