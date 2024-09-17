@@ -64,6 +64,12 @@ export class ListConfig extends MobxLitElement {
     storage.deleteListConfig(this.id);
   }
 
+  _addConfig() {
+    console.log('addConfig');
+    const id = storage.addListConfig();
+    this.state.setListConfigId(id);
+  }
+
   sync() {
     console.log('sync');
     this.id = this.state.listConfig.id;
@@ -108,6 +114,10 @@ export class ListConfig extends MobxLitElement {
                 <ss-button
                   text=${translate('deleteConfig')}
                   @click=${this._deleteConfig}
+                ></ss-button>
+                <ss-button
+                  text=${translate('addConfig')}
+                  @click=${this._addConfig}
                 ></ss-button>
               </div>
             `

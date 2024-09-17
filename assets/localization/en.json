@@ -57,5 +57,7 @@
   "createConfig": "Create Configuration",
   "deleteConfig": "Delete Configuration",
   "name": "Name",
-  "id": "ID"
+  "id": "ID",
+  "configName": "Config Name",
+  "addConfig": "Add Configuration"
 }

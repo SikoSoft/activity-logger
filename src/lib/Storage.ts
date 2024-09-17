@@ -1,7 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListFilter } from 'api-spec/models/List';
 
-import { AppState, appState } from '@/state';
+import {
+  AppState,
+  appState,
+  defaultListFilter,
+  defaultListSort,
+} from '@/state';
 import { ActionView, defaultActionView } from '@/models/Action';
+import { translate } from '@/util/strings';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -194,6 +201,23 @@ export class Storage {
         ),
       ),
     );
+  }
+
+  addListConfig(): string {
+    const id = uuidv4();
+    console.log('addListConfig', id);
+    const listConfig = {
+      id,
+      name: translate('configName'),
+      filter: defaultListFilter,
+      sort: defaultListSort,
+    };
+    const listConfigs = this.getListConfigs();
+    localStorage.setItem(
+      Storage.LIST_CONFIGS_KEY,
+      JSON.stringify([...listConfigs, listConfig]),
+    );
+    return id;
   }
 
   deleteListConfig(id: string) {

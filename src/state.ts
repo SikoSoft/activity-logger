@@ -12,7 +12,7 @@ import {
   ListConfig,
 } from 'api-spec/models/List';
 
-const defaultListFilter: ListFilter = {
+export const defaultListFilter: ListFilter = {
   tagging: {
     [ListFilterType.CONTAINS_ALL_OF]: [],
     [ListFilterType.CONTAINS_ONE_OF]: [],
@@ -23,7 +23,7 @@ const defaultListFilter: ListFilter = {
   text: [],
 };
 
-const defaultListSort: ListSort = {
+export const defaultListSort: ListSort = {
   property: ListSortProperty.OCCURRED_AT,
   direction: ListSortDirection.DESC,
 };
