@@ -62,11 +62,16 @@ export class ListConfig extends MobxLitElement {
   _deleteConfig() {
     console.log('deleteConfig');
     storage.deleteListConfig(this.id);
+    this.state.setListConfigs(storage.getListConfigs());
+    if (this.state.listConfigs.length) {
+      this.state.setListConfigId(this.state.listConfigs[0].id);
+    }
   }
 
   _addConfig() {
     console.log('addConfig');
     const id = storage.addListConfig();
+    this.state.setListConfigs(storage.getListConfigs());
     this.state.setListConfigId(id);
   }
 
