@@ -169,7 +169,6 @@ export class Storage {
   }
 
   getListConfigs(): ListConfig[] {
-    console.log('getListConfigs');
     let listConfigs: ListConfig[] = [];
     try {
       const storedListConfigs = localStorage.getItem(Storage.LIST_CONFIGS_KEY);
@@ -184,14 +183,11 @@ export class Storage {
       );
     }
 
-    console.log(listConfigs);
     return listConfigs;
   }
 
   saveListConfig(listConfig: ListConfig): void {
-    console.log('saveListConfig', listConfig);
     const listConfigs = this.getListConfigs();
-    console.log('listConfigs', listConfigs);
 
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,
@@ -205,7 +201,6 @@ export class Storage {
 
   addListConfig(): string {
     const id = uuidv4();
-    console.log('addListConfig', id);
     const listConfig = {
       id,
       name: translate('configName'),
@@ -221,7 +216,6 @@ export class Storage {
   }
 
   deleteListConfig(id: string) {
-    console.log('deleteListConfig', id);
     const listConfigs = this.getListConfigs();
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,

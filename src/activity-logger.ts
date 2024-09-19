@@ -38,13 +38,11 @@ export class ActivityLogger extends MobxLitElement {
       this._handleViewChanged(e);
     });
 
-    //storage.loadActiveFilter();
     this.state.setListConfigs(storage.getListConfigs());
     if (!this.state.listConfigId && this.state.listConfigs.length) {
       this.state.setListConfigId(this.state.listConfigs[0].id);
     }
 
-    console.log('from the getter', JSON.stringify(this.state.listConfig));
     const view = storage.getSavedView();
     if (view) {
       this.view = view;
