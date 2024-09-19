@@ -28,8 +28,17 @@ export class ListConfig extends MobxLitElement {
 
   private state = appState;
 
-  @state() id: string = this.state.listConfig.id;
-  @state() name: string = this.state.listConfig.name;
+  @state() id: string = '';
+  @state() name: string = '';
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    const listConfigs = storage.getListConfigs();
+    if (!listConfigs.length) {
+      this._addConfig();
+    }
+    this.sync();
+  }
 
   _handleConfigChanged(e: SelectChangedEvent) {
     this.setListConfigId(e.detail.value);
