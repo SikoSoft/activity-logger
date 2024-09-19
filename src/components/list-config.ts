@@ -32,10 +32,7 @@ export class ListConfig extends MobxLitElement {
   @state() name: string = this.state.listConfig.name;
 
   _handleConfigChanged(e: SelectChangedEvent) {
-    this.state.setListConfigId(e.detail.value);
-    this.dispatchEvent(
-      new ListConfigChangedEvent({ listConfigId: e.detail.value }),
-    );
+    this.setListConfigId(e.detail.value);
     this.sync();
   }
 
@@ -61,7 +58,7 @@ export class ListConfig extends MobxLitElement {
     storage.deleteListConfig(this.id);
     this.state.setListConfigs(storage.getListConfigs());
     if (this.state.listConfigs.length) {
-      this.state.setListConfigId(this.state.listConfigs[0].id);
+      this.setListConfigId(this.state.listConfigs[0].id);
     }
     this.sync();
   }
@@ -69,13 +66,18 @@ export class ListConfig extends MobxLitElement {
   _addConfig() {
     const id = storage.addListConfig();
     this.state.setListConfigs(storage.getListConfigs());
-    this.state.setListConfigId(id);
+    this.setListConfigId(id);
     this.sync();
   }
 
   sync() {
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
+  }
+
+  setListConfigId(listConfigId: string) {
+    this.state.setListConfigId(listConfigId);
+    this.dispatchEvent(new ListConfigChangedEvent({ listConfigId }));
   }
 
   render() {
