@@ -36,7 +36,10 @@ export class AppState {
   public listItems: ActionItem[] = [];
 
   @observable
-  public suggestions: string[] = [];
+  public actionSuggestions: string[] = [];
+
+  @observable
+  public tagSuggestions: string[] = [];
 
   @observable
   public toasts: Toast[] = [];
@@ -86,8 +89,13 @@ export class AppState {
   public listConfigs: ListConfig[] = [];
 
   @action
-  public setAutoSuggestions(suggestions: string[]) {
-    this.suggestions = suggestions;
+  public setActionSuggestions(suggestions: string[]) {
+    this.actionSuggestions = suggestions;
+  }
+
+  @action
+  public setTagSuggestions(suggestions: string[]) {
+    this.tagSuggestions = suggestions;
   }
 
   @action

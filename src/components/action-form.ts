@@ -176,12 +176,9 @@ export class ActionForm extends ViewElement {
     this.loading = false;
   }
 
-  private async _handleDescChanged(e: CustomEvent) {
-    console.log('_handleDescChanged', e.detail.value);
-    this.desc = e.detail.value;
-
+  private async _requestActionSuggestions(): Promise<void> {
     if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
-      this.state.setAutoSuggestions([]);
+      this.state.setActionSuggestions([]);
       return;
     }
 
@@ -199,16 +196,40 @@ export class ActionForm extends ViewElement {
       if (suggestions.length) {
         this.lastInputHadResults = true;
       }
-      this.state.setAutoSuggestions(suggestions);
+      this.state.setActionSuggestions(suggestions);
     } catch (error) {
-      console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
+      console.error(
+        `Failed to get action suggestions: ${JSON.stringify(error)}`,
+      );
     }
 
     this.lastInput = this.desc;
   }
 
+  private async _requestTagSuggestions(): Promise<void> {
+    try {
+      const json = await api.get<{ suggestions: string[] }>(
+        `tagSuggestion/${this.desc}`,
+      );
+
+      let suggestions: string[] = [];
+      if (json) {
+        suggestions = json.suggestions;
+      }
+
+      this.state.setTagSuggestions(suggestions);
+    } catch (error) {
+      console.error(`Failed to get tag suggestions: ${JSON.stringify(error)}`);
+    }
+  }
+
+  private async _handleDescChanged(e: CustomEvent) {
+    this.desc = e.detail.value;
+    this._requestTagSuggestions();
+    this._requestActionSuggestions();
+  }
+
   private _handleDescSubmitted(e: CustomEvent) {
-    console.log('handleDescsubmitted');
     this._saveAction();
   }
 

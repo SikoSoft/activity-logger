@@ -58,12 +58,13 @@ export class SSInputAuto extends MobxLitElement {
   @state()
   get show(): boolean {
     return (
-      this.state.suggestions.length > 0 && this.input.length >= this.minInput
+      this.state.actionSuggestions.length > 0 &&
+      this.input.length >= this.minInput
     );
   }
 
   get maxSelectedIndex(): number {
-    return this.state.suggestions.length - 1;
+    return this.state.actionSuggestions.length - 1;
   }
 
   connectedCallback(): void {
@@ -78,8 +79,10 @@ export class SSInputAuto extends MobxLitElement {
     });
 
     this.addEventListener('select', () => {
-      if (this.state.suggestions.length && this.selectedIndex !== -1) {
-        this._sendSelectedEvent(this.state.suggestions[this.selectedIndex]);
+      if (this.state.actionSuggestions.length && this.selectedIndex !== -1) {
+        this._sendSelectedEvent(
+          this.state.actionSuggestions[this.selectedIndex],
+        );
       } else {
         this._sendSubmitEvent();
       }
@@ -122,7 +125,7 @@ export class SSInputAuto extends MobxLitElement {
         ${this.show
           ? html` <ul class="box">
               ${repeat(
-                this.state.suggestions,
+                this.state.actionSuggestions,
                 suggestion => suggestion,
                 (suggestion, index) => html`
                   <li
