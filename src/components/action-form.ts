@@ -73,6 +73,11 @@ export class ActionForm extends ViewElement {
     return { box: true, 'advanced-mode': this.state.advancedMode };
   }
 
+  @state()
+  get tagsAndSuggestions(): string[] {
+    return [...this.tags, ...this.state.tagSuggestions];
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -151,6 +156,7 @@ export class ActionForm extends ViewElement {
     if (!this.actionId) {
       this.tags = [];
     }
+    this.state.setTagSuggestions([]);
   }
 
   private async _deleteAction() {
@@ -207,6 +213,11 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestTagSuggestions(): Promise<void> {
+    if (this.desc.length === 0) {
+      this.state.setTagSuggestions([]);
+      return;
+    }
+
     try {
       const json = await api.get<{ suggestions: string[] }>(
         `tagSuggestion/${this.desc}`,
@@ -266,7 +277,7 @@ export class ActionForm extends ViewElement {
         </div>
         <tag-manager
           value=${this.tagValue}
-          .tags=${this.tags}
+          .tags=${this.tagsAndSuggestions}
           @tags-updated=${(e: CustomEvent) => {
             this._handleTagsUpdated(e);
           }}
