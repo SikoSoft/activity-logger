@@ -59,7 +59,7 @@ export class TagInput extends MobxLitElement {
     );
 
     if (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) {
-      this.state.setAutoSuggestions([]);
+      this.state.setActionSuggestions([]);
       return;
     }
 
@@ -79,7 +79,7 @@ export class TagInput extends MobxLitElement {
       this.lastInputHadResults = true;
     }
 
-    this.state.setAutoSuggestions(tags);
+    this.state.setActionSuggestions(tags);
   }
 
   private _handleSaveClick(e: CustomEvent) {
