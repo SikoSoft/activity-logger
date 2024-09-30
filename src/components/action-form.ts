@@ -262,6 +262,11 @@ export class ActionForm extends ViewElement {
 
   private _handleTagsUpdated(e: CustomEvent) {
     this.tags = e.detail.tags;
+    this.state.setTagSuggestions(
+      this.state.tagSuggestions.filter(suggestion =>
+        this.tags.includes(suggestion),
+      ),
+    );
   }
 
   render() {
