@@ -73,14 +73,6 @@ export class AppState {
       config => this.listConfigId === config.id,
     )[0];
   }
-  /*
-  public listConfig: ListConfig = {
-    filter: structuredClone(defaultListFilter),
-    sort: structuredClone(defaultListSort),
-    name: 'My list',
-    id: '',
-  };
-  */
 
   @observable
   public listConfigId: string = '';
