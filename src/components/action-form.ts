@@ -228,7 +228,9 @@ export class ActionForm extends ViewElement {
         suggestions = json.suggestions;
       }
 
-      this.state.setTagSuggestions(suggestions);
+      this.state.setTagSuggestions(
+        suggestions.filter(suggestion => !this.tags.includes(suggestion)),
+      );
     } catch (error) {
       console.error(`Failed to get tag suggestions: ${JSON.stringify(error)}`);
     }
