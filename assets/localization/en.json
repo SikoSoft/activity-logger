@@ -49,6 +49,7 @@
   "contextUnit.minute": "minutes",
   "contextUnit.hour": "hours",
   "contextUnit.day": "days",
+  "useContext": "Use context",
   "sort.property.occurredAt": "Occurred at",
   "sort.property.createdAt": "Created at",
   "sort.property.desc": "Description",

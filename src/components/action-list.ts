@@ -23,6 +23,7 @@ import '@/components/ss-collapsable';
 import '@/components/list-sort';
 import '@/components/list-context';
 import { ListFilter } from '@/components/filter/list-filter';
+import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -136,6 +137,9 @@ export class ActionList extends ViewElement {
       ...(!this.sortIsDefault
         ? { sort: JSON.stringify(this.state.listSort) }
         : {}),
+      ...(this.state.listContextMode
+        ? { context: JSON.stringify(this.state.listContext) }
+        : {}),
     };
 
     const url = `action${
@@ -170,6 +174,10 @@ export class ActionList extends ViewElement {
   }
 
   private _handleSortUpdated(e: SortUpdatedEvent) {
+    this.load();
+  }
+
+  private _handleContextUpdated(e: ListContextUpdatedEvent) {
     this.load();
   }
 
@@ -230,7 +238,9 @@ export class ActionList extends ViewElement {
         ?open=${this.contextIsOpen}
         @toggled=${this._toggleContext}
       >
-        <list-context @sort-updated=${this._handleSortUpdated}></list-context>
+        <list-context
+          @list-context-updated=${this._handleContextUpdated}
+        ></list-context>
       </ss-collapsable>
 
       <div class="box list-items">

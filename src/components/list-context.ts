@@ -14,6 +14,7 @@ import { ListContextType, ListContextUnit } from 'api-spec/models/List';
 import { ToggleChangedEvent } from '@/events/toggle-changed';
 import { InputChangedEvent } from '@/events/input-changed';
 import { classMap } from 'lit/directives/class-map.js';
+import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 
 const quantityMap: Record<ListContextUnit, number[]> = {
   [ListContextUnit.MINUTE]: [
@@ -81,6 +82,13 @@ export class ListContext extends MobxLitElement {
     });
   }
 
+  private _handleUpdateClick() {
+    console.log('handleUpdateClick');
+    this.dispatchEvent(
+      new ListContextUpdatedEvent({ listContext: this.state.listContext }),
+    );
+  }
+
   @state() get classes() {
     return { box: true, enabled: this.state.listContextMode };
   }
@@ -135,6 +143,13 @@ export class ListContext extends MobxLitElement {
             }))}
           >
           </ss-select>
+
+          <ss-button
+            @click=${() => {
+              this._handleUpdateClick();
+            }}
+            text=${translate('useContext')}
+          ></ss-button>
         </div>
       </div>
     `;
