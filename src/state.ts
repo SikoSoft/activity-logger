@@ -10,6 +10,9 @@ import {
   ListSortDirection,
   ListSortProperty,
   ListConfig,
+  ListContext,
+  ListContextType,
+  ListContextUnit,
 } from 'api-spec/models/List';
 
 export const defaultListFilter: ListFilter = {
@@ -79,6 +82,16 @@ export class AppState {
 
   @observable
   public listConfigs: ListConfig[] = [];
+
+  @observable
+  public listContextMode: boolean = false;
+
+  @observable
+  public listContext: ListContext = {
+    type: ListContextType.BEFORE,
+    quantity: 1,
+    unit: ListContextUnit.DAY,
+  };
 
   @action
   public setActionSuggestions(suggestions: string[]) {
@@ -221,6 +234,16 @@ export class AppState {
   @action
   selectAll() {
     this.selectedActions = this.listItems.map(item => item.id);
+  }
+
+  @action
+  setListContextMode(mode: boolean) {
+    this.listContextMode = mode;
+  }
+
+  @action
+  setListContext(context: ListContext) {
+    this.listContext = context;
   }
 
   constructor() {

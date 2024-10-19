@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { property, customElement, query } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 
 import '@/components/ss-debug';
 

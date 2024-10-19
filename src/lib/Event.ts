@@ -24,18 +24,6 @@ export class IncludeUntaggedUpdatedEvent extends CustomEvent<
   }
 }
 
-export class SelectChangedEvent extends CustomEvent<
-  EventPayload[EventType.SELECT_CHANGED]
-> {
-  constructor(payload: EventPayload[EventType.SELECT_CHANGED]) {
-    super(EventType.SELECT_CHANGED, {
-      bubbles: true,
-      composed: true,
-      detail: payload,
-    });
-  }
-}
-
 export class TimeFiltersUpdatedEvent extends CustomEvent<
   EventPayload[EventType.TIME_FILTERS_UPDATED]
 > {

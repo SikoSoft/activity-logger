@@ -21,6 +21,7 @@ import '@/components/action-list-item';
 import '@/components/filter/list-filter';
 import '@/components/ss-collapsable';
 import '@/components/list-sort';
+import '@/components/list-context';
 import { ListFilter } from '@/components/filter/list-filter';
 
 @customElement('action-list')
@@ -54,6 +55,7 @@ export class ActionList extends ViewElement {
   @state() loading: boolean = false;
   @state() filterIsOpen: boolean = false;
   @state() sortIsOpen: boolean = false;
+  @state() contextIsOpen: boolean = false;
 
   get totalShown(): number {
     return this.start + config.perPage;
@@ -179,6 +181,10 @@ export class ActionList extends ViewElement {
     this.sortIsOpen = !this.sortIsOpen;
   }
 
+  private _toggleContext() {
+    this.contextIsOpen = !this.contextIsOpen;
+  }
+
   private _handlePointerLongPress(e: PointerLongPressEvent) {
     const listItem = e.target as ActionListItem;
     console.log('handlePointerLongPress', listItem.actionId);
@@ -217,6 +223,14 @@ export class ActionList extends ViewElement {
         @toggled=${this._toggleSort}
       >
         <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
+      </ss-collapsable>
+
+      <ss-collapsable
+        title=${translate('context')}
+        ?open=${this.contextIsOpen}
+        @toggled=${this._toggleContext}
+      >
+        <list-context @sort-updated=${this._handleSortUpdated}></list-context>
       </ss-collapsable>
 
       <div class="box list-items">
