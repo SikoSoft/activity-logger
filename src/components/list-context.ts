@@ -10,11 +10,14 @@ import { SelectChangedEvent } from '@/events/select-changed';
 import '@/components/ss-select';
 
 import { theme } from '@/styles/theme';
-import { ListContextType, ListContextUnit } from 'api-spec/models/List';
-import { ToggleChangedEvent } from '@/events/toggle-changed';
-import { InputChangedEvent } from '@/events/input-changed';
+import {
+  ListContextType,
+  ListContextUnit,
+  ListContext as ListContextSpec,
+} from 'api-spec/models/List';
 import { classMap } from 'lit/directives/class-map.js';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
+import { storage } from '@/lib/Storage';
 
 const quantityMap: Record<ListContextUnit, number[]> = {
   [ListContextUnit.MINUTE]: [
@@ -56,34 +59,45 @@ export class ListContext extends MobxLitElement {
     return quantityMap[this.state.listContext.unit];
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.state.setListContextMode(storage.getListContextMode());
+    this.state.setListContext(storage.getListContext());
+  }
+
   private _handleToggleEnabled(e: InputEvent) {
-    //console.log();
-    this.state.setListContextMode(!this.state.listContextMode);
+    const mode = !this.state.listContextMode;
+    this.state.setListContextMode(mode);
+    storage.saveListContextMode(mode);
   }
 
   private _handleTypeChanged(e: SelectChangedEvent<ListContextType>) {
-    this.state.setListContext({
+    this.setListContext({
       ...this.state.listContext,
       type: e.detail.value,
     });
   }
 
   private _handleQuantityChanged(e: SelectChangedEvent<number>) {
-    this.state.setListContext({
+    this.setListContext({
       ...this.state.listContext,
       quantity: e.detail.value,
     });
   }
 
   private _handleUnitChanged(e: SelectChangedEvent<ListContextUnit>) {
-    this.state.setListContext({
+    this.setListContext({
       ...this.state.listContext,
       unit: e.detail.value,
     });
   }
 
+  private setListContext(listContext: ListContextSpec) {
+    this.state.setListContext(listContext);
+    storage.saveListContext(listContext);
+  }
+
   private _handleUpdateClick() {
-    console.log('handleUpdateClick');
     this.dispatchEvent(
       new ListContextUpdatedEvent({ listContext: this.state.listContext }),
     );
@@ -109,7 +123,7 @@ export class ListContext extends MobxLitElement {
 
         <div class="input">
           <ss-select
-            selected=${this.state.listSort.property}
+            selected=${this.state.listContext.type}
             @select-changed=${(e: SelectChangedEvent<ListContextType>) => {
               this._handleTypeChanged(e);
             }}
@@ -121,12 +135,12 @@ export class ListContext extends MobxLitElement {
           </ss-select>
 
           <ss-select
-            selected=${this.state.listContext.quantity}
+            selected=${`${this.state.listContext.quantity}`}
             @select-changed=${(e: SelectChangedEvent<number>) => {
               this._handleQuantityChanged(e);
             }}
             .options=${this.quantities.map(quantity => ({
-              value: quantity,
+              value: `${quantity}`,
               label: translate(`${quantity}`),
             }))}
           >

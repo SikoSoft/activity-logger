@@ -31,6 +31,12 @@ export const defaultListSort: ListSort = {
   direction: ListSortDirection.DESC,
 };
 
+export const defaultListContext: ListContext = {
+  type: ListContextType.BEFORE,
+  quantity: 1,
+  unit: ListContextUnit.DAY,
+};
+
 import { Toast } from '@/models/Toast';
 import { ActionItem } from '@/models/Action';
 
@@ -90,11 +96,7 @@ export class AppState {
   public listContextMode: boolean = false;
 
   @observable
-  public listContext: ListContext = {
-    type: ListContextType.BEFORE,
-    quantity: 1,
-    unit: ListContextUnit.DAY,
-  };
+  public listContext: ListContext = structuredClone(defaultListContext);
 
   @action
   public setActionSuggestions(suggestions: string[]) {

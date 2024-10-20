@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ListConfig, ListFilter } from 'api-spec/models/List';
+import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
 
 import {
   AppState,
   appState,
+  defaultListContext,
   defaultListFilter,
   defaultListSort,
 } from '@/state';
@@ -23,6 +24,8 @@ export class Storage {
   static ADVANCED_MODE_KEY = 'advancedMode';
   static DEBUG_MODE_KEY = 'debugMode';
   static LIST_CONFIGS_KEY = 'listConfigs';
+  static LIST_CONTEXT_MODE = 'listContextMode';
+  static LIST_CONTEXT = 'listContext';
 
   private state: AppState;
 
@@ -221,6 +224,50 @@ export class Storage {
       Storage.LIST_CONFIGS_KEY,
       JSON.stringify(listConfigs.filter(config => id !== config.id)),
     );
+  }
+
+  saveListContextMode(mode: boolean) {
+    localStorage.setItem(Storage.LIST_CONTEXT_MODE, mode ? '1' : '0');
+  }
+
+  getListContextMode(): boolean {
+    let mode = false;
+    try {
+      const storedMode = localStorage.getItem(Storage.LIST_CONTEXT_MODE);
+      if (storedMode) {
+        mode = storedMode === '1' ? true : false;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load list context mode from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return mode;
+  }
+
+  saveListContext(listContext: ListContext) {
+    localStorage.setItem(Storage.LIST_CONTEXT, JSON.stringify(listContext));
+  }
+
+  getListContext() {
+    let listContext: ListContext = defaultListContext;
+    try {
+      const storedListContext = localStorage.getItem(Storage.LIST_CONTEXT);
+      if (storedListContext) {
+        listContext = JSON.parse(storedListContext);
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load list context from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return listContext;
   }
 }
 
