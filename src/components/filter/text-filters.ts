@@ -5,7 +5,7 @@ import { repeat } from 'lit/directives/repeat.js';
 
 import { TextContext, TextType } from 'api-spec/models/List';
 
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';

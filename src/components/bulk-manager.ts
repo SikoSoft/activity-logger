@@ -9,7 +9,7 @@ import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { translate } from '@/util/strings';
 
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 import { OperationPerformedEvent } from '@/events/operation-performed';
 
 import '@/components/tag/tag-manager';
@@ -69,7 +69,7 @@ export class BulkManager extends MobxLitElement {
     };
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent) {
+  private _handleTypeChanged(e: SelectChangedEvent<string>) {
     const type = e.detail.value as OperationType;
     this.operationType = type;
   }

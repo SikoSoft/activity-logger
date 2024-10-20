@@ -7,7 +7,7 @@ import { appState } from '@/state';
 import '@/components/ss-select';
 
 import { theme } from '@/styles/theme';
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 import { ListConfigChangedEvent } from '@/events/list-config-changed';
 import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
@@ -40,7 +40,7 @@ export class ListConfig extends MobxLitElement {
     this.sync();
   }
 
-  _handleConfigChanged(e: SelectChangedEvent) {
+  _handleConfigChanged(e: SelectChangedEvent<string>) {
     this.setListConfigId(e.detail.value);
     this.sync();
   }
@@ -96,7 +96,7 @@ export class ListConfig extends MobxLitElement {
           ? html`
               <ss-select
                 selected=${this.state.listConfigId}
-                @select-changed=${(e: SelectChangedEvent) => {
+                @select-changed=${(e: SelectChangedEvent<string>) => {
                   this._handleConfigChanged(e);
                 }}
                 .options=${Object.values(this.state.listConfigs).map(

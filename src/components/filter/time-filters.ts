@@ -7,7 +7,8 @@ import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 
-import { SelectChangedEvent, TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 
 import { SSInput } from '@/components/ss-input';
 import '@/components/tag/tag-manager';
@@ -50,7 +51,7 @@ export class TimeFilters extends LitElement {
     }
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent) {
+  private _handleTypeChanged(e: SelectChangedEvent<string>) {
     this.type = e.detail.value as ListFilterTimeType;
     this._sendUpdatedEvent();
   }
@@ -100,7 +101,7 @@ export class TimeFilters extends LitElement {
         <legend>${translate('time')}</legend>
         <ss-select
           selected=${this.type}
-          @select-changed=${(e: SelectChangedEvent) => {
+          @select-changed=${(e: SelectChangedEvent<string>) => {
             this._handleTypeChanged(e);
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({

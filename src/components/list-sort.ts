@@ -7,7 +7,7 @@ import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { translate } from '@/util/strings';
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 import { SortUpdatedEvent } from '@/events/sort-updated';
 
 import '@/components/ss-select';
@@ -27,7 +27,7 @@ export class ListSort extends MobxLitElement {
 
   private state = appState;
 
-  private _handlePropertyChanged(e: SelectChangedEvent) {
+  private _handlePropertyChanged(e: SelectChangedEvent<string>) {
     console.log('handlePropertyChanged', e.detail.value);
     const property = e.detail.value as ListSortProperty;
     const sort = {
@@ -38,7 +38,7 @@ export class ListSort extends MobxLitElement {
     this.dispatchEvent(new SortUpdatedEvent({ sort }));
   }
 
-  private _handleDirectionChanged(e: SelectChangedEvent) {
+  private _handleDirectionChanged(e: SelectChangedEvent<string>) {
     console.log('handlePropertyChanged', e.detail.value);
     const direction = e.detail.value as ListSortDirection;
     const sort = {
@@ -56,7 +56,7 @@ export class ListSort extends MobxLitElement {
         <div>
           <ss-select
             selected=${this.state.listSort.property}
-            @select-changed=${(e: SelectChangedEvent) => {
+            @select-changed=${(e: SelectChangedEvent<string>) => {
               this._handlePropertyChanged(e);
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
@@ -68,7 +68,7 @@ export class ListSort extends MobxLitElement {
 
           <ss-select
             selected=${this.state.listSort.direction}
-            @select-changed=${(e: SelectChangedEvent) => {
+            @select-changed=${(e: SelectChangedEvent<string>) => {
               this._handleDirectionChanged(e);
             }}
             .options=${Object.values(ListSortDirection).map(type => ({

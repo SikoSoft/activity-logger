@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { TextType } from 'api-spec/models/List';
 
-import { SelectChangedEvent } from '@/lib/Event';
+import { SelectChangedEvent } from '@/events/select-changed';
 import { theme } from '@/styles/theme';
 
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
@@ -21,7 +21,7 @@ export class TextFilter extends LitElement {
   @property() subStr: string = '';
   @property({ type: Number }) index: number = -1;
 
-  private _handleTypeChanged(e: SelectChangedEvent) {
+  private _handleTypeChanged(e: SelectChangedEvent<string>) {
     const type = e.detail.value as TextType;
     this.dispatchEvent(
       new TextFilterUpdatedEvent({
@@ -56,7 +56,7 @@ export class TextFilter extends LitElement {
       <fieldset>
         <ss-select
           selected=${this.type}
-          @select-changed=${(e: SelectChangedEvent) => {
+          @select-changed=${(e: SelectChangedEvent<string>) => {
             this._handleTypeChanged(e);
           }}
           .options=${Object.values(TextType).map(type => ({
