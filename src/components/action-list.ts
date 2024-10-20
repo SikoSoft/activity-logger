@@ -1,8 +1,12 @@
-import { css, html } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
-import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
+import {
+  ListContextType,
+  ListSortDirection,
+  ListSortProperty,
+} from 'api-spec/models/List';
 
 import { ActionItem } from '@/models/Action';
 import { config } from '@/models/Config';
@@ -148,7 +152,11 @@ export class ActionList extends ViewElement {
         : ''
     }`;
     try {
-      const json = await api.get<{ actions: ActionItem[]; total: number }>(url);
+      const json = await api.get<{
+        actions: ActionItem[];
+        total: number;
+        context: Record<number, ActionItem[]>;
+      }>(url);
       if (json) {
         if (json.actions) {
           this.state.setListItems(
@@ -156,6 +164,9 @@ export class ActionList extends ViewElement {
               ? [...this.state.listItems, ...json.actions]
               : [...json.actions],
           );
+        }
+        if (json.context) {
+          this.state.setContextListItems(json.context);
         }
         if (json.total) {
           this.reachedEnd = json.total <= this.totalShown ? true : false;
@@ -209,6 +220,38 @@ export class ActionList extends ViewElement {
     this.state.toggleActionSelection(listItem.actionId);
   }
 
+  private renderContextActions(type: ListContextType, item: ActionItem) {
+    return this.state.listContext.type === type &&
+      this.state.contextListItems[item.id]?.length
+      ? html`
+          <ss-collapsable
+            title=${translate('showContext')}
+            @toggled=${() => {
+              this._toggleContext();
+            }}
+            ?open=${this.contextIsOpen}
+          >
+            ${this.state.contextListItems[item.id].map(
+              contextAction => html`
+                <action-list-item
+                  actionId=${contextAction.id}
+                  type=${contextAction.type}
+                  desc=${contextAction.desc}
+                  occurredAt=${contextAction.occurredAt}
+                  .tags=${contextAction.tags}
+                  ?selected=${this.state.selectedActions.includes(
+                    contextAction.id,
+                  )}
+                  @pointer-long-press=${this._handlePointerLongPress}
+                  @pointer-up=${this._handlePointerUp}
+                ></action-list-item>
+              `,
+            )}
+          </ss-collapsable>
+        `
+      : nothing;
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -249,6 +292,7 @@ export class ActionList extends ViewElement {
               this.state.listItems,
               item => item.id,
               item => html`
+                ${this.renderContextActions(ListContextType.AFTER, item)}
                 <action-list-item
                   actionId=${item.id}
                   type=${item.type}
@@ -259,6 +303,7 @@ export class ActionList extends ViewElement {
                   @pointer-long-press=${this._handlePointerLongPress}
                   @pointer-up=${this._handlePointerUp}
                 ></action-list-item>
+                ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
             )
           : !this.loading

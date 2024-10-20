@@ -39,6 +39,9 @@ export class AppState {
   public listItems: ActionItem[] = [];
 
   @observable
+  public contextListItems: Record<number, ActionItem[]> = [];
+
+  @observable
   public actionSuggestions: string[] = [];
 
   @observable
@@ -221,6 +224,12 @@ export class AppState {
   @action
   setListItems(items: ActionItem[]) {
     this.listItems = items;
+  }
+
+  @action
+  setContextListItems(items: Record<number, ActionItem[]>) {
+    console.log(items);
+    this.contextListItems = items;
   }
 
   @action

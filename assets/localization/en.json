@@ -69,5 +69,6 @@
   "name": "Name",
   "id": "ID",
   "configName": "Config Name",
-  "addConfig": "Add Configuration"
+  "addConfig": "Add Configuration",
+  "showContext": "Show context"
 }
