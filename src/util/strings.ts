@@ -17,3 +17,14 @@ export function translate(key: string) {
   }
   return key;
 }
+
+export async function digestMessage(message: string) {
+  const hashBuffer = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(message),
+  );
+  const hashHex = Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+  return hashHex;
+}

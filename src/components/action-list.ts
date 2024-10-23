@@ -61,6 +61,14 @@ export class ActionList extends ViewElement {
   @state() filterIsOpen: boolean = false;
   @state() sortIsOpen: boolean = false;
   @state() contextIsOpen: boolean = false;
+  @state() actionContextIsOpen: Map<number, boolean> = new Map<
+    number,
+    boolean
+  >();
+
+  @state() get actionContextHash(): string {
+    return JSON.stringify([...this.actionContextIsOpen]); //[...this.actionContextIsOpen].join('');
+  }
 
   get totalShown(): number {
     return this.start + config.perPage;
@@ -167,6 +175,10 @@ export class ActionList extends ViewElement {
         }
         if (json.context) {
           this.state.setContextListItems(json.context);
+          this.actionContextIsOpen = new Map<number, boolean>();
+          Object.keys(json.context).forEach(key => {
+            this.actionContextIsOpen.set(parseInt(key), false);
+          });
         }
         if (json.total) {
           this.reachedEnd = json.total <= this.totalShown ? true : false;
@@ -204,15 +216,23 @@ export class ActionList extends ViewElement {
     this.contextIsOpen = !this.contextIsOpen;
   }
 
+  private _toggleActionContext(id: number) {
+    const state = this.actionContextIsOpen.get(id);
+    if (state) {
+      this.actionContextIsOpen.set(id, false);
+    } else {
+      this.actionContextIsOpen.set(id, true);
+    }
+    this.requestUpdate();
+  }
+
   private _handlePointerLongPress(e: PointerLongPressEvent) {
     const listItem = e.target as ActionListItem;
-    console.log('handlePointerLongPress', listItem.actionId);
     this.state.toggleActionSelection(listItem.actionId);
   }
 
   private _handlePointerUp(e: PointerUpEvent) {
     const listItem = e.target as ActionListItem;
-    console.log('handlePointerUp', listItem.actionId);
     if (!this.state.selectMode) {
       listItem.setMode(ActionListItemMode.EDIT);
       return;
@@ -227,9 +247,9 @@ export class ActionList extends ViewElement {
           <ss-collapsable
             title=${translate('showContext')}
             @toggled=${() => {
-              this._toggleContext();
+              this._toggleActionContext(item.id);
             }}
-            ?open=${this.contextIsOpen}
+            ?open=${this.actionContextIsOpen.get(item.id)}
           >
             ${this.state.contextListItems[item.id].map(
               contextAction => html`
@@ -276,15 +296,19 @@ export class ActionList extends ViewElement {
         <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
       </ss-collapsable>
 
-      <ss-collapsable
-        title=${translate('context')}
-        ?open=${this.contextIsOpen}
-        @toggled=${this._toggleContext}
-      >
-        <list-context
-          @list-context-updated=${this._handleContextUpdated}
-        ></list-context>
-      </ss-collapsable>
+      ${!this.state.listFilter.includeAll
+        ? html`
+            <ss-collapsable
+              title=${translate('context')}
+              ?open=${this.contextIsOpen}
+              @toggled=${this._toggleContext}
+            >
+              <list-context
+                @list-context-updated=${this._handleContextUpdated}
+              ></list-context>
+            </ss-collapsable>
+          `
+        : nothing}
 
       <div class="box list-items">
         ${this.state.listItems.length
