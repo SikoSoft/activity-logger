@@ -1,8 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-
-import { translate } from '@/util/strings';
+import { msg } from '@lit/localize';
 
 import '@/components/ss-button';
 
@@ -88,15 +87,15 @@ export class ActionConfirmModal extends LitElement {
       <div class=${classMap(this.classes)}>
         <div class="overlay"></div>
         <div class="box modal">
-          ${translate('areYouSure')}
+          ${msg('Are you sure?')}
           <div class="buttons">
             <ss-button
               @click=${this._sendConfirmEvent}
-              text=${translate('yes')}
+              text=${msg('Yes')}
             ></ss-button>
             <ss-button
               @click=${this._sendCancelEvent}
-              text=${translate('cancel')}
+              text=${msg('Cancel')}
             ></ss-button>
           </div>
         </div>

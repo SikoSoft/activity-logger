@@ -3,6 +3,7 @@ import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
+import { msg } from '@lit/localize';
 
 import {
   ListFilterType,
@@ -13,7 +14,6 @@ import {
 } from 'api-spec/models/List';
 
 import { appState } from '@/state';
-import { translate } from '@/util/strings';
 import { SavedListFilter, storage } from '@/lib/Storage';
 
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
@@ -163,7 +163,7 @@ export class ListFilter extends MobxLitElement {
     this.filterNameInput.clear();
     this.saveMode = false;
 
-    this.state.addToast(translate('filterSaved'));
+    this.state.addToast(msg('Filter saved!'));
   }
 
   private async _handleSaveClick(e: CustomEvent): Promise<void> {
@@ -202,7 +202,7 @@ export class ListFilter extends MobxLitElement {
       this.savedFiltersInput.dispatchEvent(new Event('change'));
     }
     this.savedFilters = storage.getSavedFilters();
-    this.state.addToast(translate('filterDeleted'));
+    this.state.addToast(msg('Filter deleted!'));
   }
 
   private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {
@@ -227,7 +227,7 @@ export class ListFilter extends MobxLitElement {
                   id="saved-filters"
                   @change=${this._handleSavedFilterChanged}
                 >
-                  <option value="">${translate('savedFilters')}</option>
+                  <option value="">${msg('Saved filters')}</option>
                   ${repeat(
                     this.savedFilters,
                     filter => filter.id,
@@ -240,7 +240,7 @@ export class ListFilter extends MobxLitElement {
                   ? html`
                       <ss-button
                         @click=${this._handleDeleteSavedFilterClick}
-                        text=${translate('deleteFilter')}
+                        text=${msg('Delete filter')}
                       ></ss-button>
                     `
                   : nothing}
@@ -255,7 +255,7 @@ export class ListFilter extends MobxLitElement {
             ?checked=${this.includeAll}
             @change=${this._handleIncludeAllChanged}
           />
-          <label for="include-all">${translate('includeAll')}</label>
+          <label for="include-all">${msg('Include all actions')}</label>
         </div>
 
         <div class="filters">
@@ -266,13 +266,13 @@ export class ListFilter extends MobxLitElement {
           ></text-filters>
 
           <fieldset>
-            <legend>${translate('tagging')}</legend>
+            <legend>${msg('Tagging')}</legend>
             ${repeat(
               Object.values(ListFilterType),
               type => type,
               type => html`
                 <fieldset>
-                  <legend>${translate(type)}</legend>
+                  <legend>${msg(type)}</legend>
                   <tag-manager
                     .tags=${this[type]}
                     @tags-updated=${(e: CustomEvent) => {
@@ -284,13 +284,13 @@ export class ListFilter extends MobxLitElement {
             )}
             <div>
               <input
-                id="include-unchanged"
+                id="include-untagged"
                 type="checkbox"
                 ?checked=${this.includeUntagged}
                 @change=${this._handleIncludeUntaggedChanged}
               />
-              <label for="include-unchanged"
-                >${translate('includeUntagged')}</label
+              <label for="include-untagged"
+                >${msg('Include actions without tags')}</label
               >
             </div>
           </fieldset>
@@ -315,7 +315,7 @@ export class ListFilter extends MobxLitElement {
           @click=${(e: CustomEvent) => {
             this._handleUpdateClick(e);
           }}
-          text=${translate('useFilter')}
+          text=${msg('Use filter')}
         ></ss-button>
 
         <div class="save">
@@ -327,14 +327,14 @@ export class ListFilter extends MobxLitElement {
               this._handleFilterNameSubmitted(e);
             }}
             id="filter-name"
-            placeholder=${translate('filterName')}
+            placeholder=${msg('Filter name')}
           ></ss-input>
 
           <ss-button
             @click=${(e: CustomEvent) => {
               this._handleSaveClick(e);
             }}
-            text=${translate('saveFilter')}
+            text=${msg('Save filter')}
             ?disabled=${!this.saveButtonIsEnabled}
           ></ss-button>
         </div>

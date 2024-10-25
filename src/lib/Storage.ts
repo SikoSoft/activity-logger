@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
+import { msg } from '@lit/localize';
 
 import {
   AppState,
@@ -9,7 +10,6 @@ import {
   defaultListSort,
 } from '@/state';
 import { ActionView, defaultActionView } from '@/models/Action';
-import { translate } from '@/util/strings';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -206,7 +206,7 @@ export class Storage {
     const id = uuidv4();
     const listConfig = {
       id,
-      name: translate('configName'),
+      name: msg('Config Name'),
       filter: defaultListFilter,
       sort: defaultListSort,
     };

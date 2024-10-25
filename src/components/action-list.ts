@@ -1,6 +1,7 @@
 import { css, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { msg } from '@lit/localize';
 
 import {
   ListContextType,
@@ -12,7 +13,6 @@ import { ActionItem } from '@/models/Action';
 import { config } from '@/models/Config';
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
-import { translate } from '@/util/strings';
 import { appState } from '@/state';
 
 import { SortUpdatedEvent } from '@/events/sort-updated';
@@ -245,7 +245,7 @@ export class ActionList extends ViewElement {
       this.state.contextListItems[item.id]?.length
       ? html`
           <ss-collapsable
-            title=${translate('showContext')}
+            title=${msg('Show context')}
             @toggled=${() => {
               this._toggleActionContext(item.id);
             }}
@@ -275,7 +275,7 @@ export class ActionList extends ViewElement {
   render() {
     return html`
       <ss-collapsable
-        title=${translate('filter')}
+        title=${msg('Filter')}
         ?open=${this.filterIsOpen}
         @toggled=${this._toggleFilter}
       >
@@ -289,7 +289,7 @@ export class ActionList extends ViewElement {
       </ss-collapsable>
 
       <ss-collapsable
-        title=${translate('sort')}
+        title=${msg('Sort')}
         ?open=${this.sortIsOpen}
         @toggled=${this._toggleSort}
       >
@@ -299,7 +299,7 @@ export class ActionList extends ViewElement {
       ${!this.state.listFilter.includeAll
         ? html`
             <ss-collapsable
-              title=${translate('context')}
+              title=${msg('Context')}
               ?open=${this.contextIsOpen}
               @toggled=${this._toggleContext}
             >
@@ -331,9 +331,7 @@ export class ActionList extends ViewElement {
               `,
             )
           : !this.loading
-            ? html` <div class="no-actions">
-                ${translate('noActionsFound')}
-              </div>`
+            ? html` <div class="no-actions">${msg('No actions found')}</div>`
             : html` <ss-loader padded></ss-loader> `}
         <div id="lazy-loader"></div>
       </div>

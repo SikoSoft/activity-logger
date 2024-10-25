@@ -3,16 +3,15 @@ import { property, customElement } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { ActionView } from '@/models/Action';
-import { translate } from '@/util/strings';
 
 import { theme } from '@/styles/theme';
 
 const views: { id: ActionView; label: string }[] = [
   {
     id: ActionView.INPUT,
-    label: msg('new'),
+    label: msg('New'),
   },
-  { id: ActionView.LIST, label: msg('list') },
+  { id: ActionView.LIST, label: msg('List') },
 ];
 
 @customElement('action-nav')

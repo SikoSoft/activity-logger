@@ -1,10 +1,10 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { msg } from '@lit/localize';
 
 import { ListFilterType } from 'api-spec/models/List';
 
-import { translate } from '@/util/strings';
 import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
@@ -29,14 +29,14 @@ export class TagFilters extends LitElement {
   render() {
     return html`
       <fieldset>
-        <legend>${translate('tagging')}</legend>
+        <legend>${msg('tagging')}</legend>
 
         ${repeat(
           Object.values(ListFilterType),
           type => type,
           type => html`
             <fieldset>
-              <legend>${translate(type)}</legend>
+              <legend>${msg(type)}</legend>
               <tag-manager
                 .tags=${this[type]}
                 @tags-updated=${(e: CustomEvent) => {
@@ -53,7 +53,9 @@ export class TagFilters extends LitElement {
             ?checked=${this.includeUntagged}
             @change=${this._handleIncludeUntaggedChanged}
           />
-          <label for="include-unchanged">${translate('includeUntagged')}</label>
+          <label for="include-unchanged"
+            >${msg('Include actions without tags')}</label
+          >
         </div>
       </fieldset>
     `;
