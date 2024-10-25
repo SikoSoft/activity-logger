@@ -38,17 +38,25 @@ export class ActivityLogger extends MobxLitElement {
       this._handleViewChanged(e);
     });
 
+    this._restoreState();
+  }
+
+  private _restoreState() {
     this.state.setListConfigs(storage.getListConfigs());
     if (!this.state.listConfigId && this.state.listConfigs.length) {
       this.state.setListConfigId(this.state.listConfigs[0].id);
     }
 
+    this.state.setListContextMode(storage.getListContextMode());
+    this.state.setListContext(storage.getListContext());
+
+    this.state.setAdvancedMode(storage.getAdvancedMode());
+    this.state.setDebugMode(storage.getDebugMode());
+
     const view = storage.getSavedView();
     if (view) {
       this.view = view;
     }
-    this.state.setAdvancedMode(storage.getAdvancedMode());
-    this.state.setDebugMode(storage.getDebugMode());
   }
 
   private _handleViewChanged(e: Event) {

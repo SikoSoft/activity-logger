@@ -59,12 +59,6 @@ export class ListContext extends MobxLitElement {
     return quantityMap[this.state.listContext.unit];
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-    this.state.setListContextMode(storage.getListContextMode());
-    this.state.setListContext(storage.getListContext());
-  }
-
   private _handleToggleEnabled(e: InputEvent) {
     const mode = !this.state.listContextMode;
     this.state.setListContextMode(mode);
