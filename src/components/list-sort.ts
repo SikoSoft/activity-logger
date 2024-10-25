@@ -1,10 +1,10 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 
-import { translate } from '@/util/strings';
 import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@/events/select-changed';
@@ -52,7 +52,7 @@ export class ListSort extends MobxLitElement {
   render() {
     return html`
       <div class="box">
-        <div>${translate('sortBy')}</div>
+        <div>${msg('Sort by')}</div>
         <div>
           <ss-select
             selected=${this.state.listSort.property}
@@ -61,7 +61,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
               value: type,
-              label: translate(`sort.property.${type}`),
+              label: msg(`sort.property.${type}`),
             }))}
           >
           </ss-select>
@@ -73,7 +73,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortDirection).map(type => ({
               value: type,
-              label: translate(`sort.direction.${type}`),
+              label: msg(`sort.direction.${type}`),
             }))}
           >
           </ss-select>

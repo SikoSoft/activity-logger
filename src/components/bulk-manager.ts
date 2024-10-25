@@ -2,12 +2,12 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { msg, str } from '@lit/localize';
 
 import { BulkOperation, OperationType } from 'api-spec/models/Operation';
 
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
-import { translate } from '@/util/strings';
 
 import { SelectChangedEvent } from '@/events/select-changed';
 import { OperationPerformedEvent } from '@/events/operation-performed';
@@ -82,7 +82,7 @@ export class BulkManager extends MobxLitElement {
 
     this.state.setSelectedActions([]);
     this.state.setSelectMode(false);
-    this.state.addToast(translate('operationPerformed'));
+    this.state.addToast(msg('The operation has been performed successfully.'));
 
     this.dispatchEvent(
       new OperationPerformedEvent({
@@ -108,7 +108,7 @@ export class BulkManager extends MobxLitElement {
           @select-changed=${this._handleTypeChanged}
           .options=${Object.values(OperationType).map(type => ({
             value: type,
-            label: translate(type),
+            label: msg(type),
           }))}
         ></ss-select>
 
@@ -123,20 +123,22 @@ export class BulkManager extends MobxLitElement {
           : nothing}
 
         <div class="number-selected">
-          ${translate(
-            `numItem${this.state.selectedActions.length > 1 ? 's' : ''}Selected`,
-          ).replace('{x}', this.state.selectedActions.length.toString())}
+          ${this.state.selectedActions.length > 1
+            ? msg('1 item selected')
+            : msg(
+                str`${this.state.selectedActions.length.toString()} items selected`,
+              )}
         </div>
 
         <div class="select-all">
           <ss-button
-            text=${translate('selectAll')}
+            text=${msg('Select all')}
             @click=${this._handleSelectAll}
           ></ss-button>
         </div>
 
         <ss-button
-          text=${translate('performOperation')}
+          text=${msg('Perform operation')}
           @click=${this._handlePerformOperation}
         ></ss-button>
       </div>

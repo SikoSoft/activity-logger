@@ -1,9 +1,9 @@
 import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
-import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
@@ -128,9 +128,7 @@ export class ActionForm extends ViewElement {
           }),
         );
 
-        this.state.addToast(
-          this.actionId ? translate('updated') : translate('added'),
-        );
+        this.state.addToast(this.actionId ? msg('Updated!') : msg('Added!'));
 
         this.loading = false;
         return;
@@ -165,7 +163,7 @@ export class ActionForm extends ViewElement {
     try {
       await api.delete(this.apiUrl);
 
-      this.state.addToast(translate('removed'));
+      this.state.addToast(msg('Removed!'));
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }
@@ -306,16 +304,16 @@ export class ActionForm extends ViewElement {
             @click=${this._handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
-                ? translate('update')
-                : translate('cancel')
-              : translate('add')}
+                ? msg('Update')
+                : msg('Cancel')
+              : msg('Add')}
             ?loading=${this.loading}
           ></ss-button>
           ${this.actionId
             ? html`
                 <ss-button
                   @click=${this._handleDeleteClick}
-                  text=${translate('delete')}
+                  text=${msg('Delete')}
                 ></ss-button>
                 <action-confirm-modal
                   @confirm=${this._deleteAction}

@@ -3,10 +3,10 @@ import { html, unsafeStatic } from 'lit/static-html.js';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
+import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
-import { translate } from '@/util/strings';
 
 import {
   ToggleChangedEvent,
@@ -209,7 +209,7 @@ export class FloatingWidget extends MobxLitElement {
         </div>
         <div class="body" @mouseenter=${this._handleOpen}>
           <div class="option">
-            <h4>${translate('advancedMode')}</h4>
+            <h4>${msg('Advanced mode')}</h4>
             <ss-toggle
               @${unsafeStatic(toggleChangedEventName)}=${this
                 ._handleToggleAdvancedChanged}
@@ -217,7 +217,7 @@ export class FloatingWidget extends MobxLitElement {
             ></ss-toggle>
           </div>
           <div class="option">
-            <h4>${translate('debugMode')}</h4>
+            <h4>${msg('Debug mode')}</h4>
             <ss-toggle
               @${unsafeStatic(toggleChangedEventName)}=${this
                 ._handleToggleDebugChanged}

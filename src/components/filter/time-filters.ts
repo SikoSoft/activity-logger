@@ -1,9 +1,9 @@
 import { html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
 
-import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 
@@ -98,7 +98,7 @@ export class TimeFilters extends LitElement {
   render() {
     return html`
       <fieldset>
-        <legend>${translate('time')}</legend>
+        <legend>${msg('Time')}</legend>
         <ss-select
           selected=${this.type}
           @select-changed=${(e: SelectChangedEvent<string>) => {
@@ -106,7 +106,7 @@ export class TimeFilters extends LitElement {
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({
             value: type,
-            label: translate(type),
+            label: msg(type),
           }))}
         ></ss-select>
 

@@ -1,6 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 
@@ -9,7 +10,6 @@ import '@/components/ss-select';
 import { theme } from '@/styles/theme';
 import { SelectChangedEvent } from '@/events/select-changed';
 import { ListConfigChangedEvent } from '@/events/list-config-changed';
-import { translate } from '@/util/strings';
 import { InputType } from '@/models/Input';
 import { InputChangedEvent } from '@/events/input-changed';
 import { storage } from '@/lib/Storage';
@@ -108,7 +108,7 @@ export class ListConfig extends MobxLitElement {
               >
               </ss-select>
 
-              <div class="id">${translate('id')}: ${this.id}</div>
+              <div class="id">${msg('ID')}: ${this.id}</div>
 
               <div class="name">
                 <ss-input
@@ -121,15 +121,15 @@ export class ListConfig extends MobxLitElement {
 
               <div class="buttons">
                 <ss-button
-                  text=${translate('saveConfig')}
+                  text=${msg('Save configuration')}
                   @click=${this._saveConfig}
                 ></ss-button>
                 <ss-button
-                  text=${translate('deleteConfig')}
+                  text=${msg('Delete configuration')}
                   @click=${this._deleteConfig}
                 ></ss-button>
                 <ss-button
-                  text=${translate('addConfig')}
+                  text=${msg('Add configuration')}
                   @click=${this._addConfig}
                 ></ss-button>
               </div>

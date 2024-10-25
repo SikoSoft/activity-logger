@@ -1,8 +1,8 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
-import { translate } from '@/util/strings';
 import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@/events/select-changed';
@@ -118,7 +118,7 @@ export class ListContext extends MobxLitElement {
             }}
             ?checked=${this.state.listContextMode}
           />
-          ${translate('includeContext')}
+          ${msg('Include context')}
         </div>
 
         <div class="input">
@@ -129,7 +129,7 @@ export class ListContext extends MobxLitElement {
             }}
             .options=${Object.values(ListContextType).map(type => ({
               value: type,
-              label: translate(`contextType.${type}`),
+              label: msg(`contextType.${type}`),
             }))}
           >
           </ss-select>
@@ -141,7 +141,7 @@ export class ListContext extends MobxLitElement {
             }}
             .options=${this.quantities.map(quantity => ({
               value: `${quantity}`,
-              label: translate(`${quantity}`),
+              label: `${quantity}`,
             }))}
           >
           </ss-select>
@@ -153,7 +153,7 @@ export class ListContext extends MobxLitElement {
             }}
             .options=${Object.values(ListContextUnit).map(type => ({
               value: type,
-              label: translate(`contextUnit.${type}`),
+              label: msg(`contextUnit.${type}`),
             }))}
           >
           </ss-select>
@@ -162,7 +162,7 @@ export class ListContext extends MobxLitElement {
             @click=${() => {
               this._handleUpdateClick();
             }}
-            text=${translate('useContext')}
+            text=${msg('useContext')}
           ></ss-button>
         </div>
       </div>

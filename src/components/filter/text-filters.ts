@@ -1,11 +1,9 @@
-import { translate } from '@/util/strings';
 import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { msg } from '@lit/localize';
 
 import { TextContext, TextType } from 'api-spec/models/List';
-
-import { SelectChangedEvent } from '@/events/select-changed';
 
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
@@ -69,7 +67,7 @@ export class TextFilters extends LitElement {
   render() {
     return html`
       <fieldset>
-        <legend>${translate('text')}</legend>
+        <legend>${msg('Text')}</legend>
 
         ${repeat(
           this.filters,

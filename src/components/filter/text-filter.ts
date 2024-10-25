@@ -1,6 +1,6 @@
-import { translate } from '@/util/strings';
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
 import { TextType } from 'api-spec/models/List';
 
@@ -61,7 +61,7 @@ export class TextFilter extends LitElement {
           }}
           .options=${Object.values(TextType).map(type => ({
             value: type,
-            label: translate(type),
+            label: msg(type),
           }))}
         ></ss-select>
 
