@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { msg, str } from '@lit/localize';
+import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 

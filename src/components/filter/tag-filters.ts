@@ -12,6 +12,11 @@ import {
 
 import '@/components/tag/tag-manager';
 
+const filterTypeMsgMap: Record<ListFilterType, string> = {
+  [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
+  [ListFilterType.CONTAINS_ONE_OF]: msg('filterType.containsOneOf'),
+};
+
 @customElement('tag-filters')
 export class TagFilters extends LitElement {
   @property({ type: Array }) [ListFilterType.CONTAINS_ONE_OF]: string[] = [];
@@ -36,7 +41,7 @@ export class TagFilters extends LitElement {
           type => type,
           type => html`
             <fieldset>
-              <legend>${msg(type)}</legend>
+              <legend>${filterTypeMsgMap[type]}</legend>
               <tag-manager
                 .tags=${this[type]}
                 @tags-updated=${(e: CustomEvent) => {

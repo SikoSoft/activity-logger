@@ -15,6 +15,12 @@ import '@/components/tag/tag-manager';
 
 import { theme } from '@/styles/theme';
 
+const filterTimeTypeMsgMap: Record<ListFilterTimeType, string> = {
+  [ListFilterTimeType.ALL_TIME]: msg('filterTimeType.allTime'),
+  [ListFilterTimeType.EXACT_DATE]: msg('filterTimeType.exactDate'),
+  [ListFilterTimeType.RANGE]: msg('filterTimeType.range'),
+};
+
 @customElement('time-filters')
 export class TimeFilters extends LitElement {
   static styles = [theme];
@@ -106,7 +112,7 @@ export class TimeFilters extends LitElement {
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({
             value: type,
-            label: msg(type),
+            label: filterTimeTypeMsgMap[type],
           }))}
         ></ss-select>
 

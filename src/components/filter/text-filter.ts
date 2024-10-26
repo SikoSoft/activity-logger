@@ -14,6 +14,12 @@ import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
 import '@/components/tag/tag-manager';
 
+const textTypeMsgMap: Record<TextType, string> = {
+  [TextType.CONTAINS]: msg('textType.contains'),
+  [TextType.ENDS_WITH]: msg('textType.endsWith'),
+  [TextType.STARTS_WITH]: msg('textType.startsWith'),
+};
+
 @customElement('text-filter')
 export class TextFilter extends LitElement {
   static styles = [theme];
@@ -61,7 +67,7 @@ export class TextFilter extends LitElement {
           }}
           .options=${Object.values(TextType).map(type => ({
             value: type,
-            label: msg(type),
+            label: textTypeMsgMap[type],
           }))}
         ></ss-select>
 

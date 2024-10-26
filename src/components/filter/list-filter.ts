@@ -28,6 +28,11 @@ import '@/components/filter/text-filters';
 
 import { theme } from '@/styles/theme';
 
+const filterTypeMsgMap: Record<ListFilterType, string> = {
+  [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
+  [ListFilterType.CONTAINS_ONE_OF]: msg('filterType.containsOneOf'),
+};
+
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
   public state = appState;
@@ -272,7 +277,7 @@ export class ListFilter extends MobxLitElement {
               type => type,
               type => html`
                 <fieldset>
-                  <legend>${msg(type)}</legend>
+                  <legend>${filterTypeMsgMap[type]}</legend>
                   <tag-manager
                     .tags=${this[type]}
                     @tags-updated=${(e: CustomEvent) => {
