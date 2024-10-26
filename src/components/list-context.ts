@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { msg, str } from '@lit/localize';
 
 import { appState } from '@/state';
 
@@ -28,6 +28,17 @@ const quantityMap: Record<ListContextUnit, number[]> = {
     22, 23, 24,
   ],
   [ListContextUnit.DAY]: [1, 2, 3, 4, 5, 6, 7],
+};
+
+const contextUnitMsgMap: Record<ListContextUnit, string> = {
+  [ListContextUnit.MINUTE]: msg('contextUnit.minute'),
+  [ListContextUnit.HOUR]: msg('contextUnit.hour'),
+  [ListContextUnit.DAY]: msg('contextUnit.day'),
+};
+
+const contextTypeMsgMap: Record<ListContextType, string> = {
+  [ListContextType.BEFORE]: msg('contextType.before'),
+  [ListContextType.AFTER]: msg('contextUnit.after'),
 };
 
 @customElement('list-context')
@@ -123,7 +134,7 @@ export class ListContext extends MobxLitElement {
             }}
             .options=${Object.values(ListContextType).map(type => ({
               value: type,
-              label: msg(`contextType.${type}`),
+              label: contextTypeMsgMap[type],
             }))}
           >
           </ss-select>
@@ -147,7 +158,7 @@ export class ListContext extends MobxLitElement {
             }}
             .options=${Object.values(ListContextUnit).map(type => ({
               value: type,
-              label: msg(`contextUnit.${type}`),
+              label: contextUnitMsgMap[type],
             }))}
           >
           </ss-select>

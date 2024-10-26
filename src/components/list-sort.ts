@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { msg, str } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 
@@ -13,6 +13,17 @@ import { SortUpdatedEvent } from '@/events/sort-updated';
 import '@/components/ss-select';
 
 import { theme } from '@/styles/theme';
+
+const sortPropertyMsgMap: Record<ListSortProperty, string> = {
+  [ListSortProperty.CREATED_AT]: msg('sortProperty.createdAt'),
+  [ListSortProperty.DESC]: msg('sortProperty.desc'),
+  [ListSortProperty.OCCURRED_AT]: msg('sortProperty.occurredAt'),
+};
+
+const sortDirectionMsgMap: Record<ListSortDirection, string> = {
+  [ListSortDirection.ASC]: msg('sortDirection.asc'),
+  [ListSortDirection.DESC]: msg('sortDirection.desc'),
+};
 
 @customElement('list-sort')
 export class ListSort extends MobxLitElement {
@@ -61,7 +72,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
               value: type,
-              label: msg(`sort.property.${type}`),
+              label: sortPropertyMsgMap[type],
             }))}
           >
           </ss-select>
@@ -73,7 +84,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortDirection).map(type => ({
               value: type,
-              label: msg(`sort.direction.${type}`),
+              label: sortDirectionMsgMap[type],
             }))}
           >
           </ss-select>

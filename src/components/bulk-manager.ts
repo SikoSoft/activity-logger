@@ -22,6 +22,13 @@ const taggingOperations = [
   OperationType.REPLACE_TAGS,
 ];
 
+const operationTypeMsgMap: Record<OperationType, string> = {
+  [OperationType.ADD_TAGS]: msg('operationType.addTags'),
+  [OperationType.DELETE]: msg('operationType.delete'),
+  [OperationType.REMOVE_TAGS]: msg('operationType.removeTags'),
+  [OperationType.REPLACE_TAGS]: msg('operationType.replaceTags'),
+};
+
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
   private state = appState;
@@ -108,7 +115,7 @@ export class BulkManager extends MobxLitElement {
           @select-changed=${this._handleTypeChanged}
           .options=${Object.values(OperationType).map(type => ({
             value: type,
-            label: msg(type),
+            label: operationTypeMsgMap[type],
           }))}
         ></ss-select>
 
