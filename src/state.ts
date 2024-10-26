@@ -160,8 +160,10 @@ export class AppState {
   @action
   setListConfigId(id: string) {
     this.listConfigId = id;
-    this.setListFilter(this.listConfig.filter);
-    this.setListSort(this.listConfig.sort);
+    if (this.listConfigId) {
+      this.setListFilter(this.listConfig.filter);
+      this.setListSort(this.listConfig.sort);
+    }
   }
 
   @action

@@ -43,6 +43,9 @@ export class ActivityLogger extends MobxLitElement {
 
   private _restoreState() {
     this.state.setListConfigs(storage.getListConfigs());
+
+    this.state.setListConfigId(storage.getActiveListConfigId());
+
     if (!this.state.listConfigId && this.state.listConfigs.length) {
       this.state.setListConfigId(this.state.listConfigs[0].id);
     }

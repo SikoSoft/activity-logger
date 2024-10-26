@@ -26,6 +26,7 @@ export class Storage {
   static LIST_CONFIGS_KEY = 'listConfigs';
   static LIST_CONTEXT_MODE = 'listContextMode';
   static LIST_CONTEXT = 'listContext';
+  static ACTIVE_LIST_CONFIG_ID = 'activeListConfigId';
 
   private state: AppState;
 
@@ -268,6 +269,30 @@ export class Storage {
     }
 
     return listContext;
+  }
+
+  saveActiveListConfigId(id: string) {
+    localStorage.setItem(Storage.ACTIVE_LIST_CONFIG_ID, id);
+  }
+
+  getActiveListConfigId(): string {
+    let listConfigId: string = '';
+    try {
+      const storedListConfigId = localStorage.getItem(
+        Storage.ACTIVE_LIST_CONFIG_ID,
+      );
+      if (storedListConfigId) {
+        listConfigId = storedListConfigId;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load active list config ID from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return listConfigId;
   }
 }
 

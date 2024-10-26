@@ -85,6 +85,7 @@ export class ListConfig extends MobxLitElement {
   }
 
   setListConfigId(listConfigId: string) {
+    storage.saveActiveListConfigId(listConfigId);
     this.state.setListConfigId(listConfigId);
     this.dispatchEvent(new ListConfigChangedEvent({ listConfigId }));
   }
