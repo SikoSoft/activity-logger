@@ -54,7 +54,7 @@ export class ActionList extends ViewElement {
   private scrollHandler: EventListener = () => this._handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @query('list-filter') listFilter!: ListFilter;
-  //@state() items: ActionItem[] = [];
+
   @state() start: number = 0;
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
@@ -65,10 +65,6 @@ export class ActionList extends ViewElement {
     number,
     boolean
   >();
-
-  @state() get actionContextHash(): string {
-    return JSON.stringify([...this.actionContextIsOpen]); //[...this.actionContextIsOpen].join('');
-  }
 
   get totalShown(): number {
     return this.start + config.perPage;
