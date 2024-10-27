@@ -124,7 +124,6 @@ export class ActionList extends ViewElement {
   }
 
   sync() {
-    console.log('action-list sync');
     this.listFilter.sync();
     this.load();
   }

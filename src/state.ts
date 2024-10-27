@@ -260,7 +260,6 @@ export class AppState {
 
   @action
   setContextListItems(items: Record<number, ActionItem[]>) {
-    console.log(items);
     this.contextListItems = items;
   }
 

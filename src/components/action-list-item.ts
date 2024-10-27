@@ -72,7 +72,6 @@ export class ActionListItem extends LitElement {
   }
 
   private _handleMouseDown(e: Event) {
-    console.log('down');
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -88,7 +87,6 @@ export class ActionListItem extends LitElement {
   }
 
   private _handleMouseUp(e: Event) {
-    console.log('up');
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }

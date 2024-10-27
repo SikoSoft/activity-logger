@@ -39,7 +39,6 @@ export class ListSort extends MobxLitElement {
   private state = appState;
 
   private _handlePropertyChanged(e: SelectChangedEvent<string>) {
-    console.log('handlePropertyChanged', e.detail.value);
     const property = e.detail.value as ListSortProperty;
     const sort = {
       property,
@@ -50,7 +49,6 @@ export class ListSort extends MobxLitElement {
   }
 
   private _handleDirectionChanged(e: SelectChangedEvent<string>) {
-    console.log('handlePropertyChanged', e.detail.value);
     const direction = e.detail.value as ListSortDirection;
     const sort = {
       property: this.state.listSort.property,
