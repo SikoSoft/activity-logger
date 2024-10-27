@@ -112,6 +112,18 @@ export class AppState {
   }
 
   @action
+  public addTagSuggestions(suggestions: string[]) {
+    this.tagSuggestions = [...this.tagSuggestions, ...suggestions];
+  }
+
+  @action
+  public removeTagSuggestions(suggestions: string[]) {
+    this.tagSuggestions = [
+      ...this.tagSuggestions.filter(tag => !suggestions.includes(tag)),
+    ];
+  }
+
+  @action
   public addToast(message: string) {
     const id = uuidv4();
     const startTime = new Date();
@@ -162,10 +174,18 @@ export class AppState {
 
   @action
   setListConfigId(id: string) {
+    if (this.listConfigId) {
+      this.removeTagSuggestions(
+        this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
+      );
+    }
     this.listConfigId = id;
     if (this.listConfigId) {
       this.setListFilter(this.listConfig.filter);
       this.setListSort(this.listConfig.sort);
+      this.addTagSuggestions(
+        this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
+      );
     }
   }
 
