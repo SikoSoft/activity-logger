@@ -78,6 +78,9 @@ export class AppState {
   public editListConfigMode: boolean = false;
 
   @observable
+  public selectListConfigMode: boolean = false;
+
+  @observable
   public selectedActions: number[] = [];
 
   get listConfig(): ListConfig {
@@ -184,6 +187,11 @@ export class AppState {
   @action
   setEditListConfigMode(state: boolean) {
     this.editListConfigMode = state;
+  }
+
+  @action
+  setSelectListConfigMode(state: boolean) {
+    this.selectListConfigMode = state;
   }
 
   @action
