@@ -130,7 +130,7 @@ export class BulkManager extends MobxLitElement {
           : nothing}
 
         <div class="number-selected">
-          ${this.state.selectedActions.length > 1
+          ${this.state.selectedActions.length === 1
             ? msg('1 item selected')
             : msg(
                 str`${this.state.selectedActions.length.toString()} items selected`,
