@@ -18,6 +18,7 @@ export class ActionToasts extends MobxLitElement {
     css`
       .toasts {
         position: fixed;
+        z-index: 5000;
         bottom: 0;
         width: 80%;
         left: 10%;
