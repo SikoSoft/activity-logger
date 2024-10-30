@@ -8,7 +8,7 @@ import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@/components/tag/tag-manager';

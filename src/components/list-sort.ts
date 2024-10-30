@@ -7,10 +7,10 @@ import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { SortUpdatedEvent } from '@/events/sort-updated';
 
-import '@/components/ss-select';
+import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
 

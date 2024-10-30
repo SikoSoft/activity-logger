@@ -9,7 +9,7 @@ import { BulkOperation, OperationType } from 'api-spec/models/Operation';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { OperationPerformedEvent } from '@/events/operation-performed';
 
 import '@ss/ui/components/ss-button';

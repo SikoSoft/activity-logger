@@ -20,8 +20,8 @@ import { TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 
 import { SSInput } from '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
 import '@/components/tag/tag-manager';
-import '@/components/ss-select';
 import '@/components/filter/time-filters';
 import '@/components/filter/text-filters';
 

@@ -1,5 +1,5 @@
 import { css } from 'lit';
-import { html, unsafeStatic } from 'lit/static-html.js';
+import { html } from 'lit/static-html.js';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -8,12 +8,9 @@ import { msg } from '@lit/localize';
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 
-import {
-  ToggleChangedEvent,
-  toggleChangedEventName,
-} from '@/events/toggle-changed';
+import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
 
-import '@/components/ss-toggle';
+import '@ss/ui/components/ss-toggle';
 
 import { theme } from '@/styles/theme';
 
@@ -212,16 +209,14 @@ export class FloatingWidget extends MobxLitElement {
           <div class="option">
             <h4>${msg('Advanced mode')}</h4>
             <ss-toggle
-              @${unsafeStatic(toggleChangedEventName)}=${this
-                ._handleToggleAdvancedChanged}
+              @toggle-changed=${this._handleToggleAdvancedChanged}
               ?on=${this.state.advancedMode}
             ></ss-toggle>
           </div>
           <div class="option">
             <h4>${msg('Debug mode')}</h4>
             <ss-toggle
-              @${unsafeStatic(toggleChangedEventName)}=${this
-                ._handleToggleDebugChanged}
+              @toggle-changed=${this._handleToggleDebugChanged}
               ?on=${this.state.debugMode}
             ></ss-toggle>
           </div>

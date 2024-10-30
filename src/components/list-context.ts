@@ -5,9 +5,9 @@ import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
-import '@/components/ss-select';
+import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
 import {

@@ -21,10 +21,10 @@ import { PointerUpEvent } from '@/events/pointer-up';
 import { ViewElement } from '@/lib/ViewElement';
 
 import '@ss/ui/components/ss-loader';
+import '@ss/ui/components/ss-collapsable';
 import { ActionListItem, ActionListItemMode } from './action-list-item';
 import '@/components/action-list-item';
 import '@/components/filter/list-filter';
-import '@/components/ss-collapsable';
 import '@/components/list-sort';
 import '@/components/list-context';
 import { ListFilter } from '@/components/filter/list-filter';

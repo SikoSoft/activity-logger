@@ -6,14 +6,15 @@ import { msg } from '@lit/localize';
 import { appState } from '@/state';
 
 import '@ss/ui/components/ss-button';
-import '@/components/ss-select';
+import '@ss/ui/components/ss-select';
 
-import { theme } from '@/styles/theme';
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { ListConfigChangedEvent } from '@/events/list-config-changed';
 import { InputType } from '@/models/Input';
-import { InputChangedEvent } from '@/events/input-changed';
 import { storage } from '@/lib/Storage';
+
+import { theme } from '@/styles/theme';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
