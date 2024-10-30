@@ -20,6 +20,7 @@ import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { ViewElement } from '@/lib/ViewElement';
 
+import '@ss/ui/components/ss-loader';
 import { ActionListItem, ActionListItemMode } from './action-list-item';
 import '@/components/action-list-item';
 import '@/components/filter/list-filter';
