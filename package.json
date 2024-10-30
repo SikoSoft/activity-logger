@@ -1,8 +1,8 @@
 {
-  "name": "food-journal",
+  "name": "activity-logger",
   "description": "Activity logger built using web components",
   "license": "MIT",
-  "author": "food-journal",
+  "author": "Aaron Wright",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
