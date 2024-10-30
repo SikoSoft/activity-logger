@@ -10,7 +10,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepare": "husky install",
     "localize-extract": "lit-localize extract",
     "localize-build": "lit-localize build"
   },
