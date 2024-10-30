@@ -3,8 +3,6 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
 
-import '@/components/ss-button';
-
 import { theme } from '@/styles/theme';
 
 @customElement('action-confirm-modal')

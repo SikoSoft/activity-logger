@@ -5,6 +5,7 @@ import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 
+import '@ss/ui/components/ss-button';
 import '@/components/ss-select';
 
 import { theme } from '@/styles/theme';

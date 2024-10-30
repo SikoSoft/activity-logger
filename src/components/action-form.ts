@@ -10,8 +10,8 @@ import { api } from '@/lib/Api';
 
 import { ViewElement } from '@/lib/ViewElement';
 
-import './ss-input';
-import './ss-button';
+import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-input';
 import './action-confirm-modal';
 import './tag/tag-manager';
 
@@ -277,6 +277,7 @@ export class ActionForm extends ViewElement {
             @input-submitted=${this._handleDescSubmitted}
             @input-changed=${this._handleDescChanged}
             value=${this.desc}
+            .suggestions=${this.state.actionSuggestions}
             autoComplete
           ></ss-input>
         </div>

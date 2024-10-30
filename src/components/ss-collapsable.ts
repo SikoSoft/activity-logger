@@ -2,8 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
-import '@/components/ss-input-auto';
-
 import { theme } from '@/styles/theme';
 
 @customElement('ss-collapsable')

@@ -19,9 +19,8 @@ import { SavedListFilter, storage } from '@/lib/Storage';
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 
-import { SSInput } from '@/components/ss-input';
+import { SSInput } from '@ss/ui/components/ss-input';
 import '@/components/tag/tag-manager';
-import '@/components/ss-input';
 import '@/components/ss-select';
 import '@/components/filter/time-filters';
 import '@/components/filter/text-filters';

@@ -2,8 +2,6 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
-import '@/components/ss-input';
-
 import { theme } from '@/styles/theme';
 
 @customElement('tag-list')

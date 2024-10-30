@@ -10,7 +10,7 @@ import { Time } from '@/lib/Time';
 import { TimeFiltersUpdatedEvent } from '@/lib/Event';
 import { SelectChangedEvent } from '@/events/select-changed';
 
-import { SSInput } from '@/components/ss-input';
+import { SSInput } from '@ss/ui/components/ss-input';
 import '@/components/tag/tag-manager';
 
 import { theme } from '@/styles/theme';

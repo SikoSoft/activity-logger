@@ -12,6 +12,7 @@ import { appState } from '@/state';
 import { SelectChangedEvent } from '@/events/select-changed';
 import { OperationPerformedEvent } from '@/events/operation-performed';
 
+import '@ss/ui/components/ss-button';
 import '@/components/tag/tag-manager';
 
 import { theme } from '@/styles/theme';
