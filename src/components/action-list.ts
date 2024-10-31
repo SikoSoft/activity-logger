@@ -86,6 +86,7 @@ export class ActionList extends ViewElement {
   }
 
   connectedCallback(): void {
+    console.log('connectedCallback');
     super.connectedCallback();
     this.load();
 
@@ -132,6 +133,7 @@ export class ActionList extends ViewElement {
   }
 
   async load(more: boolean = false): Promise<void> {
+    console.log('load', more);
     this.loading = true;
     if (more) {
       this.start += config.perPage;
@@ -170,7 +172,10 @@ export class ActionList extends ViewElement {
           );
         }
         if (json.context) {
-          this.state.setContextListItems(json.context);
+          this.state.setContextListItems({
+            ...this.state.contextListItems,
+            ...json.context,
+          });
           this.actionContextIsOpen = new Map<number, boolean>();
           Object.keys(json.context).forEach(key => {
             this.actionContextIsOpen.set(parseInt(key), false);
