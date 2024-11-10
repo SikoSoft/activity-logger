@@ -172,7 +172,7 @@ export class Storage {
     return hashHex;
   }
 
-  getListConfigs(): ListConfig[] {
+  async getListConfigs(): Promise<ListConfig[]> {
     let listConfigs: ListConfig[] = [];
     try {
       const storedListConfigs = localStorage.getItem(Storage.LIST_CONFIGS_KEY);
@@ -185,13 +185,15 @@ export class Storage {
           error,
         )}`,
       );
+      //return Promise.reject();
     }
 
-    return listConfigs;
+    return Promise.resolve(listConfigs);
+    //return listConfigs;
   }
 
-  saveListConfig(listConfig: ListConfig): void {
-    const listConfigs = this.getListConfigs();
+  async saveListConfig(listConfig: ListConfig): Promise<void> {
+    const listConfigs = await this.getListConfigs();
 
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,
@@ -203,7 +205,7 @@ export class Storage {
     );
   }
 
-  addListConfig(): string {
+  async addListConfig(): Promise<string> {
     const id = uuidv4();
     const listConfig = {
       id,
@@ -211,7 +213,7 @@ export class Storage {
       filter: defaultListFilter,
       sort: defaultListSort,
     };
-    const listConfigs = this.getListConfigs();
+    const listConfigs = await this.getListConfigs();
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,
       JSON.stringify([...listConfigs, listConfig]),
@@ -219,8 +221,8 @@ export class Storage {
     return id;
   }
 
-  deleteListConfig(id: string) {
-    const listConfigs = this.getListConfigs();
+  async deleteListConfig(id: string) {
+    const listConfigs = await this.getListConfigs();
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,
       JSON.stringify(listConfigs.filter(config => id !== config.id)),
