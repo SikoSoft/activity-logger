@@ -57,6 +57,7 @@ export class TagInput extends MobxLitElement {
     );
 
     if (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) {
+      console.log('bail early');
       this.state.setActionSuggestions([]);
       return;
     }
