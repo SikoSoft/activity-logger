@@ -27,6 +27,7 @@ export class Storage {
   static LIST_CONTEXT_MODE = 'listContextMode';
   static LIST_CONTEXT = 'listContext';
   static ACTIVE_LIST_CONFIG_ID = 'activeListConfigId';
+  static AUTH_TOKEN_KEY = 'authToken';
 
   private state: AppState;
 
@@ -299,6 +300,29 @@ export class Storage {
     }
 
     return listConfigId;
+  }
+
+  setAuthToken(authToken: string): void {
+    console.log('setAuthToken', authToken);
+    localStorage.setItem(Storage.AUTH_TOKEN_KEY, authToken);
+  }
+
+  getAuthToken(): string {
+    let authToken = '';
+    try {
+      const storedAuthToken = localStorage.getItem(Storage.AUTH_TOKEN_KEY);
+      if (storedAuthToken) {
+        authToken = storedAuthToken;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to get authToken: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return authToken;
   }
 }
 

@@ -1,4 +1,5 @@
-import { config, Config } from '../models/Config';
+import { config } from '../models/Config';
+import { storage } from './Storage';
 
 export type ApiResponse<T> = T | null;
 
@@ -8,18 +9,25 @@ export interface RequestConfig {
   body: BodyInit;
 }
 
+export interface ApiConfig {
+  authToken: string;
+  baseUrl: string;
+}
+
 export class Api {
-  constructor(private config: Config) {}
+  constructor(private config: ApiConfig) {}
 
   async httpRequest<ResponseType>(
     path: string,
-    config: RequestInit
+    config: RequestInit,
   ): Promise<ApiResponse<ResponseType>> {
     let json: unknown;
 
     const headers = new Headers(config.headers);
 
-    const url = new URL(path, this.config.apiUrl);
+    headers.append('authorization', this.config.authToken);
+
+    const url = new URL(path, this.config.baseUrl);
     const request = new Request(url, { ...config, headers });
 
     try {
@@ -39,7 +47,7 @@ export class Api {
 
   async get<ResponseType>(
     path: string,
-    config?: RequestInit
+    config?: RequestInit,
   ): Promise<ApiResponse<ResponseType>> {
     return await this.httpRequest<ResponseType>(path, {
       method: 'get',
@@ -50,7 +58,7 @@ export class Api {
   async post<RequestType, ResponseType>(
     path: string,
     body: RequestType,
-    config?: RequestInit
+    config?: RequestInit,
   ) {
     return await this.httpRequest<ResponseType>(path, {
       method: 'post',
@@ -68,4 +76,7 @@ export class Api {
   }
 }
 
-export const api = new Api(config);
+export const api = new Api({
+  authToken: storage.getAuthToken(),
+  baseUrl: config.apiUrl,
+});
