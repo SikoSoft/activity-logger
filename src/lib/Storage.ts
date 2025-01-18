@@ -193,6 +193,7 @@ export class Storage {
   }
 
   async saveListConfig(listConfig: ListConfig): Promise<void> {
+    console.log('saveListConfig', listConfig);
     const listConfigs = await this.getListConfigs();
 
     localStorage.setItem(
@@ -221,12 +222,14 @@ export class Storage {
     return id;
   }
 
-  async deleteListConfig(id: string) {
+  async deleteListConfig(id: string): Promise<boolean> {
     const listConfigs = await this.getListConfigs();
     localStorage.setItem(
       Storage.LIST_CONFIGS_KEY,
       JSON.stringify(listConfigs.filter(config => id !== config.id)),
     );
+
+    return Promise.resolve(true);
   }
 
   saveListContextMode(mode: boolean) {
@@ -274,6 +277,7 @@ export class Storage {
   }
 
   saveActiveListConfigId(id: string) {
+    console.log('saveActiveListConfigId', id);
     localStorage.setItem(Storage.ACTIVE_LIST_CONFIG_ID, id);
   }
 

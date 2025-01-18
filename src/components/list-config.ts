@@ -103,6 +103,7 @@ export class ListConfig extends MobxLitElement {
   }
 
   sync() {
+    console.log('sync', this.state.listConfigId);
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
   }

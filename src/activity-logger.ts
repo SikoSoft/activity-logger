@@ -1,9 +1,10 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ActionView, defaultActionView } from '@/models/Action';
 import { storage } from '@/lib/Storage';
+//import { networkStorage as storage } from '@/lib/NetworkStorage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 
@@ -29,6 +30,7 @@ export class ActivityLogger extends MobxLitElement {
   static styles = [theme];
 
   @state() view: ActionView = defaultActionView;
+  @state() ready: boolean = false;
   @query('main > *') viewComponent!: ViewElement;
 
   connectedCallback(): void {
@@ -65,6 +67,8 @@ export class ActivityLogger extends MobxLitElement {
     if (view) {
       this.view = view;
     }
+
+    this.ready = true;
   }
 
   private _handleViewChanged(e: Event) {
@@ -91,9 +95,11 @@ export class ActivityLogger extends MobxLitElement {
 
   render() {
     return html`
-      <list-config
-        @list-config-changed=${this._handleListConfigChanged}
-      ></list-config>
+      ${this.ready
+        ? html` <list-config
+            @list-config-changed=${this._handleListConfigChanged}
+          ></list-config>`
+        : nothing}
       <action-nav active=${this.view}></action-nav>
       <bulk-manager
         @operation-performed=${this._handleOperationPerformed}
