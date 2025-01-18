@@ -68,9 +68,9 @@ export class TagInput extends MobxLitElement {
     let tags: string[] = [];
 
     if (this.value.length >= this.minInput) {
-      const json = await api.get<{ tags: string[] }>(`tag/${this.value}`);
-      if (json) {
-        tags = json.tags;
+      const result = await api.get<{ tags: string[] }>(`tag/${this.value}`);
+      if (result) {
+        tags = result.response.tags;
       }
     }
 

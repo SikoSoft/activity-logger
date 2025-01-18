@@ -1,7 +1,13 @@
+import { appState } from '@/state';
 import { config } from '../models/Config';
 import { storage } from './Storage';
 
-export type ApiResponse<T> = T | null;
+export interface ApiResponse<ResponseBodyType> {
+  status: number;
+  response: ResponseBodyType;
+}
+
+export type ApiResult<ResponseBodyType> = ApiResponse<ResponseBodyType> | null;
 
 export interface RequestConfig {
   method: string | undefined;
@@ -12,6 +18,7 @@ export interface RequestConfig {
 export interface ApiConfig {
   authToken: string;
   baseUrl: string;
+  errorHandler: () => void;
 }
 
 export class Api {
@@ -20,7 +27,7 @@ export class Api {
   async httpRequest<ResponseType>(
     path: string,
     config: RequestInit,
-  ): Promise<ApiResponse<ResponseType>> {
+  ): Promise<ApiResult<ResponseType>> {
     let json: unknown;
 
     const headers = new Headers(config.headers);
@@ -37,7 +44,14 @@ export class Api {
         json = await response.json();
       }
 
-      return json as ResponseType;
+      if (response.status === 403) {
+        this.config.errorHandler();
+      }
+
+      return {
+        status: response.status,
+        response: json as ResponseType,
+      };
     } catch (error) {
       console.error(`Api encountered an error performing request: ${error}`);
     }
@@ -48,7 +62,7 @@ export class Api {
   async get<ResponseType>(
     path: string,
     config?: RequestInit,
-  ): Promise<ApiResponse<ResponseType>> {
+  ): Promise<ApiResult<ResponseType>> {
     return await this.httpRequest<ResponseType>(path, {
       method: 'get',
       ...config,
@@ -59,7 +73,7 @@ export class Api {
     path: string,
     body: RequestType,
     config?: RequestInit,
-  ) {
+  ): Promise<ApiResult<ResponseType>> {
     return await this.httpRequest<ResponseType>(path, {
       method: 'post',
       headers: { 'content-type': 'application/json' },
@@ -68,7 +82,10 @@ export class Api {
     });
   }
 
-  async delete<ResponseType>(path: string, config?: RequestInit) {
+  async delete<ResponseType>(
+    path: string,
+    config?: RequestInit,
+  ): Promise<ApiResult<ResponseType>> {
     return await this.httpRequest<ResponseType>(path, {
       method: 'delete',
       ...config,
@@ -79,4 +96,7 @@ export class Api {
 export const api = new Api({
   authToken: storage.getAuthToken(),
   baseUrl: config.apiUrl,
+  errorHandler: () => {
+    appState.setForbidden(true);
+  },
 });

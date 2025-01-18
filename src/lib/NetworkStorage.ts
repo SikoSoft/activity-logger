@@ -19,10 +19,10 @@ export class NetworkStorage extends Storage {
     console.log('NetworkStorage: getListConfigs');
     const result = await api.get<{ listConfigs: ListConfig[] }>('listConfig');
 
-    if (result?.listConfigs) {
-      console.log({ listConfigs: result.listConfigs });
+    if (result) {
+      console.log({ listConfigs: result.response.listConfigs });
 
-      return Promise.resolve(result.listConfigs);
+      return Promise.resolve(result.response.listConfigs);
     }
 
     return Promise.reject();

@@ -188,13 +188,13 @@ export class ActionForm extends ViewElement {
 
     try {
       this.lastInputHadResults = false;
-      const json = await api.get<{ suggestions: string[] }>(
+      const result = await api.get<{ suggestions: string[] }>(
         `actionSuggestion/${this.desc}`,
       );
 
       let suggestions: string[] = [];
-      if (json) {
-        suggestions = json.suggestions;
+      if (result) {
+        suggestions = result.response.suggestions;
       }
 
       if (suggestions.length) {
@@ -217,13 +217,13 @@ export class ActionForm extends ViewElement {
     }
 
     try {
-      const json = await api.get<{ suggestions: string[] }>(
+      const result = await api.get<{ suggestions: string[] }>(
         `tagSuggestion/${this.desc}`,
       );
 
       let suggestions: string[] = [];
-      if (json) {
-        suggestions = json.suggestions;
+      if (result) {
+        suggestions = result.response.suggestions;
       }
 
       this.state.setTagSuggestions(

@@ -15,6 +15,7 @@ import '@/components/action-form';
 import '@/components/action-list';
 import '@/components/action-toasts';
 import '@/components/floating-widget';
+import '@/components/forbidden-notice';
 import '@/components/bulk-manager';
 import '@/components/list-config';
 
@@ -94,6 +95,10 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   render() {
+    if (this.state.forbidden) {
+      return html` <forbidden-notice></forbidden-notice> `;
+    }
+
     return html`
       ${this.ready
         ? html` <list-config

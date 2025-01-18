@@ -83,6 +83,9 @@ export class AppState {
   @observable
   public selectedActions: number[] = [];
 
+  @observable
+  public forbidden: boolean = false;
+
   get listConfig(): ListConfig {
     console.log('getting listConfig from getter', this.listConfigId);
     return this.listConfigs.filter(
@@ -287,6 +290,11 @@ export class AppState {
   @action
   setListContext(context: ListContext) {
     this.listContext = context;
+  }
+
+  @action
+  setForbidden(mode: boolean) {
+    this.forbidden = mode;
   }
 
   constructor() {

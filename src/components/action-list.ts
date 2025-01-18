@@ -158,31 +158,32 @@ export class ActionList extends ViewElement {
         : ''
     }`;
     try {
-      const json = await api.get<{
+      const result = await api.get<{
         actions: ActionItem[];
         total: number;
         context: Record<number, ActionItem[]>;
       }>(url);
-      if (json) {
-        if (json.actions) {
+      if (result) {
+        if (result.response.actions) {
           this.state.setListItems(
             more
-              ? [...this.state.listItems, ...json.actions]
-              : [...json.actions],
+              ? [...this.state.listItems, ...result.response.actions]
+              : [...result.response.actions],
           );
         }
-        if (json.context) {
+        if (result.response.context) {
           this.state.setContextListItems({
             ...this.state.contextListItems,
-            ...json.context,
+            ...result.response.context,
           });
           this.actionContextIsOpen = new Map<number, boolean>();
-          Object.keys(json.context).forEach(key => {
+          Object.keys(result.response.context).forEach(key => {
             this.actionContextIsOpen.set(parseInt(key), false);
           });
         }
-        if (json.total) {
-          this.reachedEnd = json.total <= this.totalShown ? true : false;
+        if (result.response.total) {
+          this.reachedEnd =
+            result.response.total <= this.totalShown ? true : false;
         }
       }
     } catch (error) {
