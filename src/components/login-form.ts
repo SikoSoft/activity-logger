@@ -59,6 +59,8 @@ export class LoginForm extends MobxLitElement {
 
     if (result) {
       storage.setAuthToken(result.response.authToken);
+      api.setAuthToken(result.response.authToken);
+      this.state.setForbidden(false);
     }
   }
 

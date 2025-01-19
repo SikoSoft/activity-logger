@@ -22,7 +22,10 @@ export interface ApiConfig {
 }
 
 export class Api {
-  constructor(private config: ApiConfig) {}
+  private authToken: string;
+  constructor(private config: ApiConfig) {
+    this.authToken = config.authToken;
+  }
 
   async httpRequest<ResponseType>(
     path: string,
@@ -32,7 +35,7 @@ export class Api {
 
     const headers = new Headers(config.headers);
 
-    headers.append('authorization', this.config.authToken);
+    headers.append('authorization', this.authToken);
 
     const url = new URL(path, this.config.baseUrl);
     const request = new Request(url, { ...config, headers });
@@ -90,6 +93,10 @@ export class Api {
       method: 'delete',
       ...config,
     });
+  }
+
+  setAuthToken(authToken: string): void {
+    this.authToken = authToken;
   }
 }
 
