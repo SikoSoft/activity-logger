@@ -39,6 +39,7 @@ export class UserPane extends MobxLitElement {
     if (result) {
       storage.setAuthToken('');
       api.setAuthToken('');
+      this.state.setAuthToken('');
       this.state.setForbidden(true);
       this.state.addToast(msg('You are now logged out.'));
     }

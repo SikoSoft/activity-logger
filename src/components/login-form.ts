@@ -60,6 +60,7 @@ export class LoginForm extends MobxLitElement {
     if (result && result.status !== 401) {
       storage.setAuthToken(result.response.authToken);
       api.setAuthToken(result.response.authToken);
+      this.state.setAuthToken(result.response.authToken);
       this.state.setForbidden(false);
       this.state.addToast(msg('You are now logged in.'));
       return;

@@ -86,6 +86,9 @@ export class AppState {
   @observable
   public forbidden: boolean = false;
 
+  @observable
+  public authToken: string = '';
+
   get listConfig(): ListConfig {
     console.log('getting listConfig from getter', this.listConfigId);
     return this.listConfigs.filter(
@@ -295,6 +298,11 @@ export class AppState {
   @action
   setForbidden(mode: boolean) {
     this.forbidden = mode;
+  }
+
+  @action
+  setAuthToken(authToken: string) {
+    this.authToken = authToken;
   }
 
   constructor() {

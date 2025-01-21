@@ -63,6 +63,7 @@ export class ActivityLogger extends MobxLitElement {
 
     this.state.setAdvancedMode(storage.getAdvancedMode());
     this.state.setDebugMode(storage.getDebugMode());
+    this.state.setAuthToken(storage.getAuthToken());
 
     const view = storage.getSavedView();
     if (view) {
@@ -95,7 +96,7 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   renderContent() {
-    if (this.state.forbidden) {
+    if (this.state.forbidden || !this.state.authToken) {
       return html` <forbidden-notice></forbidden-notice> `;
     }
 
