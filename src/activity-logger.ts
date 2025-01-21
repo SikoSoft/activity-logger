@@ -94,7 +94,7 @@ export class ActivityLogger extends MobxLitElement {
     return html`<action-list></action-list>`;
   }
 
-  render() {
+  renderContent() {
     if (this.state.forbidden) {
       return html` <forbidden-notice></forbidden-notice> `;
     }
@@ -110,8 +110,14 @@ export class ActivityLogger extends MobxLitElement {
         @operation-performed=${this._handleOperationPerformed}
       ></bulk-manager>
       <main>${this._activeView()}</main>
-      <action-toasts></action-toasts>
       <floating-widget></floating-widget>
+    `;
+  }
+
+  render() {
+    return html`
+      ${this.renderContent()}
+      <action-toasts></action-toasts>
     `;
   }
 }

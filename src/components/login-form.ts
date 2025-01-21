@@ -57,11 +57,15 @@ export class LoginForm extends MobxLitElement {
       { username: this.username, password: this.password },
     );
 
-    if (result) {
+    if (result && result.status !== 401) {
       storage.setAuthToken(result.response.authToken);
       api.setAuthToken(result.response.authToken);
       this.state.setForbidden(false);
+      this.state.addToast(msg('You are now logged in.'));
+      return;
     }
+
+    this.state.addToast(msg('Incorrect username and password combination.'));
   }
 
   render() {
@@ -69,18 +73,20 @@ export class LoginForm extends MobxLitElement {
       <form>
         <ss-input
           id="username"
+          placeholder=${msg('Username')}
           @input-submitted=${this._handleUsernameSubmitted}
           @input-changed=${this._handleUsernameChanged}
           value=${this.username}
         ></ss-input>
         <ss-input
           id="password"
+          placeholder=${msg('Password')}
           type="password"
           @input-submitted=${this._handlePasswordSubmitted}
           @input-changed=${this._handlePasswordChanged}
           value=${this.password}
         ></ss-input>
-        <ss-button @click=${this._login} text=${msg('login')}></ss-button>
+        <ss-button @click=${this._login} text=${msg('Login')}></ss-button>
       </form>
     `;
   }

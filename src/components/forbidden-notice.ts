@@ -8,12 +8,31 @@ import { theme } from '@/styles/theme';
 
 @customElement('forbidden-notice')
 export class ForbiddenNotice extends LitElement {
+  static styles = [
+    theme,
+    css`
+      .forbidden {
+        text-align: center;
+
+        .message {
+          padding: 1rem;
+        }
+
+        .login-form {
+          padding: 1rem;
+        }
+      }
+    `,
+  ];
+
   render() {
     return html`
-      <div>
-        ${msg('forbidden')}
+      <div class="box forbidden">
+        <div class="message">${msg('You need to login to view this.')}</div>
 
-        <login-form></login-form>
+        <div class="login-form">
+          <login-form></login-form>
+        </div>
       </div>
     `;
   }
