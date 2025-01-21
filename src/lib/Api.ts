@@ -43,7 +43,7 @@ export class Api {
     try {
       const response = await fetch(request);
 
-      if (response.ok) {
+      if (response.ok && response.status !== 202) {
         json = await response.json();
       }
 

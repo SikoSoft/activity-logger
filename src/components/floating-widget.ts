@@ -11,6 +11,7 @@ import { storage } from '@/lib/Storage';
 import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
 
 import '@ss/ui/components/ss-toggle';
+import '@/components/user-pane';
 
 import { theme } from '@/styles/theme';
 
@@ -30,16 +31,18 @@ export class FloatingWidget extends MobxLitElement {
       .widget {
         position: fixed;
         z-index: 1000;
-        bottom: -10rem;
+        bottom: 0;
         left: 5%;
         width: 90%;
         opacity: 0.6;
         transition: all 0.2s;
+        transform: translateY(88%);
 
         @media (hover: hover) {
           &:hover {
             opacity: 0.9;
-            bottom: -4rem;
+            transform: translateY(86%);
+            //bottom: -4rem;
 
             .head {
               .handle {
@@ -53,6 +56,7 @@ export class FloatingWidget extends MobxLitElement {
         &.open {
           opacity: 1;
           bottom: 0;
+          transform: translateY(0%);
 
           .head {
             cursor: s-resize;
@@ -132,6 +136,10 @@ export class FloatingWidget extends MobxLitElement {
         box-sizing: border-box;
         margin-top: -2px;
 
+        .user {
+          padding: 1rem;
+        }
+
         .option {
           display: flex;
           padding: 1rem;
@@ -206,6 +214,9 @@ export class FloatingWidget extends MobxLitElement {
           <div class="right"></div>
         </div>
         <div class="body" @mouseenter=${this._handleOpen}>
+          <div class="user">
+            <user-pane></user-pane>
+          </div>
           <div class="option">
             <h4>${msg('Advanced mode')}</h4>
             <ss-toggle
