@@ -4,12 +4,12 @@ import { msg } from '@lit/localize';
 
 import { TextType } from 'api-spec/models/List';
 
-import { SelectChangedEvent } from '@/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { theme } from '@/styles/theme';
 
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
-import { InputChangedEvent } from '@/events/input-changed';
-import { InputSubmittedEvent } from '@/events/input-submitted';
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
 import '@/components/tag/tag-manager';
