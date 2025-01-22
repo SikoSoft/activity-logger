@@ -97,11 +97,12 @@ export class ActionForm extends ViewElement {
     return (
       this.desc.trim() !== this.initialDesc ||
       this.occurredAt !== this.initialOccurredAt ||
-      JSON.stringify(this.tags) !== this.initialTags
+      JSON.stringify(this.tagsAndSuggestions) !== this.initialTags
     );
   }
 
   private async _saveAction() {
+    console.log('saveAction', this.tags, this.tagsAndSuggestions);
     this.loading = true;
     const desc = this.desc.trim();
 
@@ -115,7 +116,7 @@ export class ActionForm extends ViewElement {
           desc,
           occurredAt,
           timeZone,
-          tags: this.tags,
+          tags: this.tagsAndSuggestions,
         });
 
         this.reset();
@@ -181,6 +182,7 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestActionSuggestions(): Promise<void> {
+    console.log('requestActionSuggestions');
     if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
       this.state.setActionSuggestions([]);
       return;
@@ -211,6 +213,7 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestTagSuggestions(): Promise<void> {
+    console.log('requestTagSuggestions');
     if (this.desc.length === 0) {
       this.state.setTagSuggestions([]);
       return;
