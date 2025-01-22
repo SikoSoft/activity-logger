@@ -33,6 +33,7 @@ export class LoginForm extends MobxLitElement {
 
   @state() username: string = '';
   @state() password: string = '';
+  @state() loading: boolean = false;
 
   private _handleUsernameChanged(e: InputChangedEvent): void {
     this.username = e.detail.value;
@@ -51,6 +52,7 @@ export class LoginForm extends MobxLitElement {
   }
 
   private async _login(): Promise<void> {
+    this.loading = true;
     const result = await api.post<LoginRequestBody, LoginResponseBody>(
       'login',
       { username: this.username, password: this.password },
@@ -66,6 +68,7 @@ export class LoginForm extends MobxLitElement {
     }
 
     this.state.addToast(msg('Incorrect username and password combination.'));
+    this.loading = false;
   }
 
   render() {
@@ -86,7 +89,11 @@ export class LoginForm extends MobxLitElement {
           @input-changed=${this._handlePasswordChanged}
           value=${this.password}
         ></ss-input>
-        <ss-button @click=${this._login} text=${msg('Login')}></ss-button>
+        <ss-button
+          @click=${this._login}
+          text=${msg('Login')}
+          ?loading=${this.loading}
+        ></ss-button>
       </form>
     `;
   }
