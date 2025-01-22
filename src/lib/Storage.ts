@@ -194,7 +194,6 @@ export class Storage {
   }
 
   async saveListConfig(listConfig: ListConfig): Promise<void> {
-    console.log('saveListConfig', listConfig);
     const listConfigs = await this.getListConfigs();
 
     localStorage.setItem(
@@ -278,7 +277,6 @@ export class Storage {
   }
 
   saveActiveListConfigId(id: string) {
-    console.log('saveActiveListConfigId', id);
     localStorage.setItem(Storage.ACTIVE_LIST_CONFIG_ID, id);
   }
 
@@ -303,7 +301,6 @@ export class Storage {
   }
 
   setAuthToken(authToken: string): void {
-    console.log('setAuthToken', authToken);
     localStorage.setItem(Storage.AUTH_TOKEN_KEY, authToken);
   }
 

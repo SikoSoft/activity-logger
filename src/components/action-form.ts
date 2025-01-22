@@ -28,6 +28,7 @@ export interface PostRequestBody {
 @customElement('action-form')
 export class ActionForm extends ViewElement {
   private state = appState;
+  private minLengthForSuggestion = 1;
 
   static styles = [
     theme,
@@ -102,7 +103,6 @@ export class ActionForm extends ViewElement {
   }
 
   private async _saveAction() {
-    console.log('saveAction', this.tags, this.tagsAndSuggestions);
     this.loading = true;
     const desc = this.desc.trim();
 
@@ -182,7 +182,6 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestActionSuggestions(): Promise<void> {
-    console.log('requestActionSuggestions');
     if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
       this.state.setActionSuggestions([]);
       return;
@@ -190,16 +189,18 @@ export class ActionForm extends ViewElement {
 
     try {
       this.lastInputHadResults = false;
-      const result = await api.get<{ suggestions: string[] }>(
-        `actionSuggestion/${this.desc}`,
-      );
-
       let suggestions: string[] = [];
-      if (result) {
-        suggestions = result.response.suggestions;
+
+      if (this.desc.length >= this.minLengthForSuggestion) {
+        const result = await api.get<{ suggestions: string[] }>(
+          `actionSuggestion/${this.desc}`,
+        );
+        if (result) {
+          suggestions = result.response.suggestions;
+        }
       }
 
-      if (suggestions.length) {
+      if (suggestions.length || this.desc === '') {
         this.lastInputHadResults = true;
       }
       this.state.setActionSuggestions(suggestions);
@@ -213,7 +214,6 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestTagSuggestions(): Promise<void> {
-    console.log('requestTagSuggestions');
     if (this.desc.length === 0) {
       this.state.setTagSuggestions([]);
       return;

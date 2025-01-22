@@ -51,7 +51,6 @@ export class LoginForm extends MobxLitElement {
   }
 
   private async _login(): Promise<void> {
-    console.log('_login');
     const result = await api.post<LoginRequestBody, LoginResponseBody>(
       'login',
       { username: this.username, password: this.password },
