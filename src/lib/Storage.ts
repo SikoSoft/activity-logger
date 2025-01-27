@@ -12,6 +12,7 @@ import {
   defaultListSort,
 } from '@/state';
 import { ActionView, defaultActionView } from '@/models/Action';
+import { StorageItemKey, StorageSchema } from '@/models/Storage';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -43,24 +44,7 @@ function delegateSource() {
   };
 }
 
-export interface StorageSchema {
-  setAuthToken?(authToken: string): void;
-  getAuthToken?(): string;
-  getListConfigs?(): Promise<ListConfig[]>;
-}
-
 export class Storage implements StorageSchema {
-  static ACTIVE_LIST_FILTER_KEY = 'listFilter';
-  static LIST_FILTERS_KEY = 'listFilters';
-  static VIEW_KEY = 'view';
-  static ADVANCED_MODE_KEY = 'advancedMode';
-  static DEBUG_MODE_KEY = 'debugMode';
-  static LIST_CONFIGS_KEY = 'listConfigs';
-  static LIST_CONTEXT_MODE = 'listContextMode';
-  static LIST_CONTEXT = 'listContext';
-  static ACTIVE_LIST_CONFIG_ID = 'activeListConfigId';
-  static AUTH_TOKEN_KEY = 'authToken';
-
   private state: AppState;
 
   constructor(appState: AppState) {
@@ -71,7 +55,7 @@ export class Storage implements StorageSchema {
     const savedFilters = this.getSavedFilters();
     const id = await this.digestMessage(JSON.stringify(filter));
     localStorage.setItem(
-      Storage.LIST_FILTERS_KEY,
+      StorageItemKey.LIST_FILTERS_KEY,
       JSON.stringify([
         ...savedFilters.filter(filter => filter.id !== id),
         { filter, id, name },
@@ -82,7 +66,9 @@ export class Storage implements StorageSchema {
   getSavedFilters(): SavedListFilter[] {
     let filters: SavedListFilter[] = [];
     try {
-      const storedFilters = localStorage.getItem(Storage.LIST_FILTERS_KEY);
+      const storedFilters = localStorage.getItem(
+        StorageItemKey.LIST_FILTERS_KEY,
+      );
       if (storedFilters) {
         filters = JSON.parse(storedFilters) as SavedListFilter[];
       }
@@ -100,21 +86,23 @@ export class Storage implements StorageSchema {
   deleteSavedFilter(id: string): void {
     const savedFilters = this.getSavedFilters();
     localStorage.setItem(
-      Storage.LIST_FILTERS_KEY,
+      StorageItemKey.LIST_FILTERS_KEY,
       JSON.stringify([...savedFilters.filter(filter => filter.id !== id)]),
     );
   }
 
   saveActiveFilter(filter: ListFilter) {
     localStorage.setItem(
-      Storage.ACTIVE_LIST_FILTER_KEY,
+      StorageItemKey.ACTIVE_LIST_FILTER_KEY,
       JSON.stringify(filter),
     );
   }
 
   loadActiveFilter() {
     try {
-      const storedFilter = localStorage.getItem(Storage.ACTIVE_LIST_FILTER_KEY);
+      const storedFilter = localStorage.getItem(
+        StorageItemKey.ACTIVE_LIST_FILTER_KEY,
+      );
       if (storedFilter) {
         const filter = JSON.parse(storedFilter) as ListFilter;
         this.state.setListFilter(filter);
@@ -129,13 +117,13 @@ export class Storage implements StorageSchema {
   }
 
   saveView(view: ActionView) {
-    localStorage.setItem(Storage.VIEW_KEY, view);
+    localStorage.setItem(StorageItemKey.VIEW_KEY, view);
   }
 
   getSavedView(): ActionView {
     let view: ActionView = defaultActionView;
     try {
-      const storedView = localStorage.getItem(Storage.VIEW_KEY);
+      const storedView = localStorage.getItem(StorageItemKey.VIEW_KEY);
       if (storedView) {
         view = storedView as ActionView;
       }
@@ -151,18 +139,18 @@ export class Storage implements StorageSchema {
   }
 
   saveAdvancedMode(state: boolean) {
-    localStorage.setItem(Storage.ADVANCED_MODE_KEY, state ? '1' : '0');
+    localStorage.setItem(StorageItemKey.ADVANCED_MODE_KEY, state ? '1' : '0');
   }
 
   saveDebugMode(state: boolean) {
-    localStorage.setItem(Storage.DEBUG_MODE_KEY, state ? '1' : '0');
+    localStorage.setItem(StorageItemKey.DEBUG_MODE_KEY, state ? '1' : '0');
   }
 
   getAdvancedMode(): boolean {
     let advancedMode = false;
     try {
       const storedAdvancedMode = localStorage.getItem(
-        Storage.ADVANCED_MODE_KEY,
+        StorageItemKey.ADVANCED_MODE_KEY,
       );
       if (storedAdvancedMode) {
         advancedMode = storedAdvancedMode === '1';
@@ -180,7 +168,9 @@ export class Storage implements StorageSchema {
   getDebugMode(): boolean {
     let debugMode = false;
     try {
-      const storedDebugMode = localStorage.getItem(Storage.DEBUG_MODE_KEY);
+      const storedDebugMode = localStorage.getItem(
+        StorageItemKey.DEBUG_MODE_KEY,
+      );
       if (storedDebugMode) {
         debugMode = storedDebugMode === '1';
       }
@@ -208,7 +198,9 @@ export class Storage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
     let listConfigs: ListConfig[] = [];
     try {
-      const storedListConfigs = localStorage.getItem(Storage.LIST_CONFIGS_KEY);
+      const storedListConfigs = localStorage.getItem(
+        StorageItemKey.LIST_CONFIGS_KEY,
+      );
       if (storedListConfigs) {
         listConfigs = JSON.parse(storedListConfigs) as ListConfig[];
       }
@@ -229,7 +221,7 @@ export class Storage implements StorageSchema {
     const listConfigs = await this.getListConfigs();
 
     localStorage.setItem(
-      Storage.LIST_CONFIGS_KEY,
+      StorageItemKey.LIST_CONFIGS_KEY,
       JSON.stringify(
         listConfigs.map(config =>
           listConfig.id === config.id ? listConfig : config,
@@ -248,7 +240,7 @@ export class Storage implements StorageSchema {
     };
     const listConfigs = await this.getListConfigs();
     localStorage.setItem(
-      Storage.LIST_CONFIGS_KEY,
+      StorageItemKey.LIST_CONFIGS_KEY,
       JSON.stringify([...listConfigs, listConfig]),
     );
     return id;
@@ -257,7 +249,7 @@ export class Storage implements StorageSchema {
   async deleteListConfig(id: string): Promise<boolean> {
     const listConfigs = await this.getListConfigs();
     localStorage.setItem(
-      Storage.LIST_CONFIGS_KEY,
+      StorageItemKey.LIST_CONFIGS_KEY,
       JSON.stringify(listConfigs.filter(config => id !== config.id)),
     );
 
@@ -265,13 +257,13 @@ export class Storage implements StorageSchema {
   }
 
   saveListContextMode(mode: boolean) {
-    localStorage.setItem(Storage.LIST_CONTEXT_MODE, mode ? '1' : '0');
+    localStorage.setItem(StorageItemKey.LIST_CONTEXT_MODE, mode ? '1' : '0');
   }
 
   getListContextMode(): boolean {
     let mode = false;
     try {
-      const storedMode = localStorage.getItem(Storage.LIST_CONTEXT_MODE);
+      const storedMode = localStorage.getItem(StorageItemKey.LIST_CONTEXT_MODE);
       if (storedMode) {
         mode = storedMode === '1' ? true : false;
       }
@@ -287,13 +279,18 @@ export class Storage implements StorageSchema {
   }
 
   saveListContext(listContext: ListContext) {
-    localStorage.setItem(Storage.LIST_CONTEXT, JSON.stringify(listContext));
+    localStorage.setItem(
+      StorageItemKey.LIST_CONTEXT,
+      JSON.stringify(listContext),
+    );
   }
 
   getListContext() {
     let listContext: ListContext = defaultListContext;
     try {
-      const storedListContext = localStorage.getItem(Storage.LIST_CONTEXT);
+      const storedListContext = localStorage.getItem(
+        StorageItemKey.LIST_CONTEXT,
+      );
       if (storedListContext) {
         listContext = JSON.parse(storedListContext);
       }
@@ -309,14 +306,14 @@ export class Storage implements StorageSchema {
   }
 
   saveActiveListConfigId(id: string) {
-    localStorage.setItem(Storage.ACTIVE_LIST_CONFIG_ID, id);
+    localStorage.setItem(StorageItemKey.ACTIVE_LIST_CONFIG_ID, id);
   }
 
   getActiveListConfigId(): string {
     let listConfigId: string = '';
     try {
       const storedListConfigId = localStorage.getItem(
-        Storage.ACTIVE_LIST_CONFIG_ID,
+        StorageItemKey.ACTIVE_LIST_CONFIG_ID,
       );
       if (storedListConfigId) {
         listConfigId = storedListConfigId;

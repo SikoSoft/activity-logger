@@ -1,19 +1,10 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ListConfig } from 'api-spec/models/List';
-import { StorageSchema } from './Storage';
-import {
-  AppState,
-  appState,
-  defaultListFilter,
-  defaultListSort,
-} from '@/state';
+import { AppState, appState } from '@/state';
 import { api } from './Api';
-import { msg } from '@lit/localize';
+import { StorageSchema } from '@/models/Storage';
 
 export class NetworkStorage implements StorageSchema {
-  constructor(state: AppState) {
-    //super(state);
-  }
+  constructor(state: AppState) {}
 
   async getListConfigs(): Promise<ListConfig[]> {
     console.log('NetworkStorage: getListConfigs');
