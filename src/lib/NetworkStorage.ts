@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ListConfig } from 'api-spec/models/List';
-import { Storage } from './Storage';
+import { StorageSchema } from './Storage';
 import {
   AppState,
   appState,
@@ -10,9 +10,9 @@ import {
 import { api } from './Api';
 import { msg } from '@lit/localize';
 
-export class NetworkStorage extends Storage {
+export class NetworkStorage implements StorageSchema {
   constructor(state: AppState) {
-    super(state);
+    //super(state);
   }
 
   async getListConfigs(): Promise<ListConfig[]> {
@@ -34,6 +34,7 @@ export class NetworkStorage extends Storage {
     await api.post<ListConfig, boolean>('listConfig', listConfig);
   }
 
+  /*
   async addListConfig(): Promise<string> {
     console.log('NetworkStorage: addListConfig');
     const id = uuidv4();
@@ -56,6 +57,7 @@ export class NetworkStorage extends Storage {
 
     return Promise.resolve(true);
   }
+    */
 }
 
 export const networkStorage = new NetworkStorage(appState);

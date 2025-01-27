@@ -101,7 +101,7 @@ export class Api {
 }
 
 export const api = new Api({
-  authToken: storage.getAuthToken(),
+  authToken: '', //storage.getAuthToken(),
   baseUrl: config.apiUrl,
   errorHandler: () => {
     appState.setForbidden(true);

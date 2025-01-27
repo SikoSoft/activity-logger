@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
 import { msg } from '@lit/localize';
+import { networkStorage } from './NetworkStorage';
+import { browserStorage } from './BrowserStorage';
 
 import {
   AppState,
@@ -17,7 +19,37 @@ export interface SavedListFilter {
   name: string;
 }
 
-export class Storage {
+const storageDelegates: StorageSchema[] = [browserStorage, networkStorage];
+
+function delegateSource() {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    for (let i = 0; i < storageDelegates.length; i++) {
+      const storageDelegate = storageDelegates[i];
+      const delegateMethods = Object.getOwnPropertyNames(
+        Object.getPrototypeOf(storageDelegate),
+      );
+      if (delegateMethods.includes(propertyKey)) {
+        const methodName = propertyKey as keyof StorageSchema;
+        if (!storageDelegate || !storageDelegate[methodName]) {
+          return;
+        }
+        descriptor.value = storageDelegate[methodName];
+      }
+    }
+  };
+}
+
+export interface StorageSchema {
+  setAuthToken?(authToken: string): void;
+  getAuthToken?(): string;
+  getListConfigs?(): Promise<ListConfig[]>;
+}
+
+export class Storage implements StorageSchema {
   static ACTIVE_LIST_FILTER_KEY = 'listFilter';
   static LIST_FILTERS_KEY = 'listFilters';
   static VIEW_KEY = 'view';
@@ -300,27 +332,11 @@ export class Storage {
     return listConfigId;
   }
 
-  setAuthToken(authToken: string): void {
-    localStorage.setItem(Storage.AUTH_TOKEN_KEY, authToken);
-  }
+  @delegateSource()
+  setAuthToken(): any {}
 
-  getAuthToken(): string {
-    let authToken = '';
-    try {
-      const storedAuthToken = localStorage.getItem(Storage.AUTH_TOKEN_KEY);
-      if (storedAuthToken) {
-        authToken = storedAuthToken;
-      }
-    } catch (error) {
-      console.error(
-        `Encountered an error while trying to get authToken: ${JSON.stringify(
-          error,
-        )}`,
-      );
-    }
-
-    return authToken;
-  }
+  @delegateSource()
+  getAuthToken(): any {}
 }
 
 export const storage = new Storage(appState);
