@@ -85,6 +85,19 @@ export class Api {
     });
   }
 
+  async put<RequestType, ResponseType>(
+    path: string,
+    body: RequestType,
+    config?: RequestInit,
+  ): Promise<ApiResult<ResponseType>> {
+    return await this.httpRequest<ResponseType>(path, {
+      method: 'put',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+      ...config,
+    });
+  }
+
   async delete<ResponseType>(
     path: string,
     config?: RequestInit,
