@@ -4,7 +4,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ActionView, defaultActionView } from '@/models/Action';
 import { storage } from '@/lib/Storage';
-//import { networkStorage as storage } from '@/lib/NetworkStorage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 
@@ -20,6 +19,7 @@ import '@/components/bulk-manager';
 import '@/components/list-config';
 
 import { theme } from './styles/theme';
+import { api } from './lib/Api';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
@@ -36,7 +36,7 @@ export class ActivityLogger extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-
+    api.setAuthToken(storage.getAuthToken());
     this.addEventListener('view-changed', (e: Event) => {
       this._handleViewChanged(e);
     });

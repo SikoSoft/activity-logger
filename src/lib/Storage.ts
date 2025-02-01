@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
 import { msg } from '@lit/localize';
 import { networkStorage } from './NetworkStorage';
-import { browserStorage } from './BrowserStorage';
 
 import {
   AppState,
@@ -20,7 +19,7 @@ export interface SavedListFilter {
   name: string;
 }
 
-const storageDelegates: StorageSchema[] = [browserStorage, networkStorage];
+const storageDelegates: StorageSchema[] = [networkStorage];
 
 function delegateSource() {
   return function (
@@ -195,6 +194,7 @@ export class Storage implements StorageSchema {
     return hashHex;
   }
 
+  @delegateSource()
   async getListConfigs(): Promise<ListConfig[]> {
     let listConfigs: ListConfig[] = [];
     try {
@@ -210,13 +210,12 @@ export class Storage implements StorageSchema {
           error,
         )}`,
       );
-      //return Promise.reject();
     }
 
     return Promise.resolve(listConfigs);
-    //return listConfigs;
   }
 
+  @delegateSource()
   async saveListConfig(listConfig: ListConfig): Promise<void> {
     const listConfigs = await this.getListConfigs();
 
@@ -230,6 +229,7 @@ export class Storage implements StorageSchema {
     );
   }
 
+  @delegateSource()
   async addListConfig(): Promise<string> {
     const id = uuidv4();
     const listConfig = {
@@ -246,6 +246,7 @@ export class Storage implements StorageSchema {
     return id;
   }
 
+  @delegateSource()
   async deleteListConfig(id: string): Promise<boolean> {
     const listConfigs = await this.getListConfigs();
     localStorage.setItem(
@@ -330,10 +331,31 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  setAuthToken(): any {}
+  setAuthToken(authToken: string): void {
+    localStorage.setItem(StorageItemKey.AUTH_TOKEN_KEY, authToken);
+  }
 
   @delegateSource()
-  getAuthToken(): any {}
+  getAuthToken(): string {
+    console.log('browser get auth token');
+    let authToken = '';
+    try {
+      const storedAuthToken = localStorage.getItem(
+        StorageItemKey.AUTH_TOKEN_KEY,
+      );
+      if (storedAuthToken) {
+        authToken = storedAuthToken;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to get authToken: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return authToken;
+  }
 }
 
 export const storage = new Storage(appState);

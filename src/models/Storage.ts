@@ -17,4 +17,7 @@ export interface StorageSchema {
   setAuthToken?(authToken: string): void;
   getAuthToken?(): string;
   getListConfigs?(): Promise<ListConfig[]>;
+  addListConfig?(): Promise<string>;
+  deleteListConfig?(id: string): Promise<boolean>;
+  saveListConfig?(listConfig: ListConfig): Promise<void>;
 }
