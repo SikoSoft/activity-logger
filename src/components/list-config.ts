@@ -71,7 +71,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   async _saveConfig() {
-    console.log('saveConfig');
     this.state.addToast(msg('The configuration has been saved'));
     storage.saveListConfig({
       id: this.id,
@@ -83,7 +82,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   async _deleteConfig() {
-    console.log('deleteConfig');
     await storage.deleteListConfig(this.id);
     this.state.addToast(msg('The configuration has been deleted'));
     this.state.setListConfigs(await storage.getListConfigs());
@@ -94,7 +92,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   async _addConfig() {
-    console.log('addConfig');
     const id = await storage.addListConfig();
     this.state.addToast(msg('The configuration has been added'));
     this.state.setListConfigs(await storage.getListConfigs());
@@ -103,13 +100,11 @@ export class ListConfig extends MobxLitElement {
   }
 
   sync() {
-    console.log('sync', this.state.listConfigId);
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
   }
 
   setListConfigId(listConfigId: string) {
-    console.log('setListConfigId', listConfigId);
     storage.saveActiveListConfigId(listConfigId);
     this.state.setListConfigId(listConfigId);
     this.dispatchEvent(new ListConfigChangedEvent({ listConfigId }));

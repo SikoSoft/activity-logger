@@ -2,10 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
 import { msg } from '@lit/localize';
 import { networkStorage } from './NetworkStorage';
-
 import {
-  AppState,
-  appState,
   defaultListContext,
   defaultListFilter,
   defaultListSort,
@@ -44,12 +41,6 @@ function delegateSource() {
 }
 
 export class Storage implements StorageSchema {
-  private state: AppState;
-
-  constructor(appState: AppState) {
-    this.state = appState;
-  }
-
   async saveFilter(filter: ListFilter, name: string): Promise<void> {
     const savedFilters = this.getSavedFilters();
     const id = await this.digestMessage(JSON.stringify(filter));
@@ -95,24 +86,6 @@ export class Storage implements StorageSchema {
       StorageItemKey.ACTIVE_LIST_FILTER_KEY,
       JSON.stringify(filter),
     );
-  }
-
-  loadActiveFilter() {
-    try {
-      const storedFilter = localStorage.getItem(
-        StorageItemKey.ACTIVE_LIST_FILTER_KEY,
-      );
-      if (storedFilter) {
-        const filter = JSON.parse(storedFilter) as ListFilter;
-        this.state.setListFilter(filter);
-      }
-    } catch (error) {
-      console.error(
-        `Encountered an error while trying to load filter: ${JSON.stringify(
-          error,
-        )}`,
-      );
-    }
   }
 
   saveView(view: ActionView) {
@@ -330,14 +303,11 @@ export class Storage implements StorageSchema {
     return listConfigId;
   }
 
-  @delegateSource()
   setAuthToken(authToken: string): void {
     localStorage.setItem(StorageItemKey.AUTH_TOKEN_KEY, authToken);
   }
 
-  @delegateSource()
   getAuthToken(): string {
-    console.log('browser get auth token');
     let authToken = '';
     try {
       const storedAuthToken = localStorage.getItem(
@@ -358,4 +328,4 @@ export class Storage implements StorageSchema {
   }
 }
 
-export const storage = new Storage(appState);
+export const storage = new Storage();

@@ -47,11 +47,9 @@ export class ActivityLogger extends MobxLitElement {
 
   private async _restoreState() {
     const listConfigs = await storage.getListConfigs();
-    console.log('restoreState listConfigs', listConfigs);
     this.state.setListConfigs(listConfigs);
 
     const listConfigId = storage.getActiveListConfigId();
-    console.log('listConfigId in restoreState', listConfigId);
     this.state.setListConfigId(listConfigId);
 
     if (!this.state.listConfigId && this.state.listConfigs.length) {
