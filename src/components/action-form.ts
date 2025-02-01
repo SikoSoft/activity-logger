@@ -16,6 +16,7 @@ import './action-confirm-modal';
 import './tag/tag-manager';
 
 import { theme } from '@/styles/theme';
+import { ListFilterType } from 'api-spec/models/List';
 
 export interface PostRequestBody {
   type: string;
@@ -153,7 +154,8 @@ export class ActionForm extends ViewElement {
     this.desc = '';
     this.tagValue = '';
     if (!this.actionId) {
-      this.tags = [];
+      this.tags =
+        this.state.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
     }
     this.state.setTagSuggestions([]);
   }
@@ -239,6 +241,7 @@ export class ActionForm extends ViewElement {
 
   private async _handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
+    console.log('desc changed', this.desc);
     this._requestTagSuggestions();
     this._requestActionSuggestions();
   }

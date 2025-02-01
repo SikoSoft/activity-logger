@@ -191,9 +191,6 @@ export class AppState {
     if (this.listConfigId) {
       this.setListFilter(this.listConfig.filter);
       this.setListSort(this.listConfig.sort);
-      this.addTagSuggestions(
-        this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
-      );
     }
   }
 

@@ -20,6 +20,7 @@ import '@/components/list-config';
 
 import { theme } from './styles/theme';
 import { api } from './lib/Api';
+import { ListFilterType } from 'api-spec/models/List';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: ActionView;
@@ -90,7 +91,11 @@ export class ActivityLogger extends MobxLitElement {
   _activeView() {
     switch (this.view) {
       case ActionView.INPUT:
-        return html`<action-form></action-form>`;
+        return html`<action-form
+          .tags=${this.state.listConfig.filter.tagging[
+            ListFilterType.CONTAINS_ALL_OF
+          ]}
+        ></action-form>`;
     }
     return html`<action-list></action-list>`;
   }
