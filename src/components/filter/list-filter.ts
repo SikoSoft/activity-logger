@@ -43,7 +43,8 @@ export class ListFilter extends MobxLitElement {
         padding: 1rem;
       }
 
-      .list-filter.all .filters {
+      .list-filter.all .filters,
+      .tagging.all .tag-rules {
         opacity: 0.3;
         pointer-events: none;
       }
@@ -73,6 +74,7 @@ export class ListFilter extends MobxLitElement {
   @state() [ListFilterType.CONTAINS_ALL_OF]: string[] = [];
   @state() includeUntagged: boolean = false;
   @state() includeAll: boolean = true;
+  @state() includeAllTagging: boolean = false;
   @state() time: TimeContext = { type: ListFilterTimeType.ALL_TIME };
   @state() text: TextContext[] = [];
 
@@ -94,6 +96,13 @@ export class ListFilter extends MobxLitElement {
     };
   }
 
+  @state() get taggingClasses() {
+    return {
+      tagging: true,
+      all: this.includeAllTagging,
+    };
+  }
+
   @state()
   get filterNameIsValid(): boolean {
     return this.filterName.length > 0;
@@ -108,6 +117,7 @@ export class ListFilter extends MobxLitElement {
     return {
       includeAll: this.includeAll,
       includeUntagged: this.includeUntagged,
+      includeAllTagging: this.includeAllTagging,
       tagging: {
         containsOneOf: this.containsOneOf,
         containsAllOf: this.containsAllOf,
@@ -129,6 +139,7 @@ export class ListFilter extends MobxLitElement {
     });
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
+    this.includeAllTagging = this.state.listFilter.includeAllTagging;
     if (this.state.listFilter.time) {
       this.time = this.state.listFilter.time;
     }
@@ -143,6 +154,10 @@ export class ListFilter extends MobxLitElement {
 
   private _handleIncludeAllChanged() {
     this.includeAll = !this.includeAll;
+  }
+
+  private _handleIncludeAllTaggingChanged() {
+    this.includeAllTagging = !this.includeAllTagging;
   }
 
   private _handleUpdateClick(e: CustomEvent): void {
@@ -192,6 +207,7 @@ export class ListFilter extends MobxLitElement {
         savedFilter.filter.tagging[ListFilterType.CONTAINS_ONE_OF];
       this[ListFilterType.CONTAINS_ALL_OF] =
         savedFilter.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
+      this.includeAllTagging = savedFilter.filter.includeAllTagging;
       this.includeUntagged = savedFilter.filter.includeUntagged;
       this.includeAll = savedFilter.filter.includeAll;
       this.time = savedFilter.filter.time;
@@ -269,33 +285,46 @@ export class ListFilter extends MobxLitElement {
               this._handleTextChanged(e)}
           ></text-filters>
 
-          <fieldset>
+          <fieldset class=${classMap(this.taggingClasses)}>
             <legend>${msg('Tagging')}</legend>
-            ${repeat(
-              Object.values(ListFilterType),
-              type => type,
-              type => html`
-                <fieldset>
-                  <legend>${filterTypeMsgMap[type]}</legend>
-                  <tag-manager
-                    .tags=${this[type]}
-                    @tags-updated=${(e: CustomEvent) => {
-                      this.updateTags(type, e.detail.tags);
-                    }}
-                  ></tag-manager>
-                </fieldset>
-              `,
-            )}
-            <div>
+
+            <div class="all">
               <input
-                id="include-untagged"
+                id="include-all-tagging"
                 type="checkbox"
-                ?checked=${this.includeUntagged}
-                @change=${this._handleIncludeUntaggedChanged}
+                ?checked=${this.includeAllTagging}
+                @change=${this._handleIncludeAllTaggingChanged}
               />
-              <label for="include-untagged"
-                >${msg('Include actions without tags')}</label
-              >
+              <label for="include-all-tagging">${msg('Include all')}</label>
+            </div>
+
+            <div class="tag-rules">
+              ${repeat(
+                Object.values(ListFilterType),
+                type => type,
+                type => html`
+                  <fieldset>
+                    <legend>${filterTypeMsgMap[type]}</legend>
+                    <tag-manager
+                      .tags=${this[type]}
+                      @tags-updated=${(e: CustomEvent) => {
+                        this.updateTags(type, e.detail.tags);
+                      }}
+                    ></tag-manager>
+                  </fieldset>
+                `,
+              )}
+              <div>
+                <input
+                  id="include-untagged"
+                  type="checkbox"
+                  ?checked=${this.includeUntagged}
+                  @change=${this._handleIncludeUntaggedChanged}
+                />
+                <label for="include-untagged"
+                  >${msg('Include actions without tags')}</label
+                >
+              </div>
             </div>
           </fieldset>
 

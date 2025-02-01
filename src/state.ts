@@ -22,6 +22,7 @@ export const defaultListFilter: ListFilter = {
   },
   includeUntagged: true,
   includeAll: true,
+  includeAllTagging: true,
   time: { type: ListFilterTimeType.ALL_TIME },
   text: [],
 };
@@ -90,7 +91,6 @@ export class AppState {
   public authToken: string = '';
 
   get listConfig(): ListConfig {
-    console.log('getting listConfig from getter', this.listConfigId);
     return this.listConfigs.filter(
       config => this.listConfigId === config.id,
     )[0];
@@ -181,7 +181,6 @@ export class AppState {
 
   @action
   setListConfigId(id: string) {
-    console.log('setListConfigId', id);
     if (this.listConfigId) {
       this.removeTagSuggestions(
         this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
@@ -196,7 +195,6 @@ export class AppState {
 
   @action
   setListConfigs(listConfigs: ListConfig[]) {
-    console.log('setListConfigs', listConfigs);
     this.listConfigs = listConfigs;
   }
 
