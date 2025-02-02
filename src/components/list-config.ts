@@ -22,16 +22,36 @@ export class ListConfig extends MobxLitElement {
   static styles = [
     theme,
     css`
-      .box {
+      .list-config {
         padding: 1rem;
         margin-bottom: 1rem;
+        position: relative;
+
+        .close {
+          pointer-events: none;
+          opacity: 0;
+          position: absolute;
+          right: 0;
+          top: 0;
+
+          &::before {
+            content: 'X';
+          }
+        }
 
         .config {
-          display: none;
+          transition: all 0.3s;
+          opacity: 0;
+          //height: 0;
         }
 
         .config-name {
-          display: block;
+          transition: all 0.3s;
+          opacity: 1;
+          font-size: 2rem;
+          text-align: center;
+          height: 3rem;
+          line-height: 3rem;
         }
 
         .edit {
@@ -43,12 +63,19 @@ export class ListConfig extends MobxLitElement {
         }
 
         &.config-mode {
+          .close {
+            opacity: 1;
+            pointer-events: initial;
+            cursor: pointer;
+          }
+
           .config {
-            display: block;
+            opacity: 1;
           }
 
           .config-name {
-            display: none;
+            opacity: 0;
+            font-size: 0;
           }
         }
 
@@ -75,7 +102,7 @@ export class ListConfig extends MobxLitElement {
 
   @state() get classes() {
     return {
-      box: true,
+      'list-config': true,
       'config-mode': this.state.selectListConfigMode,
       'edit-mode': this.state.editListConfigMode,
     };
@@ -160,6 +187,15 @@ export class ListConfig extends MobxLitElement {
       <div class=${classMap(this.classes)} @click=${this._handleBoxClick}>
         ${this.ready
           ? html`
+              <div
+                class="close"
+                @click=${(e: MouseEvent) => {
+                  this.state.setSelectListConfigMode(false);
+                  e.stopPropagation();
+                }}
+              ></div>
+              <div class="config-name">${this.state.listConfig.name}</div>
+
               <div class="config">
                 <div class="select">
                   <ss-select
@@ -212,7 +248,6 @@ export class ListConfig extends MobxLitElement {
                   ></ss-button>
                 </div>
               </div>
-              <div class="config-name">${this.state.listConfig.name}</div>
             `
           : html`<ss-loader></ss-loader>`}
       </div>
