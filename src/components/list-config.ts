@@ -156,17 +156,19 @@ export class ListConfig extends MobxLitElement {
   async _deleteConfig() {
     await storage.deleteListConfig(this.id);
     this.state.addToast(msg('The configuration has been deleted'));
-    this.state.setListConfigs(await storage.getListConfigs());
-    if (this.state.listConfigs.length) {
-      this.setListConfigId(this.state.listConfigs[0].id);
+    const listConfigs = await storage.getListConfigs();
+    if (listConfigs.length) {
+      this.setListConfigId(listConfigs[0].id);
     }
+    this.state.setListConfigs(listConfigs);
     this.sync();
   }
 
   async _addConfig() {
     const id = await storage.addListConfig();
     this.state.addToast(msg('The configuration has been added'));
-    this.state.setListConfigs(await storage.getListConfigs());
+    const listConfigs = await storage.getListConfigs();
+    this.state.setListConfigs(listConfigs);
     this.setListConfigId(id);
     this.sync();
   }
@@ -191,6 +193,7 @@ export class ListConfig extends MobxLitElement {
                 class="close"
                 @click=${(e: MouseEvent) => {
                   this.state.setSelectListConfigMode(false);
+                  this.state.setEditListConfigMode(false);
                   e.stopPropagation();
                 }}
               ></div>
@@ -235,16 +238,16 @@ export class ListConfig extends MobxLitElement {
                       text=${msg('Delete configuration')}
                       @click=${this._deleteConfig}
                     ></ss-button>
-                    <ss-button
-                      text=${msg('Add configuration')}
-                      @click=${this._addConfig}
-                    ></ss-button>
                   </div>
                 </div>
                 <div class="edit-button">
                   <ss-button
                     @click=${this._enableEditMode}
                     text=${msg('Edit configuration')}
+                  ></ss-button>
+                  <ss-button
+                    text=${msg('Add configuration')}
+                    @click=${this._addConfig}
                   ></ss-button>
                 </div>
               </div>
