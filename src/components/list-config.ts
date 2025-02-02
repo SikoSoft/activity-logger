@@ -15,6 +15,7 @@ import { InputType } from '@/models/Input';
 import { storage } from '@/lib/Storage';
 
 import { theme } from '@/styles/theme';
+import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
@@ -24,6 +25,42 @@ export class ListConfig extends MobxLitElement {
       .box {
         padding: 1rem;
         margin-bottom: 1rem;
+
+        .config {
+          display: none;
+        }
+
+        .config-name {
+          display: block;
+        }
+
+        .edit {
+          display: none;
+        }
+
+        .edit-button {
+          display: block;
+        }
+
+        &.config-mode {
+          .config {
+            display: block;
+          }
+
+          .config-name {
+            display: none;
+          }
+        }
+
+        &.edit-mode {
+          .edit {
+            display: block;
+          }
+
+          .edit-button {
+            display: none;
+          }
+        }
       }
     `,
   ];
@@ -35,6 +72,14 @@ export class ListConfig extends MobxLitElement {
   @state() ready: boolean = false;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
+
+  @state() get classes() {
+    return {
+      box: true,
+      'config-mode': this.state.selectListConfigMode,
+      'edit-mode': this.state.editListConfigMode,
+    };
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -112,66 +157,62 @@ export class ListConfig extends MobxLitElement {
 
   render() {
     return html`
-      <div class="box" @click=${this._handleBoxClick}>
+      <div class=${classMap(this.classes)} @click=${this._handleBoxClick}>
         ${this.ready
           ? html`
-              ${this.state.selectListConfigMode
-                ? html`
-                    <div class="select">
-                      <ss-select
-                        id="config-selector"
-                        selected=${this.state.listConfigId}
-                        @select-changed=${(e: SelectChangedEvent<string>) => {
-                          this._handleConfigChanged(e);
-                        }}
-                        .options=${Object.values(this.state.listConfigs).map(
-                          config => ({
-                            value: config.id,
-                            label: config.name,
-                          }),
-                        )}
-                      >
-                      </ss-select>
-                    </div>
+              <div class="config">
+                <div class="select">
+                  <ss-select
+                    id="config-selector"
+                    selected=${this.state.listConfigId}
+                    @select-changed=${(e: SelectChangedEvent<string>) => {
+                      this._handleConfigChanged(e);
+                    }}
+                    .options=${Object.values(this.state.listConfigs).map(
+                      config => ({
+                        value: config.id,
+                        label: config.name,
+                      }),
+                    )}
+                  >
+                  </ss-select>
+                </div>
 
-                    ${this.state.editListConfigMode
-                      ? html`
-                          <div class="manage">
-                            <div class="id">${msg('ID')}: ${this.id}</div>
+                <div class="edit">
+                  <div class="id">${msg('ID')}: ${this.id}</div>
 
-                            <div class="name">
-                              <ss-input
-                                id="date"
-                                @input-changed=${this._handleNameChanged}
-                                type=${InputType.TEXT}
-                                value=${this.name}
-                              ></ss-input>
-                            </div>
+                  <div class="name">
+                    <ss-input
+                      id="date"
+                      @input-changed=${this._handleNameChanged}
+                      type=${InputType.TEXT}
+                      value=${this.name}
+                    ></ss-input>
+                  </div>
 
-                            <div class="buttons">
-                              <ss-button
-                                text=${msg('Save configuration')}
-                                @click=${this._saveConfig}
-                              ></ss-button>
-                              <ss-button
-                                text=${msg('Delete configuration')}
-                                @click=${this._deleteConfig}
-                              ></ss-button>
-                              <ss-button
-                                text=${msg('Add configuration')}
-                                @click=${this._addConfig}
-                              ></ss-button>
-                            </div>
-                          </div>
-                        `
-                      : html`
-                          <ss-button
-                            @click=${this._enableEditMode}
-                            text=${msg('Manage configuration')}
-                          ></ss-button>
-                        `}
-                  `
-                : html` ${this.state.listConfig.name} `}
+                  <div class="buttons">
+                    <ss-button
+                      text=${msg('Save configuration')}
+                      @click=${this._saveConfig}
+                    ></ss-button>
+                    <ss-button
+                      text=${msg('Delete configuration')}
+                      @click=${this._deleteConfig}
+                    ></ss-button>
+                    <ss-button
+                      text=${msg('Add configuration')}
+                      @click=${this._addConfig}
+                    ></ss-button>
+                  </div>
+                </div>
+                <div class="edit-button">
+                  <ss-button
+                    @click=${this._enableEditMode}
+                    text=${msg('Edit configuration')}
+                  ></ss-button>
+                </div>
+              </div>
+              <div class="config-name">${this.state.listConfig.name}</div>
             `
           : html`<ss-loader></ss-loader>`}
       </div>
