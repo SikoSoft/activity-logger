@@ -22,9 +22,16 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async addListConfig(): Promise<string> {
-    const result = api.post<{ name: string }, { id: string }>('listConfig', {
-      name: msg('Config name'),
-    });
+    const result = await api.post<{ name: string }, { id: string }>(
+      'listConfig',
+      {
+        name: msg('Config name'),
+      },
+    );
+
+    if (result) {
+      return result.response.id;
+    }
     return '';
   }
 
