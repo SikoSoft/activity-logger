@@ -9,6 +9,8 @@ export interface ApiResponse<ResponseBodyType> {
 
 export type ApiResult<ResponseBodyType> = ApiResponse<ResponseBodyType> | null;
 
+export const emptyResponseCodes = [202, 204];
+
 export interface RequestConfig {
   method: string | undefined;
   headers: HeadersInit;
@@ -43,7 +45,7 @@ export class Api {
     try {
       const response = await fetch(request);
 
-      if (response.ok && response.status !== 202) {
+      if (response.ok && !emptyResponseCodes.includes(response.status)) {
         json = await response.json();
       }
 
