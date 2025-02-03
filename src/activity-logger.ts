@@ -46,6 +46,7 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   private async _restoreState() {
+    console.log('restoreState');
     const listConfigs = await storage.getListConfigs();
     this.state.setListConfigs(listConfigs);
 
@@ -69,6 +70,7 @@ export class ActivityLogger extends MobxLitElement {
       this.view = view;
     }
 
+    console.log('set ready to true');
     this.ready = true;
   }
 
@@ -99,23 +101,23 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   renderContent() {
-    if (this.state.forbidden || !this.state.authToken) {
+    if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html` <forbidden-notice></forbidden-notice> `;
     }
 
-    return html`
-      ${this.ready
-        ? html` <list-config
+    return this.ready
+      ? html`
+          <list-config
             @list-config-changed=${this._handleListConfigChanged}
-          ></list-config>`
-        : nothing}
-      <action-nav active=${this.view}></action-nav>
-      <bulk-manager
-        @operation-performed=${this._handleOperationPerformed}
-      ></bulk-manager>
-      <main>${this._activeView()}</main>
-      <floating-widget></floating-widget>
-    `;
+          ></list-config>
+          <action-nav active=${this.view}></action-nav>
+          <bulk-manager
+            @operation-performed=${this._handleOperationPerformed}
+          ></bulk-manager>
+          <main>${this._activeView()}</main>
+          <floating-widget></floating-widget>
+        `
+      : nothing;
   }
 
   render() {
