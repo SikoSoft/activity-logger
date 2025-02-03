@@ -6,7 +6,7 @@ import { msg } from '@lit/localize';
 import { appState } from '@/state';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
-import { api } from '@/lib/Api';
+import { api, ApiResult } from '@/lib/Api';
 
 import { ViewElement } from '@/lib/ViewElement';
 
@@ -18,7 +18,7 @@ import './tag/tag-manager';
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
 
-export interface PostRequestBody {
+export interface RequestBody {
   type: string;
   desc: string;
   occurredAt: string;
@@ -112,13 +112,17 @@ export class ActionForm extends ViewElement {
         const occurredAt = this.occurredAt;
         const timeZone = new Date().getTimezoneOffset();
 
-        await api.post<PostRequestBody, null>(this.apiUrl, {
+        const payload: RequestBody = {
           type: 'food',
           desc,
           occurredAt,
           timeZone,
           tags: this.tagsAndSuggestions,
-        });
+        };
+
+        this.actionId
+          ? await api.put<RequestBody, null>(this.apiUrl, payload)
+          : await api.post<RequestBody, null>(this.apiUrl, payload);
 
         this.reset();
 
