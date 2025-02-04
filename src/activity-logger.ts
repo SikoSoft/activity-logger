@@ -47,31 +47,36 @@ export class ActivityLogger extends MobxLitElement {
 
   private async _restoreState() {
     console.log('restoreState');
-    const listConfigs = await storage.getListConfigs();
-    this.state.setListConfigs(listConfigs);
+    this.ready = false;
+    try {
+      const listConfigs = await storage.getListConfigs();
+      this.state.setListConfigs(listConfigs);
 
-    const listConfigId = storage.getActiveListConfigId();
-    this.state.setListConfigId(listConfigId);
+      const listConfigId = storage.getActiveListConfigId();
+      this.state.setListConfigId(listConfigId);
 
-    if (!this.state.listConfigId && this.state.listConfigs.length) {
-      console.log('in restoreState...', this.state.listConfigs[0].id);
-      this.state.setListConfigId(this.state.listConfigs[0].id);
+      if (!this.state.listConfigId && this.state.listConfigs.length) {
+        console.log('in restoreState...', this.state.listConfigs[0].id);
+        this.state.setListConfigId(this.state.listConfigs[0].id);
+      }
+
+      this.state.setListContextMode(storage.getListContextMode());
+      this.state.setListContext(storage.getListContext());
+
+      this.state.setAdvancedMode(storage.getAdvancedMode());
+      this.state.setDebugMode(storage.getDebugMode());
+      this.state.setAuthToken(storage.getAuthToken());
+
+      const view = storage.getSavedView();
+      if (view) {
+        this.view = view;
+      }
+    } catch (error) {
+      console.error('something went wrong during restore state', error);
+    } finally {
+      console.log('set ready to true');
+      this.ready = true;
     }
-
-    this.state.setListContextMode(storage.getListContextMode());
-    this.state.setListContext(storage.getListContext());
-
-    this.state.setAdvancedMode(storage.getAdvancedMode());
-    this.state.setDebugMode(storage.getDebugMode());
-    this.state.setAuthToken(storage.getAuthToken());
-
-    const view = storage.getSavedView();
-    if (view) {
-      this.view = view;
-    }
-
-    console.log('set ready to true');
-    this.ready = true;
   }
 
   private _handleViewChanged(e: Event) {
@@ -88,6 +93,10 @@ export class ActivityLogger extends MobxLitElement {
     this.viewComponent.sync();
   }
 
+  private _handleUserLoggedIn() {
+    this._restoreState();
+  }
+
   _activeView() {
     switch (this.view) {
       case ActionView.INPUT:
@@ -101,8 +110,20 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   renderContent() {
+    console.log(
+      'ready',
+      this.ready,
+      'forbidden',
+      this.state.forbidden,
+      'authToken',
+      this.state.authToken,
+    );
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
-      return html` <forbidden-notice></forbidden-notice> `;
+      return html`
+        <forbidden-notice
+          @user-logged-in=${this._handleUserLoggedIn}
+        ></forbidden-notice>
+      `;
     }
 
     return this.ready
@@ -117,7 +138,7 @@ export class ActivityLogger extends MobxLitElement {
           <main>${this._activeView()}</main>
           <floating-widget></floating-widget>
         `
-      : nothing;
+      : html`<ss-loader></ss-loader>`;
   }
 
   render() {

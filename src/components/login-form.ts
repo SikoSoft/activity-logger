@@ -11,6 +11,7 @@ import '@ss/ui/components/ss-select';
 
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
+import { UserLoggedInEvent } from '@/events/user-logged-in';
 
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
@@ -64,6 +65,7 @@ export class LoginForm extends MobxLitElement {
       this.state.setAuthToken(result.response.authToken);
       this.state.setForbidden(false);
       this.state.addToast(msg('You are now logged in.'));
+      this.dispatchEvent(new UserLoggedInEvent({}));
       return;
     }
 

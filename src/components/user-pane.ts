@@ -16,6 +16,7 @@ import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
 import { storage } from '@/lib/Storage';
+import { UserLoggedOutEvent } from '@/events/user-logged-out';
 
 @customElement('user-pane')
 export class UserPane extends MobxLitElement {
@@ -42,6 +43,7 @@ export class UserPane extends MobxLitElement {
       this.state.setAuthToken('');
       this.state.setForbidden(true);
       this.state.addToast(msg('You are now logged out.'));
+      this.dispatchEvent(new UserLoggedOutEvent({}));
     }
   }
 
