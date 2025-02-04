@@ -37,7 +37,7 @@ export class ActivityLogger extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    api.setAuthToken(storage.getAuthToken());
+    this.setAuthToken(storage.getAuthToken());
     this.addEventListener('view-changed', (e: Event) => {
       this._handleViewChanged(e);
     });
@@ -45,18 +45,23 @@ export class ActivityLogger extends MobxLitElement {
     this._restoreState();
   }
 
+  setAuthToken(authToken: string) {
+    api.setAuthToken(authToken);
+    this.state.setAuthToken(authToken);
+  }
+
   private async _restoreState() {
-    console.log('restoreState');
     this.ready = false;
     try {
-      const listConfigs = await storage.getListConfigs();
-      this.state.setListConfigs(listConfigs);
+      if (this.state.authToken) {
+        const listConfigs = await storage.getListConfigs();
+        this.state.setListConfigs(listConfigs);
 
-      const listConfigId = storage.getActiveListConfigId();
-      this.state.setListConfigId(listConfigId);
+        const listConfigId = storage.getActiveListConfigId();
+        this.state.setListConfigId(listConfigId);
+      }
 
       if (!this.state.listConfigId && this.state.listConfigs.length) {
-        console.log('in restoreState...', this.state.listConfigs[0].id);
         this.state.setListConfigId(this.state.listConfigs[0].id);
       }
 
@@ -65,7 +70,6 @@ export class ActivityLogger extends MobxLitElement {
 
       this.state.setAdvancedMode(storage.getAdvancedMode());
       this.state.setDebugMode(storage.getDebugMode());
-      this.state.setAuthToken(storage.getAuthToken());
 
       const view = storage.getSavedView();
       if (view) {
@@ -74,7 +78,6 @@ export class ActivityLogger extends MobxLitElement {
     } catch (error) {
       console.error('something went wrong during restore state', error);
     } finally {
-      console.log('set ready to true');
       this.ready = true;
     }
   }
@@ -110,14 +113,6 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   renderContent() {
-    console.log(
-      'ready',
-      this.ready,
-      'forbidden',
-      this.state.forbidden,
-      'authToken',
-      this.state.authToken,
-    );
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html`
         <forbidden-notice
