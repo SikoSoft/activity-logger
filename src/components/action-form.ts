@@ -245,7 +245,6 @@ export class ActionForm extends ViewElement {
 
   private async _handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
-    console.log('desc changed', this.desc);
     this._requestTagSuggestions();
     this._requestActionSuggestions();
   }
