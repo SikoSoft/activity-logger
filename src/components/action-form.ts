@@ -67,7 +67,8 @@ export class ActionForm extends ViewElement {
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   @state() loading: boolean = false;
-  @state() lastInputHadResults: boolean = true;
+  @state() lastInputHadActionResults: boolean = true;
+  @state() lastInputHadTagResults: boolean = true;
   @state() lastInput: string = '';
 
   @state()
@@ -188,13 +189,16 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestActionSuggestions(): Promise<void> {
-    if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
+    if (
+      !this.lastInputHadActionResults &&
+      this.desc.startsWith(this.lastInput)
+    ) {
       this.state.setActionSuggestions([]);
       return;
     }
 
     try {
-      this.lastInputHadResults = false;
+      this.lastInputHadActionResults = false;
       let suggestions: string[] = [];
 
       if (this.desc.length >= this.minLengthForSuggestion) {
@@ -207,7 +211,7 @@ export class ActionForm extends ViewElement {
       }
 
       if (suggestions.length || this.desc === '') {
-        this.lastInputHadResults = true;
+        this.lastInputHadActionResults = true;
       }
       this.state.setActionSuggestions(suggestions);
     } catch (error) {
@@ -215,26 +219,30 @@ export class ActionForm extends ViewElement {
         `Failed to get action suggestions: ${JSON.stringify(error)}`,
       );
     }
-
-    this.lastInput = this.desc;
   }
 
   private async _requestTagSuggestions(): Promise<void> {
-    if (this.desc.length === 0) {
+    if (!this.lastInputHadTagResults && this.desc.startsWith(this.lastInput)) {
       this.state.setTagSuggestions([]);
       return;
     }
 
     try {
-      const result = await api.get<{ suggestions: string[] }>(
-        `tagSuggestion/${this.desc}`,
-      );
-
+      this.lastInputHadTagResults = false;
       let suggestions: string[] = [];
-      if (result) {
-        suggestions = result.response.suggestions;
+
+      if (this.desc.length >= this.minLengthForSuggestion) {
+        const result = await api.get<{ suggestions: string[] }>(
+          `tagSuggestion/${this.desc}`,
+        );
+        if (result) {
+          suggestions = result.response.suggestions;
+        }
       }
 
+      if (suggestions.length || this.desc === '') {
+        this.lastInputHadTagResults = true;
+      }
       this.state.setTagSuggestions(
         suggestions.filter(suggestion => !this.tags.includes(suggestion)),
       );
@@ -248,6 +256,7 @@ export class ActionForm extends ViewElement {
     console.log('desc changed', this.desc);
     this._requestTagSuggestions();
     this._requestActionSuggestions();
+    this.lastInput = this.desc;
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
