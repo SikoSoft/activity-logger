@@ -15,8 +15,13 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v2
+      - name: Checkout GitHub Action
+        uses: actions/checkout@v4
+
+      - name: Log into Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup Node ${{ env.NODE_VERSION }} Environment
         uses: actions/setup-node@v2
@@ -33,3 +38,20 @@ jobs:
         env:
           APP_BASE_API_URL: ${{ env.APP_BASE_API_URL}}
           BASE_URL: ${{ env.BASE_URL }}
+
+      - name: Upload to blob storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload-batch --account-name sikosoftstorage --auth-mode key -d '$web/food' -s '${{ env.PACKAGE_PATH }}/dist'
+
+      - name: Purge CDN endpoint
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az cdn endpoint purge --content-paths  "/food/*" --profile-name "sikosoft" --name "sikosoft" --resource-group "SS"
+
+      - name: logout
+        run: |
+          az logout
+        if: always()
