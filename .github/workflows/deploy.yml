@@ -43,7 +43,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name sikosoftstorage --auth-mode key -d '$web/food' -s '${{ env.PACKAGE_PATH }}/dist'
+            az storage blob upload-batch --account-name sikosoftstorage --auth-mode key -d '$web/food' -s '${{ env.PACKAGE_PATH }}/dist' --overwrite
 
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
