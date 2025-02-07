@@ -30,6 +30,7 @@ export class TextFilters extends LitElement {
   }
 
   private _handleFilterUpdated(e: TextFilterUpdatedEvent) {
+    console.log('handleFilterUpdated', e);
     const textFilter = e.detail;
     if (textFilter.index === -1) {
       this.newFilter = {
@@ -71,7 +72,7 @@ export class TextFilters extends LitElement {
 
         ${repeat(
           this.filters,
-          filter => `${filter.type}/${filter.subStr}`,
+          (filter, index) => `${filter.type}/${index}`,
           (filter, index) => html`
             <text-filter
               index=${index}
