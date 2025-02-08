@@ -87,7 +87,6 @@ export class ActionList extends ViewElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.load();
 
     window.addEventListener('scroll', this.scrollHandler);
 
@@ -113,6 +112,14 @@ export class ActionList extends ViewElement {
         ),
       );
     });
+
+    const urlHasChanged = this.state.lastListUrl !== this.getUrl();
+    if (urlHasChanged) {
+      this.state.setListItems([]);
+      this.state.setContextListItems([]);
+    }
+
+    this.load();
   }
 
   disconnectedCallback(): void {
@@ -131,8 +138,7 @@ export class ActionList extends ViewElement {
     }
   }
 
-  async load(more: boolean = false): Promise<void> {
-    this.loading = true;
+  private getUrl(more = false): string {
     if (more) {
       this.start += config.perPage;
     }
@@ -155,7 +161,16 @@ export class ActionList extends ViewElement {
         ? `?${new URLSearchParams(queryParams)}`
         : ''
     }`;
+
+    return url;
+  }
+
+  async load(more = false): Promise<void> {
+    this.loading = true;
+
     try {
+      const url = this.getUrl(more);
+      this.state.setLastListUrl(url);
       const result = await api.get<{
         actions: ActionItem[];
         total: number;
@@ -311,6 +326,7 @@ export class ActionList extends ViewElement {
         : nothing}
 
       <div class="box list-items">
+        ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
         ${this.state.listItems.length
           ? repeat(
               this.state.listItems,
@@ -332,7 +348,7 @@ export class ActionList extends ViewElement {
             )
           : !this.loading
             ? html` <div class="no-actions">${msg('No actions found')}</div>`
-            : html` <ss-loader padded></ss-loader> `}
+            : nothing}
         <div id="lazy-loader"></div>
       </div>
     `;

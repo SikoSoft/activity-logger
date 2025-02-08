@@ -90,6 +90,9 @@ export class AppState {
   @observable
   public authToken: string = '';
 
+  @observable
+  public lastListUrl: string = '';
+
   get listConfig(): ListConfig {
     return this.listConfigs.filter(
       config => this.listConfigId === config.id,
@@ -298,6 +301,11 @@ export class AppState {
   @action
   setAuthToken(authToken: string) {
     this.authToken = authToken;
+  }
+
+  @action
+  setLastListUrl(url: string) {
+    this.lastListUrl = url;
   }
 
   constructor() {
