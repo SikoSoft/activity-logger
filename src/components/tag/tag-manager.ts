@@ -7,6 +7,7 @@ import '@/components/tag/tag-input';
 import '@/components/tag/tag-list';
 
 import { theme } from '@/styles/theme';
+import { msg } from '@lit/localize';
 
 @customElement('tag-manager')
 export class TagManager extends LitElement {
@@ -50,7 +51,7 @@ export class TagManager extends LitElement {
   render() {
     return html`
       <fieldset class="tag-manager">
-        <legend>Tags</legend>
+        <legend>${msg('Tags')}</legend>
         <tag-input
           value=${this.value}
           @changed=${(e: CustomEvent) => {
@@ -67,7 +68,7 @@ export class TagManager extends LitElement {
                 this._handleDeleted(e);
               }}
             ></tag-list>`
-          : html`<div class="no-tags">No tags are set</div>`}
+          : html`<div class="no-tags">${msg('No tags are set')}</div>`}
       </fieldset>
     `;
   }
