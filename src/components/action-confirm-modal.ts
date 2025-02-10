@@ -1,11 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import { theme } from '@/styles/theme';
 
 @customElement('action-confirm-modal')
+@localized()
 export class ActionConfirmModal extends LitElement {
   static styles = [
     theme,
@@ -88,6 +89,7 @@ export class ActionConfirmModal extends LitElement {
           ${msg('Are you sure?')}
           <div class="buttons">
             <ss-button
+              positive
               @click=${this._sendConfirmEvent}
               text=${msg('Yes')}
             ></ss-button>

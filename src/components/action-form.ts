@@ -311,6 +311,7 @@ export class ActionForm extends ViewElement {
           : nothing}
         <div>
           <ss-button
+            ?positive=${!this.actionId || this.hasChanged}
             @click=${this._handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
@@ -322,6 +323,7 @@ export class ActionForm extends ViewElement {
           ${this.actionId
             ? html`
                 <ss-button
+                  negative
                   @click=${this._handleDeleteClick}
                   text=${msg('Delete')}
                 ></ss-button>

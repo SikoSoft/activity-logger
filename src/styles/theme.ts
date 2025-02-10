@@ -3,7 +3,9 @@ import { css } from 'lit';
 export const theme = css`
   :host {
     --negative-color: #600;
+    --negative-background-color: #ffc4c4;
     --positive-color: #060;
+    --positive-background-color: #c4ffc4;
   }
 
   input[type='text'],
