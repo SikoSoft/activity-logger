@@ -1,7 +1,7 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 
@@ -26,6 +26,7 @@ const sortDirectionMsgMap: Record<ListSortDirection, string> = {
 };
 
 @customElement('list-sort')
+@localized()
 export class ListSort extends MobxLitElement {
   static styles = [
     theme,

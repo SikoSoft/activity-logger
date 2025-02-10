@@ -40,33 +40,41 @@
 </trans-unit>
 <trans-unit id="s9a4941c9dc4a3d22">
   <source>filterTimeType.allTime</source>
+  <target>all time</target>
 </trans-unit>
 <trans-unit id="see5b3824cfc27e87">
   <source>filterTimeType.exactDate</source>
+  <target>exact date</target>
 </trans-unit>
 <trans-unit id="s1e48db0212fba0bd">
   <source>filterTimeType.range</source>
+  <target>range</target>
 </trans-unit>
 <trans-unit id="s48e186fb300e5464">
   <source>Time</source>
 </trans-unit>
 <trans-unit id="s9e9e9de4f5e2d9e9">
   <source>textType.contains</source>
+  <target>contains</target>
 </trans-unit>
 <trans-unit id="sa7d3d72c342c615e">
   <source>textType.endsWith</source>
+  <target>ends with</target>
 </trans-unit>
 <trans-unit id="s7b2584e962f71111">
   <source>textType.startsWith</source>
+  <target>starts with</target>
 </trans-unit>
 <trans-unit id="s2492f5fb1b05b45e">
   <source>Text</source>
 </trans-unit>
 <trans-unit id="s5b60008aa2671684">
   <source>filterType.containsAllOf</source>
+  <target>contains all of</target>
 </trans-unit>
 <trans-unit id="s43a6e9da57940c63">
   <source>filterType.containsOneOf</source>
+  <target>contains one of</target>
 </trans-unit>
 <trans-unit id="s26b5fae12261064f">
   <source>Filter saved!</source>
@@ -100,36 +108,46 @@
 </trans-unit>
 <trans-unit id="sfe9fb54d4c5c01e7">
   <source>sortProperty.createdAt</source>
+  <target>created</target>
 </trans-unit>
 <trans-unit id="s08d36fa7e8481d27">
   <source>sortProperty.desc</source>
+  <target>description</target>
 </trans-unit>
 <trans-unit id="s97050230d40fca64">
   <source>sortProperty.occurredAt</source>
+  <target>occured</target>
 </trans-unit>
 <trans-unit id="sb9f15c839f92d941">
   <source>sortDirection.asc</source>
+  <target>ascending</target>
 </trans-unit>
 <trans-unit id="sc844c7c03dc626e9">
   <source>sortDirection.desc</source>
+  <target>descending</target>
 </trans-unit>
 <trans-unit id="s3606b9d856cdbafe">
   <source>Sort by</source>
 </trans-unit>
 <trans-unit id="sbbe1a06994419e14">
   <source>contextUnit.minute</source>
+  <target>minute</target>
 </trans-unit>
 <trans-unit id="sd8571fe14f0e7dda">
   <source>contextUnit.hour</source>
+  <target>hour</target>
 </trans-unit>
 <trans-unit id="s7515554f2509999e">
   <source>contextUnit.day</source>
+  <target>day</target>
 </trans-unit>
 <trans-unit id="s451b5127e3c3a0c9">
   <source>contextType.before</source>
+  <target>before</target>
 </trans-unit>
 <trans-unit id="s8ff8d6460117d4ce">
   <source>contextUnit.after</source>
+  <target>after</target>
 </trans-unit>
 <trans-unit id="s4fdd00e1ca047fdc">
   <source>Include context</source>
@@ -160,15 +178,19 @@
 </trans-unit>
 <trans-unit id="s3497bfbd622b49ee">
   <source>operationType.addTags</source>
+  <target>add tags</target>
 </trans-unit>
 <trans-unit id="s423ec63a61e4c993">
   <source>operationType.delete</source>
+  <target>delete</target>
 </trans-unit>
 <trans-unit id="s70d96fec40194779">
   <source>operationType.removeTags</source>
+  <target>remove tags</target>
 </trans-unit>
 <trans-unit id="s5cf89131a6196ec9">
   <source>operationType.replaceTags</source>
+  <target>replace tags</target>
 </trans-unit>
 <trans-unit id="s6e61dbff59ac6684">
   <source>The operation has been performed successfully.</source>
@@ -199,6 +221,48 @@
 </trans-unit>
 <trans-unit id="s9466e666d781c87c">
   <source>tagging</source>
+</trans-unit>
+<trans-unit id="s57571ef84f9c42a6">
+  <source>Config name</source>
+</trans-unit>
+<trans-unit id="s5243d34d96e15244">
+  <source>Include all</source>
+</trans-unit>
+<trans-unit id="s2e119285e51a6b96">
+  <source>You are now logged out.</source>
+</trans-unit>
+<trans-unit id="s67749057edb2586b">
+  <source>Logout</source>
+</trans-unit>
+<trans-unit id="s5661e19641330bdb">
+  <source>You are now logged in.</source>
+</trans-unit>
+<trans-unit id="sb3f5f4032464db99">
+  <source>Incorrect username and password combination.</source>
+</trans-unit>
+<trans-unit id="s03f42eea72154959">
+  <source>Username</source>
+</trans-unit>
+<trans-unit id="sf6e1665c7022a1f8">
+  <source>Password</source>
+</trans-unit>
+<trans-unit id="sc8da3cc71de63832">
+  <source>Login</source>
+</trans-unit>
+<trans-unit id="sc6c26cb09fb4065c">
+  <source>You need to login to view this.</source>
+</trans-unit>
+<trans-unit id="se147212ccc273f8f">
+  <source>The configuration has been saved</source>
+</trans-unit>
+<trans-unit id="sd64ae34a270bc341">
+  <source>The configuration has been deleted</source>
+</trans-unit>
+<trans-unit id="s2e5feb9052ee54ee">
+  <source>The configuration has been added</source>
+</trans-unit>
+<trans-unit id="sfd370b42e0b63f5b">
+  <source>Edit configuration</source>
 </trans-unit>
 </body>
 </file>
