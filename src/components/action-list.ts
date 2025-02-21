@@ -27,6 +27,7 @@ import '@/components/action-list-item';
 import '@/components/filter/list-filter';
 import '@/components/list-sort';
 import '@/components/list-context';
+import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 
@@ -60,6 +61,7 @@ export class ActionList extends ViewElement {
   @state() reachedEnd: boolean = false;
   @state() loading: boolean = false;
   @state() filterIsOpen: boolean = false;
+  @state() settingIsOpen: boolean = false;
   @state() sortIsOpen: boolean = false;
   @state() contextIsOpen: boolean = false;
   @state() actionContextIsOpen: Map<number, boolean> = new Map<
@@ -215,8 +217,16 @@ export class ActionList extends ViewElement {
     this.load();
   }
 
+  private _handleSettingUpdated(e: CustomEvent) {
+    this.load();
+  }
+
   private _handleContextUpdated(e: ListContextUpdatedEvent) {
     this.load();
+  }
+
+  private _toggleSetting() {
+    this.settingIsOpen = !this.settingIsOpen;
   }
 
   private _toggleFilter() {
@@ -289,6 +299,16 @@ export class ActionList extends ViewElement {
 
   render() {
     return html`
+      <ss-collapsable
+        title=${msg('Settings')}
+        ?open=${this.settingIsOpen}
+        @toggled=${this._toggleSetting}
+      >
+        <setting-form
+          @setting-updated=${this._handleSettingUpdated}
+        ></setting-form>
+      </ss-collapsable>
+
       <ss-collapsable
         title=${msg('Filter')}
         ?open=${this.filterIsOpen}
