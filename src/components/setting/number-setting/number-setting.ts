@@ -45,7 +45,7 @@ export class NumberSetting extends LitElement {
 
   render() {
     return html`
-      <div>
+      <div class="number-setting">
         <label>${this.name}</label>
         <input type="number" value=${this.value} min=${this.min} max=${this.max} step=${this.step}></input>
       </div>
