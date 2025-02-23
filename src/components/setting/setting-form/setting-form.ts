@@ -68,7 +68,6 @@ export class SettingForm extends LitElement {
   ) {
     const setting = event.detail as Setting;
     console.log('updateSetting', setting);
-    //appState.updateSetting(setting.name, setting.value);
   }
 
   render() {

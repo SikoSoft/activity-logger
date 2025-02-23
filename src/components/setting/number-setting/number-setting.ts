@@ -4,6 +4,7 @@ import { localized, msg } from '@lit/localize';
 
 import { theme } from '@/styles/theme';
 
+import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-toggle';
 import {
   NumberSettingProp,
@@ -47,7 +48,13 @@ export class NumberSetting extends LitElement {
     return html`
       <div class="number-setting">
         <label>${this.name}</label>
-        <input type="number" value=${this.value} min=${this.min} max=${this.max} step=${this.step}></input>
+        <ss-input
+          type="number"
+          value=${this.value}
+          min=${this.min}
+          max=${this.max}
+          step=${this.step}
+        ></ss-input>
       </div>
     `;
   }
