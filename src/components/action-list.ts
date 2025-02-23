@@ -305,6 +305,7 @@ export class ActionList extends ViewElement {
         @toggled=${this._toggleSetting}
       >
         <setting-form
+          listConfigId=${this.state.listConfigId}
           @setting-updated=${this._handleSettingUpdated}
         ></setting-form>
       </ss-collapsable>

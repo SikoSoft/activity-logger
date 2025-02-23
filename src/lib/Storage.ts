@@ -9,6 +9,7 @@ import {
 } from '@/state';
 import { ActionView, defaultActionView } from '@/models/Action';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
+import { Setting } from 'api-spec/models/Setting';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -325,6 +326,11 @@ export class Storage implements StorageSchema {
     }
 
     return authToken;
+  }
+
+  @delegateSource()
+  async saveSetting(listConfigId: string, setting: Setting): Promise<void> {
+    return Promise.resolve();
   }
 }
 

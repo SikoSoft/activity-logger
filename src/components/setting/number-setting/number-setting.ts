@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
+import { localized } from '@lit/localize';
 
 import { theme } from '@/styles/theme';
 
@@ -11,6 +11,8 @@ import {
   numberSettingProps,
   NumberSettingProps,
 } from './number-setting.models';
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 @customElement('number-setting')
 @localized()
@@ -44,6 +46,15 @@ export class NumberSetting extends LitElement {
     `,
   ];
 
+  private _handleInputChanged(e: InputChangedEvent) {
+    this.dispatchEvent(
+      new SettingUpdatedEvent<typeof this.value>({
+        name: this.name,
+        value: parseInt(e.detail.value),
+      }),
+    );
+  }
+
   render() {
     return html`
       <div class="number-setting">
@@ -54,6 +65,7 @@ export class NumberSetting extends LitElement {
           min=${this.min}
           max=${this.max}
           step=${this.step}
+          @input-changed=${this._handleInputChanged}
         ></ss-input>
       </div>
     `;

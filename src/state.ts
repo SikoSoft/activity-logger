@@ -179,6 +179,7 @@ export class AppState {
 
   @action
   setListFilter(filter: ListFilter) {
+    console.log('setListFilter', JSON.stringify(filter, null, 2));
     this.listFilter = filter;
   }
 

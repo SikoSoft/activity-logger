@@ -1,24 +1,17 @@
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum SettingFormProp {
-  NAME = 'name',
-  SETTINGS = 'settings',
+  LIST_CONFIG_ID = 'listConfigId',
 }
 
 export interface SettingFormProps extends PropTypes {
-  [SettingFormProp.NAME]: string;
-  [SettingFormProp.SETTINGS]: string[];
+  [SettingFormProp.LIST_CONFIG_ID]: string;
 }
 
 export const settingFormProps: PropConfigMap<SettingFormProps> = {
-  [SettingFormProp.NAME]: {
+  [SettingFormProp.LIST_CONFIG_ID]: {
     default: '',
     control: 'text',
-    description: 'The name of the setting',
-  },
-  [SettingFormProp.SETTINGS]: {
-    default: [],
-    control: 'text',
-    description: 'The settings of the setting',
+    description: 'The ID of the list configuration the settings are for',
   },
 };

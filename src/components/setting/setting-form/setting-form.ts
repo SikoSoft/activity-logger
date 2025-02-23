@@ -1,31 +1,37 @@
-import { css, html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { localized } from '@lit/localize';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
-import { appState } from '@/state';
+import {
+  Setting,
+  settingsConfig,
+  ControlType,
+  SettingConfig,
+} from 'api-spec/models/Setting';
 
-import { theme } from '@/styles/theme';
+import { storage } from '@/lib/Storage';
 
 import '@/components/setting/boolean-setting/boolean-setting';
 import '@/components/setting/number-setting/number-setting';
 import '@/components/setting/select-setting/select-setting';
 import '@/components/setting/text-setting/text-setting';
-import {
-  Setting,
-  SettingsConfig,
-  settingsConfig,
-  ControlType,
-  SettingName,
-  SettingConfig,
-} from 'api-spec/models/Setting';
-import { ifDefined } from 'lit/directives/if-defined.js';
+
 import { SettingUpdatedEvent } from '@/events/setting-updated';
+import {
+  SettingFormProp,
+  settingFormProps,
+  SettingFormProps,
+} from './setting-form.models';
 
 @customElement('setting-form')
 @localized()
 export class SettingForm extends LitElement {
+  @property()
+  [SettingFormProp.LIST_CONFIG_ID]: SettingFormProps[SettingFormProp.LIST_CONFIG_ID] =
+    settingFormProps[SettingFormProp.LIST_CONFIG_ID].default;
+
   renderSetting(setting: SettingConfig) {
-    console.log(setting);
     switch (setting.control.type) {
       /*
       case ControlType.BOOLEAN:
@@ -67,7 +73,7 @@ export class SettingForm extends LitElement {
     event: SettingUpdatedEvent<SettingType>,
   ) {
     const setting = event.detail as Setting;
-    console.log('updateSetting', setting);
+    storage.saveSetting(this[SettingFormProp.LIST_CONFIG_ID], setting);
   }
 
   render() {

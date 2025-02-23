@@ -2,6 +2,7 @@ import { ListConfig } from 'api-spec/models/List';
 import { api } from './Api';
 import { StorageSchema } from '@/models/Storage';
 import { msg } from '@lit/localize';
+import { Setting } from 'api-spec/models/Setting';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -43,6 +44,11 @@ export class NetworkStorage implements StorageSchema {
     }
 
     return false;
+  }
+
+  async saveSetting(listConfigId: string, setting: Setting): Promise<void> {
+    console.log('saveSetting', setting);
+    await api.put<Setting, Setting>(`setting/${listConfigId}`, setting);
   }
 }
 

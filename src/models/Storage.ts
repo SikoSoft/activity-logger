@@ -1,3 +1,4 @@
+import { Setting } from 'api-spec/models/Setting';
 import { ListConfig } from 'api-spec/models/List';
 
 export enum StorageItemKey {
@@ -20,4 +21,5 @@ export interface StorageSchema {
   addListConfig?(): Promise<string>;
   deleteListConfig?(id: string): Promise<boolean>;
   saveListConfig?(listConfig: ListConfig): Promise<void>;
+  saveSetting?(listConfigId: string, setting: Setting): Promise<void>;
 }
