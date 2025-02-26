@@ -50,18 +50,6 @@ export class ActionListItem extends LitElement {
     return { 'action-list-item': true, selected: this.selected };
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    this.addEventListener('action-item-updated', e => {
-      this.mode = ActionListItemMode.VIEW;
-    });
-
-    this.addEventListener('action-item-canceled', e => {
-      this.mode = ActionListItemMode.VIEW;
-    });
-  }
-
   get readableTime() {
     const date = new Date(this.occurredAt);
     return Time.formatDateTime(date);
@@ -137,6 +125,12 @@ export class ActionListItem extends LitElement {
         ${this.mode === ActionListItemMode.EDIT
           ? html`
               <action-form
+                @action-item-updated=${() => {
+                  this.mode = ActionListItemMode.VIEW;
+                }}
+                @action-item-canceled=${() => {
+                  this.mode = ActionListItemMode.VIEW;
+                }}
                 actionId=${this.actionId}
                 desc=${this.desc}
                 occurredAt=${this.occurredAt}
