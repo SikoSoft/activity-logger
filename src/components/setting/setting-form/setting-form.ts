@@ -23,10 +23,14 @@ import {
   settingFormProps,
   SettingFormProps,
 } from './setting-form.models';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 @customElement('setting-form')
 @localized()
-export class SettingForm extends LitElement {
+export class SettingForm extends MobxLitElement {
+  public state = appState;
+
   @property()
   [SettingFormProp.LIST_CONFIG_ID]: SettingFormProps[SettingFormProp.LIST_CONFIG_ID] =
     settingFormProps[SettingFormProp.LIST_CONFIG_ID].default;
@@ -46,7 +50,7 @@ export class SettingForm extends LitElement {
       case ControlType.NUMBER:
         return html`<number-setting
           name=${setting.name}
-          value=${setting.value}
+          value=${this.state.listConfig.setting[setting.name]}
           min=${ifDefined(setting.control.min)}
           max=${ifDefined(setting.control.max)}
           step=${ifDefined(setting.control.step)}
@@ -55,7 +59,7 @@ export class SettingForm extends LitElement {
       case ControlType.SELECT:
         return html`<select-setting
           name=${setting.name}
-          value=${setting.value}
+          value=${this.state.listConfig.setting[setting.name]}
           .options=${setting.control.options}
           @setting-updated=${this._handleSettingUpdated}
         ></select-setting>`;
