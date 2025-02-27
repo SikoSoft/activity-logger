@@ -40,6 +40,7 @@ export const defaultListContext: ListContext = {
 
 import { Toast } from '@/models/Toast';
 import { ActionItem } from '@/models/Action';
+import { defaultSettings, Settings } from 'api-spec/models/Setting';
 
 export class AppState {
   @observable
@@ -65,6 +66,9 @@ export class AppState {
 
   @observable
   public listSort: ListSort = structuredClone(defaultListSort);
+
+  @observable
+  public listSetting: Settings = defaultSettings;
 
   @observable
   public advancedMode: boolean = false;
@@ -184,6 +188,11 @@ export class AppState {
   }
 
   @action
+  setListSetting(setting: Settings) {
+    this.listSetting = setting;
+  }
+
+  @action
   setListConfigId(id: string) {
     if (this.listConfigId) {
       this.removeTagSuggestions(
@@ -194,6 +203,7 @@ export class AppState {
     if (this.listConfigId) {
       this.setListFilter(this.listConfig.filter);
       this.setListSort(this.listConfig.sort);
+      this.setListSetting(this.listConfig.setting);
     }
   }
 

@@ -30,6 +30,7 @@ import '@/components/list-context';
 import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
+import { SettingName } from 'api-spec/models/Setting';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -69,8 +70,13 @@ export class ActionList extends ViewElement {
     boolean
   >();
 
+  get perPage(): number {
+    const perPage = this.state.listSetting[SettingName.PAGINATION_PAGE_SIZE];
+    return perPage;
+  }
+
   get totalShown(): number {
-    return this.start + config.perPage;
+    return this.start + this.perPage;
   }
 
   get sortIsDefault(): boolean {
@@ -142,10 +148,11 @@ export class ActionList extends ViewElement {
 
   private getUrl(more = false): string {
     if (more) {
-      this.start += config.perPage;
+      this.start += this.perPage;
     }
 
     const queryParams = {
+      perPage: `${this.perPage}`,
       ...(this.start > 0 ? { start: `${this.start}` } : {}),
       ...(!this.state.listFilter.includeAll
         ? { filter: JSON.stringify(this.state.listFilter) }
