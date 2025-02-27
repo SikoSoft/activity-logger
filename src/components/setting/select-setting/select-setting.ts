@@ -52,7 +52,7 @@ export class SelectSetting extends LitElement {
         <label>${this.name}</label>
         <ss-select
           @select-changed=${this._handleSelectChanged}
-          value=${this.value}
+          selected=${this.value}
           .options=${this.options.map(option => ({
             label: option,
             value: option,
