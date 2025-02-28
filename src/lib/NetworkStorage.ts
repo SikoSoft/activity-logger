@@ -47,7 +47,6 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async saveSetting(listConfigId: string, setting: Setting): Promise<void> {
-    console.log('saveSetting', setting);
     await api.put<Setting, Setting>(`setting/${listConfigId}`, setting);
   }
 }
