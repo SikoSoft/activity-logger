@@ -27,10 +27,11 @@ import '@/components/action-list-item';
 import '@/components/filter/list-filter';
 import '@/components/list-sort';
 import '@/components/list-context';
+import '@/components/list-paginator/list-paginator';
 import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
-import { SettingName } from 'api-spec/models/Setting';
+import { PaginationType, SettingName } from 'api-spec/models/Setting';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -59,7 +60,7 @@ export class ActionList extends ViewElement {
   @query('list-filter') listFilter!: ListFilter;
 
   @state() start: number = 0;
-  @state() reachedEnd: boolean = false;
+  @state() total: number = 0;
   @state() loading: boolean = false;
   @state() filterIsOpen: boolean = false;
   @state() settingIsOpen: boolean = false;
@@ -70,15 +71,23 @@ export class ActionList extends ViewElement {
     boolean
   >();
 
+  @state()
   get perPage(): number {
     const perPage = this.state.listSetting[SettingName.PAGINATION_PAGE_SIZE];
     return perPage;
   }
 
+  @state()
   get totalShown(): number {
     return this.start + this.perPage;
   }
 
+  @state()
+  get reachedEnd(): boolean {
+    return this.totalShown >= this.total;
+  }
+
+  @state()
   get sortIsDefault(): boolean {
     return (
       this.state.listSort.direction === ListSortDirection.DESC &&
@@ -91,6 +100,13 @@ export class ActionList extends ViewElement {
     const docHeight =
       window.innerHeight || document.documentElement.clientHeight;
     return rect.bottom <= docHeight;
+  }
+
+  @state()
+  get paginationType(): PaginationType {
+    return (
+      this.state.listSetting[SettingName.PAGINATION_TYPE] ?? PaginationType.LAZY
+    );
   }
 
   connectedCallback(): void {
@@ -141,8 +157,10 @@ export class ActionList extends ViewElement {
   }
 
   private _handleScroll() {
-    if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
-      this.load(true);
+    if (this.paginationType === PaginationType.LAZY) {
+      if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
+        this.load(true);
+      }
     }
   }
 
@@ -204,8 +222,7 @@ export class ActionList extends ViewElement {
           });
         }
         if (result.response.total) {
-          this.reachedEnd =
-            result.response.total <= this.totalShown ? true : false;
+          this.total = result.response.total;
         }
       }
     } catch (error) {
@@ -379,6 +396,15 @@ export class ActionList extends ViewElement {
             : nothing}
         <div id="lazy-loader"></div>
       </div>
+      ${this.paginationType === PaginationType.NAVIGATION
+        ? html`
+            <list-paginator
+              start=${this.start}
+              total=${this.total}
+              perPage=${this.perPage}
+            ></list-paginator>
+          `
+        : nothing}
     `;
   }
 }
