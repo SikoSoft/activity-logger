@@ -40,7 +40,12 @@ export const defaultListContext: ListContext = {
 
 import { Toast } from '@/models/Toast';
 import { ActionItem } from '@/models/Action';
-import { defaultSettings, Settings } from 'api-spec/models/Setting';
+import {
+  defaultSettings,
+  Setting,
+  SettingName,
+  Settings,
+} from 'api-spec/models/Setting';
 
 export class AppState {
   @observable
@@ -302,6 +307,14 @@ export class AppState {
   @action
   setListContext(context: ListContext) {
     this.listContext = context;
+  }
+
+  @action
+  setSetting(setting: Setting) {
+    this.listSetting = {
+      ...this.listSetting,
+      [setting.name]: setting.value,
+    };
   }
 
   @action

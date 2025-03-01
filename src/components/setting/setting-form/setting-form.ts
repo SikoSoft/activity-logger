@@ -77,6 +77,7 @@ export class SettingForm extends MobxLitElement {
     event: SettingUpdatedEvent<SettingType>,
   ) {
     const setting = event.detail as Setting;
+    this.state.setSetting(setting);
     storage.saveSetting(this[SettingFormProp.LIST_CONFIG_ID], setting);
   }
 
