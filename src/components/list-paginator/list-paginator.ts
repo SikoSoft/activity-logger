@@ -9,6 +9,7 @@ import {
 
 import '@ss/ui/components/ss-button';
 import { PageChangedEvent } from './list-paginator.events';
+import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('list-paginator')
 export class ListPaginator extends LitElement {
@@ -45,10 +46,32 @@ export class ListPaginator extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0.25rem;
       }
+
+      .pages {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .quick-page {
+        color: #777;
+
+        &.active {
+          color: #000;
+          font-weight: bold;
+        }
+      }
+
       button {
-        padding: 0.5em 1em;
         cursor: pointer;
+        border-radius: 8px;
+        border: 1px #aaa solid;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: #ccc;
+        }
       }
       button:disabled {
         cursor: not-allowed;
@@ -56,6 +79,15 @@ export class ListPaginator extends LitElement {
       }
     `,
   ];
+
+  @state()
+  get quickPages(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.pages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
 
   private _prevPage() {
     if (this.page > 1) {
@@ -78,11 +110,32 @@ export class ListPaginator extends LitElement {
     return html`
       <div class="paginator box">
         <div class="left">
-          <ss-button text="&#x21e6;" @click=${this._prevPage}></ss-button>
+          <button text="" @click=${this._prevPage}>&#x21e6;</button>
         </div>
-        <div class="center">${this.page}</div>
+        <div class="center">
+          <div class="pages">
+            ${this.quickPages.map(
+              page =>
+                html`<button
+                  class=${classMap({
+                    'quick-page': true,
+                    active: page === this.page,
+                  })}
+                  @click=${() =>
+                    this.dispatchEvent(
+                      new PageChangedEvent({
+                        start: (page - 1) * this.perPage,
+                      }),
+                    )}
+                >
+                  ${page}
+                </button>`,
+            )}
+          </div>
+        </div>
+
         <div class="right">
-          <ss-button text="&#x21e8;" @click=${this._nextPage}></ss-button>
+          <button text="" @click=${this._nextPage}>&#x21e8;</button>
         </div>
       </div>
     `;
