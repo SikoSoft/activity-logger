@@ -32,6 +32,7 @@ import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
+import { PageChangedEvent } from './list-paginator/list-paginator.events';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -249,6 +250,11 @@ export class ActionList extends ViewElement {
     this.load();
   }
 
+  private _handlePageChanged(e: PageChangedEvent) {
+    this.start = e.detail.start;
+    this.load();
+  }
+
   private _toggleSetting() {
     this.settingIsOpen = !this.settingIsOpen;
   }
@@ -399,6 +405,7 @@ export class ActionList extends ViewElement {
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
             <list-paginator
+              @page-changed=${this._handlePageChanged}
               start=${this.start}
               total=${this.total}
               perPage=${this.perPage}
