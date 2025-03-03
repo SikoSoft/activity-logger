@@ -25,6 +25,8 @@ export class ListPaginator extends LitElement {
   [ListPaginatorProp.PER_PAGE]: ListPaginatorProps[ListPaginatorProp.PER_PAGE] =
     listPaginatorProps[ListPaginatorProp.PER_PAGE].default;
 
+  @state() maxPagesToShow = 0;
+
   @state()
   get pages(): number {
     return Math.ceil(this.total / this.perPage);
@@ -83,9 +85,32 @@ export class ListPaginator extends LitElement {
   @state()
   get quickPages(): number[] {
     const pages = [];
-    for (let i = 1; i <= this.pages; i++) {
-      pages.push(i);
+
+    if (this.pages <= this.maxPagesToShow) {
+      for (let i = 1; i <= this.pages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      const startPage = Math.max(2, this.page - 2);
+      const endPage = Math.min(this.pages - 1, this.page + 2);
+
+      if (startPage > 2) {
+        pages.push(0);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      if (endPage < this.pages - 1) {
+        pages.push(0);
+      }
+
+      pages.push(this.pages);
     }
+
     return pages;
   }
 
@@ -106,6 +131,12 @@ export class ListPaginator extends LitElement {
     }
   }
 
+  private _goToPage(page: number) {
+    this.dispatchEvent(
+      new PageChangedEvent({ start: (page - 1) * this.perPage }),
+    );
+  }
+
   render() {
     return html`
       <div class="paginator box">
@@ -114,22 +145,18 @@ export class ListPaginator extends LitElement {
         </div>
         <div class="center">
           <div class="pages">
-            ${this.quickPages.map(
-              page =>
-                html`<button
-                  class=${classMap({
-                    'quick-page': true,
-                    active: page === this.page,
-                  })}
-                  @click=${() =>
-                    this.dispatchEvent(
-                      new PageChangedEvent({
-                        start: (page - 1) * this.perPage,
-                      }),
-                    )}
-                >
-                  ${page}
-                </button>`,
+            ${this.quickPages.map(page =>
+              page === 0
+                ? html`<span>...</span>`
+                : html`<button
+                    class=${classMap({
+                      'quick-page': true,
+                      active: page === this.page,
+                    })}
+                    @click=${() => this._goToPage(page)}
+                  >
+                    ${page}
+                  </button>`,
             )}
           </div>
         </div>
