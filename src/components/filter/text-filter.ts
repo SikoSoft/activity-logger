@@ -15,6 +15,7 @@ import { TextFilterSaveEvent } from '@/events/text-filter-save';
 import '@/components/tag/tag-manager';
 
 const textTypeMsgMap: Record<TextType, string> = {
+  [TextType.EQUALS]: msg('textType.equals'),
   [TextType.CONTAINS]: msg('textType.contains'),
   [TextType.ENDS_WITH]: msg('textType.endsWith'),
   [TextType.STARTS_WITH]: msg('textType.startsWith'),
