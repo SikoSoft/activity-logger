@@ -1,5 +1,5 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   ListPaginatorProp,
@@ -84,6 +84,10 @@ export class ListPaginator extends LitElement {
 
   @state()
   get quickPages(): number[] {
+    if (this.pages === 1) {
+      return [1];
+    }
+
     const pages = [];
 
     if (this.pages <= this.maxPagesToShow) {
@@ -138,33 +142,35 @@ export class ListPaginator extends LitElement {
   }
 
   render() {
-    return html`
-      <div class="paginator box">
-        <div class="left">
-          <button text="" @click=${this._prevPage}>&#x21e6;</button>
-        </div>
-        <div class="center">
-          <div class="pages">
-            ${this.quickPages.map(page =>
-              page === 0
-                ? html`<span>...</span>`
-                : html`<button
-                    class=${classMap({
-                      'quick-page': true,
-                      active: page === this.page,
-                    })}
-                    @click=${() => this._goToPage(page)}
-                  >
-                    ${page}
-                  </button>`,
-            )}
-          </div>
-        </div>
+    return this.pages > 1
+      ? html`
+          <div class="paginator box">
+            <div class="left">
+              <button text="" @click=${this._prevPage}>&#x21e6;</button>
+            </div>
+            <div class="center">
+              <div class="pages">
+                ${this.quickPages.map(page =>
+                  page === 0
+                    ? html`<span>...</span>`
+                    : html`<button
+                        class=${classMap({
+                          'quick-page': true,
+                          active: page === this.page,
+                        })}
+                        @click=${() => this._goToPage(page)}
+                      >
+                        ${page}
+                      </button>`,
+                )}
+              </div>
+            </div>
 
-        <div class="right">
-          <button text="" @click=${this._nextPage}>&#x21e8;</button>
-        </div>
-      </div>
-    `;
+            <div class="right">
+              <button text="" @click=${this._nextPage}>&#x21e8;</button>
+            </div>
+          </div>
+        `
+      : nothing;
   }
 }
