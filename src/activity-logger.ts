@@ -101,6 +101,9 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   _activeView() {
+    if (!this.state.listConfig) {
+      return nothing;
+    }
     switch (this.view) {
       case ActionView.INPUT:
         return html`<action-form
