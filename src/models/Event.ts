@@ -1,10 +1,9 @@
-import { ListFilterType, TimeContext } from 'api-spec/models/List';
+import { ListFilterType } from 'api-spec/models/List';
 
 export enum EventType {
   INCLUDE_UNTAGGED_UPDATED = 'include-untagged-updated',
   FILTER_TAGS_UPDATED = 'filter-tags-updated',
   SELECT_CHANGED = 'select-changed',
-  TIME_FILTERS_UPDATED = 'time-filters-updated',
 }
 
 export interface EventPayload {
@@ -16,5 +15,4 @@ export interface EventPayload {
   [EventType.SELECT_CHANGED]: {
     value: string;
   };
-  [EventType.TIME_FILTERS_UPDATED]: TimeContext;
 }

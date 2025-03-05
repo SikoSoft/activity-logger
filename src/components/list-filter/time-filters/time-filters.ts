@@ -7,13 +7,18 @@ import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 
-import { TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { TimeFiltersUpdatedEvent } from './time-filters.events';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@/components/tag/tag-manager';
 
 import { theme } from '@/styles/theme';
+import {
+  TimeFiltersProp,
+  timeFiltersProps,
+  TimeFiltersProps,
+} from './time-filters.models';
 
 const filterTimeTypeMsgMap: Record<ListFilterTimeType, string> = {
   [ListFilterTimeType.ALL_TIME]: msg('filterTimeType.allTime'),
@@ -25,17 +30,29 @@ const filterTimeTypeMsgMap: Record<ListFilterTimeType, string> = {
 export class TimeFilters extends LitElement {
   static styles = [theme];
 
-  @property() timeStr: string = '';
+  @property()
+  [TimeFiltersProp.TIME_STR]: TimeFiltersProps[TimeFiltersProp.TIME_STR] =
+    timeFiltersProps[TimeFiltersProp.TIME_STR].default;
+
+  @property({ reflect: true })
+  [TimeFiltersProp.TYPE]: TimeFiltersProps[TimeFiltersProp.TYPE] =
+    timeFiltersProps[TimeFiltersProp.TYPE].default;
+
+  @property({ reflect: true })
+  [TimeFiltersProp.DATE]: TimeFiltersProps[TimeFiltersProp.DATE] =
+    timeFiltersProps[TimeFiltersProp.DATE].default;
+
+  @property({ reflect: true })
+  [TimeFiltersProp.START]: TimeFiltersProps[TimeFiltersProp.START] =
+    timeFiltersProps[TimeFiltersProp.START].default;
+
+  @property({ reflect: true })
+  [TimeFiltersProp.END]: TimeFiltersProps[TimeFiltersProp.END] =
+    timeFiltersProps[TimeFiltersProp.END].default;
 
   @state() time: TimeContext = {
     type: ListFilterTimeType.ALL_TIME,
   };
-
-  @property({ reflect: true }) type: ListFilterTimeType =
-    ListFilterTimeType.ALL_TIME;
-  @property({ reflect: true }) date: string = '';
-  @property({ reflect: true }) start: string = '';
-  @property({ reflect: true }) end: string = '';
 
   @query('#date') dateNode!: SSInput;
   @query('#start') startNode!: SSInput;

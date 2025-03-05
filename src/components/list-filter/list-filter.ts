@@ -16,14 +16,14 @@ import {
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 
-import { TimeFiltersUpdatedEvent } from '@/lib/Event';
+import { TimeFiltersUpdatedEvent } from '@/components/list-filter/time-filters/time-filters.events';
 import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@/components/tag/tag-manager';
-import '@/components/list-filter/time-filters';
-import '@/components/list-filter/text-filters';
+import '@/components/list-filter/time-filters/time-filters';
+import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
 

@@ -23,15 +23,3 @@ export class IncludeUntaggedUpdatedEvent extends CustomEvent<
     });
   }
 }
-
-export class TimeFiltersUpdatedEvent extends CustomEvent<
-  EventPayload[EventType.TIME_FILTERS_UPDATED]
-> {
-  constructor(payload: EventPayload[EventType.TIME_FILTERS_UPDATED]) {
-    super(EventType.TIME_FILTERS_UPDATED, {
-      bubbles: true,
-      composed: true,
-      detail: payload,
-    });
-  }
-}
