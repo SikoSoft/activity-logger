@@ -17,6 +17,7 @@ import './tag/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
+import { ActionItem } from '@/models/Action';
 
 export interface RequestBody {
   type: string;
@@ -120,23 +121,31 @@ export class ActionForm extends ViewElement {
           tags: this.tagsAndSuggestions,
         };
 
-        this.actionId
-          ? await api.put<RequestBody, null>(this.apiUrl, payload)
-          : await api.post<RequestBody, null>(this.apiUrl, payload);
+        const result = this.actionId
+          ? await api.put<RequestBody, ActionItem>(this.apiUrl, payload)
+          : await api.post<RequestBody, ActionItem>(this.apiUrl, payload);
 
         this.reset();
+        this.loading = false;
+
+        if (!result) {
+          return;
+        }
 
         this.dispatchEvent(
           new CustomEvent('action-item-updated', {
             bubbles: true,
             composed: true,
-            detail: { id: this.actionId, desc, occurredAt, tags: this.tags },
+            detail: {
+              id: this.actionId,
+              desc,
+              occurredAt: result.response.occurredAt,
+              tags: this.tags,
+            },
           }),
         );
 
         this.state.addToast(this.actionId ? msg('Updated!') : msg('Added!'));
-
-        this.loading = false;
         return;
       }
 

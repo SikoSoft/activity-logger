@@ -128,8 +128,8 @@ export class ActionList extends ViewElement {
 
     this.addEventListener('action-item-updated', e => {
       const event = e as CustomEvent;
-      this.state.setListItems(
-        this.state.listItems.map(item =>
+      const updatedList = this.state.listItems
+        .map(item =>
           item.id === event.detail.id
             ? {
                 ...item,
@@ -138,8 +138,10 @@ export class ActionList extends ViewElement {
                 tags: event.detail.tags,
               }
             : item,
-        ),
-      );
+        )
+        .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
+      console.log(JSON.stringify(updatedList, null, 2));
+      this.state.setListItems(updatedList);
     });
 
     const urlHasChanged = this.state.lastListUrl !== this.getUrl();
