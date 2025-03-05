@@ -20,6 +20,7 @@ import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { ViewElement } from '@/lib/ViewElement';
 
+import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
 import { ActionListItem, ActionListItemMode } from './action-list-item';
@@ -53,6 +54,10 @@ export class ActionList extends ViewElement {
 
       .no-actions {
         padding: 1rem;
+      }
+
+      .more {
+        margin-top: 1rem;
       }
     `,
   ];
@@ -411,7 +416,18 @@ export class ActionList extends ViewElement {
               perPage=${this.perPage}
             ></list-paginator>
           `
-        : nothing}
+        : this.paginationType === PaginationType.MORE_BUTTON && !this.reachedEnd
+          ? html`
+              <div class="more box">
+                <ss-button
+                  text=${msg('Load more')}
+                  @click=${() => this.load(true)}
+                  ?loading=${this.loading}
+                  ?disabled=${this.loading}
+                ></ss-button>
+              </div>
+            `
+          : nothing}
     `;
   }
 }
