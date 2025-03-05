@@ -22,8 +22,11 @@ import { ViewElement } from '@/lib/ViewElement';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
-import { ActionListItem, ActionListItemMode } from './action-list-item';
-import '@/components/action-list-item';
+import {
+  ActionListItem,
+  ActionListItemMode,
+} from './action-list-item/action-list-item';
+import '@/components/action-list/action-list-item/action-list-item';
 import '@/components/list-filter/list-filter';
 import '@/components/list-sort';
 import '@/components/list-context';
@@ -32,7 +35,7 @@ import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/list-filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
-import { PageChangedEvent } from './list-paginator/list-paginator.events';
+import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {

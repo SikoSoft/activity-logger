@@ -11,7 +11,7 @@ import { OperationPerformedEvent } from '@/events/operation-performed';
 
 import '@/components/action-nav';
 import '@/components/action-form';
-import '@/components/action-list';
+import '@/components/action-list/action-list';
 import '@/components/action-toasts';
 import '@/components/floating-widget';
 import '@/components/forbidden-notice';

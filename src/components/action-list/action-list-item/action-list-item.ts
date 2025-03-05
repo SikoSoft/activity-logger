@@ -6,6 +6,11 @@ import { Time } from '@/lib/Time';
 import { PointerDownEvent } from '@/events/pointer-down';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
+import {
+  ActionListItemProp,
+  actionListItemProps,
+  ActionListItemProps,
+} from './action-list-item.models';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -32,14 +37,37 @@ export class ActionListItem extends LitElement {
       font-size: 0.9rem;
     }
   `;
-  @property() type: string = '';
-  @property({ type: Number }) actionId: number = 0;
-  @property() desc: string = '';
-  @property() createdAt: string = '';
-  @property() updatedAt: string = '';
-  @property() occurredAt: string = '';
-  @property({ type: Array }) tags: string[] = [];
-  @property({ type: Boolean }) selected: boolean = false;
+  @property()
+  [ActionListItemProp.TYPE]: ActionListItemProps[ActionListItemProp.TYPE] =
+    actionListItemProps[ActionListItemProp.TYPE].default;
+
+  @property({ type: Number })
+  [ActionListItemProp.ACTION_ID]: ActionListItemProps[ActionListItemProp.ACTION_ID] =
+    actionListItemProps[ActionListItemProp.ACTION_ID].default;
+
+  @property()
+  [ActionListItemProp.DESC]: ActionListItemProps[ActionListItemProp.DESC] =
+    actionListItemProps[ActionListItemProp.DESC].default;
+
+  @property()
+  [ActionListItemProp.CREATED_AT]: ActionListItemProps[ActionListItemProp.CREATED_AT] =
+    actionListItemProps[ActionListItemProp.CREATED_AT].default;
+
+  @property()
+  [ActionListItemProp.UPDATED_AT]: ActionListItemProps[ActionListItemProp.UPDATED_AT] =
+    actionListItemProps[ActionListItemProp.UPDATED_AT].default;
+
+  @property()
+  [ActionListItemProp.OCCURRED_AT]: ActionListItemProps[ActionListItemProp.OCCURRED_AT] =
+    actionListItemProps[ActionListItemProp.OCCURRED_AT].default;
+
+  @property({ type: Array })
+  [ActionListItemProp.TAGS]: ActionListItemProps[ActionListItemProp.TAGS] =
+    actionListItemProps[ActionListItemProp.TAGS].default;
+
+  @property({ type: Boolean })
+  [ActionListItemProp.SELECTED]: ActionListItemProps[ActionListItemProp.SELECTED] =
+    actionListItemProps[ActionListItemProp.SELECTED].default;
 
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
   @state() pointerDown: Date = new Date();
