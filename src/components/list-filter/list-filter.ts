@@ -22,8 +22,8 @@ import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@/components/tag/tag-manager';
-import '@/components/filter/time-filters';
-import '@/components/filter/text-filters';
+import '@/components/list-filter/time-filters';
+import '@/components/list-filter/text-filters';
 
 import { theme } from '@/styles/theme';
 
