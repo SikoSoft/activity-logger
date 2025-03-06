@@ -51,6 +51,14 @@ export class AccountForm extends LitElement {
     );
   }
 
+  private _reset(): void {
+    this.username = '';
+    this.password = '';
+    this.passwordRepeat = '';
+    this.firstName = '';
+    this.lastName = '';
+  }
+
   private _handleFieldChanged(
     fieldName: AccountFormFieldName,
     e: InputChangedEvent,
@@ -80,6 +88,7 @@ export class AccountForm extends LitElement {
 
     if (result && result.status !== 401) {
       this.dispatchEvent(new AccountCreatedEvent({ id: result.response.id }));
+      this._reset();
     }
 
     this.loading = false;
