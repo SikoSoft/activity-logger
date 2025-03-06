@@ -4,7 +4,7 @@ export enum ActionToastProp {
   MESSAGE = 'message',
 }
 
-export interface ActionToastProps {
+export interface ActionToastProps extends PropTypes {
   [ActionToastProp.MESSAGE]: string;
 }
 

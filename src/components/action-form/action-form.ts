@@ -12,7 +12,7 @@ import { ViewElement } from '@/lib/ViewElement';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
-import '@/components/action-confirm-modal/action-confirm-modal';
+import '@/components/confirm-modal/confirm-modal';
 import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
