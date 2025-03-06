@@ -9,7 +9,7 @@ import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
 import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
 import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
-import '@/components/tag/tag-manager';
+import '@/components/tag-manager/tag-manager';
 import '@/components/list-filter/text-filters/text-filter/text-filter';
 
 import { theme } from '@/styles/theme';

@@ -13,7 +13,7 @@ import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { OperationPerformedEvent } from '@/events/operation-performed';
 
 import '@ss/ui/components/ss-button';
-import '@/components/tag/tag-manager';
+import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
 

@@ -13,7 +13,7 @@ import { ViewElement } from '@/lib/ViewElement';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@/components/action-confirm-modal';
-import '@/components/tag/tag-manager';
+import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';

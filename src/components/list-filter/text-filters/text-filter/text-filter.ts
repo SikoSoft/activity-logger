@@ -12,7 +12,7 @@ import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
-import '@/components/tag/tag-manager';
+import '@/components/tag-manager/tag-manager';
 
 const textTypeMsgMap: Record<TextType, string> = {
   [TextType.EQUALS]: msg('textType.equals'),

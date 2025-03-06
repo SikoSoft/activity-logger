@@ -10,7 +10,7 @@ import {
   IncludeUntaggedUpdatedEvent,
 } from '@/lib/Event';
 
-import '@/components/tag/tag-manager';
+import '@/components/tag-manager/tag-manager';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),

@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { theme } from '@/styles/theme';
+import { TagListProp, tagListProps, TagListProps } from './tag-list.models';
 
 @customElement('tag-list')
 export class TagList extends LitElement {
@@ -43,7 +44,9 @@ export class TagList extends LitElement {
     `,
   ];
 
-  @property({ type: Array }) tags: string[] = [];
+  @property({ type: Array })
+  [TagListProp.TAGS]: TagListProps[TagListProp.TAGS] =
+    tagListProps[TagListProp.TAGS].default;
 
   connectedCallback(): void {
     super.connectedCallback();

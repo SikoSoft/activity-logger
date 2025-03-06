@@ -6,10 +6,11 @@ import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
 import '@/components/ss-debug';
-import '@/components/tag/tag-input';
-import '@/components/tag/tag-list';
+import '@/components/tag-manager/tag-input/tag-input';
+import '@/components/tag-manager/tag-list/tag-list';
 
 import { theme } from '@/styles/theme';
+import { TagInputProp, tagInputProps, TagInputProps } from './tag-input.models';
 
 @customElement('tag-input')
 export class TagInput extends MobxLitElement {
@@ -33,7 +34,10 @@ export class TagInput extends MobxLitElement {
     `,
   ];
 
-  @property({ type: String, reflect: true }) value: string = '';
+  @property({ type: String, reflect: true })
+  [TagInputProp.VALUE]: TagInputProps[TagInputProp.VALUE] =
+    tagInputProps[TagInputProp.VALUE].default;
+
   @state() lastInputHadResults: boolean = true;
   @state() lastInput: string = '';
 

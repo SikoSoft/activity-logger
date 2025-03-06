@@ -3,11 +3,16 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { TagsUpdatedEvent } from '@/events/tags-updated';
 
-import '@/components/tag/tag-input';
-import '@/components/tag/tag-list';
+import '@/components/tag-manager/tag-input/tag-input';
+import '@/components/tag-manager/tag-list/tag-list';
 
 import { theme } from '@/styles/theme';
 import { msg } from '@lit/localize';
+import {
+  TagManagerProp,
+  tagManagerProps,
+  TagManagerProps,
+} from './tag-manager.models';
 
 @customElement('tag-manager')
 export class TagManager extends LitElement {
@@ -27,8 +32,13 @@ export class TagManager extends LitElement {
     `,
   ];
 
-  @property({ type: Array, reflect: true }) tags: string[] = [];
-  @property({ type: String, reflect: true }) value: string = '';
+  @property({ type: Array, reflect: true })
+  [TagManagerProp.TAGS]: TagManagerProps[TagManagerProp.TAGS] =
+    tagManagerProps[TagManagerProp.TAGS].default;
+
+  @property({ type: String, reflect: true })
+  [TagManagerProp.VALUE]: TagManagerProps[TagManagerProp.VALUE] =
+    tagManagerProps[TagManagerProp.VALUE].default;
 
   private _handleAdded(e: CustomEvent) {
     this.tags = [...this.tags, e.detail.value];
