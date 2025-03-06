@@ -6,26 +6,29 @@ import { msg } from '@lit/localize';
 import { appState } from '@/state';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
-import { api, ApiResult } from '@/lib/Api';
+import { api } from '@/lib/Api';
 
 import { ViewElement } from '@/lib/ViewElement';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
-import './action-confirm-modal';
-import './tag/tag-manager';
+import '@/components/action-confirm-modal';
+import '@/components/tag/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
-
-export interface RequestBody {
-  type: string;
-  desc: string;
-  occurredAt: string;
-  timeZone: number;
-  tags: string[];
-}
+import {
+  ActionFormProp,
+  actionFormProps,
+  ActionFormProps,
+  RequestBody,
+} from './action-form.models';
+import {
+  ActionItemCanceledEvent,
+  ActionItemDeletedEvent,
+  ActionItemUpdatedEvent,
+} from './action-form.events';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -55,12 +58,29 @@ export class ActionForm extends ViewElement {
     `,
   ];
 
-  @property({ type: Number }) actionId: number = 0;
-  @property() type: string = '';
-  @property({ reflect: true }) desc: string = '';
-  @property({ reflect: true }) occurredAt: string = '';
-  @property({ reflect: true, type: Array }) tags: string[] = [];
-  @property({ reflect: true }) tagValue: string = '';
+  @property({ type: Number })
+  [ActionFormProp.ACTION_ID]: ActionFormProps[ActionFormProp.ACTION_ID] =
+    actionFormProps[ActionFormProp.ACTION_ID].default;
+
+  @property()
+  [ActionFormProp.TYPE]: ActionFormProps[ActionFormProp.TYPE] =
+    actionFormProps[ActionFormProp.TYPE].default;
+
+  @property()
+  [ActionFormProp.DESC]: ActionFormProps[ActionFormProp.DESC] =
+    actionFormProps[ActionFormProp.DESC].default;
+
+  @property()
+  [ActionFormProp.OCCURRED_AT]: ActionFormProps[ActionFormProp.OCCURRED_AT] =
+    actionFormProps[ActionFormProp.OCCURRED_AT].default;
+
+  @property({ type: Array })
+  [ActionFormProp.TAGS]: ActionFormProps[ActionFormProp.TAGS] =
+    actionFormProps[ActionFormProp.TAGS].default;
+
+  @property()
+  [ActionFormProp.TAG_VALUE]: ActionFormProps[ActionFormProp.TAG_VALUE] =
+    actionFormProps[ActionFormProp.TAG_VALUE].default;
 
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
@@ -133,15 +153,11 @@ export class ActionForm extends ViewElement {
         }
 
         this.dispatchEvent(
-          new CustomEvent('action-item-updated', {
-            bubbles: true,
-            composed: true,
-            detail: {
-              id: this.actionId,
-              desc,
-              occurredAt: result.response.occurredAt,
-              tags: this.tags,
-            },
+          new ActionItemUpdatedEvent({
+            id: this.actionId,
+            desc,
+            occurredAt: result.response.occurredAt,
+            tags: this.tags,
           }),
         );
 
@@ -150,10 +166,8 @@ export class ActionForm extends ViewElement {
       }
 
       this.dispatchEvent(
-        new CustomEvent('action-item-canceled', {
-          bubbles: true,
-          composed: true,
-          detail: { id: this.actionId },
+        new ActionItemCanceledEvent({
+          id: this.actionId,
         }),
       );
     } catch (error) {
@@ -185,10 +199,8 @@ export class ActionForm extends ViewElement {
     }
 
     this.dispatchEvent(
-      new CustomEvent('action-item-deleted', {
-        bubbles: true,
-        composed: true,
-        detail: this.actionId,
+      new ActionItemDeletedEvent({
+        id: this.actionId,
       }),
     );
 

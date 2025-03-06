@@ -36,6 +36,10 @@ import { ListFilter } from '@/components/list-filter/list-filter';
 import { ListContextUpdatedEvent } from '@/events/list-context-updated';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
+import {
+  ActionItemDeletedEvent,
+  ActionItemUpdatedEvent,
+} from '@/components/action-form/action-form.events';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -122,31 +126,6 @@ export class ActionList extends ViewElement {
 
     window.addEventListener('scroll', this.scrollHandler);
 
-    this.addEventListener('action-item-deleted', e => {
-      const event = e as CustomEvent;
-      this.state.setListItems(
-        this.state.listItems.filter(item => item.id !== event.detail),
-      );
-    });
-
-    this.addEventListener('action-item-updated', e => {
-      const event = e as CustomEvent;
-      const updatedList = this.state.listItems
-        .map(item =>
-          item.id === event.detail.id
-            ? {
-                ...item,
-                desc: event.detail.desc,
-                occurredAt: event.detail.occurredAt,
-                tags: event.detail.tags,
-              }
-            : item,
-        )
-        .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
-      console.log(JSON.stringify(updatedList, null, 2));
-      this.state.setListItems(updatedList);
-    });
-
     const urlHasChanged = this.state.lastListUrl !== this.getUrl();
     if (urlHasChanged) {
       this.state.setListItems([]);
@@ -164,6 +143,36 @@ export class ActionList extends ViewElement {
   sync() {
     this.listFilter.sync();
     this.load();
+  }
+
+  private _handleItemDeleted(e: ActionItemDeletedEvent) {
+    this.state.setListItems(
+      this.state.listItems.filter(item => item.id !== e.detail.id),
+    );
+  }
+
+  private _handleItemUpdated(e: ActionItemUpdatedEvent) {
+    const updatedList = this.state.listItems
+      .map(item =>
+        item.id === e.detail.id
+          ? {
+              ...item,
+              desc: e.detail.desc,
+              occurredAt: e.detail.occurredAt,
+              tags: e.detail.tags,
+            }
+          : item,
+      )
+      .sort((a, b) =>
+        this.state.listSort.direction === ListSortDirection.DESC
+          ? b[this.state.listSort.property].localeCompare(
+              a[this.state.listSort.property],
+            )
+          : a[this.state.listSort.property].localeCompare(
+              b[this.state.listSort.property],
+            ),
+      );
+    this.state.setListItems(updatedList);
   }
 
   private _handleScroll() {
@@ -402,6 +411,8 @@ export class ActionList extends ViewElement {
                   ?selected=${this.state.selectedActions.includes(item.id)}
                   @pointer-long-press=${this._handlePointerLongPress}
                   @pointer-up=${this._handlePointerUp}
+                  @action-item-deleted=${this._handleItemDeleted}
+                  @action-item-updated=${this._handleItemUpdated}
                 ></action-list-item>
                 ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
