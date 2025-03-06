@@ -40,6 +40,17 @@ export class AccountForm extends LitElement {
   @state() lastName: string = '';
   @state() loading: boolean = false;
 
+  @state()
+  get isValid(): boolean {
+    return (
+      this.username.length > 0 &&
+      this.password.length > 0 &&
+      this.password === this.passwordRepeat &&
+      this.firstName.length > 0 &&
+      this.lastName.length > 0
+    );
+  }
+
   private _handleFieldChanged(
     fieldName: AccountFormFieldName,
     e: InputChangedEvent,
@@ -52,6 +63,10 @@ export class AccountForm extends LitElement {
   }
 
   private async _save(): Promise<void> {
+    if (!this.isValid) {
+      return;
+    }
+
     this.loading = true;
     const result = await api.post<
       CreateAccountRequestBody,
@@ -72,7 +87,7 @@ export class AccountForm extends LitElement {
 
   render() {
     return html`
-      <form>
+      <form class="box">
         ${Object.values(AccountFormField).map(
           fieldName =>
             html` <ss-input
