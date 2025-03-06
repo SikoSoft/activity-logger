@@ -5,6 +5,11 @@ import { msg } from '@lit/localize';
 import { ActionView } from '@/models/Action';
 
 import { theme } from '@/styles/theme';
+import {
+  ActionNavProp,
+  actionNavProps,
+  ActionNavProps,
+} from './action-nav.models';
 
 const views: { id: ActionView; label: string }[] = [
   {
@@ -39,7 +44,9 @@ export class ActionNav extends LitElement {
     `,
   ];
 
-  @property() active: ActionView = ActionView.INPUT;
+  @property()
+  [ActionNavProp.ACTIVE]: ActionNavProps[ActionNavProp.ACTIVE] =
+    actionNavProps[ActionNavProp.ACTIVE].default;
 
   _setActiveView(view: ActionView) {
     this.dispatchEvent(
