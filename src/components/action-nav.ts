@@ -6,8 +6,6 @@ import { ActionView } from '@/models/Action';
 
 import { theme } from '@/styles/theme';
 
-import '@/components/account-form/account-form';
-
 const views: { id: ActionView; label: string }[] = [
   {
     id: ActionView.INPUT,
@@ -55,7 +53,6 @@ export class ActionNav extends LitElement {
 
   render() {
     return html`
-      <account-form></account-form>
       <nav class="box">
         ${views.map(
           view =>
