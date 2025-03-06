@@ -33,11 +33,7 @@ export class ActionToasts extends MobxLitElement {
           this.state.toasts,
           toast => toast.id,
           toast => html`
-            <action-toast
-              toastId=${toast.id}
-              message=${toast.message}
-              startTime=${toast.startTime.getTime()}
-            ></action-toast>
+            <action-toast message=${toast.message}></action-toast>
           `,
         )}
       </div>
