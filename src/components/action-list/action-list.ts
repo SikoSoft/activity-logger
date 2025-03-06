@@ -28,8 +28,8 @@ import {
 } from './action-list-item/action-list-item';
 import '@/components/action-list/action-list-item/action-list-item';
 import '@/components/list-filter/list-filter';
-import '@/components/list-sort';
-import '@/components/list-context';
+import '@/components/list-sort/list-sort';
+import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
 import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/list-filter/list-filter';

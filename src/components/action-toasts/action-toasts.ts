@@ -5,7 +5,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { appState } from '@/state';
 
-import '@/components/action-toast';
+import '@/components/action-toasts/action-toast/action-toast';
 
 import { theme } from '@/styles/theme';
 

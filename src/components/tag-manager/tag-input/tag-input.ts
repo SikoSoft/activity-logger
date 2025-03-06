@@ -5,7 +5,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
-import '@/components/ss-debug';
 import '@/components/tag-manager/tag-input/tag-input';
 import '@/components/tag-manager/tag-list/tag-list';
 

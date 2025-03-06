@@ -1,6 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
@@ -9,12 +9,8 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
-
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
-import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
 import { storage } from '@/lib/Storage';
 import { UserLoggedOutEvent } from '@/events/user-logged-out';
 

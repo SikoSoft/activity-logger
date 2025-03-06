@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
-import '@/components/login-form';
+import '@/components/login-form/login-form';
 
 import { theme } from '@/styles/theme';
 

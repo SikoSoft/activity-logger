@@ -12,11 +12,11 @@ import { OperationPerformedEvent } from '@/events/operation-performed';
 import '@/components/action-nav/action-nav';
 import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
-import '@/components/action-toasts';
-import '@/components/floating-widget';
-import '@/components/forbidden-notice';
-import '@/components/bulk-manager';
-import '@/components/list-config';
+import '@/components/action-toasts/action-toasts';
+import '@/components/floating-widget/floating-widget';
+import '@/components/forbidden-notice/forbidden-notice';
+import '@/components/bulk-manager/bulk-manager';
+import '@/components/list-config/list-config';
 
 import { theme } from './styles/theme';
 import { api } from './lib/Api';

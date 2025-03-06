@@ -11,7 +11,7 @@ import { storage } from '@/lib/Storage';
 import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
 
 import '@ss/ui/components/ss-toggle';
-import '@/components/user-pane';
+import '@/components/user-pane/user-pane';
 
 import { theme } from '@/styles/theme';
 
