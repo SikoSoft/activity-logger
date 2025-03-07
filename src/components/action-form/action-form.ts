@@ -135,7 +135,6 @@ export class ActionForm extends ViewElement {
         const timeZone = new Date().getTimezoneOffset();
 
         const payload: RequestBody = {
-          type: 'food',
           desc,
           occurredAt,
           timeZone,

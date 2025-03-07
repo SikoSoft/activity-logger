@@ -7,7 +7,8 @@ import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 
-import { OperationPerformedEvent } from '@/events/operation-performed';
+import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
+import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
 
 import '@/components/action-nav/action-nav';
 import '@/components/action-form/action-form';
@@ -92,7 +93,7 @@ export class ActivityLogger extends MobxLitElement {
     this.viewComponent.sync();
   }
 
-  private _handleListConfigChanged(e: OperationPerformedEvent) {
+  private _handleListConfigChanged(e: ListConfigChangedEvent) {
     this.viewComponent.sync();
   }
 

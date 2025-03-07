@@ -1,3 +1,3 @@
-## Food Journal
+## Activity Logger
 
 WIP

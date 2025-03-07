@@ -52,7 +52,6 @@ export const actionFormProps: PropConfigMap<ActionFormProps> = {
 };
 
 export interface RequestBody {
-  type: string;
   desc: string;
   occurredAt: string;
   timeZone: number;
