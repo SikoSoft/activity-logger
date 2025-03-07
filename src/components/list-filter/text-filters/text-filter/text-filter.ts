@@ -7,12 +7,19 @@ import { TextType } from 'api-spec/models/List';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { theme } from '@/styles/theme';
 
-import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
+import {
+  TextFilterUpdatedEvent,
+  TextFilterSaveEvent,
+} from './text-filter.events';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
-import { TextFilterSaveEvent } from '@/events/text-filter-save';
 
 import '@/components/tag-manager/tag-manager';
+import {
+  TextFilterProp,
+  textFilterProps,
+  TextFilterProps,
+} from './text-filter.models';
 
 const textTypeMsgMap: Record<TextType, string> = {
   [TextType.EQUALS]: msg('textType.equals'),
@@ -24,9 +31,18 @@ const textTypeMsgMap: Record<TextType, string> = {
 @customElement('text-filter')
 export class TextFilter extends LitElement {
   static styles = [theme];
-  @property() type: TextType = TextType.CONTAINS;
-  @property() subStr: string = '';
-  @property({ type: Number }) index: number = -1;
+
+  @property()
+  [TextFilterProp.TYPE]: TextFilterProps[TextFilterProp.TYPE] =
+    textFilterProps[TextFilterProp.TYPE].default;
+
+  @property()
+  [TextFilterProp.SUB_STR]: TextFilterProps[TextFilterProp.SUB_STR] =
+    textFilterProps[TextFilterProp.SUB_STR].default;
+
+  @property({ type: Number })
+  [TextFilterProp.INDEX]: TextFilterProps[TextFilterProp.INDEX] =
+    textFilterProps[TextFilterProp.INDEX].default;
 
   private _handleTypeChanged(e: SelectChangedEvent<string>) {
     const type = e.detail.value as TextType;

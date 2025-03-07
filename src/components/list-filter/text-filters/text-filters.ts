@@ -5,20 +5,29 @@ import { msg } from '@lit/localize';
 
 import { TextContext, TextType } from 'api-spec/models/List';
 
-import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
-import { TextFilterUpdatedEvent } from '@/events/text-filter-updated';
-import { TextFilterSaveEvent } from '@/events/text-filter-save';
+import { TextFiltersUpdatedEvent } from './text-filters.events';
+import {
+  TextFilterUpdatedEvent,
+  TextFilterSaveEvent,
+} from './text-filter/text-filter.events';
 
 import '@/components/tag-manager/tag-manager';
 import '@/components/list-filter/text-filters/text-filter/text-filter';
 
 import { theme } from '@/styles/theme';
+import {
+  TextFiltersProp,
+  textFiltersProps,
+  TextFiltersProps,
+} from './text-filters.models';
 
 @customElement('text-filters')
 export class TextFilters extends LitElement {
   static styles = [theme];
 
-  @property({ type: Array }) filters: TextContext[] = [];
+  @property({ type: Array })
+  [TextFiltersProp.FILTERS]: TextFiltersProps[TextFiltersProp.FILTERS] =
+    textFiltersProps[TextFiltersProp.FILTERS].default;
 
   @state() newFilter: TextContext = {
     type: TextType.CONTAINS,

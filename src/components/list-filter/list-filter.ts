@@ -17,7 +17,7 @@ import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 
 import { TimeFiltersUpdatedEvent } from '@/components/list-filter/time-filters/time-filters.events';
-import { TextFiltersUpdatedEvent } from '@/events/text-filters-updated';
+import { TextFiltersUpdatedEvent } from '@/components/list-filter/text-filters/text-filters.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
