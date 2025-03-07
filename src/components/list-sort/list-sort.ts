@@ -8,7 +8,7 @@ import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { SortUpdatedEvent } from '@/events/sort-updated';
+import { ListSortUpdatedEvent } from './list-sort.events';
 
 import '@ss/ui/components/ss-select';
 
@@ -46,7 +46,7 @@ export class ListSort extends MobxLitElement {
       direction: this.state.listSort.direction,
     };
     this.state.setListSort(sort);
-    this.dispatchEvent(new SortUpdatedEvent({ sort }));
+    this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
   private _handleDirectionChanged(e: SelectChangedEvent<string>) {
@@ -56,7 +56,7 @@ export class ListSort extends MobxLitElement {
       direction,
     };
     this.state.setListSort(sort);
-    this.dispatchEvent(new SortUpdatedEvent({ sort }));
+    this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
   render() {

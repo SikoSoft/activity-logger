@@ -16,7 +16,7 @@ import {
   ListContext as ListContextSpec,
 } from 'api-spec/models/List';
 import { classMap } from 'lit/directives/class-map.js';
-import { ListContextUpdatedEvent } from '@/events/list-context-updated';
+import { ListContextUpdatedEvent } from './list-context.events';
 import { storage } from '@/lib/Storage';
 
 const quantityMap: Record<ListContextUnit, number[]> = {

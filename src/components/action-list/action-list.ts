@@ -14,9 +14,16 @@ import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
-import { SortUpdatedEvent } from '@/events/sort-updated';
+import { ListSortUpdatedEvent } from '@/components/list-sort/list-sort.events';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
+import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
+import {
+  ActionItemDeletedEvent,
+  ActionItemUpdatedEvent,
+} from '@/components/action-form/action-form.events';
+import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
+
 import { ViewElement } from '@/lib/ViewElement';
 
 import '@ss/ui/components/ss-button';
@@ -33,14 +40,8 @@ import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
 import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/list-filter/list-filter';
-import { ListContextUpdatedEvent } from '@/events/list-context-updated';
+import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
-import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
-import {
-  ActionItemDeletedEvent,
-  ActionItemUpdatedEvent,
-} from '@/components/action-form/action-form.events';
-import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -257,7 +258,7 @@ export class ActionList extends ViewElement {
     this.load();
   }
 
-  private _handleSortUpdated(e: SortUpdatedEvent) {
+  private _handleSortUpdated(e: ListSortUpdatedEvent) {
     this.load();
   }
 
@@ -376,7 +377,7 @@ export class ActionList extends ViewElement {
         ?open=${this.sortIsOpen}
         @toggled=${this._toggleSort}
       >
-        <list-sort @sort-updated=${this._handleSortUpdated}></list-sort>
+        <list-sort @list-sort-updated=${this._handleSortUpdated}></list-sort>
       </ss-collapsable>
 
       ${!this.state.listFilter.includeAll
