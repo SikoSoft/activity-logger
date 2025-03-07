@@ -9,6 +9,7 @@ import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
 } from '@/lib/Event';
+import { TagsUpdatedEvent } from '@/components/tag-manager/tag-manager.events';
 
 import '@/components/tag-manager/tag-manager';
 
@@ -44,7 +45,7 @@ export class TagFilters extends LitElement {
               <legend>${filterTypeMsgMap[type]}</legend>
               <tag-manager
                 .tags=${this[type]}
-                @tags-updated=${(e: CustomEvent) => {
+                @tags-updated=${(e: TagsUpdatedEvent) => {
                   this._handleTagsUpdated(type, e.detail.tags);
                 }}
               ></tag-manager>

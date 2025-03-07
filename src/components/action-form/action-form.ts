@@ -29,6 +29,7 @@ import {
   ActionItemDeletedEvent,
   ActionItemUpdatedEvent,
 } from './action-form.events';
+import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -290,7 +291,7 @@ export class ActionForm extends ViewElement {
     this.confirmModalShown = true;
   }
 
-  private _handleTagsUpdated(e: CustomEvent) {
+  private _handleTagsUpdated(e: TagsUpdatedEvent) {
     this.tags = e.detail.tags;
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
@@ -314,9 +315,7 @@ export class ActionForm extends ViewElement {
         <tag-manager
           value=${this.tagValue}
           .tags=${this.tagsAndSuggestions}
-          @tags-updated=${(e: CustomEvent) => {
-            this._handleTagsUpdated(e);
-          }}
+          @tags-updated=${this._handleTagsUpdated}
         ></tag-manager>
         ${this.actionId
           ? html`

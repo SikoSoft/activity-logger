@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { TagsUpdatedEvent } from '@/events/tags-updated';
+import { TagsUpdatedEvent } from './tag-manager.events';
 
 import '@/components/tag-manager/tag-input/tag-input';
 import '@/components/tag-manager/tag-list/tag-list';

@@ -18,6 +18,8 @@ import { SavedListFilter, storage } from '@/lib/Storage';
 
 import { TimeFiltersUpdatedEvent } from '@/components/list-filter/time-filters/time-filters.events';
 import { TextFiltersUpdatedEvent } from '@/components/list-filter/text-filters/text-filters.events';
+import { ListFilterUpdatedEvent } from './list-filter.events';
+import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
@@ -26,7 +28,6 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
-import { ListFilterUpdatedEvent } from './list-filter.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -306,7 +307,7 @@ export class ListFilter extends MobxLitElement {
                     <legend>${filterTypeMsgMap[type]}</legend>
                     <tag-manager
                       .tags=${this[type]}
-                      @tags-updated=${(e: CustomEvent) => {
+                      @tags-updated=${(e: TagsUpdatedEvent) => {
                         this.updateTags(type, e.detail.tags);
                       }}
                     ></tag-manager>

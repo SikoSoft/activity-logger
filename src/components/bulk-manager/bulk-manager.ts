@@ -11,6 +11,7 @@ import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { OperationPerformedEvent } from './bulk-manager.events';
+import { TagsUpdatedEvent } from '@/components/tag-manager/tag-manager.events';
 
 import '@ss/ui/components/ss-button';
 import '@/components/tag-manager/tag-manager';
@@ -88,7 +89,7 @@ export class BulkManager extends MobxLitElement {
     );
   }
 
-  private _handleTagsUpdated(e: CustomEvent) {
+  private _handleTagsUpdated(e: TagsUpdatedEvent) {
     this.tags = e.detail.tags;
   }
 
