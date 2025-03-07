@@ -10,25 +10,13 @@ import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { OperationPerformedEvent } from '@/events/operation-performed';
+import { OperationPerformedEvent } from './bulk-manager.events';
 
 import '@ss/ui/components/ss-button';
 import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
-
-const taggingOperations = [
-  OperationType.ADD_TAGS,
-  OperationType.REMOVE_TAGS,
-  OperationType.REPLACE_TAGS,
-];
-
-const operationTypeMsgMap: Record<OperationType, string> = {
-  [OperationType.ADD_TAGS]: msg('operationType.addTags'),
-  [OperationType.DELETE]: msg('operationType.delete'),
-  [OperationType.REMOVE_TAGS]: msg('operationType.removeTags'),
-  [OperationType.REPLACE_TAGS]: msg('operationType.replaceTags'),
-};
+import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {

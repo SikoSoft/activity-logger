@@ -26,6 +26,7 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
+import { ListFilterUpdatedEvent } from './list-filter.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -164,9 +165,7 @@ export class ListFilter extends MobxLitElement {
     this.state.setListFilter(this.filter);
 
     storage.saveActiveFilter(this.state.listFilter);
-    this.dispatchEvent(
-      new CustomEvent('filter-updated', { bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(new ListFilterUpdatedEvent({}));
   }
 
   private async _saveFilter() {

@@ -40,6 +40,7 @@ import {
   ActionItemDeletedEvent,
   ActionItemUpdatedEvent,
 } from '@/components/action-form/action-form.events';
+import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -251,7 +252,7 @@ export class ActionList extends ViewElement {
     }
   }
 
-  private _handleFilterUpdated(e: CustomEvent) {
+  private _handleFilterUpdated(e: ListFilterUpdatedEvent) {
     this.filterIsOpen = false;
     this.load();
   }
@@ -365,9 +366,7 @@ export class ActionList extends ViewElement {
       >
         <div class="filter-body">
           <list-filter
-            @filter-updated=${(e: CustomEvent) => {
-              this._handleFilterUpdated(e);
-            }}
+            @filter-updated=${this._handleFilterUpdated}
           ></list-filter>
         </div>
       </ss-collapsable>
