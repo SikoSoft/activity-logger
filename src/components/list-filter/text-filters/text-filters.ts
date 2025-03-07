@@ -39,7 +39,6 @@ export class TextFilters extends LitElement {
   }
 
   private _handleFilterUpdated(e: TextFilterUpdatedEvent) {
-    console.log('handleFilterUpdated', e);
     const textFilter = e.detail;
     if (textFilter.index === -1) {
       this.newFilter = {

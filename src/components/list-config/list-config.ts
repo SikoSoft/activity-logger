@@ -115,7 +115,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   async setup() {
-    console.log('setup');
     const listConfigs = this.state.listConfigs;
     if (!listConfigs.length) {
       await this._addConfig();
@@ -167,7 +166,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   async _addConfig() {
-    console.log('add config');
     const id = await storage.addListConfig();
     this.state.addToast(msg('The configuration has been added'));
     const listConfigs = await storage.getListConfigs();
