@@ -10,7 +10,7 @@ import '@ss/ui/components/ss-select';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { ListConfigChangedEvent } from '@/events/list-config-changed';
+import { ListConfigChangedEvent } from './list-config.events';
 import { InputType } from '@/models/Input';
 import { storage } from '@/lib/Storage';
 
