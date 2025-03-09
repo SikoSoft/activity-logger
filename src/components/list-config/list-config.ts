@@ -144,7 +144,7 @@ export class ListConfig extends MobxLitElement {
 
   async _saveConfig() {
     this.state.addToast(msg('The configuration has been saved'));
-    storage.saveListConfig({
+    await storage.saveListConfig({
       id: this.id,
       name: this.name,
       filter: this.state.listFilter,
