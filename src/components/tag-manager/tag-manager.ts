@@ -1,5 +1,5 @@
-import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, PropertyValues, css, html } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import { TagsUpdatedEvent } from './tag-manager.events';
 
@@ -29,6 +29,10 @@ export class TagManager extends LitElement {
         color: #666;
         font-size: 0.75rem;
       }
+
+      #data-slot {
+        display: none;
+      }
     `,
   ];
 
@@ -39,6 +43,46 @@ export class TagManager extends LitElement {
   @property({ type: String, reflect: true })
   [TagManagerProp.VALUE]: TagManagerProps[TagManagerProp.VALUE] =
     tagManagerProps[TagManagerProp.VALUE].default;
+
+  @state() dataTags: string[] = [];
+
+  connectedCallback(): void {
+    super.connectedCallback();
+  }
+
+  async firstUpdated(_changedProperties: PropertyValues): Promise<void> {
+    super.firstUpdated(_changedProperties);
+    await this.updateComplete;
+
+    console.log('firstUpdated', this.innerHTML, this.querySelector('slot'));
+    const slotNode = this.querySelector('slot');
+    if (slotNode) {
+      console.log('slotNode', slotNode);
+
+      slotNode.addEventListener('slotchange', () => {
+        console.log('slotchange');
+        this.syncDataTags();
+      });
+    }
+  }
+
+  private syncDataTags() {
+    console.log('syncDataTags');
+    this.dataTags = [];
+    this.querySelectorAll('data-item').forEach(item => {
+      this.dataTags.push(item.textContent || '');
+    });
+  }
+
+  /*
+  protected updated(_changedProperties: PropertyValues): void {
+    super.updated(_changedProperties);
+
+    if (_changedProperties.has(TagManagerProp.TAGS)) {
+      this.tags = this[TagManagerProp.TAGS];
+    }
+  }
+    */
 
   private _handleAdded(e: CustomEvent) {
     this.tags = [...this.tags, e.detail.value];
@@ -79,6 +123,7 @@ export class TagManager extends LitElement {
               }}
             ></tag-list>`
           : html`<div class="no-tags">${msg('No tags are set')}</div>`}
+        <slot id="data-slot"></slot>
       </fieldset>
     `;
   }

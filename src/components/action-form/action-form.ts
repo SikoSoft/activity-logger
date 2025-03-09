@@ -315,7 +315,11 @@ export class ActionForm extends ViewElement {
           value=${this.tagValue}
           .tags=${this.tagsAndSuggestions}
           @tags-updated=${this._handleTagsUpdated}
-        ></tag-manager>
+        >
+          ${this.tagsAndSuggestions.map(
+            tag => html`<data-item>${tag}</data-item>`,
+          )}
+        </tag-manager>
         ${this.actionId
           ? html`
               <div class="time">
