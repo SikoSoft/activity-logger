@@ -35,6 +35,7 @@ import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 export class ActionForm extends ViewElement {
   private state = appState;
   private minLengthForSuggestion = 1;
+  private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
 
   static styles = [
     theme,
@@ -267,7 +268,12 @@ export class ActionForm extends ViewElement {
   private async _handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
     this._requestTagSuggestions();
-    this._requestActionSuggestions();
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+    this.suggestionTimeout = setTimeout(() => {
+      this._requestActionSuggestions();
+    }, 100);
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
