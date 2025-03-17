@@ -15,6 +15,7 @@ import { TagInputProp, tagInputProps, TagInputProps } from './tag-input.models';
 export class TagInput extends MobxLitElement {
   private state = appState;
   private minInput = 1;
+  private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
 
   static styles = [
     theme,
@@ -59,6 +60,15 @@ export class TagInput extends MobxLitElement {
       }),
     );
 
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+    this.suggestionTimeout = setTimeout(() => {
+      this._requestSuggestions();
+    }, 100);
+  }
+
+  private async _requestSuggestions() {
     if (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) {
       this.state.setActionSuggestions([]);
       return;
