@@ -1,6 +1,5 @@
 import { appState } from '@/state';
 import { config } from '../models/Config';
-import { storage } from './Storage';
 
 export interface ApiResponse<ResponseBodyType> {
   status: number;
@@ -116,7 +115,7 @@ export class Api {
 }
 
 export const api = new Api({
-  authToken: '', //storage.getAuthToken(),
+  authToken: '',
   baseUrl: config.apiUrl,
   errorHandler: () => {
     appState.setForbidden(true);
