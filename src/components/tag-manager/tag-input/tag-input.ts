@@ -65,7 +65,7 @@ export class TagInput extends MobxLitElement {
     }
     this.suggestionTimeout = setTimeout(() => {
       this._requestSuggestions();
-    }, 100);
+    }, 150);
   }
 
   private async _requestSuggestions() {

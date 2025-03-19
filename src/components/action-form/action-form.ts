@@ -269,11 +269,12 @@ export class ActionForm extends ViewElement {
     this.desc = e.detail.value;
     this._requestTagSuggestions();
     if (this.suggestionTimeout) {
+      console.log('clearing suggestion timeout');
       clearTimeout(this.suggestionTimeout);
     }
     this.suggestionTimeout = setTimeout(() => {
       this._requestActionSuggestions();
-    }, 100);
+    }, 150);
   }
 
   private _handleDescSubmitted(e: CustomEvent) {
