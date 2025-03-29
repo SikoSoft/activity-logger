@@ -56,9 +56,6 @@ export class AppState {
   public tagSuggestions: string[] = [];
 
   @observable
-  public toasts: Toast[] = [];
-
-  @observable
   public loading: boolean = false;
 
   @observable
@@ -135,25 +132,6 @@ export class AppState {
     this.tagSuggestions = [
       ...this.tagSuggestions.filter(tag => !suggestions.includes(tag)),
     ];
-  }
-
-  @action
-  public addToast(message: string) {
-    const id = uuidv4();
-    const startTime = new Date();
-    this.toasts.push({
-      id,
-      message,
-      startTime,
-    });
-    setTimeout(() => {
-      this.removeToast(id);
-    }, 3000);
-  }
-
-  @action
-  removeToast(id: string) {
-    this.toasts = this.toasts.filter(toast => toast.id !== id);
   }
 
   @action

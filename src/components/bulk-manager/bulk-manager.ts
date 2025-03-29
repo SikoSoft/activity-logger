@@ -18,6 +18,7 @@ import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
+import { addToast } from '@/lib/Util';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
@@ -79,7 +80,7 @@ export class BulkManager extends MobxLitElement {
 
     this.state.setSelectedActions([]);
     this.state.setSelectMode(false);
-    this.state.addToast(msg('The operation has been performed successfully.'));
+    addToast(msg('The operation has been performed successfully.'));
 
     this.dispatchEvent(
       new OperationPerformedEvent({

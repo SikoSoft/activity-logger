@@ -13,7 +13,6 @@ import { ListConfigChangedEvent } from '@/components/list-config/list-config.eve
 import '@/components/action-nav/action-nav';
 import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
-import '@/components/action-toasts/action-toasts';
 import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/bulk-manager/bulk-manager';
@@ -116,7 +115,7 @@ export class ActivityLogger extends MobxLitElement {
     return html`<action-list></action-list>`;
   }
 
-  renderContent() {
+  render() {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html`
         <forbidden-notice
@@ -138,12 +137,5 @@ export class ActivityLogger extends MobxLitElement {
           <floating-widget></floating-widget>
         `
       : html`<ss-loader></ss-loader>`;
-  }
-
-  render() {
-    return html`
-      ${this.renderContent()}
-      <action-toasts></action-toasts>
-    `;
   }
 }

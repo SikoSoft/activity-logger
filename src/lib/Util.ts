@@ -1,0 +1,16 @@
+import { NotificationProvider } from '@ss/ui/components/notification-provider';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import '@ss/ui/components/notification-provider';
+
+let notificationProvider: NotificationProvider | null = null;
+
+export function addToast(message: string) {
+  if (!notificationProvider) {
+    notificationProvider = document.createElement(
+      'notification-provider',
+    ) as NotificationProvider;
+    document.body.appendChild(notificationProvider);
+  }
+
+  notificationProvider.addNotification(message, NotificationType.INFO);
+}

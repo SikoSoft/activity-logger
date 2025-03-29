@@ -28,6 +28,7 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
+import { addToast } from '@/lib/Util';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -182,7 +183,7 @@ export class ListFilter extends MobxLitElement {
     this.filterNameInput.clear();
     this.saveMode = false;
 
-    this.state.addToast(msg('Filter saved!'));
+    addToast(msg('Filter saved!'));
   }
 
   private async _handleSaveClick(e: CustomEvent): Promise<void> {
@@ -222,7 +223,7 @@ export class ListFilter extends MobxLitElement {
       this.savedFiltersInput.dispatchEvent(new Event('change'));
     }
     this.savedFilters = storage.getSavedFilters();
-    this.state.addToast(msg('Filter deleted!'));
+    addToast(msg('Filter deleted!'));
   }
 
   private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {

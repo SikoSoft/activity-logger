@@ -16,6 +16,7 @@ import { storage } from '@/lib/Storage';
 
 import { theme } from '@/styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
+import { addToast } from '@/lib/Util';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
@@ -143,7 +144,7 @@ export class ListConfig extends MobxLitElement {
   }
 
   async _saveConfig() {
-    this.state.addToast(msg('The configuration has been saved'));
+    addToast(msg('The configuration has been saved'));
     await storage.saveListConfig({
       id: this.id,
       name: this.name,
@@ -156,7 +157,7 @@ export class ListConfig extends MobxLitElement {
 
   async _deleteConfig() {
     await storage.deleteListConfig(this.id);
-    this.state.addToast(msg('The configuration has been deleted'));
+    addToast(msg('The configuration has been deleted'));
     const listConfigs = await storage.getListConfigs();
     if (listConfigs.length) {
       this.setListConfigId(listConfigs[0].id);
@@ -167,7 +168,7 @@ export class ListConfig extends MobxLitElement {
 
   async _addConfig() {
     const id = await storage.addListConfig();
-    this.state.addToast(msg('The configuration has been added'));
+    addToast(msg('The configuration has been added'));
     const listConfigs = await storage.getListConfigs();
     this.state.setListConfigs(listConfigs);
     this.setListConfigId(id);

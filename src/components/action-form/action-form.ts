@@ -30,6 +30,7 @@ import {
   ActionItemUpdatedEvent,
 } from './action-form.events';
 import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
+import { addToast } from '@/lib/Util';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -162,7 +163,7 @@ export class ActionForm extends ViewElement {
           }),
         );
 
-        this.state.addToast(this.actionId ? msg('Updated!') : msg('Added!'));
+        addToast(this.actionId ? msg('Updated!') : msg('Added!'));
         return;
       }
 
@@ -194,7 +195,7 @@ export class ActionForm extends ViewElement {
     try {
       await api.delete(this.apiUrl);
 
-      this.state.addToast(msg('Removed!'));
+      addToast(msg('Removed!'));
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }
