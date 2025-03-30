@@ -31,6 +31,7 @@ import {
 } from './action-form.events';
 import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 import { addToast } from '@/lib/Util';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -102,6 +103,14 @@ export class ActionForm extends ViewElement {
   @state()
   get tagsAndSuggestions(): string[] {
     return [...this.tags, ...this.state.tagSuggestions];
+  }
+
+  @state()
+  get tagSuggestionsEnabled(): boolean {
+    return (
+      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
+      TagSuggestions.DISABLED
+    );
   }
 
   connectedCallback(): void {
@@ -243,7 +252,7 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestTagSuggestions(): Promise<void> {
-    if (this.desc.length === 0) {
+    if (this.desc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
     }

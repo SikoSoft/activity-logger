@@ -10,6 +10,7 @@ import '@/components/tag-manager/tag-list/tag-list';
 
 import { theme } from '@/styles/theme';
 import { TagInputProp, tagInputProps, TagInputProps } from './tag-input.models';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 
 @customElement('tag-input')
 export class TagInput extends MobxLitElement {
@@ -45,6 +46,14 @@ export class TagInput extends MobxLitElement {
     return this.value.length > 0;
   }
 
+  @state()
+  get tagSuggestionsEnabled(): boolean {
+    return (
+      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
+      TagSuggestions.DISABLED
+    );
+  }
+
   private _handleSubmitted() {
     this._save();
   }
@@ -65,11 +74,14 @@ export class TagInput extends MobxLitElement {
     }
     this.suggestionTimeout = setTimeout(() => {
       this._requestSuggestions();
-    }, 150);
+    }, 200);
   }
 
   private async _requestSuggestions() {
-    if (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) {
+    if (
+      (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) ||
+      !this.tagSuggestionsEnabled
+    ) {
       this.state.setActionSuggestions([]);
       return;
     }
