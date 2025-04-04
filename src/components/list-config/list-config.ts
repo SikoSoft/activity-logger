@@ -1,11 +1,13 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html } from 'lit';
+import { css, CSSResult, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
+import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 
 import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-carousel';
 import '@ss/ui/components/ss-select';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
@@ -17,12 +19,18 @@ import { storage } from '@/lib/Storage';
 import { theme } from '@/styles/theme';
 import { classMap } from 'lit/directives/class-map.js';
 import { addToast } from '@/lib/Util';
+import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
   static styles = [
     theme,
     css`
+      :host {
+        display: block;
+        width: 100%;
+      }
+
       .list-config {
         padding: 1rem;
         margin-bottom: 1rem;
@@ -34,6 +42,7 @@ export class ListConfig extends MobxLitElement {
           position: absolute;
           right: 0;
           top: 0;
+          z-index: 100;
 
           &::before {
             content: 'X';
@@ -92,6 +101,27 @@ export class ListConfig extends MobxLitElement {
       }
     `,
   ];
+  private defaultModeStyles = css`
+    .config-slide {
+      .config {
+        display: none;
+      }
+    }
+  `;
+  private editModeStyles = css`
+    .config-slide {
+      .config {
+        display: block;
+      }
+    }
+  `;
+  private configModeStyles = css`
+    .config-slide {
+      .config {
+        display: block;
+      }
+    }
+  `;
 
   private state = appState;
 
@@ -107,6 +137,22 @@ export class ListConfig extends MobxLitElement {
       'config-mode': this.state.selectListConfigMode,
       'edit-mode': this.state.editListConfigMode,
     };
+  }
+
+  @state() get carouselStyles(): CSSResult[] {
+    console.log(
+      'carouselStyles',
+      this.state.editListConfigMode,
+      this.setListConfigId,
+    );
+    const styles: CSSResult[] = [this.defaultModeStyles];
+    if (this.state.editListConfigMode) {
+      styles.push(this.editModeStyles);
+    }
+    if (this.state.selectListConfigMode) {
+      styles.push(this.configModeStyles);
+    }
+    return styles;
   }
 
   connectedCallback(): void {
@@ -187,6 +233,86 @@ export class ListConfig extends MobxLitElement {
   }
 
   render() {
+    return html`<div
+      class=${classMap(this.classes)}
+      @click=${this._handleBoxClick}
+    >
+      <ss-carousel
+        infinite
+        discrete
+        showButtons
+        height="180"
+        width="100%"
+        @carousel-slide-changed=${(e: CarouselSlideChangedEvent) => {
+          this.state.setEditListConfigMode(false);
+          this.state.setSelectListConfigMode(false);
+          this.setListConfigId(this.state.listConfigs[e.detail.slideIndex].id);
+        }}
+      >
+        ${this.ready
+          ? repeat(
+              this.state.listConfigs,
+              config => config.id,
+              config =>
+                html`<div class="config-slide">
+                  <div
+                    class="close"
+                    @click=${(e: MouseEvent) => {
+                      console.log('close');
+                      this.state.setSelectListConfigMode(false);
+                      this.state.setEditListConfigMode(false);
+                      e.stopPropagation();
+                    }}
+                  ></div>
+
+                  <div class="config-name">${config.name}</div>
+
+                  <div class="config">
+                    <div class="edit">
+                      <div class="id">${msg('ID')}: ${this.id}</div>
+
+                      <div class="name">
+                        <ss-input
+                          id="date"
+                          @input-changed=${this._handleNameChanged}
+                          type=${InputType.TEXT}
+                          value=${this.name}
+                        ></ss-input>
+                      </div>
+
+                      <div class="buttons">
+                        <ss-button
+                          text=${msg('Save configuration')}
+                          @click=${this._saveConfig}
+                        ></ss-button>
+                        <ss-button
+                          text=${msg('Delete configuration')}
+                          @click=${this._deleteConfig}
+                        ></ss-button>
+                      </div>
+                    </div>
+                    <div class="edit-button">
+                      <ss-button
+                        @click=${this._enableEditMode}
+                        text=${msg('Edit configuration')}
+                      ></ss-button>
+                      <ss-button
+                        text=${msg('Add configuration')}
+                        @click=${this._addConfig}
+                      ></ss-button>
+                    </div>
+                  </div>
+                </div>`,
+            )
+          : nothing}
+        <style>
+          ${this.carouselStyles}
+        </style>
+      </ss-carousel>
+    </div>`;
+  }
+
+  renderOld() {
     return html`
       <div class=${classMap(this.classes)} @click=${this._handleBoxClick}>
         ${this.ready
