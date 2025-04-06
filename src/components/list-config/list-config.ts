@@ -273,7 +273,7 @@ export class ListConfig extends MobxLitElement {
                           id="date"
                           @input-changed=${this._handleNameChanged}
                           type=${InputType.TEXT}
-                          value=${this.name}
+                          value=${config.name}
                         ></ss-input>
                       </div>
 
