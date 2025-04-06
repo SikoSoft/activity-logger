@@ -29,6 +29,7 @@ export class ListConfig extends MobxLitElement {
       :host {
         display: block;
         width: 100%;
+        touch-action: none;
       }
 
       .list-config {
@@ -52,7 +53,6 @@ export class ListConfig extends MobxLitElement {
         .config {
           transition: all 0.3s;
           opacity: 0;
-          //height: 0;
         }
 
         .config-name {
@@ -84,8 +84,7 @@ export class ListConfig extends MobxLitElement {
           }
 
           .config-name {
-            opacity: 0;
-            font-size: 0;
+            font-size: 1rem;
           }
         }
 
@@ -269,8 +268,6 @@ export class ListConfig extends MobxLitElement {
 
                   <div class="config">
                     <div class="edit">
-                      <div class="id">${msg('ID')}: ${this.id}</div>
-
                       <div class="name">
                         <ss-input
                           id="date"
@@ -291,6 +288,7 @@ export class ListConfig extends MobxLitElement {
                         ></ss-button>
                       </div>
                     </div>
+
                     <div class="edit-button">
                       <ss-button
                         @click=${this._enableEditMode}
@@ -310,81 +308,5 @@ export class ListConfig extends MobxLitElement {
         </style>
       </ss-carousel>
     </div>`;
-  }
-
-  renderOld() {
-    return html`
-      <div class=${classMap(this.classes)} @click=${this._handleBoxClick}>
-        ${this.ready
-          ? html`
-              <div
-                class="close"
-                @click=${(e: MouseEvent) => {
-                  this.state.setSelectListConfigMode(false);
-                  this.state.setEditListConfigMode(false);
-                  e.stopPropagation();
-                }}
-              ></div>
-
-              <div class="window">
-                <div class="config-name">${this.state.listConfig.name}</div>
-
-                <div class="config">
-                  <div class="select">
-                    <ss-select
-                      id="config-selector"
-                      selected=${this.state.listConfigId}
-                      @select-changed=${(e: SelectChangedEvent<string>) => {
-                        this._handleConfigChanged(e);
-                      }}
-                      .options=${Object.values(this.state.listConfigs).map(
-                        config => ({
-                          value: config.id,
-                          label: config.name,
-                        }),
-                      )}
-                    >
-                    </ss-select>
-                  </div>
-
-                  <div class="edit">
-                    <div class="id">${msg('ID')}: ${this.id}</div>
-
-                    <div class="name">
-                      <ss-input
-                        id="date"
-                        @input-changed=${this._handleNameChanged}
-                        type=${InputType.TEXT}
-                        value=${this.name}
-                      ></ss-input>
-                    </div>
-
-                    <div class="buttons">
-                      <ss-button
-                        text=${msg('Save configuration')}
-                        @click=${this._saveConfig}
-                      ></ss-button>
-                      <ss-button
-                        text=${msg('Delete configuration')}
-                        @click=${this._deleteConfig}
-                      ></ss-button>
-                    </div>
-                  </div>
-                  <div class="edit-button">
-                    <ss-button
-                      @click=${this._enableEditMode}
-                      text=${msg('Edit configuration')}
-                    ></ss-button>
-                    <ss-button
-                      text=${msg('Add configuration')}
-                      @click=${this._addConfig}
-                    ></ss-button>
-                  </div>
-                </div>
-              </div>
-            `
-          : html`<ss-loader></ss-loader>`}
-      </div>
-    `;
   }
 }
