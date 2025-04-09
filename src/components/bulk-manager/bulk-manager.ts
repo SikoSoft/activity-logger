@@ -19,6 +19,7 @@ import '@/components/tag-manager/tag-manager';
 import { theme } from '@/styles/theme';
 import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
 import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
@@ -80,7 +81,10 @@ export class BulkManager extends MobxLitElement {
 
     this.state.setSelectedActions([]);
     this.state.setSelectMode(false);
-    addToast(msg('The operation has been performed successfully.'));
+    addToast(
+      msg('The operation has been performed successfully.'),
+      NotificationType.INFO,
+    );
 
     this.dispatchEvent(
       new OperationPerformedEvent({

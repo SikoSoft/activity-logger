@@ -4,7 +4,10 @@ import '@ss/ui/components/notification-provider';
 
 let notificationProvider: NotificationProvider | null = null;
 
-export function addToast(message: string) {
+export function addToast(
+  message: string,
+  type: NotificationType = NotificationType.INFO,
+) {
   if (!notificationProvider) {
     notificationProvider = document.createElement(
       'notification-provider',
@@ -12,5 +15,5 @@ export function addToast(message: string) {
     document.body.appendChild(notificationProvider);
   }
 
-  notificationProvider.addNotification(message, NotificationType.INFO);
+  notificationProvider.addNotification(message, type);
 }

@@ -32,6 +32,7 @@ import {
 import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -172,7 +173,10 @@ export class ActionForm extends ViewElement {
           }),
         );
 
-        addToast(this.actionId ? msg('Updated!') : msg('Added!'));
+        addToast(
+          this.actionId ? msg('Updated!') : msg('Added!'),
+          NotificationType.SUCCESS,
+        );
         return;
       }
 
@@ -204,7 +208,7 @@ export class ActionForm extends ViewElement {
     try {
       await api.delete(this.apiUrl);
 
-      addToast(msg('Removed!'));
+      addToast(msg('Removed!'), NotificationType.INFO);
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }

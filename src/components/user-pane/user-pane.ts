@@ -14,6 +14,7 @@ import { api } from '@/lib/Api';
 import { storage } from '@/lib/Storage';
 import { UserLoggedOutEvent } from '@/events/user-logged-out';
 import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('user-pane')
 export class UserPane extends MobxLitElement {
@@ -39,7 +40,7 @@ export class UserPane extends MobxLitElement {
       api.setAuthToken('');
       this.state.setAuthToken('');
       this.state.setForbidden(true);
-      addToast(msg('You are now logged out.'));
+      addToast(msg('You are now logged out.'), NotificationType.INFO);
       this.dispatchEvent(new UserLoggedOutEvent({}));
     }
   }

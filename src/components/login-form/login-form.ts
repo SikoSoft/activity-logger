@@ -18,6 +18,7 @@ import { api } from '@/lib/Api';
 import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
 import { storage } from '@/lib/Storage';
 import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('login-form')
 export class LoginForm extends MobxLitElement {
@@ -65,12 +66,15 @@ export class LoginForm extends MobxLitElement {
       api.setAuthToken(result.response.authToken);
       this.state.setAuthToken(result.response.authToken);
       this.state.setForbidden(false);
-      addToast(msg('You are now logged in.'));
+      addToast(msg('You are now logged in.'), NotificationType.SUCCESS);
       this.dispatchEvent(new UserLoggedInEvent({}));
       return;
     }
 
-    addToast(msg('Incorrect username and password combination.'));
+    addToast(
+      msg('Incorrect username and password combination.'),
+      NotificationType.ERROR,
+    );
     this.loading = false;
   }
 

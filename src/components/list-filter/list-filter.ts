@@ -29,6 +29,7 @@ import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
 import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -183,7 +184,7 @@ export class ListFilter extends MobxLitElement {
     this.filterNameInput.clear();
     this.saveMode = false;
 
-    addToast(msg('Filter saved!'));
+    addToast(msg('Filter saved!'), NotificationType.SUCCESS);
   }
 
   private async _handleSaveClick(e: CustomEvent): Promise<void> {
@@ -223,7 +224,7 @@ export class ListFilter extends MobxLitElement {
       this.savedFiltersInput.dispatchEvent(new Event('change'));
     }
     this.savedFilters = storage.getSavedFilters();
-    addToast(msg('Filter deleted!'));
+    addToast(msg('Filter deleted!'), NotificationType.INFO);
   }
 
   private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {
