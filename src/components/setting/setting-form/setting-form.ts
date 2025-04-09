@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import {
@@ -25,6 +25,8 @@ import {
 } from './setting-form.models';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('setting-form')
 @localized()
@@ -54,30 +56,39 @@ export class SettingForm extends MobxLitElement {
           min=${ifDefined(setting.control.min)}
           max=${ifDefined(setting.control.max)}
           step=${ifDefined(setting.control.step)}
-          @setting-updated=${this._handleSettingUpdated}
+          @setting-updated=${this.handleSettingUpdated}
         ></number-setting>`;
       case ControlType.SELECT:
         return html`<select-setting
           name=${setting.name}
           value=${this.state.listConfig.setting[setting.name]}
           .options=${setting.control.options}
-          @setting-updated=${this._handleSettingUpdated}
+          @setting-updated=${this.handleSettingUpdated}
         ></select-setting>`;
       case ControlType.TEXT:
         return html`<text-setting
           name=${setting.name}
           value=${this.state.listConfig.setting[setting.name]}
-          @setting-updated=${this._handleSettingUpdated}
+          @setting-updated=${this.handleSettingUpdated}
         ></text-setting>`;
     }
   }
 
-  private _handleSettingUpdated<SettingType>(
+  private async handleSettingUpdated<SettingType>(
     event: SettingUpdatedEvent<SettingType>,
   ) {
     const setting = event.detail as Setting;
-    this.state.setSetting(setting);
-    storage.saveSetting(this[SettingFormProp.LIST_CONFIG_ID], setting);
+    const isOk = await storage.saveSetting(
+      this[SettingFormProp.LIST_CONFIG_ID],
+      setting,
+    );
+    if (isOk) {
+      this.state.setSetting(setting);
+      addToast(msg('Setting updated'), NotificationType.SUCCESS);
+      return;
+    }
+
+    addToast(msg('Failed to update setting'), NotificationType.ERROR);
   }
 
   render() {

@@ -329,8 +329,8 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async saveSetting(listConfigId: string, setting: Setting): Promise<void> {
-    return Promise.resolve();
+  async saveSetting(listConfigId: string, setting: Setting): Promise<boolean> {
+    return Promise.resolve(true);
   }
 }
 

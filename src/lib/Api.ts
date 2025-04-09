@@ -3,12 +3,14 @@ import { config } from '../models/Config';
 
 export interface ApiResponse<ResponseBodyType> {
   status: number;
+  isOk: boolean;
   response: ResponseBodyType;
 }
 
 export type ApiResult<ResponseBodyType> = ApiResponse<ResponseBodyType> | null;
 
 export const emptyResponseCodes = [202, 204];
+export const okResponseCodes = [200, 201, 202, 204];
 
 export interface RequestConfig {
   method: string | undefined;
@@ -54,6 +56,7 @@ export class Api {
 
       return {
         status: response.status,
+        isOk: okResponseCodes.includes(response.status),
         response: json as ResponseType,
       };
     } catch (error) {

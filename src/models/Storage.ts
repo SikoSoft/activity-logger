@@ -21,5 +21,5 @@ export interface StorageSchema {
   addListConfig?(): Promise<string>;
   deleteListConfig?(id: string): Promise<boolean>;
   saveListConfig?(listConfig: ListConfig): Promise<void>;
-  saveSetting?(listConfigId: string, setting: Setting): Promise<void>;
+  saveSetting?(listConfigId: string, setting: Setting): Promise<boolean>;
 }
