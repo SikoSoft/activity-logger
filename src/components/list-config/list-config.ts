@@ -103,6 +103,10 @@ export class ListConfig extends MobxLitElement {
   ];
   private defaultModeStyles = css`
     .config-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
       .config {
         display: none;
       }
