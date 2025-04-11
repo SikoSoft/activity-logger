@@ -128,6 +128,7 @@ export class ListConfig extends MobxLitElement {
   @state() id: string = '';
   @state() name: string = '';
   @state() ready: boolean = false;
+  @state() navigationIndex: number = 0;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
 
@@ -154,6 +155,14 @@ export class ListConfig extends MobxLitElement {
     }
     return styles;
   }
+
+  /*
+  @state() get navigationIndex(): number {
+    return this.state.listConfigs.findIndex(
+      config => config.id === this.state.listConfig.id,
+    );
+  }
+    */
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -224,6 +233,9 @@ export class ListConfig extends MobxLitElement {
   sync() {
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
+    this.navigationIndex = this.state.listConfigs.findIndex(
+      config => config.id === this.state.listConfig.id,
+    );
   }
 
   setListConfigId(listConfigId: string) {
@@ -243,9 +255,11 @@ export class ListConfig extends MobxLitElement {
         showButtons
         height="180"
         width="100%"
+        navigationIndex=${this.navigationIndex}
         @carousel-slide-changed=${(e: CarouselSlideChangedEvent) => {
           this.state.setEditListConfigMode(false);
           this.state.setSelectListConfigMode(false);
+          this.navigationIndex = e.detail.navigationIndex;
           this.setListConfigId(this.state.listConfigs[e.detail.slideIndex].id);
         }}
       >
