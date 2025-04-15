@@ -169,6 +169,7 @@ export class ListFilter extends MobxLitElement {
 
     storage.saveActiveFilter(this.state.listFilter);
     this.dispatchEvent(new ListFilterUpdatedEvent({}));
+    addToast(msg('Filter updated!'), NotificationType.INFO);
   }
 
   private async _saveFilter() {
