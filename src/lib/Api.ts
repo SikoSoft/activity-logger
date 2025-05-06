@@ -40,8 +40,14 @@ export class Api {
 
     headers.append('authorization', this.authToken);
 
+    const abortController = new AbortController();
+
     const url = new URL(path, this.config.baseUrl);
-    const request = new Request(url, { ...config, headers });
+    const request = new Request(url, {
+      ...config,
+      headers,
+      signal: abortController.signal,
+    });
 
     try {
       const response = await fetch(request);
