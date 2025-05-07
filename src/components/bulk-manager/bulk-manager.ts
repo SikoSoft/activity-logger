@@ -20,6 +20,7 @@ import { theme } from '@/styles/theme';
 import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
@@ -120,7 +121,13 @@ export class BulkManager extends MobxLitElement {
                 value=${this.tagValue}
                 .tags=${this.tags}
                 @tags-updated=${this._handleTagsUpdated}
-              ></tag-manager>
+              >
+                ${repeat(
+                  this.tags,
+                  tag => tag,
+                  tag => html`<data-item>${tag}</data-item>`,
+                )}
+              </tag-manager>
             `
           : nothing}
 

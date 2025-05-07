@@ -33,6 +33,7 @@ import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
 import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -334,10 +335,11 @@ export class ActionForm extends ViewElement {
         </div>
         <tag-manager
           value=${this.tagValue}
-          .tags=${this.tagsAndSuggestions}
           @tags-updated=${this._handleTagsUpdated}
         >
-          ${this.tagsAndSuggestions.map(
+          ${repeat(
+            this.tagsAndSuggestions,
+            tag => tag,
             tag => html`<data-item>${tag}</data-item>`,
           )}
         </tag-manager>

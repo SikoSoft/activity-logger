@@ -44,11 +44,16 @@ export class TagFilters extends LitElement {
             <fieldset>
               <legend>${filterTypeMsgMap[type]}</legend>
               <tag-manager
-                .tags=${this[type]}
                 @tags-updated=${(e: TagsUpdatedEvent) => {
                   this._handleTagsUpdated(type, e.detail.tags);
                 }}
-              ></tag-manager>
+              >
+                ${repeat(
+                  this[type],
+                  tag => tag,
+                  tag => html`<data-item>${tag}</data-item>`,
+                )}
+              </tag-manager>
             </fieldset>
           `,
         )}

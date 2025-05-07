@@ -64,14 +64,15 @@ export class TagList extends LitElement {
 
   render() {
     return html`
-      <ul class="tag-list">
+      <ul class="tag-list" part="list">
         ${repeat(
           this.tags,
           tag => tag,
           tag => html`
-            <li>
+            <li part="item">
               ${tag}
               <span
+                part="delete"
                 class="delete"
                 @click=${() => {
                   this._deleteTag(tag);

@@ -36,15 +36,17 @@ export class TagManager extends LitElement {
     `,
   ];
 
+  /*
   @property({ type: Array, reflect: true })
   [TagManagerProp.TAGS]: TagManagerProps[TagManagerProp.TAGS] =
     tagManagerProps[TagManagerProp.TAGS].default;
+    */
 
   @property({ type: String, reflect: true })
   [TagManagerProp.VALUE]: TagManagerProps[TagManagerProp.VALUE] =
     tagManagerProps[TagManagerProp.VALUE].default;
 
-  @state() dataTags: string[] = [];
+  @state() tags: string[] = [];
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -54,35 +56,20 @@ export class TagManager extends LitElement {
     super.firstUpdated(_changedProperties);
     await this.updateComplete;
 
-    console.log('firstUpdated', this.innerHTML, this.querySelector('slot'));
-    const slotNode = this.querySelector('slot');
+    const slotNode = this.shadowRoot?.querySelector('slot');
     if (slotNode) {
-      console.log('slotNode', slotNode);
-
       slotNode.addEventListener('slotchange', () => {
-        console.log('slotchange');
-        this.syncDataTags();
+        this.syncSlotTags();
       });
     }
   }
 
-  private syncDataTags() {
-    console.log('syncDataTags');
-    this.dataTags = [];
+  private syncSlotTags() {
+    this.tags = [];
     this.querySelectorAll('data-item').forEach(item => {
-      this.dataTags.push(item.textContent || '');
+      this.tags.push(item.textContent || '');
     });
   }
-
-  /*
-  protected updated(_changedProperties: PropertyValues): void {
-    super.updated(_changedProperties);
-
-    if (_changedProperties.has(TagManagerProp.TAGS)) {
-      this.tags = this[TagManagerProp.TAGS];
-    }
-  }
-    */
 
   private _handleAdded(e: CustomEvent) {
     this.tags = [...this.tags, e.detail.value];
