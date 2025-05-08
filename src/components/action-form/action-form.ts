@@ -357,21 +357,21 @@ export class ActionForm extends ViewElement {
             autoComplete
           ></ss-input>
         </div>
-        ${JSON.stringify(this.tags)}
+
         <tag-manager
           ?enableSuggestions=${this.tagSuggestionsEnabled}
           value=${this.tagValue}
           @tags-updated=${this.handleTagsUpdated}
           @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
         >
-          <div slot="tags" data-hash=${tagHash(this.tags)}>
+          <div slot="tags">
             ${repeat(
               this.tagsAndSuggestions,
               tag => tag,
               tag => html`<data-item>${tag}</data-item>`,
             )}
           </div>
-          <div slot="suggestions" data-hash=${tagHash(this.tags)}>
+          <div slot="suggestions">
             ${repeat(
               this.tagSuggestions,
               suggestion => suggestion,
@@ -379,6 +379,7 @@ export class ActionForm extends ViewElement {
             )}
           </div>
         </tag-manager>
+
         ${this.actionId
           ? html`
               <div class="time">
