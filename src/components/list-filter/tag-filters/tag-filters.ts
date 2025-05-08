@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
@@ -12,6 +12,9 @@ import {
 import { TagsUpdatedEvent } from '@/components/tag-manager/tag-manager.events';
 
 import '@/components/tag-manager/tag-manager';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { appState } from '@/state';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -19,10 +22,19 @@ const filterTypeMsgMap: Record<ListFilterType, string> = {
 };
 
 @customElement('tag-filters')
-export class TagFilters extends LitElement {
+export class TagFilters extends MobxLitElement {
+  private state = appState;
+
   @property({ type: Array }) [ListFilterType.CONTAINS_ONE_OF]: string[] = [];
   @property({ type: Array }) [ListFilterType.CONTAINS_ALL_OF]: string[] = [];
   @property({ type: Boolean }) includeUntagged: boolean = false;
+
+  get tagSuggestionsEnabled(): boolean {
+    return (
+      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
+      TagSuggestions.DISABLED
+    );
+  }
 
   private _handleIncludeUntaggedChanged() {
     this.dispatchEvent(new IncludeUntaggedUpdatedEvent({}));
@@ -44,6 +56,7 @@ export class TagFilters extends LitElement {
             <fieldset>
               <legend>${filterTypeMsgMap[type]}</legend>
               <tag-manager
+                ?enableSuggestions=${this.tagSuggestionsEnabled}
                 @tags-updated=${(e: TagsUpdatedEvent) => {
                   this._handleTagsUpdated(type, e.detail.tags);
                 }}

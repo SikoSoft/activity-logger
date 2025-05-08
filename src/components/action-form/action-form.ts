@@ -34,6 +34,7 @@ import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
+import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -96,6 +97,7 @@ export class ActionForm extends ViewElement {
   @state() loading: boolean = false;
   @state() lastInputHadResults: boolean = true;
   @state() lastInput: string = '';
+  @state() tagSuggestions: string[] = [];
 
   @state()
   get classes() {
@@ -104,7 +106,7 @@ export class ActionForm extends ViewElement {
 
   @state()
   get tagsAndSuggestions(): string[] {
-    return [...this.tags, ...this.state.tagSuggestions];
+    return [...this.tags, ...this.tagSuggestions];
   }
 
   @state()
@@ -312,7 +314,8 @@ export class ActionForm extends ViewElement {
     this.confirmModalShown = true;
   }
 
-  private _handleTagsUpdated(e: TagsUpdatedEvent) {
+  private handleTagsUpdated(e: TagsUpdatedEvent) {
+    console.log('tags updated', e.detail.tags);
     this.tags = e.detail.tags;
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
@@ -320,6 +323,8 @@ export class ActionForm extends ViewElement {
       ),
     );
   }
+
+  private handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {}
 
   render() {
     return html`
@@ -333,15 +338,27 @@ export class ActionForm extends ViewElement {
             autoComplete
           ></ss-input>
         </div>
+        ${JSON.stringify(this.tags)}
         <tag-manager
+          ?enableSuggestions=${this.tagSuggestionsEnabled}
           value=${this.tagValue}
-          @tags-updated=${this._handleTagsUpdated}
+          @tags-updated=${this.handleTagsUpdated}
+          @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
         >
-          ${repeat(
-            this.tagsAndSuggestions,
-            tag => tag,
-            tag => html`<data-item>${tag}</data-item>`,
-          )}
+          <div slot="tags">
+            ${repeat(
+              this.tagsAndSuggestions,
+              tag => tag,
+              tag => html`<data-item>${tag}</data-item>`,
+            )}
+          </div>
+          <div slot="suggestions">
+            ${repeat(
+              this.tagSuggestions,
+              suggestion => suggestion,
+              suggestion => html`<data-item>${suggestion}</data-item>`,
+            )}
+          </div>
         </tag-manager>
         ${this.actionId
           ? html`

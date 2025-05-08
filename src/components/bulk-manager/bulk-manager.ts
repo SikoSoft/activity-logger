@@ -21,6 +21,7 @@ import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
@@ -54,6 +55,13 @@ export class BulkManager extends MobxLitElement {
   @state() operationType: OperationType = OperationType.ADD_TAGS;
   @state() tagValue: string = '';
   @state() tags: string[] = [];
+
+  get tagSuggestionsEnabled(): boolean {
+    return (
+      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
+      TagSuggestions.DISABLED
+    );
+  }
 
   @state()
   get showTagManager(): boolean {
@@ -118,6 +126,7 @@ export class BulkManager extends MobxLitElement {
         ${this.showTagManager
           ? html`
               <tag-manager
+                ?enableSuggestions=${this.tagSuggestionsEnabled}
                 value=${this.tagValue}
                 .tags=${this.tags}
                 @tags-updated=${this._handleTagsUpdated}

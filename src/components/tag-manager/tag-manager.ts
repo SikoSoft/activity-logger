@@ -13,6 +13,12 @@ import {
   tagManagerProps,
   TagManagerProps,
 } from './tag-manager.models';
+import {
+  TagAddedEvent,
+  TagInputUpdatedEvent,
+  TagSuggestionsUpdatedEvent,
+} from './tag-input/tag-input.events';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('tag-manager')
 export class TagManager extends LitElement {
@@ -30,7 +36,7 @@ export class TagManager extends LitElement {
         font-size: 0.75rem;
       }
 
-      #data-slot {
+      slot {
         display: none;
       }
     `,
@@ -46,7 +52,12 @@ export class TagManager extends LitElement {
   [TagManagerProp.VALUE]: TagManagerProps[TagManagerProp.VALUE] =
     tagManagerProps[TagManagerProp.VALUE].default;
 
+  @property({ type: Boolean, reflect: true })
+  [TagManagerProp.ENABLE_SUGGESTIONS]: TagManagerProps[TagManagerProp.ENABLE_SUGGESTIONS] =
+    tagManagerProps[TagManagerProp.ENABLE_SUGGESTIONS].default;
+
   @state() tags: string[] = [];
+  @state() suggestions: string[] = [];
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -56,12 +67,29 @@ export class TagManager extends LitElement {
     super.firstUpdated(_changedProperties);
     await this.updateComplete;
 
-    const slotNode = this.shadowRoot?.querySelector('slot');
-    if (slotNode) {
-      slotNode.addEventListener('slotchange', () => {
+    const tagsSlotNode = this.shadowRoot?.querySelector('slot[name="tags"]');
+    if (tagsSlotNode) {
+      console.log('tags slot found');
+      tagsSlotNode.addEventListener('slotchange', () => {
+        console.log('tags slot changed');
         this.syncSlotTags();
       });
     }
+
+    this.syncSlotTags();
+
+    const suggestionsSlotNode = this.shadowRoot?.querySelector(
+      'slot[name="suggestions"]',
+    );
+    if (suggestionsSlotNode) {
+      console.log('suggestions slot found');
+      suggestionsSlotNode.addEventListener('slotchange', () => {
+        console.log('suggestions slot changed');
+        this.syncSlotSuggestions();
+      });
+    }
+
+    this.syncSlotSuggestions();
   }
 
   private syncSlotTags() {
@@ -69,10 +97,19 @@ export class TagManager extends LitElement {
     this.querySelectorAll('data-item').forEach(item => {
       this.tags.push(item.textContent || '');
     });
+    console.log('tags', this.tags);
   }
 
-  private _handleAdded(e: CustomEvent) {
-    this.tags = [...this.tags, e.detail.value];
+  private syncSlotSuggestions() {
+    this.tags = [];
+    this.querySelectorAll('data-item').forEach(item => {
+      this.tags.push(item.textContent || '');
+    });
+    console.log('suggestions', this.tags);
+  }
+
+  private handleTagAdded(e: TagAddedEvent) {
+    this.tags = [...this.tags, e.detail.tag];
     this._sendUpdatedEvent();
   }
 
@@ -81,8 +118,12 @@ export class TagManager extends LitElement {
     this._sendUpdatedEvent();
   }
 
-  private _handleChanged(e: CustomEvent) {
+  private handleInputUpdated(e: TagInputUpdatedEvent) {
     this.value = e.detail.value;
+  }
+
+  private handleSuggestionsUpdated(e: TagSuggestionsUpdatedEvent) {
+    this.suggestions = e.detail.suggestions;
   }
 
   private _sendUpdatedEvent() {
@@ -93,15 +134,21 @@ export class TagManager extends LitElement {
     return html`
       <fieldset class="tag-manager">
         <legend>${msg('Tags')}</legend>
+
         <tag-input
           value=${this.value}
-          @changed=${(e: CustomEvent) => {
-            this._handleChanged(e);
-          }}
-          @added=${(e: CustomEvent) => {
-            this._handleAdded(e);
-          }}
-        ></tag-input>
+          ?enableSuggestions=${this.enableSuggestions}
+          @tag-input-updated=${this.handleInputUpdated}
+          @tag-added=${this.handleTagAdded}
+          @tag-suggestions-updated=${this.handleSuggestionsUpdated}
+        >
+          ${repeat(
+            this.suggestions,
+            suggestion => suggestion,
+            suggestion => html` <data-item>${suggestion}</data-item> `,
+          )}
+        </tag-input>
+
         ${this.tags.length
           ? html` <tag-list
               .tags=${this.tags}
@@ -110,7 +157,8 @@ export class TagManager extends LitElement {
               }}
             ></tag-list>`
           : html`<div class="no-tags">${msg('No tags are set')}</div>`}
-        <slot id="data-slot"></slot>
+        <slot name="tags"></slot>
+        <slot name="suggestions"></slot>
       </fieldset>
     `;
   }

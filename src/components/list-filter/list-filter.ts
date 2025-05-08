@@ -30,6 +30,7 @@ import '@/components/list-filter/text-filters/text-filters';
 import { theme } from '@/styles/theme';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -115,6 +116,13 @@ export class ListFilter extends MobxLitElement {
   @state()
   get saveButtonIsEnabled(): boolean {
     return !this.saveMode || this.filterNameIsValid;
+  }
+
+  get tagSuggestionsEnabled(): boolean {
+    return (
+      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
+      TagSuggestions.DISABLED
+    );
   }
 
   get filter(): ListFilterModel {
@@ -309,6 +317,7 @@ export class ListFilter extends MobxLitElement {
                   <fieldset>
                     <legend>${filterTypeMsgMap[type]}</legend>
                     <tag-manager
+                      ?enableSuggestions=${this.tagSuggestionsEnabled}
                       @tags-updated=${(e: TagsUpdatedEvent) => {
                         this.updateTags(type, e.detail.tags);
                       }}
