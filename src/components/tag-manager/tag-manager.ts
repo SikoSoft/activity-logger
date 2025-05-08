@@ -63,6 +63,55 @@ export class TagManager extends LitElement {
     super.connectedCallback();
   }
 
+  private setupTagsMutationObserver(): void {
+    const tagsSlot = this.shadowRoot?.querySelector('slot[name="tags"]');
+    if (!tagsSlot) {
+      return;
+    }
+
+    const slottedElements = (tagsSlot as HTMLSlotElement).assignedElements();
+
+    const observer = new MutationObserver(() => {
+      this.syncSlotTags();
+    });
+
+    slottedElements.forEach(element => {
+      observer.observe(element, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+      });
+    });
+  }
+
+  private setupSuggestionsMutationObserver(): void {
+    const suggestionsSlot = this.shadowRoot?.querySelector(
+      'slot[name="suggestions"]',
+    );
+    if (!suggestionsSlot) {
+      return;
+    }
+
+    const slottedElements = (
+      suggestionsSlot as HTMLSlotElement
+    ).assignedElements();
+
+    const observer = new MutationObserver(() => {
+      console.log('suggestions slot changed');
+      this.syncSlotSuggestions();
+    });
+
+    slottedElements.forEach(element => {
+      observer.observe(element, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+      });
+    });
+  }
+
   async firstUpdated(_changedProperties: PropertyValues): Promise<void> {
     super.firstUpdated(_changedProperties);
     await this.updateComplete;
@@ -75,6 +124,9 @@ export class TagManager extends LitElement {
         this.syncSlotTags();
       });
     }
+
+    this.setupTagsMutationObserver();
+    this.setupSuggestionsMutationObserver();
 
     this.syncSlotTags();
 
