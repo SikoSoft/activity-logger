@@ -36,6 +36,14 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
 
+const tagHash = (tags: string[]): string => {
+  return tags
+    .map(tag => tag.toLowerCase().trim())
+    .sort()
+    .join(',')
+    .replace(/[^a-z0-9,]/g, '');
+};
+
 @customElement('action-form')
 export class ActionForm extends ViewElement {
   private state = appState;
@@ -324,7 +332,18 @@ export class ActionForm extends ViewElement {
     );
   }
 
-  private handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {}
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
+    let tags: string[] = [];
+
+    const result = await api.get<{ tags: string[] }>(`tag/${e.detail.value}`);
+    if (result) {
+      tags = result.response.tags;
+    }
+
+    this.tagSuggestions = tags;
+  }
 
   render() {
     return html`
@@ -345,14 +364,14 @@ export class ActionForm extends ViewElement {
           @tags-updated=${this.handleTagsUpdated}
           @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
         >
-          <div slot="tags">
+          <div slot="tags" data-hash=${tagHash(this.tags)}>
             ${repeat(
               this.tagsAndSuggestions,
               tag => tag,
               tag => html`<data-item>${tag}</data-item>`,
             )}
           </div>
-          <div slot="suggestions">
+          <div slot="suggestions" data-hash=${tagHash(this.tags)}>
             ${repeat(
               this.tagSuggestions,
               suggestion => suggestion,
