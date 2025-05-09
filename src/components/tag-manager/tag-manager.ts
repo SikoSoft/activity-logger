@@ -149,12 +149,12 @@ export class TagManager extends LitElement {
 
   private handleTagAdded(e: TagAddedEvent) {
     this.tags = [...this.tags, e.detail.tag];
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
-  private _handleDeleted(e: CustomEvent) {
+  private handleDeleted(e: CustomEvent) {
     this.tags = this.tags.filter(tag => tag !== e.detail.value);
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
   private handleInputUpdated(e: TagInputUpdatedEvent) {
@@ -165,7 +165,7 @@ export class TagManager extends LitElement {
     this.suggestions = e.detail.suggestions;
   }
 
-  private _sendUpdatedEvent() {
+  private sendUpdatedEvent() {
     this.dispatchEvent(new TagsUpdatedEvent({ tags: this.tags }));
   }
 
@@ -192,7 +192,7 @@ export class TagManager extends LitElement {
           ? html` <tag-list
               .tags=${this.tags}
               @deleted=${(e: CustomEvent) => {
-                this._handleDeleted(e);
+                this.handleDeleted(e);
               }}
             ></tag-list>`
           : html`<div class="no-tags">${msg('No tags are set')}</div>`}

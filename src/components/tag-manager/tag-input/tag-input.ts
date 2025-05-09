@@ -70,11 +70,11 @@ export class TagInput extends LitElement {
     });
   }
 
-  private _handleSubmitted() {
-    this._save();
+  private handleSubmitted() {
+    this.save();
   }
 
-  private async _handleChanged(e: CustomEvent) {
+  private async handleChanged(e: CustomEvent) {
     this.value = e.detail.value;
 
     this.dispatchEvent(
@@ -87,24 +87,24 @@ export class TagInput extends LitElement {
       clearTimeout(this.suggestionTimeout);
     }
     this.suggestionTimeout = setTimeout(() => {
-      this._requestSuggestions();
+      this.requestSuggestions();
     }, 200);
   }
 
-  private async _requestSuggestions() {
+  private async requestSuggestions() {
     this.dispatchEvent(new TagSuggestionsRequestedEvent({ value: this.value }));
   }
 
-  private _handleSaveClick(e: CustomEvent) {
-    this._save();
+  private handleSaveClick(e: CustomEvent) {
+    this.save();
   }
 
-  private _save() {
-    this._sendAddedEvent();
+  private save() {
+    this.sendAddedEvent();
     this.value = '';
   }
 
-  private _sendAddedEvent() {
+  private sendAddedEvent() {
     this.dispatchEvent(
       new TagAddedEvent({
         tag: this.value,
@@ -118,8 +118,8 @@ export class TagInput extends LitElement {
         <slot id="data-slot"></slot>
 
         <ss-input
-          @input-submitted=${this._handleSubmitted}
-          @input-changed=${this._handleChanged}
+          @input-submitted=${this.handleSubmitted}
+          @input-changed=${this.handleChanged}
           placeholder="Tag"
           value=${this.value}
           .suggestions=${this.suggestions}
@@ -128,7 +128,7 @@ export class TagInput extends LitElement {
 
         ${this.showButton
           ? html`
-              <ss-button text="Add" @click=${this._handleSaveClick}></ss-button>
+              <ss-button text="Add" @click=${this.handleSaveClick}></ss-button>
             `
           : nothing}
       </div>

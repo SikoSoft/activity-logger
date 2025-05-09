@@ -52,7 +52,7 @@ export class TagList extends LitElement {
     super.connectedCallback();
   }
 
-  private _deleteTag(tag: string) {
+  private deleteTag(tag: string) {
     this.dispatchEvent(
       new CustomEvent('deleted', {
         bubbles: true,
@@ -75,7 +75,7 @@ export class TagList extends LitElement {
                 part="delete"
                 class="delete"
                 @click=${() => {
-                  this._deleteTag(tag);
+                  this.deleteTag(tag);
                 }}
                 >&#215;</span
               >
