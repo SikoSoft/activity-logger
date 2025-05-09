@@ -1,15 +1,11 @@
-import { css, html, nothing, PropertyValues } from 'lit';
+import { LitElement, css, html, nothing, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
-
-import { appState } from '@/state';
 
 import '@/components/tag-manager/tag-input/tag-input';
 import '@/components/tag-manager/tag-list/tag-list';
 
 import { theme } from '@/styles/theme';
 import { TagInputProp, tagInputProps, TagInputProps } from './tag-input.models';
-import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import {
   TagAddedEvent,
   TagInputUpdatedEvent,
@@ -17,8 +13,7 @@ import {
 } from './tag-input.events';
 
 @customElement('tag-input')
-export class TagInput extends MobxLitElement {
-  private state = appState;
+export class TagInput extends LitElement {
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
 
   static styles = [
@@ -52,14 +47,6 @@ export class TagInput extends MobxLitElement {
 
   get showButton(): boolean {
     return this.value.length > 0;
-  }
-
-  @state()
-  get tagSuggestionsEnabled(): boolean {
-    return (
-      this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
-      TagSuggestions.DISABLED
-    );
   }
 
   async firstUpdated(_changedProperties: PropertyValues): Promise<void> {
