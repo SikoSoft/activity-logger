@@ -23,6 +23,8 @@ import {
   actionFormProps,
   ActionFormProps,
   RequestBody,
+  SuggestionInputType,
+  SuggestionLastInput,
 } from './action-form.models';
 import {
   ActionItemCanceledEvent,
@@ -34,7 +36,10 @@ import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
-import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
+import {
+  TagSuggestionsClearedEvent,
+  TagSuggestionsRequestedEvent,
+} from '../tag-manager/tag-input/tag-input.events';
 
 const tagHash = (tags: string[]): string => {
   return tags
@@ -103,8 +108,10 @@ export class ActionForm extends ViewElement {
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
   @state() loading: boolean = false;
-  @state() lastInputHadResults: boolean = true;
-  @state() lastInput: string = '';
+  @state() lastInput: SuggestionLastInput = {
+    [SuggestionInputType.ACTION]: { value: '', hadResults: true },
+    [SuggestionInputType.TAG]: { value: '', hadResults: true },
+  };
   @state() tagSuggestions: string[] = [];
 
   @state()
@@ -235,13 +242,16 @@ export class ActionForm extends ViewElement {
   }
 
   private async _requestActionSuggestions(): Promise<void> {
-    if (!this.lastInputHadResults && this.desc.startsWith(this.lastInput)) {
+    if (
+      !this.lastInput.action.hadResults &&
+      this.desc.startsWith(this.lastInput.action.value)
+    ) {
       this.state.setActionSuggestions([]);
       return;
     }
 
     try {
-      this.lastInputHadResults = false;
+      this.lastInput.action.hadResults = false;
       let suggestions: string[] = [];
 
       if (this.desc.length >= this.minLengthForSuggestion) {
@@ -254,7 +264,7 @@ export class ActionForm extends ViewElement {
       }
 
       if (suggestions.length || this.desc === '') {
-        this.lastInputHadResults = true;
+        this.lastInput.action.hadResults = true;
       }
       this.state.setActionSuggestions(suggestions);
     } catch (error) {
@@ -263,7 +273,7 @@ export class ActionForm extends ViewElement {
       );
     }
 
-    this.lastInput = this.desc;
+    this.lastInput.action.value = this.desc;
   }
 
   private async _requestTagSuggestions(): Promise<void> {
@@ -332,7 +342,38 @@ export class ActionForm extends ViewElement {
     );
   }
 
-  private async handleTagSuggestionsRequested(
+  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+    const value = e.detail.value;
+    console.log('requesting suggestions', value);
+    if (
+      (!this.lastInput.tag.hadResults &&
+        value.startsWith(this.lastInput.tag.value)) ||
+      !this.tagSuggestionsEnabled
+    ) {
+      this.tagSuggestions = [];
+      return;
+    }
+
+    this.lastInput.tag.hadResults = false;
+    this.lastInput.tag.value = value;
+
+    let tags: string[] = [];
+
+    if (value.length >= this.minLengthForSuggestion) {
+      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      if (result) {
+        tags = result.response.tags;
+      }
+    }
+
+    if (tags.length || value === '') {
+      this.lastInput.tag.hadResults = true;
+    }
+
+    this.tagSuggestions = tags;
+  }
+
+  private async __handleTagSuggestionsRequested(
     e: TagSuggestionsRequestedEvent,
   ): Promise<void> {
     let tags: string[] = [];
@@ -343,6 +384,10 @@ export class ActionForm extends ViewElement {
     }
 
     this.tagSuggestions = tags;
+  }
+
+  private handleTagSuggestionsCleared(e: TagSuggestionsClearedEvent): void {
+    this.tagSuggestions = [];
   }
 
   render() {
@@ -363,10 +408,11 @@ export class ActionForm extends ViewElement {
           value=${this.tagValue}
           @tags-updated=${this.handleTagsUpdated}
           @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
+          @tag-suggestions-cleared=${this.handleTagSuggestionsCleared}
         >
           <div slot="tags">
             ${repeat(
-              this.tagsAndSuggestions,
+              this.tags,
               tag => tag,
               tag => html`<data-item>${tag}</data-item>`,
             )}

@@ -57,3 +57,13 @@ export interface RequestBody {
   timeZone: number;
   tags: string[];
 }
+
+export enum SuggestionInputType {
+  TAG = 'tag',
+  ACTION = 'action',
+}
+
+export type SuggestionLastInput = Record<
+  SuggestionInputType,
+  { hadResults: boolean; value: string }
+>;

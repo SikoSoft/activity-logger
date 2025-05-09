@@ -14,6 +14,7 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import {
   TagAddedEvent,
   TagInputUpdatedEvent,
+  TagSuggestionsClearedEvent,
   TagSuggestionsRequestedEvent,
   TagSuggestionsUpdatedEvent,
 } from './tag-input.events';
@@ -108,6 +109,9 @@ export class TagInput extends MobxLitElement {
   }
 
   private async _requestSuggestions() {
+    this.dispatchEvent(new TagSuggestionsRequestedEvent({ value: this.value }));
+    return;
+    console.log('requesting suggestions', this.value);
     if (
       (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) ||
       !this.tagSuggestionsEnabled
@@ -132,6 +136,8 @@ export class TagInput extends MobxLitElement {
         tags = result.response.tags;
       }
         */
+    } else {
+      this.dispatchEvent(new TagSuggestionsClearedEvent({}));
     }
 
     if (tags.length || this.value === '') {
@@ -142,7 +148,8 @@ export class TagInput extends MobxLitElement {
   }
 
   setSuggestions(suggestions: string[]) {
-    this.dispatchEvent(new TagSuggestionsUpdatedEvent({ suggestions }));
+    console.log('setSuggestions', suggestions);
+    // this.dispatchEvent(new TagSuggestionsUpdatedEvent({ suggestions }));
   }
 
   private _handleSaveClick(e: CustomEvent) {
