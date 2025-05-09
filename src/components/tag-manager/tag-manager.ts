@@ -42,12 +42,6 @@ export class TagManager extends LitElement {
     `,
   ];
 
-  /*
-  @property({ type: Array, reflect: true })
-  [TagManagerProp.TAGS]: TagManagerProps[TagManagerProp.TAGS] =
-    tagManagerProps[TagManagerProp.TAGS].default;
-    */
-
   @property({ type: String, reflect: true })
   [TagManagerProp.VALUE]: TagManagerProps[TagManagerProp.VALUE] =
     tagManagerProps[TagManagerProp.VALUE].default;
@@ -98,7 +92,6 @@ export class TagManager extends LitElement {
     ).assignedElements();
 
     const observer = new MutationObserver(() => {
-      console.log('suggestions slot changed');
       this.syncSlotSuggestions();
     });
 
@@ -118,9 +111,7 @@ export class TagManager extends LitElement {
 
     const tagsSlotNode = this.shadowRoot?.querySelector('slot[name="tags"]');
     if (tagsSlotNode) {
-      console.log('tags slot found');
       tagsSlotNode.addEventListener('slotchange', () => {
-        console.log('tags slot changed');
         this.syncSlotTags();
       });
     }
@@ -134,9 +125,7 @@ export class TagManager extends LitElement {
       'slot[name="suggestions"]',
     );
     if (suggestionsSlotNode) {
-      console.log('suggestions slot found');
       suggestionsSlotNode.addEventListener('slotchange', () => {
-        console.log('suggestions slot changed');
         this.syncSlotSuggestions();
       });
     }
@@ -146,18 +135,16 @@ export class TagManager extends LitElement {
 
   private syncSlotTags() {
     this.tags = [];
-    this.querySelectorAll('data-item').forEach(item => {
+    this.querySelectorAll('[slot="tags"] data-item').forEach(item => {
       this.tags.push(item.textContent || '');
     });
-    console.log('tags', this.tags);
   }
 
   private syncSlotSuggestions() {
-    this.tags = [];
-    this.querySelectorAll('data-item').forEach(item => {
-      this.tags.push(item.textContent || '');
+    this.suggestions = [];
+    this.querySelectorAll('[slot="suggestions"] data-item').forEach(item => {
+      this.suggestions.push(item.textContent || '');
     });
-    console.log('suggestions', this.tags);
   }
 
   private handleTagAdded(e: TagAddedEvent) {
