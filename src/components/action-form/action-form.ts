@@ -36,10 +36,7 @@ import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
-import {
-  TagSuggestionsClearedEvent,
-  TagSuggestionsRequestedEvent,
-} from '../tag-manager/tag-input/tag-input.events';
+import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
 
 const tagHash = (tags: string[]): string => {
   return tags
@@ -121,7 +118,7 @@ export class ActionForm extends ViewElement {
 
   @state()
   get tagsAndSuggestions(): string[] {
-    return [...this.tags, ...this.tagSuggestions];
+    return [...this.tags, ...this.state.tagSuggestions];
   }
 
   @state()
@@ -333,7 +330,6 @@ export class ActionForm extends ViewElement {
   }
 
   private handleTagsUpdated(e: TagsUpdatedEvent) {
-    console.log('tags updated', e.detail.tags);
     this.tags = e.detail.tags;
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
@@ -344,7 +340,6 @@ export class ActionForm extends ViewElement {
 
   private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
     const value = e.detail.value;
-    console.log('requesting suggestions', value);
     if (
       (!this.lastInput.tag.hadResults &&
         value.startsWith(this.lastInput.tag.value)) ||
@@ -373,23 +368,6 @@ export class ActionForm extends ViewElement {
     this.tagSuggestions = tags;
   }
 
-  private async __handleTagSuggestionsRequested(
-    e: TagSuggestionsRequestedEvent,
-  ): Promise<void> {
-    let tags: string[] = [];
-
-    const result = await api.get<{ tags: string[] }>(`tag/${e.detail.value}`);
-    if (result) {
-      tags = result.response.tags;
-    }
-
-    this.tagSuggestions = tags;
-  }
-
-  private handleTagSuggestionsCleared(e: TagSuggestionsClearedEvent): void {
-    this.tagSuggestions = [];
-  }
-
   render() {
     return html`
       <form class=${classMap(this.classes)}>
@@ -408,15 +386,15 @@ export class ActionForm extends ViewElement {
           value=${this.tagValue}
           @tags-updated=${this.handleTagsUpdated}
           @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
-          @tag-suggestions-cleared=${this.handleTagSuggestionsCleared}
         >
           <div slot="tags">
             ${repeat(
-              this.tags,
+              this.tagsAndSuggestions,
               tag => tag,
               tag => html`<data-item>${tag}</data-item>`,
             )}
           </div>
+
           <div slot="suggestions">
             ${repeat(
               this.tagSuggestions,
@@ -438,6 +416,7 @@ export class ActionForm extends ViewElement {
               </div>
             `
           : nothing}
+
         <div>
           <ss-button
             ?positive=${!this.actionId || this.hasChanged}
@@ -449,6 +428,7 @@ export class ActionForm extends ViewElement {
               : msg('Add')}
             ?loading=${this.loading}
           ></ss-button>
+
           ${this.actionId
             ? html`
                 <ss-button

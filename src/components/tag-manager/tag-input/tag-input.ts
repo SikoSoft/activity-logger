@@ -2,7 +2,6 @@ import { css, html, nothing, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { api } from '@/lib/Api';
 import { appState } from '@/state';
 
 import '@/components/tag-manager/tag-input/tag-input';
@@ -14,15 +13,12 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import {
   TagAddedEvent,
   TagInputUpdatedEvent,
-  TagSuggestionsClearedEvent,
   TagSuggestionsRequestedEvent,
-  TagSuggestionsUpdatedEvent,
 } from './tag-input.events';
 
 @customElement('tag-input')
 export class TagInput extends MobxLitElement {
   private state = appState;
-  private minInput = 1;
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
 
   static styles = [
@@ -110,46 +106,6 @@ export class TagInput extends MobxLitElement {
 
   private async _requestSuggestions() {
     this.dispatchEvent(new TagSuggestionsRequestedEvent({ value: this.value }));
-    return;
-    console.log('requesting suggestions', this.value);
-    if (
-      (!this.lastInputHadResults && this.value.startsWith(this.lastInput)) ||
-      !this.tagSuggestionsEnabled
-    ) {
-      this.setSuggestions([]);
-      return;
-    }
-
-    this.lastInputHadResults = false;
-    this.lastInput = this.value;
-
-    let tags: string[] = [];
-
-    if (this.value.length >= this.minInput) {
-      this.dispatchEvent(
-        new TagSuggestionsRequestedEvent({ value: this.value }),
-      );
-
-      /*
-      const result = await api.get<{ tags: string[] }>(`tag/${this.value}`);
-      if (result) {
-        tags = result.response.tags;
-      }
-        */
-    } else {
-      this.dispatchEvent(new TagSuggestionsClearedEvent({}));
-    }
-
-    if (tags.length || this.value === '') {
-      this.lastInputHadResults = true;
-    }
-
-    this.setSuggestions(tags);
-  }
-
-  setSuggestions(suggestions: string[]) {
-    console.log('setSuggestions', suggestions);
-    // this.dispatchEvent(new TagSuggestionsUpdatedEvent({ suggestions }));
   }
 
   private _handleSaveClick(e: CustomEvent) {

@@ -61,17 +61,3 @@ export class TagSuggestionsRequestedEvent extends CustomEvent<TagSuggestionsRequ
     });
   }
 }
-
-export const tagSuggestionsClearedEventName = 'tag-suggestions-cleared';
-
-export interface TagSuggestionsClearedEventPayload {}
-
-export class TagSuggestionsClearedEvent extends CustomEvent<TagSuggestionsClearedEventPayload> {
-  constructor(payload: TagSuggestionsClearedEventPayload) {
-    super(tagSuggestionsClearedEventName, {
-      bubbles: true,
-      composed: true,
-      detail: payload,
-    });
-  }
-}
