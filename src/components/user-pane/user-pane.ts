@@ -33,7 +33,7 @@ export class UserPane extends MobxLitElement {
   @state() username: string = '';
   @state() password: string = '';
 
-  private async _logout(): Promise<void> {
+  private async logout(): Promise<void> {
     const result = await api.get<unknown>('logout');
     if (result) {
       storage.setAuthToken('');
@@ -48,7 +48,7 @@ export class UserPane extends MobxLitElement {
   render() {
     return html`
       <div>
-        <button @click=${this._logout}>${msg('Logout')}</button>
+        <button @click=${this.logout}>${msg('Logout')}</button>
       </div>
     `;
   }

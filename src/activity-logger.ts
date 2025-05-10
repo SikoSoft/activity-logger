@@ -39,10 +39,10 @@ export class ActivityLogger extends MobxLitElement {
     super.connectedCallback();
     this.setAuthToken(storage.getAuthToken());
     this.addEventListener('view-changed', (e: Event) => {
-      this._handleViewChanged(e);
+      this.handleViewChanged(e);
     });
 
-    this._restoreState();
+    this.restoreState();
   }
 
   setAuthToken(authToken: string) {
@@ -50,7 +50,7 @@ export class ActivityLogger extends MobxLitElement {
     this.state.setAuthToken(authToken);
   }
 
-  private async _restoreState() {
+  private async restoreState() {
     this.ready = false;
     try {
       if (this.state.authToken) {
@@ -82,25 +82,25 @@ export class ActivityLogger extends MobxLitElement {
     }
   }
 
-  private _handleViewChanged(e: Event) {
+  private handleViewChanged(e: Event) {
     const event = e as CustomEvent;
     this.view = event.detail;
     storage.saveView(this.view);
   }
 
-  private _handleOperationPerformed(e: OperationPerformedEvent) {
+  private handleOperationPerformed(e: OperationPerformedEvent) {
     this.viewComponent.sync(false);
   }
 
-  private _handleListConfigChanged(e: ListConfigChangedEvent) {
+  private handleListConfigChanged(e: ListConfigChangedEvent) {
     this.viewComponent.sync(true);
   }
 
-  private _handleUserLoggedIn() {
-    this._restoreState();
+  private handleUserLoggedIn() {
+    this.restoreState();
   }
 
-  _activeView() {
+  activeView() {
     if (!this.state.listConfig) {
       return nothing;
     }
@@ -119,7 +119,7 @@ export class ActivityLogger extends MobxLitElement {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html`
         <forbidden-notice
-          @user-logged-in=${this._handleUserLoggedIn}
+          @user-logged-in=${this.handleUserLoggedIn}
         ></forbidden-notice>
       `;
     }
@@ -127,13 +127,13 @@ export class ActivityLogger extends MobxLitElement {
     return this.ready
       ? html`
           <list-config
-            @list-config-changed=${this._handleListConfigChanged}
+            @list-config-changed=${this.handleListConfigChanged}
           ></list-config>
           <action-nav active=${this.view}></action-nav>
           <bulk-manager
-            @operation-performed=${this._handleOperationPerformed}
+            @operation-performed=${this.handleOperationPerformed}
           ></bulk-manager>
-          <main>${this._activeView()}</main>
+          <main>${this.activeView()}</main>
           <floating-widget></floating-widget>
         `
       : html`<ss-loader></ss-loader>`;

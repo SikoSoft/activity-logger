@@ -33,7 +33,7 @@ export class BooleanSetting extends LitElement {
     `,
   ];
 
-  private _handleToggleChanged(e: ToggleChangedEvent) {
+  private handleToggleChanged(e: ToggleChangedEvent) {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -48,7 +48,7 @@ export class BooleanSetting extends LitElement {
         <label>${this.name}</label>
         <ss-toggle
           on=${this.value}
-          @toggle-changed=${this._handleToggleChanged}
+          @toggle-changed=${this.handleToggleChanged}
         ></ss-toggle>
       </div>
     `;

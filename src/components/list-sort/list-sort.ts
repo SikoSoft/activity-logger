@@ -39,7 +39,7 @@ export class ListSort extends MobxLitElement {
 
   private state = appState;
 
-  private _handlePropertyChanged(e: SelectChangedEvent<string>) {
+  private handlePropertyChanged(e: SelectChangedEvent<string>) {
     const property = e.detail.value as ListSortProperty;
     const sort = {
       property,
@@ -49,7 +49,7 @@ export class ListSort extends MobxLitElement {
     this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
-  private _handleDirectionChanged(e: SelectChangedEvent<string>) {
+  private handleDirectionChanged(e: SelectChangedEvent<string>) {
     const direction = e.detail.value as ListSortDirection;
     const sort = {
       property: this.state.listSort.property,
@@ -67,7 +67,7 @@ export class ListSort extends MobxLitElement {
           <ss-select
             selected=${this.state.listSort.property}
             @select-changed=${(e: SelectChangedEvent<string>) => {
-              this._handlePropertyChanged(e);
+              this.handlePropertyChanged(e);
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
               value: type,
@@ -79,7 +79,7 @@ export class ListSort extends MobxLitElement {
           <ss-select
             selected=${this.state.listSort.direction}
             @select-changed=${(e: SelectChangedEvent<string>) => {
-              this._handleDirectionChanged(e);
+              this.handleDirectionChanged(e);
             }}
             .options=${Object.values(ListSortDirection).map(type => ({
               value: type,

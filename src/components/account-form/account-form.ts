@@ -51,7 +51,7 @@ export class AccountForm extends LitElement {
     );
   }
 
-  private _reset(): void {
+  private reset(): void {
     this.username = '';
     this.password = '';
     this.passwordRepeat = '';
@@ -59,18 +59,18 @@ export class AccountForm extends LitElement {
     this.lastName = '';
   }
 
-  private _handleFieldChanged(
+  private handleFieldChanged(
     fieldName: AccountFormFieldName,
     e: InputChangedEvent,
   ): void {
     this[fieldName] = e.detail.value;
   }
 
-  private _handleFieldSubmitted(e: InputSubmittedEvent): void {
-    this._save();
+  private handleFieldSubmitted(e: InputSubmittedEvent): void {
+    this.save();
   }
 
-  private async _save(): Promise<void> {
+  private async save(): Promise<void> {
     if (!this.isValid) {
       return;
     }
@@ -88,7 +88,7 @@ export class AccountForm extends LitElement {
 
     if (result && result.status !== 401) {
       this.dispatchEvent(new AccountCreatedEvent({ id: result.response.id }));
-      this._reset();
+      this.reset();
     }
 
     this.loading = false;
@@ -105,16 +105,16 @@ export class AccountForm extends LitElement {
                 : Input.InputType.TEXT}
               id=${fieldName}
               placeholder=${fieldName}
-              @input-submitted=${this._handleFieldSubmitted}
+              @input-submitted=${this.handleFieldSubmitted}
               @input-changed=${(e: InputChangedEvent) => {
-                this._handleFieldChanged(fieldName, e);
+                this.handleFieldChanged(fieldName, e);
               }}
               value=${this[fieldName]}
             ></ss-input>`,
         )}
 
         <ss-button
-          @click=${this._save}
+          @click=${this.save}
           text=${msg('Create Account')}
           ?loading=${this.loading}
         ></ss-button>

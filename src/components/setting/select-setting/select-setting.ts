@@ -37,7 +37,7 @@ export class SelectSetting extends LitElement {
     `,
   ];
 
-  private _handleSelectChanged(e: SelectChangedEvent<string>) {
+  private handleSelectChanged(e: SelectChangedEvent<string>) {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -51,7 +51,7 @@ export class SelectSetting extends LitElement {
       <div class="select-setting">
         <label>${this.name}</label>
         <ss-select
-          @select-changed=${this._handleSelectChanged}
+          @select-changed=${this.handleSelectChanged}
           selected=${this.value}
           .options=${this.options.map(option => ({
             label: option,

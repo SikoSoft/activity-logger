@@ -167,32 +167,32 @@ export class FloatingWidget extends MobxLitElement {
     };
   }
 
-  private _handleToggleAdvancedChanged(event: ToggleChangedEvent) {
+  private handleToggleAdvancedChanged(event: ToggleChangedEvent) {
     this.state.setAdvancedMode(event.detail.on);
     storage.saveAdvancedMode(event.detail.on);
   }
 
-  private _handleToggleDebugChanged(event: ToggleChangedEvent) {
+  private handleToggleDebugChanged(event: ToggleChangedEvent) {
     this.state.setDebugMode(event.detail.on);
     storage.saveDebugMode(event.detail.on);
   }
 
-  private _handleToggleOpen() {
+  private handleToggleOpen() {
     this.open = !this.open;
   }
 
-  private _handleOpen() {
+  private handleOpen() {
     this.open = true;
   }
 
-  private _handleMouseEnter() {
+  private handleMouseEnter() {
     this.mouseIn = true;
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
   }
 
-  private _handleMouseLeave() {
+  private handleMouseLeave() {
     this.mouseIn = false;
     this.timeout = setTimeout(() => {
       this.open = false;
@@ -203,31 +203,31 @@ export class FloatingWidget extends MobxLitElement {
     return html`
       <div
         class=${classMap(this.classes)}
-        @mouseenter=${this._handleMouseEnter}
-        @mouseleave=${this._handleMouseLeave}
+        @mouseenter=${this.handleMouseEnter}
+        @mouseleave=${this.handleMouseLeave}
       >
-        <div class="head" @click=${this._handleToggleOpen}>
+        <div class="head" @click=${this.handleToggleOpen}>
           <div class="left"></div>
           <div class="center">
             <div class="handle"></div>
           </div>
           <div class="right"></div>
         </div>
-        <div class="body" @mouseenter=${this._handleOpen}>
+        <div class="body" @mouseenter=${this.handleOpen}>
           <div class="user">
             <user-pane></user-pane>
           </div>
           <div class="option">
             <h4>${msg('Advanced mode')}</h4>
             <ss-toggle
-              @toggle-changed=${this._handleToggleAdvancedChanged}
+              @toggle-changed=${this.handleToggleAdvancedChanged}
               ?on=${this.state.advancedMode}
             ></ss-toggle>
           </div>
           <div class="option">
             <h4>${msg('Debug mode')}</h4>
             <ss-toggle
-              @toggle-changed=${this._handleToggleDebugChanged}
+              @toggle-changed=${this.handleToggleDebugChanged}
               ?on=${this.state.debugMode}
             ></ss-toggle>
           </div>

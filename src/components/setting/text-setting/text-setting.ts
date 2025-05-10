@@ -33,7 +33,7 @@ export class TextSetting extends LitElement {
     `,
   ];
 
-  private _handleInputChanged(e: InputChangedEvent) {
+  private handleInputChanged(e: InputChangedEvent) {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -47,7 +47,7 @@ export class TextSetting extends LitElement {
       <div class="text-setting">
         <label>${this.name}</label>
         <ss-input
-          @input-changed=${this._handleInputChanged}
+          @input-changed=${this.handleInputChanged}
           value=${this.value}
         ></ss-input>
       </div>

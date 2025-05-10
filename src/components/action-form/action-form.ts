@@ -152,7 +152,7 @@ export class ActionForm extends ViewElement {
     );
   }
 
-  private async _saveAction() {
+  private async saveAction() {
     this.loading = true;
     const desc = this.desc.trim();
 
@@ -217,7 +217,7 @@ export class ActionForm extends ViewElement {
     this.state.setTagSuggestions([]);
   }
 
-  private async _deleteAction() {
+  private async deleteAction() {
     this.loading = true;
 
     try {
@@ -238,7 +238,7 @@ export class ActionForm extends ViewElement {
     this.loading = false;
   }
 
-  private async _requestActionSuggestions(): Promise<void> {
+  private async requestActionSuggestions(): Promise<void> {
     if (
       !this.lastInput.action.hadResults &&
       this.desc.startsWith(this.lastInput.action.value)
@@ -273,7 +273,7 @@ export class ActionForm extends ViewElement {
     this.lastInput.action.value = this.desc;
   }
 
-  private async _requestTagSuggestions(): Promise<void> {
+  private async requestTagSuggestions(): Promise<void> {
     if (this.desc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
@@ -297,35 +297,35 @@ export class ActionForm extends ViewElement {
     }
   }
 
-  private async _handleDescChanged(e: CustomEvent) {
+  private async handleDescChanged(e: CustomEvent) {
     this.desc = e.detail.value;
 
     if (this.suggestionTimeout) {
       clearTimeout(this.suggestionTimeout);
     }
     this.suggestionTimeout = setTimeout(() => {
-      this._requestTagSuggestions();
-      this._requestActionSuggestions();
+      this.requestTagSuggestions();
+      this.requestActionSuggestions();
     }, 150);
   }
 
-  private _handleDescSubmitted(e: CustomEvent) {
-    this._saveAction();
+  private handleDescSubmitted(e: CustomEvent) {
+    this.saveAction();
   }
 
-  private _handleOccurredAtChanged(e: CustomEvent) {
+  private handleOccurredAtChanged(e: CustomEvent) {
     this.occurredAt = e.detail.value;
   }
 
-  private _handleOccurredAtSubmitted(e: CustomEvent) {
-    this._saveAction();
+  private handleOccurredAtSubmitted(e: CustomEvent) {
+    this.saveAction();
   }
 
-  private _handleSaveClick(e: CustomEvent) {
-    this._saveAction();
+  private handleSaveClick(e: CustomEvent) {
+    this.saveAction();
   }
 
-  private _handleDeleteClick(e: CustomEvent) {
+  private handleDeleteClick(e: CustomEvent) {
     this.confirmModalShown = true;
   }
 
@@ -373,8 +373,8 @@ export class ActionForm extends ViewElement {
       <form class=${classMap(this.classes)}>
         <div>
           <ss-input
-            @input-submitted=${this._handleDescSubmitted}
-            @input-changed=${this._handleDescChanged}
+            @input-submitted=${this.handleDescSubmitted}
+            @input-changed=${this.handleDescChanged}
             value=${this.desc}
             .suggestions=${this.state.actionSuggestions}
             autoComplete
@@ -409,8 +409,8 @@ export class ActionForm extends ViewElement {
               <div class="time">
                 <ss-input
                   type=${InputType.DATETIME_LOCAL}
-                  @input-submitted=${this._handleOccurredAtSubmitted}
-                  @input-changed=${this._handleOccurredAtChanged}
+                  @input-submitted=${this.handleOccurredAtSubmitted}
+                  @input-changed=${this.handleOccurredAtChanged}
                   value=${this.occurredAt}
                 ></ss-input>
               </div>
@@ -420,7 +420,7 @@ export class ActionForm extends ViewElement {
         <div>
           <ss-button
             ?positive=${!this.actionId || this.hasChanged}
-            @click=${this._handleSaveClick}
+            @click=${this.handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
                 ? msg('Update')
@@ -433,11 +433,11 @@ export class ActionForm extends ViewElement {
             ? html`
                 <ss-button
                   negative
-                  @click=${this._handleDeleteClick}
+                  @click=${this.handleDeleteClick}
                   text=${msg('Delete')}
                 ></ss-button>
                 <action-confirm-modal
-                  @confirm=${this._deleteAction}
+                  @confirm=${this.deleteAction}
                   @cancel=${() => (this.confirmModalShown = false)}
                   ?open=${this.confirmModalShown}
                 ></action-confirm-modal>

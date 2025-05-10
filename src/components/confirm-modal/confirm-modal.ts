@@ -69,13 +69,13 @@ export class ActionConfirmModal extends LitElement {
     return { container: true, open: this.open };
   }
 
-  private _sendConfirmEvent() {
+  private sendConfirmEvent() {
     this.dispatchEvent(
       new CustomEvent('confirm', { bubbles: true, composed: true }),
     );
   }
 
-  private _sendCancelEvent() {
+  private sendCancelEvent() {
     this.dispatchEvent(
       new CustomEvent('cancel', { bubbles: true, composed: true }),
     );
@@ -90,11 +90,11 @@ export class ActionConfirmModal extends LitElement {
           <div class="buttons">
             <ss-button
               positive
-              @click=${this._sendConfirmEvent}
+              @click=${this.sendConfirmEvent}
               text=${msg('Yes')}
             ></ss-button>
             <ss-button
-              @click=${this._sendCancelEvent}
+              @click=${this.sendCancelEvent}
               text=${msg('Cancel')}
             ></ss-button>
           </div>

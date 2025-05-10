@@ -82,12 +82,12 @@ export class BulkManager extends MobxLitElement {
     };
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>) {
     const type = e.detail.value as OperationType;
     this.operationType = type;
   }
 
-  private async _handlePerformOperation() {
+  private async handlePerformOperation() {
     await api.post<any, BulkOperation>('operation', {
       operation: { tags: this.tags, type: this.operationType },
       actions: this.state.selectedActions,
@@ -141,7 +141,7 @@ export class BulkManager extends MobxLitElement {
     this.tagSuggestions = tags;
   }
 
-  private _handleSelectAll() {
+  private handleSelectAll() {
     this.state.toggleSelectAll();
   }
 
@@ -150,7 +150,7 @@ export class BulkManager extends MobxLitElement {
       <div class=${classMap(this.classes)}>
         <ss-select
           selected=${this.operationType}
-          @select-changed=${this._handleTypeChanged}
+          @select-changed=${this.handleTypeChanged}
           .options=${Object.values(OperationType).map(type => ({
             value: type,
             label: operationTypeMsgMap[type],
@@ -195,13 +195,13 @@ export class BulkManager extends MobxLitElement {
         <div class="select-all">
           <ss-button
             text=${msg('Select all')}
-            @click=${this._handleSelectAll}
+            @click=${this.handleSelectAll}
           ></ss-button>
         </div>
 
         <ss-button
           text=${msg('Perform operation')}
-          @click=${this._handlePerformOperation}
+          @click=${this.handlePerformOperation}
         ></ss-button>
       </div>
     `;

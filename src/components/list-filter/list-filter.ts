@@ -166,19 +166,19 @@ export class ListFilter extends MobxLitElement {
     }
   }
 
-  private _handleIncludeUntaggedChanged() {
+  private handleIncludeUntaggedChanged() {
     this.includeUntagged = !this.includeUntagged;
   }
 
-  private _handleIncludeAllChanged() {
+  private handleIncludeAllChanged() {
     this.includeAll = !this.includeAll;
   }
 
-  private _handleIncludeAllTaggingChanged() {
+  private handleIncludeAllTaggingChanged() {
     this.includeAllTagging = !this.includeAllTagging;
   }
 
-  private _handleUpdateClick(e: CustomEvent): void {
+  private handleUpdateClick(e: CustomEvent): void {
     this.state.setListFilter(this.filter);
 
     storage.saveActiveFilter(this.state.listFilter);
@@ -186,7 +186,7 @@ export class ListFilter extends MobxLitElement {
     addToast(msg('Filter updated!'), NotificationType.INFO);
   }
 
-  private async _saveFilter() {
+  private async saveFilter() {
     if (!this.saveMode) {
       this.saveMode = true;
       this.filterNameInput.focus();
@@ -202,19 +202,19 @@ export class ListFilter extends MobxLitElement {
     addToast(msg('Filter saved!'), NotificationType.SUCCESS);
   }
 
-  private async _handleSaveClick(e: CustomEvent): Promise<void> {
-    await this._saveFilter();
+  private async handleSaveClick(e: CustomEvent): Promise<void> {
+    await this.saveFilter();
   }
 
-  private _handleFilterNameChanged(e: CustomEvent): void {
+  private handleFilterNameChanged(e: CustomEvent): void {
     this.filterName = e.detail.value;
   }
 
-  private _handleFilterNameSubmitted(e: CustomEvent): void {
-    this._saveFilter();
+  private handleFilterNameSubmitted(e: CustomEvent): void {
+    this.saveFilter();
   }
 
-  private _handleSavedFilterChanged(e: Event) {
+  private handleSavedFilterChanged(e: Event) {
     this.selectedSavedFilter = this.savedFiltersInput.value;
     const savedFilter = this.savedFilters.find(
       savedFilter => savedFilter.id === this.savedFiltersInput.value,
@@ -232,7 +232,7 @@ export class ListFilter extends MobxLitElement {
     }
   }
 
-  private _handleDeleteSavedFilterClick(e: Event) {
+  private handleDeleteSavedFilterClick(e: Event) {
     if (this.savedFiltersInput.value) {
       storage.deleteSavedFilter(this.savedFiltersInput.value);
       this.savedFiltersInput.value = '';
@@ -242,11 +242,11 @@ export class ListFilter extends MobxLitElement {
     addToast(msg('Filter deleted!'), NotificationType.INFO);
   }
 
-  private _handleTimeChanged(e: TimeFiltersUpdatedEvent) {
+  private handleTimeChanged(e: TimeFiltersUpdatedEvent) {
     this.time = e.detail;
   }
 
-  private _handleTextChanged(e: TextFiltersUpdatedEvent) {
+  private handleTextChanged(e: TextFiltersUpdatedEvent) {
     this.text = e.detail.filters;
   }
 
@@ -291,7 +291,7 @@ export class ListFilter extends MobxLitElement {
               <div class="saved-filters">
                 <select
                   id="saved-filters"
-                  @change=${this._handleSavedFilterChanged}
+                  @change=${this.handleSavedFilterChanged}
                 >
                   <option value="">${msg('Saved filters')}</option>
                   ${repeat(
@@ -305,7 +305,7 @@ export class ListFilter extends MobxLitElement {
                 ${this.selectedSavedFilter
                   ? html`
                       <ss-button
-                        @click=${this._handleDeleteSavedFilterClick}
+                        @click=${this.handleDeleteSavedFilterClick}
                         text=${msg('Delete filter')}
                       ></ss-button>
                     `
@@ -319,7 +319,7 @@ export class ListFilter extends MobxLitElement {
             id="include-all"
             type="checkbox"
             ?checked=${this.includeAll}
-            @change=${this._handleIncludeAllChanged}
+            @change=${this.handleIncludeAllChanged}
           />
           <label for="include-all">${msg('Include all actions')}</label>
         </div>
@@ -328,7 +328,7 @@ export class ListFilter extends MobxLitElement {
           <text-filters
             .filters=${this.text}
             @text-filters-updated=${(e: TextFiltersUpdatedEvent) =>
-              this._handleTextChanged(e)}
+              this.handleTextChanged(e)}
           ></text-filters>
 
           <fieldset class=${classMap(this.taggingClasses)}>
@@ -339,7 +339,7 @@ export class ListFilter extends MobxLitElement {
                 id="include-all-tagging"
                 type="checkbox"
                 ?checked=${this.includeAllTagging}
-                @change=${this._handleIncludeAllTaggingChanged}
+                @change=${this.handleIncludeAllTaggingChanged}
               />
               <label for="include-all-tagging">${msg('Include all')}</label>
             </div>
@@ -354,7 +354,7 @@ export class ListFilter extends MobxLitElement {
                     <tag-manager
                       ?enableSuggestions=${this.tagSuggestionsEnabled}
                       @tags-updated=${(e: TagsUpdatedEvent): void => {
-                        this[type] = e.detail.tags;
+                        this.updateTags(type, e.detail.tags);
                       }}
                       @tag-suggestions-requested=${this
                         .handleTagSuggestionsRequested}
@@ -384,7 +384,7 @@ export class ListFilter extends MobxLitElement {
                   id="include-untagged"
                   type="checkbox"
                   ?checked=${this.includeUntagged}
-                  @change=${this._handleIncludeUntaggedChanged}
+                  @change=${this.handleIncludeUntaggedChanged}
                 />
                 <label for="include-untagged"
                   >${msg('Include actions without tags')}</label
@@ -405,13 +405,13 @@ export class ListFilter extends MobxLitElement {
               ? this.time.end
               : ''}
             @time-filters-updated=${(e: TimeFiltersUpdatedEvent) =>
-              this._handleTimeChanged(e)}
+              this.handleTimeChanged(e)}
           ></time-filters>
         </div>
 
         <ss-button
           @click=${(e: CustomEvent) => {
-            this._handleUpdateClick(e);
+            this.handleUpdateClick(e);
           }}
           text=${msg('Use filter')}
         ></ss-button>
@@ -419,10 +419,10 @@ export class ListFilter extends MobxLitElement {
         <div class="save">
           <ss-input
             @input-changed=${(e: CustomEvent) => {
-              this._handleFilterNameChanged(e);
+              this.handleFilterNameChanged(e);
             }}
             @input-submitted=${(e: CustomEvent) => {
-              this._handleFilterNameSubmitted(e);
+              this.handleFilterNameSubmitted(e);
             }}
             id="filter-name"
             placeholder=${msg('Filter name')}
@@ -430,7 +430,7 @@ export class ListFilter extends MobxLitElement {
 
           <ss-button
             @click=${(e: CustomEvent) => {
-              this._handleSaveClick(e);
+              this.handleSaveClick(e);
             }}
             text=${msg('Save filter')}
             ?disabled=${!this.saveButtonIsEnabled}

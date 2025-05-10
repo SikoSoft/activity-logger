@@ -37,7 +37,7 @@ export class TextFilters extends LitElement {
     super.connectedCallback();
   }
 
-  private _handleFilterUpdated(e: TextFilterUpdatedEvent) {
+  private handleFilterUpdated(e: TextFilterUpdatedEvent) {
     const textFilter = e.detail;
     if (textFilter.index === -1) {
       this.newFilter = {
@@ -59,7 +59,7 @@ export class TextFilters extends LitElement {
     );
   }
 
-  private _handleSave(e: TextFilterSaveEvent) {
+  private handleSave(e: TextFilterSaveEvent) {
     let filters: TextContext[] =
       e.detail.index === -1
         ? [...this.filters, this.newFilter]
@@ -85,8 +85,8 @@ export class TextFilters extends LitElement {
               index=${index}
               type=${filter.type}
               subStr=${filter.subStr}
-              @text-filter-updated=${this._handleFilterUpdated}
-              @text-filter-save=${this._handleSave}
+              @text-filter-updated=${this.handleFilterUpdated}
+              @text-filter-save=${this.handleSave}
             ></text-filter>
           `,
         )}
@@ -94,8 +94,8 @@ export class TextFilters extends LitElement {
         <text-filter
           type=${this.newFilter.type}
           subStr=${this.newFilter.subStr}
-          @text-filter-updated=${this._handleFilterUpdated}
-          @text-filter-save=${this._handleSave}
+          @text-filter-updated=${this.handleFilterUpdated}
+          @text-filter-save=${this.handleSave}
         ></text-filter>
 
         <div></div>

@@ -69,7 +69,7 @@ export class ActionList extends ViewElement {
       }
     `,
   ];
-  private scrollHandler: EventListener = () => this._handleScroll();
+  private scrollHandler: EventListener = () => this.handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @query('list-filter') listFilter!: ListFilter;
 
@@ -151,13 +151,13 @@ export class ActionList extends ViewElement {
     this.load();
   }
 
-  private _handleItemDeleted(e: ActionItemDeletedEvent) {
+  private handleItemDeleted(e: ActionItemDeletedEvent) {
     this.state.setListItems(
       this.state.listItems.filter(item => item.id !== e.detail.id),
     );
   }
 
-  private _handleItemUpdated(e: ActionItemUpdatedEvent) {
+  private handleItemUpdated(e: ActionItemUpdatedEvent) {
     const updatedList = this.state.listItems
       .map(item =>
         item.id === e.detail.id
@@ -181,7 +181,7 @@ export class ActionList extends ViewElement {
     this.state.setListItems(updatedList);
   }
 
-  private _handleScroll() {
+  private handleScroll() {
     if (this.paginationType === PaginationType.LAZY) {
       if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
         this.load(true);
@@ -257,45 +257,45 @@ export class ActionList extends ViewElement {
     }
   }
 
-  private _handleFilterUpdated(e: ListFilterUpdatedEvent) {
+  private handleFilterUpdated(e: ListFilterUpdatedEvent) {
     this.filterIsOpen = false;
     this.load();
   }
 
-  private _handleSortUpdated(e: ListSortUpdatedEvent) {
+  private handleSortUpdated(e: ListSortUpdatedEvent) {
     this.load();
   }
 
-  private _handleSettingUpdated(e: CustomEvent) {
+  private handleSettingUpdated(e: CustomEvent) {
     this.load();
   }
 
-  private _handleContextUpdated(e: ListContextUpdatedEvent) {
+  private handleContextUpdated(e: ListContextUpdatedEvent) {
     this.load();
   }
 
-  private _handlePageChanged(e: PageChangedEvent) {
+  private handlePageChanged(e: PageChangedEvent) {
     this.start = e.detail.start;
     this.load();
   }
 
-  private _toggleSetting() {
+  private toggleSetting() {
     this.settingIsOpen = !this.settingIsOpen;
   }
 
-  private _toggleFilter() {
+  private toggleFilter() {
     this.filterIsOpen = !this.filterIsOpen;
   }
 
-  private _toggleSort() {
+  private toggleSort() {
     this.sortIsOpen = !this.sortIsOpen;
   }
 
-  private _toggleContext() {
+  private toggleContext() {
     this.contextIsOpen = !this.contextIsOpen;
   }
 
-  private _toggleActionContext(id: number) {
+  private toggleActionContext(id: number) {
     const state = this.actionContextIsOpen.get(id);
     if (state) {
       this.actionContextIsOpen.set(id, false);
@@ -305,12 +305,12 @@ export class ActionList extends ViewElement {
     this.requestUpdate();
   }
 
-  private _handlePointerLongPress(e: PointerLongPressEvent) {
+  private handlePointerLongPress(e: PointerLongPressEvent) {
     const listItem = e.target as ActionListItem;
     this.state.toggleActionSelection(listItem.actionId);
   }
 
-  private _handlePointerUp(e: PointerUpEvent) {
+  private handlePointerUp(e: PointerUpEvent) {
     const listItem = e.target as ActionListItem;
     if (!this.state.selectMode) {
       listItem.setMode(ActionListItemMode.EDIT);
@@ -326,7 +326,7 @@ export class ActionList extends ViewElement {
           <ss-collapsable
             title=${msg('Show context')}
             @toggled=${() => {
-              this._toggleActionContext(item.id);
+              this.toggleActionContext(item.id);
             }}
             ?open=${this.actionContextIsOpen.get(item.id)}
           >
@@ -341,8 +341,8 @@ export class ActionList extends ViewElement {
                   ?selected=${this.state.selectedActions.includes(
                     contextAction.id,
                   )}
-                  @pointer-long-press=${this._handlePointerLongPress}
-                  @pointer-up=${this._handlePointerUp}
+                  @pointer-long-press=${this.handlePointerLongPress}
+                  @pointer-up=${this.handlePointerUp}
                 ></action-list-item>
               `,
             )}
@@ -356,22 +356,22 @@ export class ActionList extends ViewElement {
       <ss-collapsable
         title=${msg('Settings')}
         ?open=${this.settingIsOpen}
-        @toggled=${this._toggleSetting}
+        @toggled=${this.toggleSetting}
       >
         <setting-form
           listConfigId=${this.state.listConfigId}
-          @setting-updated=${this._handleSettingUpdated}
+          @setting-updated=${this.handleSettingUpdated}
         ></setting-form>
       </ss-collapsable>
 
       <ss-collapsable
         title=${msg('Filter')}
         ?open=${this.filterIsOpen}
-        @toggled=${this._toggleFilter}
+        @toggled=${this.toggleFilter}
       >
         <div class="filter-body">
           <list-filter
-            @filter-updated=${this._handleFilterUpdated}
+            @filter-updated=${this.handleFilterUpdated}
           ></list-filter>
         </div>
       </ss-collapsable>
@@ -379,9 +379,9 @@ export class ActionList extends ViewElement {
       <ss-collapsable
         title=${msg('Sort')}
         ?open=${this.sortIsOpen}
-        @toggled=${this._toggleSort}
+        @toggled=${this.toggleSort}
       >
-        <list-sort @list-sort-updated=${this._handleSortUpdated}></list-sort>
+        <list-sort @list-sort-updated=${this.handleSortUpdated}></list-sort>
       </ss-collapsable>
 
       ${!this.state.listFilter.includeAll
@@ -389,10 +389,10 @@ export class ActionList extends ViewElement {
             <ss-collapsable
               title=${msg('Context')}
               ?open=${this.contextIsOpen}
-              @toggled=${this._toggleContext}
+              @toggled=${this.toggleContext}
             >
               <list-context
-                @list-context-updated=${this._handleContextUpdated}
+                @list-context-updated=${this.handleContextUpdated}
               ></list-context>
             </ss-collapsable>
           `
@@ -413,10 +413,10 @@ export class ActionList extends ViewElement {
                   occurredAt=${item.occurredAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
-                  @pointer-long-press=${this._handlePointerLongPress}
-                  @pointer-up=${this._handlePointerUp}
-                  @action-item-deleted=${this._handleItemDeleted}
-                  @action-item-updated=${this._handleItemUpdated}
+                  @pointer-long-press=${this.handlePointerLongPress}
+                  @pointer-up=${this.handlePointerUp}
+                  @action-item-deleted=${this.handleItemDeleted}
+                  @action-item-updated=${this.handleItemUpdated}
                 ></action-list-item>
                 ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
@@ -429,7 +429,7 @@ export class ActionList extends ViewElement {
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
             <list-paginator
-              @page-changed=${this._handlePageChanged}
+              @page-changed=${this.handlePageChanged}
               start=${this.start}
               total=${this.total}
               perPage=${this.perPage}

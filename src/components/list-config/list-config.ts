@@ -177,32 +177,32 @@ export class ListConfig extends MobxLitElement {
   async setup() {
     const listConfigs = this.state.listConfigs;
     if (!listConfigs.length) {
-      await this._addConfig();
+      await this.addConfig();
     }
 
     this.sync();
     this.ready = true;
   }
 
-  _handleConfigChanged(e: SelectChangedEvent<string>) {
+  handleConfigChanged(e: SelectChangedEvent<string>) {
     this.state.setEditListConfigMode(false);
     this.setListConfigId(e.detail.value);
     this.sync();
   }
 
-  _handleBoxClick() {
+  handleBoxClick() {
     this.state.setSelectListConfigMode(true);
   }
 
-  _enableEditMode() {
+  enableEditMode() {
     this.state.setEditListConfigMode(true);
   }
 
-  _handleNameChanged(e: InputChangedEvent) {
+  handleNameChanged(e: InputChangedEvent) {
     this.name = e.detail.value;
   }
 
-  async _saveConfig() {
+  async saveConfig() {
     addToast(msg('The configuration has been saved'), NotificationType.SUCCESS);
     await storage.saveListConfig({
       id: this.id,
@@ -214,7 +214,7 @@ export class ListConfig extends MobxLitElement {
     this.state.setListConfigs(await storage.getListConfigs());
   }
 
-  async _deleteConfig() {
+  async deleteConfig() {
     await storage.deleteListConfig(this.id);
     addToast(msg('The configuration has been deleted'), NotificationType.INFO);
     const listConfigs = await storage.getListConfigs();
@@ -225,7 +225,7 @@ export class ListConfig extends MobxLitElement {
     this.sync();
   }
 
-  async _addConfig() {
+  async addConfig() {
     const id = await storage.addListConfig();
     addToast(msg('The configuration has been added'), NotificationType.SUCCESS);
     const listConfigs = await storage.getListConfigs();
@@ -251,7 +251,7 @@ export class ListConfig extends MobxLitElement {
   render() {
     return html`<div
       class=${classMap(this.classes)}
-      @click=${this._handleBoxClick}
+      @click=${this.handleBoxClick}
     >
       <ss-carousel
         infinite
@@ -290,7 +290,7 @@ export class ListConfig extends MobxLitElement {
                       <div class="name">
                         <ss-input
                           id="date"
-                          @input-changed=${this._handleNameChanged}
+                          @input-changed=${this.handleNameChanged}
                           type=${InputType.TEXT}
                           value=${config.name}
                         ></ss-input>
@@ -299,23 +299,23 @@ export class ListConfig extends MobxLitElement {
                       <div class="buttons">
                         <ss-button
                           text=${msg('Save configuration')}
-                          @click=${this._saveConfig}
+                          @click=${this.saveConfig}
                         ></ss-button>
                         <ss-button
                           text=${msg('Delete configuration')}
-                          @click=${this._deleteConfig}
+                          @click=${this.deleteConfig}
                         ></ss-button>
                       </div>
                     </div>
 
                     <div class="edit-button">
                       <ss-button
-                        @click=${this._enableEditMode}
+                        @click=${this.enableEditMode}
                         text=${msg('Edit configuration')}
                       ></ss-button>
                       <ss-button
                         text=${msg('Add configuration')}
-                        @click=${this._addConfig}
+                        @click=${this.addConfig}
                       ></ss-button>
                     </div>
                   </div>

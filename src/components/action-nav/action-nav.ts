@@ -48,7 +48,7 @@ export class ActionNav extends LitElement {
   [ActionNavProp.ACTIVE]: ActionNavProps[ActionNavProp.ACTIVE] =
     actionNavProps[ActionNavProp.ACTIVE].default;
 
-  _setActiveView(view: ActionView) {
+  setActiveView(view: ActionView) {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
         bubbles: true,
@@ -65,7 +65,7 @@ export class ActionNav extends LitElement {
           view =>
             html`<span
               @click="${() => {
-                this._setActiveView(view.id);
+                this.setActiveView(view.id);
               }}"
               class=${this.active === view.id ? 'active' : ''}
               >${view.label}</span

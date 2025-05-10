@@ -73,31 +73,31 @@ export class TimeFilters extends LitElement {
     }
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>) {
     this.type = e.detail.value as ListFilterTimeType;
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
-  private _handleDateChanged(e: CustomEvent) {
+  private handleDateChanged(e: CustomEvent) {
     this.date = e.detail.value;
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
-  private _handleStartChanged(e: CustomEvent) {
+  private handleStartChanged(e: CustomEvent) {
     this.start = e.detail.value;
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
-  private _handleEndChanged(e: CustomEvent) {
+  private handleEndChanged(e: CustomEvent) {
     this.end = e.detail.value;
-    this._sendUpdatedEvent();
+    this.sendUpdatedEvent();
   }
 
-  private _sendUpdatedEvent(): void {
-    this.dispatchEvent(new TimeFiltersUpdatedEvent(this._mapContextFromType()));
+  private sendUpdatedEvent(): void {
+    this.dispatchEvent(new TimeFiltersUpdatedEvent(this.mapContextFromType()));
   }
 
-  private _mapContextFromType(): TimeContext {
+  private mapContextFromType(): TimeContext {
     switch (this.type) {
       case ListFilterTimeType.ALL_TIME:
         return {
@@ -124,7 +124,7 @@ export class TimeFilters extends LitElement {
         <ss-select
           selected=${this.type}
           @select-changed=${(e: SelectChangedEvent<string>) => {
-            this._handleTypeChanged(e);
+            this.handleTypeChanged(e);
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({
             value: type,
@@ -137,7 +137,7 @@ export class TimeFilters extends LitElement {
             ? html`
                 <ss-input
                   id="date"
-                  @input-changed=${this._handleDateChanged}
+                  @input-changed=${this.handleDateChanged}
                   type=${InputType.DATE}
                   value=${this.date}
                 ></ss-input>
@@ -146,13 +146,13 @@ export class TimeFilters extends LitElement {
               ? html`
                   <ss-input
                     id="start"
-                    @input-changed=${this._handleStartChanged}
+                    @input-changed=${this.handleStartChanged}
                     type=${InputType.DATE}
                     value=${this.start}
                   ></ss-input>
                   <ss-input
                     id="end"
-                    @input-changed=${this._handleEndChanged}
+                    @input-changed=${this.handleEndChanged}
                     type=${InputType.DATE}
                     value=${this.end}
                   ></ss-input>

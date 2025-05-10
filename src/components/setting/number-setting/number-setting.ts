@@ -46,7 +46,7 @@ export class NumberSetting extends LitElement {
     `,
   ];
 
-  private _handleInputChanged(e: InputChangedEvent) {
+  private handleInputChanged(e: InputChangedEvent) {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -65,7 +65,7 @@ export class NumberSetting extends LitElement {
           min=${this.min}
           max=${this.max}
           step=${this.step}
-          @input-changed=${this._handleInputChanged}
+          @input-changed=${this.handleInputChanged}
         ></ss-input>
       </div>
     `;

@@ -43,7 +43,7 @@ export class TextFilter extends LitElement {
   [TextFilterProp.INDEX]: TextFilterProps[TextFilterProp.INDEX] =
     textFilterProps[TextFilterProp.INDEX].default;
 
-  private _handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>) {
     const type = e.detail.value as TextType;
     this.dispatchEvent(
       new TextFilterUpdatedEvent({
@@ -54,7 +54,7 @@ export class TextFilter extends LitElement {
     );
   }
 
-  private _handleSubStrChanged(e: InputChangedEvent) {
+  private handleSubStrChanged(e: InputChangedEvent) {
     const subStr = e.detail.value;
     this.dispatchEvent(
       new TextFilterUpdatedEvent({
@@ -65,11 +65,11 @@ export class TextFilter extends LitElement {
     );
   }
 
-  private _handleSubStrSubmitted(e: InputChangedEvent) {
+  private handleSubStrSubmitted(e: InputChangedEvent) {
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
-  private _handleButtonClicked() {
+  private handleButtonClicked() {
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
@@ -79,7 +79,7 @@ export class TextFilter extends LitElement {
         <ss-select
           selected=${this.type}
           @select-changed=${(e: SelectChangedEvent<string>) => {
-            this._handleTypeChanged(e);
+            this.handleTypeChanged(e);
           }}
           .options=${Object.values(TextType).map(type => ({
             value: type,
@@ -90,16 +90,16 @@ export class TextFilter extends LitElement {
         <ss-input
           value=${this.subStr}
           @input-changed=${(e: InputChangedEvent) => {
-            this._handleSubStrChanged(e);
+            this.handleSubStrChanged(e);
           }}
           @input-submitted=${(e: InputSubmittedEvent) => {
-            this._handleSubStrSubmitted(e);
+            this.handleSubStrSubmitted(e);
           }}
         ></ss-input>
 
         <ss-button
           text=${this.index === -1 ? '+' : '-'}
-          @click=${this._handleButtonClicked}
+          @click=${this.handleButtonClicked}
         ></ss-button>
       </fieldset>
     `;

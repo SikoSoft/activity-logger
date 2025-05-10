@@ -118,7 +118,7 @@ export class ListPaginator extends LitElement {
     return pages;
   }
 
-  private _prevPage() {
+  private prevPage() {
     if (this.page > 1) {
       const start = this.start - this.perPage;
       this.dispatchEvent(
@@ -127,7 +127,7 @@ export class ListPaginator extends LitElement {
     }
   }
 
-  private _nextPage() {
+  private nextPage() {
     if (this.page + 1 <= this.pages) {
       this.dispatchEvent(
         new PageChangedEvent({ start: this.start + this.perPage }),
@@ -135,7 +135,7 @@ export class ListPaginator extends LitElement {
     }
   }
 
-  private _goToPage(page: number) {
+  private goToPage(page: number) {
     this.dispatchEvent(
       new PageChangedEvent({ start: (page - 1) * this.perPage }),
     );
@@ -146,7 +146,7 @@ export class ListPaginator extends LitElement {
       ? html`
           <div class="paginator box">
             <div class="left">
-              <button text="" @click=${this._prevPage}>&#x21e6;</button>
+              <button text="" @click=${this.prevPage}>&#x21e6;</button>
             </div>
             <div class="center">
               <div class="pages">
@@ -158,7 +158,7 @@ export class ListPaginator extends LitElement {
                           'quick-page': true,
                           active: page === this.page,
                         })}
-                        @click=${() => this._goToPage(page)}
+                        @click=${() => this.goToPage(page)}
                       >
                         ${page}
                       </button>`,
@@ -167,7 +167,7 @@ export class ListPaginator extends LitElement {
             </div>
 
             <div class="right">
-              <button text="" @click=${this._nextPage}>&#x21e8;</button>
+              <button text="" @click=${this.nextPage}>&#x21e8;</button>
             </div>
           </div>
         `

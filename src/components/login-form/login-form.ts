@@ -38,23 +38,23 @@ export class LoginForm extends MobxLitElement {
   @state() password: string = '';
   @state() loading: boolean = false;
 
-  private _handleUsernameChanged(e: InputChangedEvent): void {
+  private handleUsernameChanged(e: InputChangedEvent): void {
     this.username = e.detail.value;
   }
 
-  private _handleUsernameSubmitted(e: InputSubmittedEvent): void {
-    this._login();
+  private handleUsernameSubmitted(e: InputSubmittedEvent): void {
+    this.login();
   }
 
-  private _handlePasswordChanged(e: InputChangedEvent): void {
+  private handlePasswordChanged(e: InputChangedEvent): void {
     this.password = e.detail.value;
   }
 
-  private _handlePasswordSubmitted(e: InputSubmittedEvent): void {
-    this._login();
+  private handlePasswordSubmitted(e: InputSubmittedEvent): void {
+    this.login();
   }
 
-  private async _login(): Promise<void> {
+  private async login(): Promise<void> {
     this.loading = true;
     const result = await api.post<LoginRequestBody, LoginResponseBody>(
       'login',
@@ -84,20 +84,20 @@ export class LoginForm extends MobxLitElement {
         <ss-input
           id="username"
           placeholder=${msg('Username')}
-          @input-submitted=${this._handleUsernameSubmitted}
-          @input-changed=${this._handleUsernameChanged}
+          @input-submitted=${this.handleUsernameSubmitted}
+          @input-changed=${this.handleUsernameChanged}
           value=${this.username}
         ></ss-input>
         <ss-input
           id="password"
           placeholder=${msg('Password')}
           type="password"
-          @input-submitted=${this._handlePasswordSubmitted}
-          @input-changed=${this._handlePasswordChanged}
+          @input-submitted=${this.handlePasswordSubmitted}
+          @input-changed=${this.handlePasswordChanged}
           value=${this.password}
         ></ss-input>
         <ss-button
-          @click=${this._login}
+          @click=${this.login}
           text=${msg('Login')}
           ?loading=${this.loading}
         ></ss-button>
