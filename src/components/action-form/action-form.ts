@@ -13,7 +13,7 @@ import { ViewElement } from '@/lib/ViewElement';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@/components/confirm-modal/confirm-modal';
-import '@/components/tag-manager/tag-manager';
+import '@ss/ui/components/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
@@ -31,12 +31,12 @@ import {
   ActionItemDeletedEvent,
   ActionItemUpdatedEvent,
 } from './action-form.events';
-import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
+import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { addToast } from '@/lib/Util';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
-import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 const tagHash = (tags: string[]): string => {
   return tags

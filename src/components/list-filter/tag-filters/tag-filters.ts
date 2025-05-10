@@ -11,13 +11,12 @@ import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
 } from '@/lib/Event';
-import { TagsUpdatedEvent } from '@/components/tag-manager/tag-manager.events';
 
-import '@/components/tag-manager/tag-manager';
+import '@ss/ui/components/tag-manager';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { appState } from '@/state';
-import { TagSuggestionsRequestedEvent } from '@/components/tag-manager/tag-input/tag-input.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),

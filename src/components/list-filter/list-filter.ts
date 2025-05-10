@@ -21,11 +21,11 @@ import { SavedListFilter, storage } from '@/lib/Storage';
 import { TimeFiltersUpdatedEvent } from '@/components/list-filter/time-filters/time-filters.events';
 import { TextFiltersUpdatedEvent } from '@/components/list-filter/text-filters/text-filters.events';
 import { ListFilterUpdatedEvent } from './list-filter.events';
-import { TagsUpdatedEvent } from '../tag-manager/tag-manager.events';
+import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
-import '@/components/tag-manager/tag-manager';
+import '@ss/ui/components/tag-manager';
 import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
@@ -33,7 +33,7 @@ import { theme } from '@/styles/theme';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),

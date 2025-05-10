@@ -11,10 +11,10 @@ import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { OperationPerformedEvent } from './bulk-manager.events';
-import { TagsUpdatedEvent } from '@/components/tag-manager/tag-manager.events';
+import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 
 import '@ss/ui/components/ss-button';
-import '@/components/tag-manager/tag-manager';
+import '@ss/ui/components/tag-manager';
 
 import { theme } from '@/styles/theme';
 import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
@@ -22,7 +22,7 @@ import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
