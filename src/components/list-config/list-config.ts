@@ -234,7 +234,7 @@ export class ListConfig extends MobxLitElement {
     this.sync();
   }
 
-  sync() {
+  sync(reset = false): void {
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
     this.navigationIndex = this.state.listConfigs.findIndex(

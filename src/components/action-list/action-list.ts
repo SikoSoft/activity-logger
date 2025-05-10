@@ -142,7 +142,11 @@ export class ActionList extends ViewElement {
     window.removeEventListener('scroll', this.scrollHandler);
   }
 
-  sync() {
+  sync(reset = false): void {
+    if (reset) {
+      this.start = 0;
+    }
+
     this.listFilter.sync();
     this.load();
   }

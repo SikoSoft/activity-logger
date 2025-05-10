@@ -151,7 +151,7 @@ export class ListFilter extends MobxLitElement {
     this.savedFilters = storage.getSavedFilters();
   }
 
-  sync() {
+  sync(reset: boolean = false): void {
     Object.values(ListFilterType).forEach(type => {
       this[type] = this.state.listFilter.tagging[type];
     });

@@ -89,11 +89,11 @@ export class ActivityLogger extends MobxLitElement {
   }
 
   private _handleOperationPerformed(e: OperationPerformedEvent) {
-    this.viewComponent.sync();
+    this.viewComponent.sync(false);
   }
 
   private _handleListConfigChanged(e: ListConfigChangedEvent) {
-    this.viewComponent.sync();
+    this.viewComponent.sync(true);
   }
 
   private _handleUserLoggedIn() {
