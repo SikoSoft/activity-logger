@@ -302,6 +302,7 @@ export class ListFilter extends MobxLitElement {
                     `,
                   )}
                 </select>
+
                 ${this.selectedSavedFilter
                   ? html`
                       <ss-button
@@ -321,6 +322,7 @@ export class ListFilter extends MobxLitElement {
             ?checked=${this.includeAll}
             @change=${this.handleIncludeAllChanged}
           />
+
           <label for="include-all">${msg('Include all actions')}</label>
         </div>
 
@@ -341,6 +343,7 @@ export class ListFilter extends MobxLitElement {
                 ?checked=${this.includeAllTagging}
                 @change=${this.handleIncludeAllTaggingChanged}
               />
+
               <label for="include-all-tagging">${msg('Include all')}</label>
             </div>
 
@@ -351,6 +354,7 @@ export class ListFilter extends MobxLitElement {
                 type => html`
                   <fieldset>
                     <legend>${filterTypeMsgMap[type]}</legend>
+
                     <tag-manager
                       ?enableSuggestions=${this.tagSuggestionsEnabled}
                       @tags-updated=${(e: TagsUpdatedEvent): void => {
@@ -386,6 +390,7 @@ export class ListFilter extends MobxLitElement {
                   ?checked=${this.includeUntagged}
                   @change=${this.handleIncludeUntaggedChanged}
                 />
+
                 <label for="include-untagged"
                   >${msg('Include actions without tags')}</label
                 >

@@ -148,6 +148,7 @@ export class ListPaginator extends LitElement {
             <div class="left">
               <button text="" @click=${this.prevPage}>&#x21e6;</button>
             </div>
+
             <div class="center">
               <div class="pages">
                 ${this.quickPages.map(page =>

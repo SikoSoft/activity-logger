@@ -37,7 +37,9 @@ export class ActivityLogger extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
     this.setAuthToken(storage.getAuthToken());
+
     this.addEventListener('view-changed', (e: Event) => {
       this.handleViewChanged(e);
     });
@@ -72,6 +74,7 @@ export class ActivityLogger extends MobxLitElement {
       this.state.setDebugMode(storage.getDebugMode());
 
       const view = storage.getSavedView();
+
       if (view) {
         this.view = view;
       }
@@ -129,11 +132,15 @@ export class ActivityLogger extends MobxLitElement {
           <list-config
             @list-config-changed=${this.handleListConfigChanged}
           ></list-config>
+
           <action-nav active=${this.view}></action-nav>
+
           <bulk-manager
             @operation-performed=${this.handleOperationPerformed}
           ></bulk-manager>
+
           <main>${this.activeView()}</main>
+
           <floating-widget></floating-widget>
         `
       : html`<ss-loader></ss-loader>`;

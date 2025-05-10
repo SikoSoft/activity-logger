@@ -85,6 +85,7 @@ export class ActionConfirmModal extends LitElement {
     return html`
       <div class=${classMap(this.classes)}>
         <div class="overlay"></div>
+
         <div class="box modal">
           ${msg('Are you sure?')}
           <div class="buttons">
@@ -93,6 +94,7 @@ export class ActionConfirmModal extends LitElement {
               @click=${this.sendConfirmEvent}
               text=${msg('Yes')}
             ></ss-button>
+
             <ss-button
               @click=${this.sendCancelEvent}
               text=${msg('Cancel')}

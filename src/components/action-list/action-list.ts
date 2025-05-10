@@ -129,6 +129,7 @@ export class ActionList extends ViewElement {
     window.addEventListener('scroll', this.scrollHandler);
 
     const urlHasChanged = this.state.lastListUrl !== this.getUrl();
+
     if (urlHasChanged) {
       this.state.setListItems([]);
       this.state.setContextListItems([]);
@@ -223,11 +224,13 @@ export class ActionList extends ViewElement {
     try {
       const url = this.getUrl(more);
       this.state.setLastListUrl(url);
+
       const result = await api.get<{
         actions: ActionItem[];
         total: number;
         context: Record<number, ActionItem[]>;
       }>(url);
+
       if (result) {
         if (result.response.actions) {
           this.state.setListItems(
@@ -236,6 +239,7 @@ export class ActionList extends ViewElement {
               : [...result.response.actions],
           );
         }
+
         if (result.response.context) {
           this.state.setContextListItems({
             ...this.state.contextListItems,
@@ -246,6 +250,7 @@ export class ActionList extends ViewElement {
             this.actionContextIsOpen.set(parseInt(key), false);
           });
         }
+
         if (result.response.total) {
           this.total = result.response.total;
         }

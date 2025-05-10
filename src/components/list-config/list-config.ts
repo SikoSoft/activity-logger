@@ -145,11 +145,13 @@ export class ListConfig extends MobxLitElement {
   }
 
   @state() get carouselStyles(): CSSResult[] {
+    /*
     console.log(
       'carouselStyles',
       this.state.editListConfigMode,
       this.setListConfigId,
     );
+    */
     const styles: CSSResult[] = [this.defaultModeStyles];
     if (this.state.editListConfigMode) {
       styles.push(this.editModeStyles);
@@ -301,6 +303,7 @@ export class ListConfig extends MobxLitElement {
                           text=${msg('Save configuration')}
                           @click=${this.saveConfig}
                         ></ss-button>
+
                         <ss-button
                           text=${msg('Delete configuration')}
                           @click=${this.deleteConfig}
@@ -313,6 +316,7 @@ export class ListConfig extends MobxLitElement {
                         @click=${this.enableEditMode}
                         text=${msg('Edit configuration')}
                       ></ss-button>
+
                       <ss-button
                         text=${msg('Add configuration')}
                         @click=${this.addConfig}
@@ -322,6 +326,7 @@ export class ListConfig extends MobxLitElement {
                 </div>`,
             )
           : nothing}
+
         <style>
           ${this.carouselStyles}
         </style>

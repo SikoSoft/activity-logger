@@ -88,6 +88,7 @@ export class LoginForm extends MobxLitElement {
           @input-changed=${this.handleUsernameChanged}
           value=${this.username}
         ></ss-input>
+
         <ss-input
           id="password"
           placeholder=${msg('Password')}
@@ -96,6 +97,7 @@ export class LoginForm extends MobxLitElement {
           @input-changed=${this.handlePasswordChanged}
           value=${this.password}
         ></ss-input>
+
         <ss-button
           @click=${this.login}
           text=${msg('Login')}

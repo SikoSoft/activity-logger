@@ -121,6 +121,7 @@ export class TimeFilters extends LitElement {
     return html`
       <fieldset>
         <legend>${msg('Time')}</legend>
+
         <ss-select
           selected=${this.type}
           @select-changed=${(e: SelectChangedEvent<string>) => {
@@ -150,6 +151,7 @@ export class TimeFilters extends LitElement {
                     type=${InputType.DATE}
                     value=${this.start}
                   ></ss-input>
+
                   <ss-input
                     id="end"
                     @input-changed=${this.handleEndChanged}

@@ -46,6 +46,7 @@ export class TextSetting extends LitElement {
     return html`
       <div class="text-setting">
         <label>${this.name}</label>
+
         <ss-input
           @input-changed=${this.handleInputChanged}
           value=${this.value}

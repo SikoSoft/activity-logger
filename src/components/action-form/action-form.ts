@@ -263,6 +263,7 @@ export class ActionForm extends ViewElement {
       if (suggestions.length || this.desc === '') {
         this.lastInput.action.hadResults = true;
       }
+
       this.state.setActionSuggestions(suggestions);
     } catch (error) {
       console.error(
@@ -436,6 +437,7 @@ export class ActionForm extends ViewElement {
                   @click=${this.handleDeleteClick}
                   text=${msg('Delete')}
                 ></ss-button>
+
                 <action-confirm-modal
                   @confirm=${this.deleteAction}
                   @cancel=${() => (this.confirmModalShown = false)}

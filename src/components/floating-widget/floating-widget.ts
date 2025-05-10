@@ -208,15 +208,19 @@ export class FloatingWidget extends MobxLitElement {
       >
         <div class="head" @click=${this.handleToggleOpen}>
           <div class="left"></div>
+
           <div class="center">
             <div class="handle"></div>
           </div>
+
           <div class="right"></div>
         </div>
+
         <div class="body" @mouseenter=${this.handleOpen}>
           <div class="user">
             <user-pane></user-pane>
           </div>
+
           <div class="option">
             <h4>${msg('Advanced mode')}</h4>
             <ss-toggle
@@ -224,6 +228,7 @@ export class FloatingWidget extends MobxLitElement {
               ?on=${this.state.advancedMode}
             ></ss-toggle>
           </div>
+
           <div class="option">
             <h4>${msg('Debug mode')}</h4>
             <ss-toggle

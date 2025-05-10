@@ -59,6 +59,7 @@ export class NumberSetting extends LitElement {
     return html`
       <div class="number-setting">
         <label>${this.name}</label>
+
         <ss-input
           type="number"
           value=${this.value}

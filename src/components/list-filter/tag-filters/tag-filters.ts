@@ -121,6 +121,7 @@ export class TagFilters extends MobxLitElement {
             ?checked=${this.includeUntagged}
             @change=${this._handleIncludeUntaggedChanged}
           />
+
           <label for="include-unchanged"
             >${msg('Include actions without tags')}</label
           >

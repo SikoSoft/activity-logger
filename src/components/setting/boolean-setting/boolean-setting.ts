@@ -46,6 +46,7 @@ export class BooleanSetting extends LitElement {
     return html`
       <div class="boolean-setting">
         <label>${this.name}</label>
+
         <ss-toggle
           on=${this.value}
           @toggle-changed=${this.handleToggleChanged}
