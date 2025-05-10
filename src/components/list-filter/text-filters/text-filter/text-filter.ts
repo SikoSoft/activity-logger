@@ -14,7 +14,6 @@ import {
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 
-import '@/components/tag-manager/tag-manager';
 import {
   TextFilterProp,
   textFilterProps,

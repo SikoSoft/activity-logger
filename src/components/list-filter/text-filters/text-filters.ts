@@ -11,7 +11,6 @@ import {
   TextFilterSaveEvent,
 } from './text-filter/text-filter.events';
 
-import '@/components/tag-manager/tag-manager';
 import '@/components/list-filter/text-filters/text-filter/text-filter';
 
 import { theme } from '@/styles/theme';

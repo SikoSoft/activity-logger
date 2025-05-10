@@ -22,9 +22,11 @@ import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
+  private minLengthForSuggestion = 1;
   private state = appState;
 
   static styles = [
@@ -55,6 +57,9 @@ export class BulkManager extends MobxLitElement {
   @state() operationType: OperationType = OperationType.ADD_TAGS;
   @state() tagValue: string = '';
   @state() tags: string[] = [];
+  @state() loading: boolean = false;
+  @state() lastInput = { value: '', hadResults: true };
+  @state() tagSuggestions: string[] = [];
 
   get tagSuggestionsEnabled(): boolean {
     return (
@@ -103,8 +108,37 @@ export class BulkManager extends MobxLitElement {
     );
   }
 
-  private _handleTagsUpdated(e: TagsUpdatedEvent) {
+  private handleTagsUpdated(e: TagsUpdatedEvent) {
     this.tags = e.detail.tags;
+  }
+
+  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+    const value = e.detail.value;
+    if (
+      (!this.lastInput.hadResults && value.startsWith(this.lastInput.value)) ||
+      !this.tagSuggestionsEnabled
+    ) {
+      this.tagSuggestions = [];
+      return;
+    }
+
+    this.lastInput.hadResults = false;
+    this.lastInput.value = value;
+
+    let tags: string[] = [];
+
+    if (value.length >= this.minLengthForSuggestion) {
+      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      if (result) {
+        tags = result.response.tags;
+      }
+    }
+
+    if (tags.length || value === '') {
+      this.lastInput.hadResults = true;
+    }
+
+    this.tagSuggestions = tags;
   }
 
   private _handleSelectAll() {
@@ -128,14 +162,24 @@ export class BulkManager extends MobxLitElement {
               <tag-manager
                 ?enableSuggestions=${this.tagSuggestionsEnabled}
                 value=${this.tagValue}
-                .tags=${this.tags}
-                @tags-updated=${this._handleTagsUpdated}
+                @tags-updated=${this.handleTagsUpdated}
+                @tag-suggestions-requested=${this.handleTagSuggestionsRequested}
               >
-                ${repeat(
-                  this.tags,
-                  tag => tag,
-                  tag => html`<data-item>${tag}</data-item>`,
-                )}
+                <div slot="tags">
+                  ${repeat(
+                    this.tags,
+                    tag => tag,
+                    tag => html`<data-item>${tag}</data-item>`,
+                  )}
+                </div>
+
+                <div slot="suggestions">
+                  ${repeat(
+                    this.tagSuggestions,
+                    suggestion => suggestion,
+                    suggestion => html`<data-item>${suggestion}</data-item>`,
+                  )}
+                </div>
               </tag-manager>
             `
           : nothing}

@@ -11,7 +11,6 @@ import { TimeFiltersUpdatedEvent } from './time-filters.events';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 import { SSInput } from '@ss/ui/components/ss-input';
-import '@/components/tag-manager/tag-manager';
 
 import { theme } from '@/styles/theme';
 import {

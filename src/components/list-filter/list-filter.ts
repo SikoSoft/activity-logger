@@ -13,6 +13,8 @@ import {
   TextContext,
 } from 'api-spec/models/List';
 
+import { api } from '@/lib/Api';
+
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 
@@ -31,6 +33,7 @@ import { theme } from '@/styles/theme';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { TagSuggestionsRequestedEvent } from '../tag-manager/tag-input/tag-input.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
@@ -39,6 +42,7 @@ const filterTypeMsgMap: Record<ListFilterType, string> = {
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
+  private minLengthForSuggestion = 1;
   public state = appState;
 
   static styles = [
@@ -87,6 +91,8 @@ export class ListFilter extends MobxLitElement {
   @state() saveMode: boolean = false;
   @state() filterName: string = '';
   @state() selectedSavedFilter: string = '';
+  @state() lastInput = { value: '', hadResults: true };
+  @state() tagSuggestions: string[] = [];
 
   @query('#filter-name') filterNameInput!: SSInput;
   @query('#saved-filters') savedFiltersInput!: HTMLSelectElement;
@@ -248,6 +254,35 @@ export class ListFilter extends MobxLitElement {
     this[type] = tags;
   }
 
+  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+    const value = e.detail.value;
+    if (
+      (!this.lastInput.hadResults && value.startsWith(this.lastInput.value)) ||
+      !this.tagSuggestionsEnabled
+    ) {
+      this.tagSuggestions = [];
+      return;
+    }
+
+    this.lastInput.hadResults = false;
+    this.lastInput.value = value;
+
+    let tags: string[] = [];
+
+    if (value.length >= this.minLengthForSuggestion) {
+      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      if (result) {
+        tags = result.response.tags;
+      }
+    }
+
+    if (tags.length || value === '') {
+      this.lastInput.hadResults = true;
+    }
+
+    this.tagSuggestions = tags;
+  }
+
   render() {
     return html`
       <div class=${classMap(this.classes)}>
@@ -318,15 +353,28 @@ export class ListFilter extends MobxLitElement {
                     <legend>${filterTypeMsgMap[type]}</legend>
                     <tag-manager
                       ?enableSuggestions=${this.tagSuggestionsEnabled}
-                      @tags-updated=${(e: TagsUpdatedEvent) => {
-                        this.updateTags(type, e.detail.tags);
+                      @tags-updated=${(e: TagsUpdatedEvent): void => {
+                        this[type] = e.detail.tags;
                       }}
+                      @tag-suggestions-requested=${this
+                        .handleTagSuggestionsRequested}
                     >
-                      ${repeat(
-                        this[type],
-                        tag => tag,
-                        tag => html`<data-item>${tag}</data-item>`,
-                      )}
+                      <div slot="tags">
+                        ${repeat(
+                          this[type],
+                          tag => tag,
+                          tag => html`<data-item>${tag}</data-item>`,
+                        )}
+                      </div>
+
+                      <div slot="suggestions">
+                        ${repeat(
+                          this.tagSuggestions,
+                          suggestion => suggestion,
+                          suggestion =>
+                            html`<data-item>${suggestion}</data-item>`,
+                        )}
+                      </div>
                     </tag-manager>
                   </fieldset>
                 `,
