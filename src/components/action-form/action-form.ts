@@ -12,6 +12,7 @@ import { ViewElement } from '@/lib/ViewElement';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
 import '@/components/confirm-modal/confirm-modal';
 import '@ss/ui/components/tag-manager';
 
@@ -46,6 +47,14 @@ const tagHash = (tags: string[]): string => {
     .replace(/[^a-z0-9,]/g, '');
 };
 
+const defaultEntityType = 1;
+
+const entityTypes = [
+  { id: defaultEntityType, name: 'Entity 1' },
+  { id: 2, name: 'Entity 2' },
+  { id: 3, name: 'Entity 3' },
+];
+
 @customElement('action-form')
 export class ActionForm extends ViewElement {
   private state = appState;
@@ -60,12 +69,14 @@ export class ActionForm extends ViewElement {
       }
 
       tag-manager,
-      .time {
+      .time,
+      .type {
         display: none;
       }
 
       form.advanced-mode tag-manager,
-      form.advanced-mode .time {
+      form.advanced-mode .time,
+      form.advanced-mode .type {
         display: initial;
       }
 
@@ -372,6 +383,16 @@ export class ActionForm extends ViewElement {
   render() {
     return html`
       <form class=${classMap(this.classes)}>
+        <div class="type">
+          <ss-select
+            selected=${defaultEntityType}
+            .options=${entityTypes.map(entity => ({
+              label: entity.name,
+              id: entity.id,
+            }))}
+          ></ss-select>
+        </div>
+
         <div>
           <ss-input
             @input-submitted=${this.handleDescSubmitted}
