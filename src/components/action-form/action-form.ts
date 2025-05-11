@@ -383,15 +383,19 @@ export class ActionForm extends ViewElement {
   render() {
     return html`
       <form class=${classMap(this.classes)}>
-        <div class="type">
-          <ss-select
-            selected=${defaultEntityType}
-            .options=${entityTypes.map(entity => ({
-              label: entity.name,
-              id: entity.id,
-            }))}
-          ></ss-select>
-        </div>
+        ${import.meta.env.APP_FF_PROPERTIES
+          ? html`
+              <div class="type">
+                <ss-select
+                  selected=${defaultEntityType}
+                  .options=${entityTypes.map(entity => ({
+                    label: entity.name,
+                    id: entity.id,
+                  }))}
+                ></ss-select>
+              </div>
+            `
+          : nothing}
 
         <div>
           <ss-input
