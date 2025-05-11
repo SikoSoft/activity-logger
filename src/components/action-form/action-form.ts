@@ -39,6 +39,8 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
+import { defaultEntityType, entityConfigs } from '@/mock/entity-config';
+
 const tagHash = (tags: string[]): string => {
   return tags
     .map(tag => tag.toLowerCase().trim())
@@ -46,14 +48,6 @@ const tagHash = (tags: string[]): string => {
     .join(',')
     .replace(/[^a-z0-9,]/g, '');
 };
-
-const defaultEntityType = 1;
-
-const entityTypes = [
-  { id: defaultEntityType, name: 'Entity 1' },
-  { id: 2, name: 'Entity 2' },
-  { id: 3, name: 'Entity 3' },
-];
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {
@@ -388,7 +382,7 @@ export class ActionForm extends ViewElement {
               <div class="type">
                 <ss-select
                   selected=${defaultEntityType}
-                  .options=${entityTypes.map(entity => ({
+                  .options=${entityConfigs.map(entity => ({
                     label: entity.name,
                     id: entity.id,
                   }))}
