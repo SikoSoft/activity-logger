@@ -23,6 +23,11 @@ export interface PropertyConfig {
   defaultValue: PropertyDataType[PropertyType];
 }
 
+export interface Property {
+  propertyId: number;
+  value: PropertyDataType[PropertyType];
+}
+
 export const properties: PropertyConfig[] = [
   {
     id: 1,

@@ -155,8 +155,8 @@ export class ActionListItem extends LitElement {
     return this.properties.map(property => {
       return html`
         <div class="property">
-          <span>${property.name}</span>
-          <span>${property.defaultValue}</span>
+          <span>${property.propertyId}</span>
+          <span>${property.value}</span>
         </div>
       `;
     });
