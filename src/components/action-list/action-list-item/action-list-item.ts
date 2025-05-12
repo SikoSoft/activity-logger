@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -68,6 +68,10 @@ export class ActionListItem extends LitElement {
   @property({ type: Boolean })
   [ActionListItemProp.SELECTED]: ActionListItemProps[ActionListItemProp.SELECTED] =
     actionListItemProps[ActionListItemProp.SELECTED].default;
+
+  @property({ type: Array })
+  [ActionListItemProp.PROPERTIES]: ActionListItemProps[ActionListItemProp.PROPERTIES] =
+    actionListItemProps[ActionListItemProp.PROPERTIES].default;
 
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
   @state() pointerDown: Date = new Date();
@@ -173,6 +177,18 @@ export class ActionListItem extends LitElement {
                 @touchstart=${this._handleTouchStart}
                 @touchend=${this._handleTouchEnd}
               >
+                ${import.meta.env.APP_FF_PROPERTIES
+                  ? html` <div class="properties">
+                      ${this.properties.map(
+                        property => html`
+                          <div class="property">
+                            <span>${property.name}</span>
+                          </div>
+                        `,
+                      )}
+                    </div>`
+                  : nothing}
+
                 <div class="desc">${this.desc}</div>
                 <div class="time">${this.readableTime}</div>
               </div>

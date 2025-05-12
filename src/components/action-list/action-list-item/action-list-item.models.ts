@@ -1,3 +1,4 @@
+import { Property } from '@/mock/entity-config';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum ActionListItemProp {
@@ -9,6 +10,7 @@ export enum ActionListItemProp {
   OCCURRED_AT = 'occurredAt',
   TAGS = 'tags',
   SELECTED = 'selected',
+  PROPERTIES = 'properties',
 }
 
 export interface ActionListItemProps extends PropTypes {
@@ -20,6 +22,7 @@ export interface ActionListItemProps extends PropTypes {
   [ActionListItemProp.OCCURRED_AT]: string;
   [ActionListItemProp.TAGS]: string[];
   [ActionListItemProp.SELECTED]: boolean;
+  [ActionListItemProp.PROPERTIES]: Property[];
 }
 
 export const actionListItemProps: PropConfigMap<ActionListItemProps> = {
@@ -62,5 +65,10 @@ export const actionListItemProps: PropConfigMap<ActionListItemProps> = {
     default: false,
     control: 'boolean',
     description: 'Whether the action is selected',
+  },
+  [ActionListItemProp.PROPERTIES]: {
+    default: [],
+    control: 'text',
+    description: 'The properties of the action',
   },
 };
