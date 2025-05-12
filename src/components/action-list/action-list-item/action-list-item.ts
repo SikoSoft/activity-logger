@@ -151,6 +151,17 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
+  private renderProperties() {
+    return this.properties.map(property => {
+      return html`
+        <div class="property">
+          <span>${property.name}</span>
+          <span>${property.defaultValue}</span>
+        </div>
+      `;
+    });
+  }
+
   render() {
     return html`
       <div class=${classMap(this.classes)}>
@@ -179,13 +190,7 @@ export class ActionListItem extends LitElement {
               >
                 ${import.meta.env.APP_FF_PROPERTIES
                   ? html` <div class="properties">
-                      ${this.properties.map(
-                        property => html`
-                          <div class="property">
-                            <span>${property.name}</span>
-                          </div>
-                        `,
-                      )}
+                      ${this.renderProperties()}
                     </div>`
                   : nothing}
 

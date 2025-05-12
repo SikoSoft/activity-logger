@@ -13,7 +13,7 @@ export const propertyTypes = [
   { id: 2, name: 'number', type: PropertyType.NUMBER },
 ];
 
-export interface Property {
+export interface PropertyConfig {
   id: number;
   type: PropertyType;
   name: string;
@@ -23,7 +23,7 @@ export interface Property {
   defaultValue: PropertyDataType[PropertyType];
 }
 
-export const properties: Property[] = [
+export const properties: PropertyConfig[] = [
   {
     id: 1,
     type: PropertyType.NUMBER,
@@ -37,13 +37,13 @@ export const properties: Property[] = [
 
 export const defaultEntityType = 1;
 
-export interface Entity {
+export interface EntityConfig {
   id: number;
   name: string;
-  properties: Property[];
+  properties: PropertyConfig[];
 }
 
-export const entityConfigs = [
+export const entityConfigs: EntityConfig[] = [
   { id: 1, name: 'food', properties: [] },
   { id: 2, name: 'exercise', properties: [] },
 ];

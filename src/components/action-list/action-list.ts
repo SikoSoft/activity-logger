@@ -418,6 +418,7 @@ export class ActionList extends ViewElement {
                   occurredAt=${item.occurredAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
+                  .properties=${[]}
                   @pointer-long-press=${this.handlePointerLongPress}
                   @pointer-up=${this.handlePointerUp}
                   @action-item-deleted=${this.handleItemDeleted}
