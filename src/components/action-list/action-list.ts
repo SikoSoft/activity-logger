@@ -42,6 +42,7 @@ import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/list-filter/list-filter';
 import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
+import { defaultProperties } from '@/mock/entity-config';
 
 @customElement('action-list')
 export class ActionList extends ViewElement {
@@ -418,7 +419,7 @@ export class ActionList extends ViewElement {
                   occurredAt=${item.occurredAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
-                  .properties=${[]}
+                  .properties=${defaultProperties}
                   @pointer-long-press=${this.handlePointerLongPress}
                   @pointer-up=${this.handlePointerUp}
                   @action-item-deleted=${this.handleItemDeleted}

@@ -49,6 +49,8 @@ export interface CommonPropertyConfig {
   min: number;
   max: number;
   defaultValue: DataTypeMap[PropertyDataType];
+  valuePrefix: string;
+  valueSuffix: string;
 }
 
 export interface NumberPropertyConfig extends CommonPropertyConfig {
@@ -77,14 +79,16 @@ export type PropertyConfig =
 export const propertyConfigs: PropertyConfig[] = [
   {
     id: 1,
-    name: 'text',
-    dataType: PropertyDataType.TEXT,
-    controlType: PropertyControlType.TEXT,
+    name: 'weight',
+    dataType: PropertyDataType.NUMBER,
+    controlType: PropertyControlType.NUMBER,
     renderType: PropertyRenderType.PLAIN_TEXT,
     repeat: 1,
     min: 1,
     max: 1,
-    defaultValue: '',
+    defaultValue: 0,
+    valuePrefix: '',
+    valueSuffix: 'kg',
   },
   {
     id: 2,
@@ -96,6 +100,34 @@ export const propertyConfigs: PropertyConfig[] = [
     min: 1,
     max: 1,
     defaultValue: 0,
+    valuePrefix: '',
+    valueSuffix: '',
+  },
+  {
+    id: 3,
+    name: 'image',
+    dataType: PropertyDataType.TEXT,
+    controlType: PropertyControlType.TEXT,
+    renderType: PropertyRenderType.IMAGE,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: '',
+    valuePrefix: '',
+    valueSuffix: '',
+  },
+  {
+    id: 4,
+    name: 'hidden',
+    dataType: PropertyDataType.BOOLEAN,
+    controlType: PropertyControlType.BOOLEAN,
+    renderType: PropertyRenderType.HIDDEN,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: false,
+    valuePrefix: '',
+    valueSuffix: '',
   },
 ];
 
@@ -104,15 +136,26 @@ export interface Property {
   value: DataTypeMap[PropertyDataType];
 }
 
-export const defaultEntityType = 1;
+export const defaultEntityType = 2;
 
 export interface EntityConfig {
   id: number;
   name: string;
-  properties: PropertyConfig[];
+  properties: Property[];
 }
+
+export const defaultProperties: Property[] = [
+  { propertyId: 2, value: 20 },
+  { propertyId: 1, value: 100 },
+  { propertyId: 3, value: 'https://example.com/image.jpg' },
+  { propertyId: 4, value: false },
+];
 
 export const entityConfigs: EntityConfig[] = [
   { id: 1, name: 'food', properties: [] },
-  { id: 2, name: 'exercise', properties: [] },
+  { id: 2, name: 'exercise', properties: defaultProperties },
 ];
+
+export const propertyConfigById = (id: number): PropertyConfig | undefined => {
+  return propertyConfigs.find(propertyConfig => propertyConfig.id === id);
+};

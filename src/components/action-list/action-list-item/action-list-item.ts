@@ -11,6 +11,12 @@ import {
   actionListItemProps,
   ActionListItemProps,
 } from './action-list-item.models';
+import {
+  PropertyConfig,
+  propertyConfigById,
+  PropertyDataType,
+} from '@/mock/entity-config';
+import { Prop } from '@ss/ui/models';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -153,10 +159,35 @@ export class ActionListItem extends LitElement {
 
   private renderProperties() {
     return this.properties.map(property => {
+      const propertyConfig = propertyConfigById(property.propertyId);
+      if (!propertyConfig || propertyConfig.renderType === 'hidden') {
+        return nothing;
+      }
+
+      let value: PropertyConfig['defaultValue'] = propertyConfig.defaultValue;
+
+      switch (propertyConfig.dataType) {
+        case PropertyDataType.NUMBER:
+          value = property.value as number;
+          break;
+        default:
+          value = property.value as string;
+          break;
+      }
+
       return html`
         <div class="property">
-          <span>${property.propertyId}</span>
-          <span>${property.value}</span>
+          <span>${propertyConfig.name}</span>
+          ${propertyConfig.valuePrefix
+            ? html`<span class="property-prefix"
+                >${propertyConfig.valuePrefix}</span
+              >`
+            : nothing}<span class="property-value">${value}</span
+          >${propertyConfig.valueSuffix
+            ? html`<span class="property-suffix"
+                >${propertyConfig.valueSuffix}</span
+              >`
+            : nothing}
         </div>
       `;
     });
