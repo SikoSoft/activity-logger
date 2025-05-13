@@ -91,7 +91,7 @@ export class ActionListItem extends LitElement {
     this.mode = mode;
   }
 
-  private _handleMouseDown(e: Event) {
+  private handleMouseDown(e: Event) {
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -106,7 +106,7 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private _handleMouseUp(e: Event) {
+  private handleMouseUp(e: Event) {
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -119,7 +119,7 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private _handleTouchStart(e: TouchEvent) {
+  private handleTouchStart(e: TouchEvent) {
     return;
     console.log('touchstart');
     this.pointerDown = new Date();
@@ -137,7 +137,7 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private _handleTouchEnd(e: Event) {
+  private handleTouchEnd(e: Event) {
     return;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
@@ -183,10 +183,10 @@ export class ActionListItem extends LitElement {
             `
           : html`
               <div
-                @mousedown=${this._handleMouseDown}
-                @mouseup=${this._handleMouseUp}
-                @touchstart=${this._handleTouchStart}
-                @touchend=${this._handleTouchEnd}
+                @mousedown=${this.handleMouseDown}
+                @mouseup=${this.handleMouseUp}
+                @touchstart=${this.handleTouchStart}
+                @touchend=${this.handleTouchEnd}
               >
                 ${import.meta.env.APP_FF_PROPERTIES
                   ? html` <div class="properties">
