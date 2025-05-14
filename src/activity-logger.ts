@@ -15,6 +15,7 @@ import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
 import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
+import '@/components/mock-entities/mock-entities';
 import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
 
@@ -114,6 +115,8 @@ export class ActivityLogger extends MobxLitElement {
             ListFilterType.CONTAINS_ALL_OF
           ]}
         ></action-form>`;
+      case ActionView.MOCK:
+        return html`<mock-entities></mock-entities>`;
     }
     return html`<action-list></action-list>`;
   }

@@ -17,6 +17,7 @@ const views: { id: ActionView; label: string }[] = [
     label: msg('New'),
   },
   { id: ActionView.LIST, label: msg('List') },
+  { id: ActionView.MOCK, label: msg('Mock') },
 ];
 
 @customElement('action-nav')
@@ -32,7 +33,7 @@ export class ActionNav extends LitElement {
         display: inline-block;
         height: 32px;
         line-height: 32px;
-        width: 50%;
+        width: calc(100% / var(--num-views));
         text-align: center;
         background-color: #ececec;
         cursor: pointer;
@@ -60,7 +61,7 @@ export class ActionNav extends LitElement {
 
   render() {
     return html`
-      <nav class="box">
+      <nav class="box" style="--num-views: ${views.length}">
         ${views.map(
           view =>
             html`<span

@@ -129,6 +129,58 @@ export const propertyConfigs: PropertyConfig[] = [
     valuePrefix: '',
     valueSuffix: '',
   },
+  {
+    id: 5,
+    name: 'title',
+    dataType: PropertyDataType.TEXT,
+    controlType: PropertyControlType.TEXT,
+    renderType: PropertyRenderType.PLAIN_TEXT,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: '',
+    valuePrefix: '',
+    valueSuffix: '',
+  },
+  {
+    id: 6,
+    name: 'artist',
+    dataType: PropertyDataType.TEXT,
+    controlType: PropertyControlType.TEXT,
+    renderType: PropertyRenderType.PLAIN_TEXT,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: '',
+    valuePrefix: '',
+    valueSuffix: '',
+  },
+  {
+    id: 7,
+    name: 'year',
+    dataType: PropertyDataType.NUMBER,
+    controlType: PropertyControlType.NUMBER,
+    renderType: PropertyRenderType.PLAIN_TEXT,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: 1982,
+    valuePrefix: '',
+    valueSuffix: '',
+  },
+  {
+    id: 8,
+    name: 'platform',
+    dataType: PropertyDataType.TEXT,
+    controlType: PropertyControlType.TEXT,
+    renderType: PropertyRenderType.PLAIN_TEXT,
+    repeat: 1,
+    min: 1,
+    max: 1,
+    defaultValue: '',
+    valuePrefix: '',
+    valueSuffix: 's',
+  },
 ];
 
 export interface Property {
@@ -147,13 +199,18 @@ export interface EntityConfig {
 export const defaultProperties: Property[] = [
   { propertyId: 2, value: 20 },
   { propertyId: 1, value: 100 },
-  { propertyId: 3, value: 'https://example.com/image.jpg' },
+  {
+    propertyId: 3,
+    value: 'https://m.media-amazon.com/images/I/81aRr8wQi4L._AC_UL320_.jpg',
+  },
   { propertyId: 4, value: false },
 ];
 
 export const entityConfigs: EntityConfig[] = [
   { id: 1, name: 'food', properties: [] },
   { id: 2, name: 'exercise', properties: defaultProperties },
+  { id: 3, name: 'record', properties: [] },
+  { id: 4, name: 'game', properties: [] },
 ];
 
 export const propertyConfigById = (id: number): PropertyConfig | undefined => {

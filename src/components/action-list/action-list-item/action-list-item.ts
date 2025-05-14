@@ -12,9 +12,11 @@ import {
   ActionListItemProps,
 } from './action-list-item.models';
 import {
+  Property,
   PropertyConfig,
   propertyConfigById,
   PropertyDataType,
+  PropertyRenderType,
 } from '@/mock/entity-config';
 import { Prop } from '@ss/ui/models';
 
@@ -175,6 +177,10 @@ export class ActionListItem extends LitElement {
           break;
       }
 
+      if (propertyConfig.renderType === PropertyRenderType.IMAGE) {
+        return this.renderImageProperty(property);
+      }
+
       return html`
         <div class="property">
           <span>${propertyConfig.name}</span>
@@ -191,6 +197,12 @@ export class ActionListItem extends LitElement {
         </div>
       `;
     });
+  }
+
+  renderImageProperty(property: Property) {
+    return html` <span class="property image"
+      ><img src=${property.value}
+    /></span>`;
   }
 
   render() {
