@@ -1,15 +1,15 @@
 export interface CommonRenderConfig {
-  id: number;
   name: string;
+  values: ValueConfig[];
 }
 
 export interface TextRenderConfig extends CommonRenderConfig {
-  value: string;
+  value: TextValueConfig;
 }
 
 export interface ImageRenderConfig extends CommonRenderConfig {
-  src: string;
-  alt: string;
+  src: TextValueConfig;
+  alt: TextValueConfig;
 }
 
 export type RenderConfig = TextRenderConfig | ImageRenderConfig;
@@ -17,11 +17,65 @@ export type RenderConfig = TextRenderConfig | ImageRenderConfig;
 export interface EntityConfig {
   id: number;
   name: string;
-  properties: PropertyConfig[];
+  propertyConfigs: PropertyConfig[];
 }
+
+export interface IntValueConfig {
+  id: number;
+  value: number;
+}
+
+export interface TextValueConfig {
+  id: number;
+  value: string;
+}
+
+export interface BooleanValueConfig {
+  id: number;
+  value: boolean;
+}
+
+export type ValueConfig = IntValueConfig | TextValueConfig | BooleanValueConfig;
 
 export interface PropertyConfig {
   id: number;
   name: string;
   renderConfig: RenderConfig;
+  valueConfigs: ValueConfig[];
 }
+
+export interface Entity {
+  id: number;
+  name: string;
+  properties: PropertyConfig[];
+}
+
+export enum RenderType {
+  TEXT = 'text',
+  IMAGE = 'image',
+}
+
+export const renderConfigs: Record<RenderType, RenderConfig> = {
+  [RenderType.TEXT]: {
+    name: 'text',
+  },
+  [RenderType.IMAGE]: {
+    name: 'image',
+  },
+}
+
+
+export const entityConfigs: EntityConfig[] = [
+  {
+    id: 1,
+    name: 'record',
+    propertyConfigs: [
+      {
+        id: 1,
+        name: 'photo',
+        renderType: RenderType.IMAGE,
+    ],
+  },
+];
+
+
