@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { LitElement, html, css, PropertyValues } from 'lit';
+import { property, customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { ActionView } from '@/models/Action';
@@ -10,18 +10,28 @@ import {
   actionNavProps,
   ActionNavProps,
 } from './action-nav.models';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
-const views: { id: ActionView; label: string }[] = [
+export interface ActionViewConfig {
+  id: ActionView;
+  label: string;
+}
+
+const views: ActionViewConfig[] = [
   {
     id: ActionView.INPUT,
     label: msg('New'),
   },
   { id: ActionView.LIST, label: msg('List') },
-  { id: ActionView.MOCK, label: msg('Mock') },
 ];
 
+const debugViews = [...views, { id: ActionView.MOCK, label: msg('Mock') }];
+
 @customElement('action-nav')
-export class ActionNav extends LitElement {
+export class ActionNav extends MobxLitElement {
+  private state = appState;
+
   static styles = [
     theme,
     css`
@@ -49,6 +59,20 @@ export class ActionNav extends LitElement {
   [ActionNavProp.ACTIVE]: ActionNavProps[ActionNavProp.ACTIVE] =
     actionNavProps[ActionNavProp.ACTIVE].default;
 
+  @state()
+  get displayViews(): ActionViewConfig[] {
+    return this.state.debugMode ? debugViews : views;
+  }
+
+  protected updated(_changedProperties: PropertyValues): void {
+    super.updated(_changedProperties);
+    if (_changedProperties.has(ActionNavProp.ACTIVE)) {
+      //this.setActiveView(this[ActionNavProp.ACTIVE]);
+    }
+
+    console.log('updated', _changedProperties);
+  }
+
   setActiveView(view: ActionView) {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
@@ -61,8 +85,12 @@ export class ActionNav extends LitElement {
 
   render() {
     return html`
-      <nav class="box" style="--num-views: ${views.length}">
-        ${views.map(
+      <nav
+        class="box"
+        style="--num-views: ${this.displayViews.length}"
+        data-debug=${this.state.debugMode}
+      >
+        ${this.displayViews.map(
           view =>
             html`<span
               @click="${() => {
