@@ -55,27 +55,18 @@ export enum RenderType {
   IMAGE = 'image',
 }
 
-export const renderConfigs: Record<RenderType, RenderConfig> = {
-  [RenderType.TEXT]: {
-    name: 'text',
-  },
-  [RenderType.IMAGE]: {
-    name: 'image',
-  },
+export interface Entity {
+  id: number;
+  name: string;
+  properties: PropertyConfig[];
 }
 
+export interface Property {
+  id: number;
+}
 
-export const entityConfigs: EntityConfig[] = [
-  {
-    id: 1,
-    name: 'record',
-    propertyConfigs: [
-      {
-        id: 1,
-        name: 'photo',
-        renderType: RenderType.IMAGE,
-    ],
-  },
-];
-
-
+export interface Item {
+  id: number;
+  entityType: number;
+  properties: Property[];
+}
