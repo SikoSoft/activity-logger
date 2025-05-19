@@ -8,6 +8,42 @@ import {
 } from './mock-entities.models';
 
 import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-select';
+import './item-property/item-property';
+
+import entities from 'api-spec/mock/entities';
+import itemsJson from 'api-spec/mock/items';
+import properties from 'api-spec/mock/properties';
+
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { repeat } from 'lit/directives/repeat.js';
+import { Item } from '@/models/Entity';
+
+const items = itemsJson as unknown as Item[];
+
+export enum InputType {
+  TEXT = 'text',
+  NUMBER = 'number',
+  SELECT = 'select',
+  CHECKBOX = 'checkbox',
+}
+
+export interface InputObject {
+  id: number;
+  name: number;
+  type?: InputType;
+  value?: string | number | boolean;
+}
+
+export const textInputParams: Partial<InputObject> = {
+  type: InputType.TEXT,
+  value: '',
+};
+
+export const numberInputParams: Partial<InputObject> = {
+  type: InputType.NUMBER,
+  value: 0,
+};
 
 @customElement('mock-entities')
 export class MockEntities extends LitElement {
@@ -56,7 +92,71 @@ export class MockEntities extends LitElement {
     `,
   ];
 
+  @state()
+  entityType: number = 0;
+
+  @state()
+  get listItems(): Item[] {
+    return items.filter(item => item.type === this.entityType);
+  }
+
+  @state()
+  get entityName(): string {
+    const entity = entities.find(entity => entity.id === this.entityType);
+    return entity ? entity.name : '';
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    console.log({ entities, items, properties });
+
+    this.entityType = entities[0].id;
+  }
+
+  handleTypeChanged(e: SelectChangedEvent<string>) {
+    this.entityType = parseInt(e.detail.value);
+  }
+
+  getPropertyName(id: number): string {
+    const property = properties.find(property => property.id === id);
+    return property ? property.name : '';
+  }
+
   render() {
-    return html`<div class="mock-entities">Mock Entities</div>`;
+    return html`<div class="mock-entities">
+      Mock Entities
+
+      <ss-select
+        @select-changed=${this.handleTypeChanged}
+        .options=${entities.map(entity => ({
+          value: entity.id,
+          label: entity.name,
+        }))}
+      >
+      </ss-select>
+
+      <h3>${this.entityName}</h3>
+
+      ${repeat(
+        this.listItems,
+        item => item.id,
+        item =>
+          html` <div class="item">
+            ${repeat(
+              item.properties,
+              property => property.id,
+              property => html`
+                <item-property>
+                  <xml>
+                    <property>
+                      <id>${property.id}</id>
+                    </property>
+                  </xml>
+                </item-property>
+              `,
+            )}
+          </div>`,
+      )}
+    </div>`;
   }
 }

@@ -61,12 +61,13 @@ export interface Entity {
   properties: PropertyConfig[];
 }
 
-export interface Property {
+export interface ItemProperty {
   id: number;
+  value: unknown[];
 }
 
 export interface Item {
   id: number;
-  entityType: number;
-  properties: Property[];
+  type: number;
+  properties: ItemProperty[];
 }

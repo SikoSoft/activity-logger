@@ -183,6 +183,19 @@ export const propertyConfigs: PropertyConfig[] = [
   },
 ];
 
+export const propertyConfig = {
+  id: 1,
+  name: 'weight',
+  controlType: PropertyControlType.NUMBER,
+  renderType: PropertyRenderType.PLAIN_TEXT,
+  repeat: 1,
+  min: 1,
+  max: 1,
+  defaultValue: 0,
+  valuePrefix: '',
+  valueSuffix: 'kg',
+};
+
 export interface Property {
   propertyId: number;
   value: DataTypeMap[PropertyDataType];
@@ -193,7 +206,7 @@ export const defaultEntityType = 2;
 export interface EntityConfig {
   id: number;
   name: string;
-  properties: Property[];
+  properties: PropertyConfig[];
 }
 
 export const defaultProperties: Property[] = [
@@ -208,7 +221,7 @@ export const defaultProperties: Property[] = [
 
 export const entityConfigs: EntityConfig[] = [
   { id: 1, name: 'food', properties: [] },
-  { id: 2, name: 'exercise', properties: defaultProperties },
+  { id: 2, name: 'exercise', properties: [] },
   { id: 3, name: 'record', properties: [] },
   { id: 4, name: 'game', properties: [] },
 ];
