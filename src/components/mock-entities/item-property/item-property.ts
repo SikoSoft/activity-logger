@@ -1,6 +1,7 @@
 import { theme } from '@/styles/theme';
 import { css, html, LitElement, nothing, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { produce } from 'immer';
 import {
   ItemPropertyProp,
   itemPropertyProps,
@@ -60,21 +61,17 @@ export class ItemProperty extends LitElement {
     `,
   ];
 
-  @state()
-  data: ItemPropertyModel = {
-    id: 0,
-    value: [],
-  };
+  @property({ type: Object })
+  [ItemPropertyProp.DATA]: ItemPropertyProps[ItemPropertyProp.DATA] =
+    itemPropertyProps[ItemPropertyProp.DATA].default;
 
+  @state()
   get name(): string {
     return this.getPropertyName(this.data.id);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
-    //    console.log({ entities, items, properties });
-
-    //  this.entityType = entities[0].id;
   }
 
   protected firstUpdated(_changedProperties: PropertyValues): void {
@@ -98,12 +95,11 @@ export class ItemProperty extends LitElement {
 
     if (xml) {
       const propertyNode = xml.querySelector('property');
-      //console.log('property', propertyNode);
       const idNodes = propertyNode?.getElementsByTagName('id');
-      // console.log('idNodes', idNodes);
 
-      this.data.id = parseInt(idNodes?.[0]?.textContent || '0');
-      console.log('this.data.id', this.data.id);
+      this.data = produce(this.data, draft => {
+        draft.id = parseInt(idNodes?.[0]?.textContent || '0');
+      });
     }
   }
 

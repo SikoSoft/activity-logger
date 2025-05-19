@@ -146,13 +146,7 @@ export class MockEntities extends LitElement {
               item.properties,
               property => property.id,
               property => html`
-                <item-property>
-                  <xml>
-                    <property>
-                      <id>${property.id}</id>
-                    </property>
-                  </xml>
-                </item-property>
+                <item-property .data=${property}></item-property>
               `,
             )}
           </div>`,
