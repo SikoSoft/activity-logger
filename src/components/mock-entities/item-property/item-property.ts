@@ -61,46 +61,21 @@ export class ItemProperty extends LitElement {
     `,
   ];
 
-  @property({ type: Object })
-  [ItemPropertyProp.DATA]: ItemPropertyProps[ItemPropertyProp.DATA] =
-    itemPropertyProps[ItemPropertyProp.DATA].default;
+  @property({ type: Number })
+  [ItemPropertyProp._ID]: ItemPropertyProps[ItemPropertyProp._ID] =
+    itemPropertyProps[ItemPropertyProp._ID].default;
+
+  @property({ type: Array })
+  [ItemPropertyProp.VALUE]: ItemPropertyProps[ItemPropertyProp.VALUE] =
+    itemPropertyProps[ItemPropertyProp.VALUE].default;
 
   @state()
   get name(): string {
-    return this.getPropertyName(this.data.id);
+    return this.getPropertyName(this._id);
   }
 
   connectedCallback(): void {
     super.connectedCallback();
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    const suggestionsSlotNode = this.shadowRoot?.querySelector(
-      'slot[name="suggestions"]',
-    );
-    if (suggestionsSlotNode) {
-      suggestionsSlotNode.addEventListener('slotchange', () => {
-        this.syncFromSlot();
-      });
-    }
-
-    this.syncFromSlot();
-  }
-
-  syncFromSlot() {
-    console.log('syncFromSlot');
-    const xml = this.querySelector('xml');
-
-    // console.log('xml', xml);
-
-    if (xml) {
-      const propertyNode = xml.querySelector('property');
-      const idNodes = propertyNode?.getElementsByTagName('id');
-
-      this.data = produce(this.data, draft => {
-        draft.id = parseInt(idNodes?.[0]?.textContent || '0');
-      });
-    }
   }
 
   getPropertyName(id: number): string {
@@ -110,8 +85,17 @@ export class ItemProperty extends LitElement {
 
   render() {
     return html`<div class="item-property">
-      <span data-id=${this.data.id} class="id">${this.data.id}</span>
-      <span data-id=${this.name} class="name">${this.name}</span>
+      <span data-id=${this._id} class="id">${this._id}</span>
+      <span data-name=${this.name} class="name">${this.name}</span>
+      ${repeat(
+        this.value,
+        (value, index) => index,
+        (value, index) => html`
+          <span data-value=${JSON.stringify(this.value[index])} class="value">
+            ${this.value[index]}
+          </span>
+        `,
+      )}
     </div>`;
   }
 }

@@ -1,18 +1,24 @@
 import { PropConfigMap, PropTypes } from '@/models/Prop';
-import { ItemProperty } from '@/models/Entity';
 
 export enum ItemPropertyProp {
-  DATA = 'data',
+  _ID = '_id',
+  VALUE = 'value',
 }
 
 export interface ItemPropertyProps extends PropTypes {
-  [ItemPropertyProp.DATA]: ItemProperty;
+  [ItemPropertyProp._ID]: number;
+  [ItemPropertyProp.VALUE]: unknown[];
 }
 
 export const itemPropertyProps: PropConfigMap<ItemPropertyProps> = {
-  [ItemPropertyProp.DATA]: {
-    default: { id: 0, value: [] },
+  [ItemPropertyProp._ID]: {
+    default: 0,
+    control: 'number',
+    description: 'The ID of the item property',
+  },
+  [ItemPropertyProp.VALUE]: {
+    default: [],
     control: 'text',
-    description: 'The data to be displayed in the item property',
+    description: 'The value(s) of the item property',
   },
 };

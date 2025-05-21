@@ -61,7 +61,9 @@ export class ActionNav extends MobxLitElement {
 
   @state()
   get displayViews(): ActionViewConfig[] {
-    return this.state.debugMode ? debugViews : views;
+    return import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
+      ? debugViews
+      : views;
   }
 
   protected updated(_changedProperties: PropertyValues): void {

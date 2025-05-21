@@ -9,7 +9,8 @@ import {
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-select';
-import './item-property/item-property';
+
+import './entity-item/entity-item';
 
 import entities from 'api-spec/mock/entities';
 import itemsJson from 'api-spec/mock/items';
@@ -141,15 +142,11 @@ export class MockEntities extends LitElement {
         this.listItems,
         item => item.id,
         item =>
-          html` <div class="item">
-            ${repeat(
-              item.properties,
-              property => property.id,
-              property => html`
-                <item-property .data=${property}></item-property>
-              `,
-            )}
-          </div>`,
+          html`<entity-item
+            _id=${item.id}
+            type=${item.type}
+            .properties=${item.properties}
+          ></entity-item>`,
       )}
     </div>`;
   }
