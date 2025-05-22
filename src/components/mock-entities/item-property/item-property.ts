@@ -10,9 +10,15 @@ import {
 
 import entities from 'api-spec/mock/entities';
 import itemsJson from 'api-spec/mock/items';
-import properties from 'api-spec/mock/properties';
+import propertiesJson from 'api-spec/mock/properties';
 import { repeat } from 'lit/directives/repeat.js';
-import { Item, ItemProperty as ItemPropertyModel } from '@/models/Entity';
+import {
+  Item,
+  ItemProperty as ItemPropertyModel,
+  PropertyConfig,
+} from '@/models/Entity';
+
+const properties = propertiesJson as unknown as PropertyConfig[];
 
 @customElement('item-property')
 export class ItemProperty extends LitElement {
@@ -74,6 +80,13 @@ export class ItemProperty extends LitElement {
     return this.getPropertyName(this._id);
   }
 
+  @state()
+  get propertyConfig(): PropertyConfig {
+    return properties.find(
+      property => property.id === this._id,
+    ) as PropertyConfig;
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
   }
@@ -92,7 +105,16 @@ export class ItemProperty extends LitElement {
         (value, index) => index,
         (value, index) => html`
           <span data-value=${JSON.stringify(this.value[index])} class="value">
-            ${this.value[index]}
+            ${this.propertyConfig.prefix
+              ? html`<span class="property-prefix"
+                  >${this.propertyConfig.prefix}</span
+                >`
+              : nothing}<span class="property-value">${this.value[index]}</span
+            >${this.propertyConfig.suffix
+              ? html`<span class="property-suffix"
+                  >${this.propertyConfig.suffix}</span
+                >`
+              : nothing}
           </span>
         `,
       )}

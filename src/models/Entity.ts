@@ -40,8 +40,16 @@ export type ValueConfig = IntValueConfig | TextValueConfig | BooleanValueConfig;
 export interface PropertyConfig {
   id: number;
   name: string;
+  prefix: string;
+  suffix: string;
+  required: number;
+  repeat: number;
+  allowed: number;
+  type: RenderType;
+  /*
   renderConfig: RenderConfig;
   valueConfigs: ValueConfig[];
+  */
 }
 
 export interface Entity {
