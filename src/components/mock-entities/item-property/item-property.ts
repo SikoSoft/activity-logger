@@ -50,6 +50,10 @@ export class ItemProperty extends LitElement {
         }
       }
 
+      img {
+        max-width: 100%;
+      }
+
       button {
         cursor: pointer;
         border-radius: 8px;
@@ -96,28 +100,52 @@ export class ItemProperty extends LitElement {
     return property ? property.name : '';
   }
 
+  renderText() {
+    return html` ${repeat(
+      this.value,
+      (value, index) => index,
+      (value, index) =>
+        html` <span
+          data-value=${JSON.stringify(this.value[index])}
+          class="value"
+        >
+          ${this.propertyConfig.prefix
+            ? html`<span class="property-prefix"
+                >${this.propertyConfig.prefix}</span
+              >`
+            : nothing}<span class="property-value">${this.value[index]}</span
+          >${this.propertyConfig.suffix
+            ? html`<span class="property-suffix"
+                >${this.propertyConfig.suffix}</span
+              >`
+            : nothing}
+        </span>`,
+    )}`;
+  }
+
+  renderImage() {
+    return html` ${repeat(
+      this.value,
+      (value, index) => index,
+      (value, index) =>
+        html` <span
+          data-value=${JSON.stringify(this.value[index])}
+          class="value"
+        >
+          <img src=${this.value[index] as string} alt="Image" />
+        </span>`,
+    )}`;
+  }
+
   render() {
     return html`<div class="item-property">
       <span data-id=${this._id} class="id">${this._id}</span>
       <span data-name=${this.name} class="name">${this.name}</span>
-      ${repeat(
-        this.value,
-        (value, index) => index,
-        (value, index) => html`
-          <span data-value=${JSON.stringify(this.value[index])} class="value">
-            ${this.propertyConfig.prefix
-              ? html`<span class="property-prefix"
-                  >${this.propertyConfig.prefix}</span
-                >`
-              : nothing}<span class="property-value">${this.value[index]}</span
-            >${this.propertyConfig.suffix
-              ? html`<span class="property-suffix"
-                  >${this.propertyConfig.suffix}</span
-                >`
-              : nothing}
-          </span>
-        `,
-      )}
+      ${this.propertyConfig.type === 'text'
+        ? this.renderText()
+        : this.propertyConfig.type === 'image'
+          ? this.renderImage()
+          : nothing}
     </div>`;
   }
 }
