@@ -16,6 +16,7 @@ import {
   Item,
   ItemProperty as ItemPropertyModel,
   PropertyConfig,
+  RenderType,
 } from '@/models/Entity';
 
 const properties = propertiesJson as unknown as PropertyConfig[];
@@ -141,9 +142,9 @@ export class ItemProperty extends LitElement {
     return html`<div class="item-property">
       <span data-id=${this._id} class="id">${this._id}</span>
       <span data-name=${this.name} class="name">${this.name}</span>
-      ${this.propertyConfig.type === 'text'
+      ${this.propertyConfig.type === RenderType.TEXT
         ? this.renderText()
-        : this.propertyConfig.type === 'image'
+        : this.propertyConfig.type === RenderType.IMAGE
           ? this.renderImage()
           : nothing}
     </div>`;
