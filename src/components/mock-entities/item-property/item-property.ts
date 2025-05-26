@@ -13,6 +13,7 @@ import itemsJson from 'api-spec/mock/items';
 import propertiesJson from 'api-spec/mock/properties';
 import { repeat } from 'lit/directives/repeat.js';
 import {
+  ImageProperty,
   Item,
   ItemProperty as ItemPropertyModel,
   PropertyConfig,
@@ -76,19 +77,23 @@ export class ItemProperty extends LitElement {
   [ItemPropertyProp._ID]: ItemPropertyProps[ItemPropertyProp._ID] =
     itemPropertyProps[ItemPropertyProp._ID].default;
 
+  @property({ type: Number })
+  [ItemPropertyProp.PROPERTY_ID]: ItemPropertyProps[ItemPropertyProp.PROPERTY_ID] =
+    itemPropertyProps[ItemPropertyProp.PROPERTY_ID].default;
+
   @property({ type: Array })
   [ItemPropertyProp.VALUE]: ItemPropertyProps[ItemPropertyProp.VALUE] =
     itemPropertyProps[ItemPropertyProp.VALUE].default;
 
   @state()
   get name(): string {
-    return this.getPropertyName(this._id);
+    return this.getPropertyName(this.propertyId);
   }
 
   @state()
   get propertyConfig(): PropertyConfig {
     return properties.find(
-      property => property.id === this._id,
+      property => property.id === this.propertyId,
     ) as PropertyConfig;
   }
 
@@ -102,40 +107,28 @@ export class ItemProperty extends LitElement {
   }
 
   renderText() {
-    return html` ${repeat(
-      this.value,
-      (value, index) => index,
-      (value, index) =>
-        html` <span
-          data-value=${JSON.stringify(this.value[index])}
-          class="value"
-        >
-          ${this.propertyConfig.prefix
-            ? html`<span class="property-prefix"
-                >${this.propertyConfig.prefix}</span
-              >`
-            : nothing}<span class="property-value">${this.value[index]}</span
-          >${this.propertyConfig.suffix
-            ? html`<span class="property-suffix"
-                >${this.propertyConfig.suffix}</span
-              >`
-            : nothing}
-        </span>`,
-    )}`;
+    const value = this.value as ItemPropertyModel['value'];
+
+    return html`<span data-value=${JSON.stringify(value)} class="value">
+      ${this.propertyConfig.prefix
+        ? html`<span class="property-prefix"
+            >${this.propertyConfig.prefix}</span
+          >`
+        : nothing}<span class="property-value">${value}</span>${this
+        .propertyConfig.suffix
+        ? html`<span class="property-suffix"
+            >${this.propertyConfig.suffix}</span
+          >`
+        : nothing}
+    </span>`;
   }
 
   renderImage() {
-    return html` ${repeat(
-      this.value,
-      (value, index) => index,
-      (value, index) =>
-        html` <span
-          data-value=${JSON.stringify(this.value[index])}
-          class="value"
-        >
-          <img src=${this.value[index] as string} alt="Image" />
-        </span>`,
-    )}`;
+    const value = this.value as ImageProperty['value'];
+
+    return html` <span data-value=${JSON.stringify(value)} class="value">
+      <img src=${value.src} alt=${value.alt} />
+    </span>`;
   }
 
   render() {

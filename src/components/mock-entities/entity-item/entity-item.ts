@@ -59,6 +59,7 @@ export class EntityItem extends LitElement {
         property => html`
           <item-property
             _id=${property.id}
+            propertyId=${property.propertyId}
             .value=${property.value}
           ></item-property>
         `,

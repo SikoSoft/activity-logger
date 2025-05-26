@@ -69,10 +69,23 @@ export interface Entity {
   properties: PropertyConfig[];
 }
 
-export interface ItemProperty {
+export interface CommonProperty {
   id: number;
-  value: unknown[];
+  propertyId: number;
 }
+
+export interface TextProperty extends CommonProperty {
+  value: string;
+}
+
+export interface ImageProperty extends CommonProperty {
+  value: {
+    src: string;
+    alt: string;
+  };
+}
+
+export type ItemProperty = TextProperty | ImageProperty;
 
 export interface Item {
   id: number;
