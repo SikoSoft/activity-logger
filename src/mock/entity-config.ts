@@ -219,13 +219,6 @@ export const defaultProperties: Property[] = [
   { propertyId: 4, value: false },
 ];
 
-export const entityConfigs: EntityConfig[] = [
-  { id: 1, name: 'food', properties: [] },
-  { id: 2, name: 'exercise', properties: [] },
-  { id: 3, name: 'record', properties: [] },
-  { id: 4, name: 'game', properties: [] },
-];
-
 export const propertyConfigById = (id: number): PropertyConfig | undefined => {
   return propertyConfigs.find(propertyConfig => propertyConfig.id === id);
 };

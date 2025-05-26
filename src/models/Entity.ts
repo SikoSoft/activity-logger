@@ -14,10 +14,17 @@ export interface ImageRenderConfig extends CommonRenderConfig {
 
 export type RenderConfig = TextRenderConfig | ImageRenderConfig;
 
+export interface PropertyConfig {
+  type: 1;
+  repeat: 1;
+  allowed: 1;
+  required: 1;
+}
+
 export interface EntityConfig {
   id: number;
   name: string;
-  propertyConfigs: PropertyConfig[];
+  properties: PropertyConfig[];
 }
 
 export interface IntValueConfig {
@@ -37,6 +44,7 @@ export interface BooleanValueConfig {
 
 export type ValueConfig = IntValueConfig | TextValueConfig | BooleanValueConfig;
 
+/*
 export interface PropertyConfig {
   id: number;
   name: string;
@@ -46,11 +54,10 @@ export interface PropertyConfig {
   repeat: number;
   allowed: number;
   type: RenderType;
-  /*
-  renderConfig: RenderConfig;
-  valueConfigs: ValueConfig[];
-  */
+  //renderConfig: RenderConfig;
+  // valueConfigs: ValueConfig[];
 }
+  */
 
 export interface Entity {
   id: number;

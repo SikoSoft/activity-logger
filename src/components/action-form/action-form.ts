@@ -39,7 +39,10 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
-import { defaultEntityType, entityConfigs } from '@/mock/entity-config';
+import entitiesJson from 'api-spec/mock/entities';
+import { EntityConfig } from '@/mock/entity-config';
+
+const entities = entitiesJson as unknown as EntityConfig[];
 
 const tagHash = (tags: string[]): string => {
   return tags
@@ -381,8 +384,7 @@ export class ActionForm extends ViewElement {
           ? html`
               <div class="type">
                 <ss-select
-                  selected=${defaultEntityType}
-                  .options=${entityConfigs.map(entity => ({
+                  .options=${entities.map(entity => ({
                     label: entity.name,
                     id: entity.id,
                   }))}
