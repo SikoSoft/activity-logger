@@ -1,20 +1,15 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement, nothing, PropertyValues } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { produce } from 'immer';
 import {
   ItemPropertyProp,
   itemPropertyProps,
   ItemPropertyProps,
 } from './item-property.models';
 
-import entities from 'api-spec/mock/entities';
-import itemsJson from 'api-spec/mock/items';
 import propertiesJson from 'api-spec/mock/properties';
-import { repeat } from 'lit/directives/repeat.js';
 import {
   ImageProperty,
-  Item,
   ItemProperty as ItemPropertyModel,
   PropertyConfig,
   RenderType,
@@ -30,45 +25,9 @@ export class ItemProperty extends LitElement {
       :host {
         display: block;
       }
-      .paginator {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.25rem;
-      }
-
-      .pages {
-        display: flex;
-        gap: 0.25rem;
-      }
-
-      .quick-page {
-        color: #777;
-
-        &.active {
-          color: #000;
-          font-weight: bold;
-        }
-      }
 
       img {
         max-width: 100%;
-      }
-
-      button {
-        cursor: pointer;
-        border-radius: 8px;
-        border: 1px #aaa solid;
-        transition: all 0.2s;
-
-        &:hover {
-          background-color: #ccc;
-        }
-      }
-      button:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
       }
     `,
   ];
@@ -81,7 +40,7 @@ export class ItemProperty extends LitElement {
   [ItemPropertyProp.PROPERTY_ID]: ItemPropertyProps[ItemPropertyProp.PROPERTY_ID] =
     itemPropertyProps[ItemPropertyProp.PROPERTY_ID].default;
 
-  @property({ type: Array })
+  @property({ type: Object })
   [ItemPropertyProp.VALUE]: ItemPropertyProps[ItemPropertyProp.VALUE] =
     itemPropertyProps[ItemPropertyProp.VALUE].default;
 
@@ -97,13 +56,19 @@ export class ItemProperty extends LitElement {
     ) as PropertyConfig;
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-  }
-
   getPropertyName(id: number): string {
     const property = properties.find(property => property.id === id);
     return property ? property.name : '';
+  }
+
+  renderValue() {
+    const renderHandlers: Record<RenderType, () => unknown> = {
+      [RenderType.TEXT]: () => this.renderText(),
+      [RenderType.IMAGE]: () => this.renderImage(),
+    };
+
+    const renderHandler = renderHandlers[this.propertyConfig.type];
+    return renderHandler ? renderHandler() : nothing;
   }
 
   renderText() {
@@ -135,11 +100,7 @@ export class ItemProperty extends LitElement {
     return html`<div class="item-property">
       <span data-id=${this._id} class="id">${this._id}</span>
       <span data-name=${this.name} class="name">${this.name}</span>
-      ${this.propertyConfig.type === RenderType.TEXT
-        ? this.renderText()
-        : this.propertyConfig.type === RenderType.IMAGE
-          ? this.renderImage()
-          : nothing}
+      ${this.renderValue()}
     </div>`;
   }
 }

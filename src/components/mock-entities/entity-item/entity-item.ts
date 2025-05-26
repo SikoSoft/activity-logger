@@ -1,7 +1,6 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement, nothing, PropertyValues } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
-import { produce } from 'immer';
+import { css, html, LitElement, PropertyValues } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import {
   EntityItemProp,
   entityItemProps,
@@ -10,11 +9,7 @@ import {
 
 import '@/components/mock-entities/item-property/item-property';
 
-import entities from 'api-spec/mock/entities';
-import itemsJson from 'api-spec/mock/items';
-import properties from 'api-spec/mock/properties';
 import { repeat } from 'lit/directives/repeat.js';
-import { Item, ItemProperty as ItemPropertyModel } from '@/models/Entity';
 
 @customElement('entity-item')
 export class EntityItem extends LitElement {
@@ -44,10 +39,6 @@ export class EntityItem extends LitElement {
   @property({ type: Array })
   [EntityItemProp.PROPERTIES]: EntityItemProps[EntityItemProp.PROPERTIES] =
     entityItemProps[EntityItemProp.PROPERTIES].default;
-
-  connectedCallback(): void {
-    super.connectedCallback();
-  }
 
   protected firstUpdated(_changedProperties: PropertyValues): void {}
 

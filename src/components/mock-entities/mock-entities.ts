@@ -1,11 +1,6 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement, nothing } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
-import {
-  MockEntitiesProp,
-  mockEntitiesProps,
-  MockEntitiesProps,
-} from './mock-entities.models';
+import { css, html, LitElement } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-select';
@@ -109,7 +104,6 @@ export class MockEntities extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    console.log({ entities, items, properties });
 
     this.entityType = entities[0].id;
   }
