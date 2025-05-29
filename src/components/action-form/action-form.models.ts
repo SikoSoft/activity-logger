@@ -11,7 +11,7 @@ export enum ActionFormProp {
 
 export interface ActionFormProps extends PropTypes {
   [ActionFormProp.ACTION_ID]: number;
-  [ActionFormProp.TYPE]: string;
+  [ActionFormProp.TYPE]: number;
   [ActionFormProp.DESC]: string;
   [ActionFormProp.OCCURRED_AT]: string;
   [ActionFormProp.TAGS]: string[];
@@ -25,8 +25,8 @@ export const actionFormProps: PropConfigMap<ActionFormProps> = {
     description: 'The ID of the action',
   },
   [ActionFormProp.TYPE]: {
-    default: '',
-    control: 'text',
+    default: 0,
+    control: 'number',
     description: 'The type of the action',
   },
   [ActionFormProp.DESC]: {

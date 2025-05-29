@@ -15,10 +15,10 @@ export interface ImageRenderConfig extends CommonRenderConfig {
 export type RenderConfig = TextRenderConfig | ImageRenderConfig;
 
 export interface EntityPropertyConfig {
-  type: 1;
-  repeat: 1;
-  allowed: 1;
-  required: 1;
+  propertyId: number;
+  repeat: number;
+  allowed: number;
+  required: number;
 }
 
 export interface EntityConfig {

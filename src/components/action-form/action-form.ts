@@ -15,6 +15,7 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@/components/confirm-modal/confirm-modal';
 import '@ss/ui/components/tag-manager';
+import '@/components/mock-entities/item-property-form/item-property-form';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
@@ -40,9 +41,12 @@ import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import entitiesJson from 'api-spec/mock/entities';
-import { EntityConfig } from '@/mock/entity-config';
+import propertiesJson from 'api-spec/mock/properties';
+import { EntityConfig, PropertyConfig } from '@/models/Entity';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 const entities = entitiesJson as unknown as EntityConfig[];
+const properties = propertiesJson as unknown as PropertyConfig[];
 
 const tagHash = (tags: string[]): string => {
   return tags
@@ -87,7 +91,7 @@ export class ActionForm extends ViewElement {
   [ActionFormProp.ACTION_ID]: ActionFormProps[ActionFormProp.ACTION_ID] =
     actionFormProps[ActionFormProp.ACTION_ID].default;
 
-  @property()
+  @property({ type: Number })
   [ActionFormProp.TYPE]: ActionFormProps[ActionFormProp.TYPE] =
     actionFormProps[ActionFormProp.TYPE].default;
 
@@ -135,6 +139,12 @@ export class ActionForm extends ViewElement {
       this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
       TagSuggestions.DISABLED
     );
+  }
+
+  @state()
+  get entityConfig(): EntityConfig | undefined {
+    console.log('Entity config for type:', this.type);
+    return entities.find(entity => entity.id === this.type);
   }
 
   connectedCallback(): void {
@@ -377,6 +387,10 @@ export class ActionForm extends ViewElement {
     this.tagSuggestions = tags;
   }
 
+  private handleTypeChanged(e: SelectChangedEvent<string>) {
+    this.type = parseInt(e.detail.value);
+  }
+
   render() {
     return html`
       <form class=${classMap(this.classes)}>
@@ -384,11 +398,26 @@ export class ActionForm extends ViewElement {
           ? html`
               <div class="type">
                 <ss-select
+                  @select-changed=${this.handleTypeChanged}
                   .options=${entities.map(entity => ({
                     label: entity.name,
-                    id: entity.id,
+                    value: entity.id,
                   }))}
                 ></ss-select>
+              </div>
+
+              <div class="properties">
+                ${this.entityConfig
+                  ? repeat(
+                      this.entityConfig.properties,
+                      property => property.propertyId,
+                      property =>
+                        html`<item-property-form
+                          propertyId=${property.propertyId}
+                          >${property.propertyId}</item-property-form
+                        >`,
+                    )
+                  : nothing}
               </div>
             `
           : nothing}
