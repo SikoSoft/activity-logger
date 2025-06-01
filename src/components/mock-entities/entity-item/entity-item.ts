@@ -1,6 +1,6 @@
 import { theme } from '@/styles/theme';
 import { css, html, LitElement, PropertyValues } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import {
   EntityItemProp,
   entityItemProps,
@@ -10,6 +10,7 @@ import {
 import '@/components/mock-entities/item-property/item-property';
 
 import { repeat } from 'lit/directives/repeat.js';
+import { ActionListItemMode } from '@/components/action-list/action-list-item/action-list-item';
 
 @customElement('entity-item')
 export class EntityItem extends LitElement {
@@ -40,21 +41,34 @@ export class EntityItem extends LitElement {
   [EntityItemProp.PROPERTIES]: EntityItemProps[EntityItemProp.PROPERTIES] =
     entityItemProps[EntityItemProp.PROPERTIES].default;
 
+  @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
+
   protected firstUpdated(_changedProperties: PropertyValues): void {}
+
+  handleMouseDown(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.mode = ActionListItemMode.EDIT;
+  }
 
   render() {
     return html`<div class="entity-item">
-      ${repeat(
-        this.properties,
-        property => property.id,
-        property => html`
-          <item-property
-            _id=${property.id}
-            propertyId=${property.propertyId}
-            .value=${property.value}
-          ></item-property>
-        `,
-      )}
+      ${this.mode === ActionListItemMode.EDIT
+        ? html`<action-form></action-form>`
+        : html`<div @mousedown=${this.handleMouseDown}>
+            ${repeat(
+              this.properties,
+              property => property.id,
+              property => html`
+                <item-property
+                  _id=${property.id}
+                  propertyId=${property.propertyId}
+                  .value=${property.value}
+                ></item-property>
+              `,
+            )}
+          </div>`}
     </div>`;
   }
 }

@@ -42,7 +42,7 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 
 import entitiesJson from 'api-spec/mock/entities';
 import propertiesJson from 'api-spec/mock/properties';
-import { EntityConfig, PropertyConfig } from '@/models/Entity';
+import { EntityConfig, ItemProperty, PropertyConfig } from '@/models/Entity';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 const entities = entitiesJson as unknown as EntityConfig[];
@@ -122,6 +122,7 @@ export class ActionForm extends ViewElement {
     [SuggestionInputType.TAG]: { value: '', hadResults: true },
   };
   @state() tagSuggestions: string[] = [];
+  @state() properties: ItemProperty[] = [];
 
   @state()
   get classes() {
@@ -407,15 +408,25 @@ export class ActionForm extends ViewElement {
               </div>
 
               <div class="properties">
-                ${this.entityConfig
+                ${this.properties.length
                   ? repeat(
-                      this.entityConfig.properties,
+                      this.properties,
                       property => property.propertyId,
                       property =>
                         html`<item-property-form
                           propertyId=${property.propertyId}
-                          >${property.propertyId}</item-property-form
-                        >`,
+                          value=${property.value}
+                        ></item-property-form>`,
+                    )
+                  : nothing}
+                ${this.entityConfig
+                  ? repeat(
+                      this.entityConfig.properties,
+                      propertyConfig => propertyConfig.propertyId,
+                      propertyConfig =>
+                        html`<item-property-form
+                          propertyId=${propertyConfig.propertyId}
+                        ></item-property-form>`,
                     )
                   : nothing}
               </div>
