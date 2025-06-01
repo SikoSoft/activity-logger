@@ -41,9 +41,11 @@ export class EntityItem extends LitElement {
   [EntityItemProp.PROPERTIES]: EntityItemProps[EntityItemProp.PROPERTIES] =
     entityItemProps[EntityItemProp.PROPERTIES].default;
 
-  @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
+  @property({ type: Number })
+  [EntityItemProp.TYPE]: EntityItemProps[EntityItemProp.TYPE] =
+    entityItemProps[EntityItemProp.TYPE].default;
 
-  protected firstUpdated(_changedProperties: PropertyValues): void {}
+  @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
 
   handleMouseDown(event: MouseEvent): void {
     event.preventDefault();
@@ -55,12 +57,17 @@ export class EntityItem extends LitElement {
   render() {
     return html`<div class="entity-item">
       ${this.mode === ActionListItemMode.EDIT
-        ? html`<action-form></action-form>`
+        ? html`<action-form
+            actionId=${this._id}
+            type=${this.type}
+            .properties=${this.properties}
+          ></action-form>`
         : html`<div @mousedown=${this.handleMouseDown}>
             ${repeat(
               this.properties,
               property => property.id,
               property => html`
+                (${property.propertyId})
                 <item-property
                   _id=${property.id}
                   propertyId=${property.propertyId}

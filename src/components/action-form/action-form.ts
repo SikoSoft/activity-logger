@@ -402,6 +402,7 @@ export class ActionForm extends ViewElement {
           ? html`
               <div class="type">
                 <ss-select
+                  selected=${this.type}
                   @select-changed=${this.handleTypeChanged}
                   .options=${entities.map(entity => ({
                     label: entity.name,
