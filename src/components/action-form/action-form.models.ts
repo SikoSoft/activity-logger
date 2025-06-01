@@ -1,3 +1,4 @@
+import { ItemProperty } from '@/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum ActionFormProp {
@@ -7,6 +8,7 @@ export enum ActionFormProp {
   OCCURRED_AT = 'occurredAt',
   TAGS = 'tags',
   TAG_VALUE = 'tagValue',
+  PROPERTIES = 'properties',
 }
 
 export interface ActionFormProps extends PropTypes {
@@ -16,6 +18,7 @@ export interface ActionFormProps extends PropTypes {
   [ActionFormProp.OCCURRED_AT]: string;
   [ActionFormProp.TAGS]: string[];
   [ActionFormProp.TAG_VALUE]: string;
+  [ActionFormProp.PROPERTIES]: ItemProperty[];
 }
 
 export const actionFormProps: PropConfigMap<ActionFormProps> = {
@@ -48,6 +51,11 @@ export const actionFormProps: PropConfigMap<ActionFormProps> = {
     default: '',
     control: 'text',
     description: 'The value of the tag',
+  },
+  [ActionFormProp.PROPERTIES]: {
+    default: [],
+    control: 'text',
+    description: 'The properties of the action',
   },
 };
 
