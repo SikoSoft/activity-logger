@@ -97,6 +97,13 @@ export class ItemProperty extends LitElement {
   }
 
   render() {
+    if (!this.propertyConfig) {
+      console.warn(
+        `Property with ID ${this.propertyId} not found in properties.`,
+      );
+      return nothing;
+    }
+
     return html`<div class="item-property">
       <span data-id=${this._id} class="id">${this._id}</span>
       <span data-name=${this.name} class="name">${this.name}</span>
