@@ -68,6 +68,7 @@ export class ItemProperty extends LitElement {
 
   renderValue() {
     const renderHandlers: Record<RenderType, () => unknown> = {
+      [RenderType.NUMBER]: () => this.renderText(),
       [RenderType.TEXT]: () => this.renderText(),
       [RenderType.IMAGE]: () => this.renderImage(),
     };

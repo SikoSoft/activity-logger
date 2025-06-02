@@ -66,6 +66,7 @@ export interface Entity {
 export enum RenderType {
   TEXT = 'text',
   IMAGE = 'image',
+  NUMBER = 'number',
 }
 
 export interface Entity {
