@@ -52,7 +52,7 @@ export interface PropertyConfig {
   required: number;
   repeat: number;
   allowed: number;
-  type: RenderType;
+  renderType: RenderType;
   //renderConfig: RenderConfig;
   // valueConfigs: ValueConfig[];
 }
@@ -61,6 +61,14 @@ export interface Entity {
   id: number;
   name: string;
   properties: PropertyConfig[];
+}
+
+export enum DataType {
+  INT = 'int',
+  TEXT = 'text',
+  BOOLEAN = 'boolean',
+  IMAGE = 'image',
+  NUMBER = 'number',
 }
 
 export enum RenderType {

@@ -73,7 +73,7 @@ export class ItemProperty extends LitElement {
       [RenderType.IMAGE]: () => this.renderImage(),
     };
 
-    const renderHandler = renderHandlers[this.propertyConfig.type];
+    const renderHandler = renderHandlers[this.propertyConfig.renderType];
     return renderHandler ? renderHandler() : nothing;
   }
 
