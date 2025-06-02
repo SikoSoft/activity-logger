@@ -67,7 +67,6 @@ export class EntityItem extends LitElement {
               this.properties,
               property => property.id,
               property => html`
-                (${property.propertyId})
                 <item-property
                   _id=${property.id}
                   propertyId=${property.propertyId}

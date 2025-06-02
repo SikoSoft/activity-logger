@@ -26,6 +26,11 @@ export class ItemProperty extends LitElement {
         display: block;
       }
 
+      .id,
+      .name {
+        display: none;
+      }
+
       img {
         max-width: 100%;
       }

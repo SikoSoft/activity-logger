@@ -54,6 +54,8 @@ export class ItemPropertyForm extends LitElement {
   }
 
   render() {
+    console.log('render item-property-form', this.propertyConfig);
+
     return html`<div class="item-property">
       <ss-input placeholder=${this.propertyConfig.name}></ss-input>
     </div>`;
