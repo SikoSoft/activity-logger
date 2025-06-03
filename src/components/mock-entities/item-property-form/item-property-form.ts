@@ -1,5 +1,5 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement, nothing } from 'lit';
+import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   ItemPropertyFormProp,
@@ -13,9 +13,11 @@ import {
   ItemProperty as ItemPropertyModel,
   PropertyConfig,
   RenderType,
+  TextProperty,
 } from '@/models/Entity';
 
 import '@ss/ui/components/ss-input';
+import { msg } from '@lit/localize';
 
 const properties = propertiesJson as unknown as PropertyConfig[];
 
@@ -53,11 +55,51 @@ export class ItemPropertyForm extends LitElement {
     ) as PropertyConfig;
   }
 
+  @state()
+  get typedValue(): ItemPropertyModel['value'] {
+    switch (this.propertyConfig.renderType) {
+      case RenderType.IMAGE:
+        return this.value as ImageProperty['value'];
+      case RenderType.TEXT:
+      case RenderType.NUMBER:
+        return this.value as TextProperty['value'];
+      default:
+        return '';
+    }
+  }
+
+  renderControl() {
+    const renderHandlers: Record<RenderType, () => unknown> = {
+      [RenderType.NUMBER]: () => this.renderText(),
+      [RenderType.TEXT]: () => this.renderText(),
+      [RenderType.IMAGE]: () => this.renderImage(),
+    };
+
+    const renderHandler = renderHandlers[this.propertyConfig.renderType];
+    return renderHandler ? renderHandler() : nothing;
+  }
+
+  renderText(): TemplateResult {
+    const value = this.value as TextProperty['value'];
+
+    return html` <ss-input
+      placeholder=${this.propertyConfig.name}
+      value=${value}
+    ></ss-input>`;
+  }
+
+  renderImage(): TemplateResult {
+    const value = this.value as ImageProperty['value'];
+
+    return html`
+      <ss-input placeholder=${msg('src')} value=${value.src}></ss-input>
+      <ss-input placeholder=${msg('alt')} value=${value.alt}></ss-input>
+    `;
+  }
+
   render() {
     console.log('render item-property-form', this.propertyConfig);
 
-    return html`<div class="item-property">
-      <ss-input placeholder=${this.propertyConfig.name}></ss-input>
-    </div>`;
+    return html`<div class="item-property">${this.renderControl()}</div>`;
   }
 }
