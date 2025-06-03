@@ -419,7 +419,7 @@ export class ActionForm extends ViewElement {
                       property =>
                         html`<item-property-form
                           propertyId=${property.propertyId}
-                          value=${property.value}
+                          .value=${property.value}
                         ></item-property-form>`,
                     )
                   : nothing}
