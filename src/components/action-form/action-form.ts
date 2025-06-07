@@ -188,6 +188,7 @@ export class ActionForm extends ViewElement {
           occurredAt,
           timeZone,
           tags: this.tagsAndSuggestions,
+          properties: this.properties,
         };
 
         const result = this.actionId

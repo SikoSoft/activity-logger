@@ -64,6 +64,7 @@ export interface RequestBody {
   occurredAt: string;
   timeZone: number;
   tags: string[];
+  properties: ItemProperty[];
 }
 
 export enum SuggestionInputType {
