@@ -18,6 +18,7 @@ import {
 
 import '@ss/ui/components/ss-input';
 import { msg } from '@lit/localize';
+import { ItemPropertyUpdatedEvent } from './item-property-form.events';
 
 const properties = propertiesJson as unknown as PropertyConfig[];
 
@@ -65,6 +66,30 @@ export class ItemPropertyForm extends LitElement {
         return this.value as TextProperty['value'];
       default:
         return '';
+    }
+  }
+
+  sendUpdatedEvent() {
+    switch (this.propertyConfig.renderType) {
+      case RenderType.IMAGE:
+        this.dispatchEvent(
+          new ItemPropertyUpdatedEvent<ImageProperty>({
+            id: this._id,
+            propertyId: this.propertyId,
+            value: this.value as ImageProperty['value'],
+          }),
+        );
+        break;
+      case RenderType.TEXT:
+      case RenderType.NUMBER:
+        this.dispatchEvent(
+          new ItemPropertyUpdatedEvent<TextProperty>({
+            id: this._id,
+            propertyId: this.propertyId,
+            value: this.value as TextProperty['value'],
+          }),
+        );
+        break;
     }
   }
 
