@@ -81,6 +81,10 @@ export class ActionListItem extends LitElement {
   [ActionListItemProp.PROPERTIES]: ActionListItemProps[ActionListItemProp.PROPERTIES] =
     actionListItemProps[ActionListItemProp.PROPERTIES].default;
 
+  @property({ type: Boolean })
+  [ActionListItemProp.DEBUG]: ActionListItemProps[ActionListItemProp.DEBUG] =
+    actionListItemProps[ActionListItemProp.DEBUG].default;
+
   @state() mode: ActionListItemMode = ActionListItemMode.VIEW;
   @state() pointerDown: Date = new Date();
   @state() downTimeout: number = 0;
@@ -231,7 +235,7 @@ export class ActionListItem extends LitElement {
                 @touchstart=${this.handleTouchStart}
                 @touchend=${this.handleTouchEnd}
               >
-                ${import.meta.env.APP_FF_PROPERTIES
+                ${import.meta.env.APP_FF_PROPERTIES && this.debug
                   ? html` <div class="properties">
                       ${this.renderProperties()}
                     </div>`

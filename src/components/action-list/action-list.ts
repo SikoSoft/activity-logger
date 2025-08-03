@@ -339,6 +339,7 @@ export class ActionList extends ViewElement {
             ${this.state.contextListItems[item.id].map(
               contextAction => html`
                 <action-list-item
+                  ?debug=${this.state.debugMode}
                   actionId=${contextAction.id}
                   type=${contextAction.type}
                   desc=${contextAction.desc}
@@ -413,6 +414,7 @@ export class ActionList extends ViewElement {
               item => html`
                 ${this.renderContextActions(ListContextType.AFTER, item)}
                 <action-list-item
+                  ?debug=${this.state.debugMode}
                   actionId=${item.id}
                   type=${item.type}
                   desc=${item.desc}

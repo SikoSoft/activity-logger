@@ -11,6 +11,7 @@ export enum ActionListItemProp {
   TAGS = 'tags',
   SELECTED = 'selected',
   PROPERTIES = 'properties',
+  DEBUG = 'debug',
 }
 
 export interface ActionListItemProps extends PropTypes {
@@ -23,6 +24,7 @@ export interface ActionListItemProps extends PropTypes {
   [ActionListItemProp.TAGS]: string[];
   [ActionListItemProp.SELECTED]: boolean;
   [ActionListItemProp.PROPERTIES]: Property[];
+  [ActionListItemProp.DEBUG]: boolean;
 }
 
 export const actionListItemProps: PropConfigMap<ActionListItemProps> = {
@@ -70,5 +72,10 @@ export const actionListItemProps: PropConfigMap<ActionListItemProps> = {
     default: [],
     control: 'text',
     description: 'The properties of the action',
+  },
+  [ActionListItemProp.DEBUG]: {
+    default: false,
+    control: 'boolean',
+    description: 'Whether debug mode is enabled',
   },
 };

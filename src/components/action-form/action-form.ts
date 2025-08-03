@@ -419,7 +419,7 @@ export class ActionForm extends ViewElement {
   render() {
     return html`
       <form class=${classMap(this.classes)}>
-        ${import.meta.env.APP_FF_PROPERTIES
+        ${import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
           ? html`
               <div class="type">
                 <ss-select
