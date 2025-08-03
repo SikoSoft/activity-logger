@@ -42,8 +42,14 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 
 import entitiesJson from 'api-spec/mock/entities';
 import propertiesJson from 'api-spec/mock/properties';
-import { EntityConfig, ItemProperty, PropertyConfig } from '@/models/Entity';
+import {
+  EntityConfig,
+  Item,
+  ItemProperty,
+  PropertyConfig,
+} from '@/models/Entity';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { ItemPropertyUpdatedEvent } from '../mock-entities/item-property-form/item-property-form.events';
 
 const entities = entitiesJson as unknown as EntityConfig[];
 const properties = propertiesJson as unknown as PropertyConfig[];
@@ -396,6 +402,20 @@ export class ActionForm extends ViewElement {
     this.type = parseInt(e.detail.value);
   }
 
+  private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {
+    console.log('Property updated:', e.detail);
+    const updatedProperty = e.detail;
+    const existingIndex = this.properties.findIndex(
+      property => property.propertyId === updatedProperty.propertyId,
+    );
+
+    if (existingIndex > -1) {
+      this.properties[existingIndex] = updatedProperty;
+    } else {
+      this.properties.push(updatedProperty);
+    }
+  }
+
   render() {
     return html`
       <form class=${classMap(this.classes)}>
@@ -421,6 +441,7 @@ export class ActionForm extends ViewElement {
                         html`<item-property-form
                           propertyId=${property.propertyId}
                           .value=${property.value}
+                          @item-property-updated=${this.handlePropertyUpdated}
                         ></item-property-form>`,
                     )
                   : nothing}
