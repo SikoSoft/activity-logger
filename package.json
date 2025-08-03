@@ -10,6 +10,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "start": "vite",
     "localize-extract": "lit-localize extract",
     "localize-build": "lit-localize build"
   },
