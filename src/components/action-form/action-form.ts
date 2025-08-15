@@ -304,6 +304,11 @@ export class ActionForm extends ViewElement {
   }
 
   private async requestTagSuggestions(): Promise<void> {
+    console.log(
+      'requestTagSuggestions:',
+      this.desc,
+      this.tagSuggestionsEnabled,
+    );
     if (this.desc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
@@ -318,6 +323,8 @@ export class ActionForm extends ViewElement {
       if (result) {
         suggestions = result.response.suggestions;
       }
+
+      console.log('Tag suggestions retrieved:', suggestions);
 
       this.state.setTagSuggestions(
         suggestions.filter(suggestion => !this.tags.includes(suggestion)),
@@ -334,9 +341,20 @@ export class ActionForm extends ViewElement {
       clearTimeout(this.suggestionTimeout);
     }
     this.suggestionTimeout = setTimeout(() => {
-      this.requestTagSuggestions();
-      this.requestActionSuggestions();
+      this.syncSuggestions();
     }, 150);
+  }
+
+  private syncSuggestions() {
+    this.state.setTagSuggestions([]);
+    this.state.setActionSuggestions([]);
+    this.requestTagSuggestions();
+    this.requestActionSuggestions();
+  }
+
+  sync(reset: boolean = false) {
+    console.log('Syncing action form:', reset);
+    this.syncSuggestions();
   }
 
   private handleDescSubmitted(e: CustomEvent) {
@@ -369,6 +387,7 @@ export class ActionForm extends ViewElement {
   }
 
   private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+    console.log('handleTagSuggestionsRequested:', e.detail.value);
     const value = e.detail.value;
     if (
       (!this.lastInput.tag.hadResults &&
