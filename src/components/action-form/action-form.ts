@@ -67,6 +67,7 @@ export class ActionForm extends ViewElement {
   private state = appState;
   private minLengthForSuggestion = 1;
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
+  private abortController: AbortController | null = null;
 
   static styles = [
     theme,
@@ -165,6 +166,20 @@ export class ActionForm extends ViewElement {
     this.initialDesc = this.desc;
     this.initialOccurredAt = this.occurredAt;
     this.initialTags = JSON.stringify(this.tags);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+      this.suggestionTimeout = null;
+    }
+
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
   }
 
   get apiUrl(): string {
@@ -309,6 +324,12 @@ export class ActionForm extends ViewElement {
   }
 
   private async requestTagSuggestions(): Promise<void> {
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+
+    this.abortController = new AbortController();
+
     console.log(
       'requestTagSuggestions:',
       this.desc,
@@ -322,6 +343,7 @@ export class ActionForm extends ViewElement {
     try {
       const result = await api.get<{ suggestions: string[] }>(
         `tagSuggestion/${this.desc}`,
+        { signal: this.abortController.signal },
       );
 
       let suggestions: string[] = [];
