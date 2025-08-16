@@ -141,7 +141,7 @@ export class ActionForm extends ViewElement {
 
   @state()
   get tagsAndSuggestions(): string[] {
-    return [...this.tags, ...this.state.tagSuggestions];
+    return Array.from(new Set([...this.tags, ...this.state.tagSuggestions]));
   }
 
   @state()
@@ -406,7 +406,14 @@ export class ActionForm extends ViewElement {
   }
 
   private handleTagsUpdated(e: TagsUpdatedEvent) {
+    console.log('Tags updated:', e.detail.tags);
     this.tags = e.detail.tags;
+
+    const newSuggestions = this.state.tagSuggestions.filter(suggestion =>
+      this.tags.includes(suggestion),
+    );
+
+    console.log('New tag suggestions:', newSuggestions);
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
         this.tags.includes(suggestion),
