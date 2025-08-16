@@ -244,6 +244,11 @@ export class ActionForm extends ViewElement {
         this.state.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
     }
     this.state.setTagSuggestions([]);
+
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+      this.suggestionTimeout = null;
+    }
   }
 
   private async deleteAction() {
@@ -346,6 +351,7 @@ export class ActionForm extends ViewElement {
   }
 
   private syncSuggestions() {
+    console.log('Syncing suggestions for action form');
     this.state.setTagSuggestions([]);
     this.state.setActionSuggestions([]);
     this.requestTagSuggestions();
