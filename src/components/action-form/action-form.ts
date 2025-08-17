@@ -330,19 +330,21 @@ export class ActionForm extends ViewElement {
 
     this.abortController = new AbortController();
 
+    const initialDesc = this.desc;
+
     console.log(
       'requestTagSuggestions:',
-      this.desc,
+      initialDesc,
       this.tagSuggestionsEnabled,
     );
-    if (this.desc.length === 0 || !this.tagSuggestionsEnabled) {
+    if (initialDesc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
     }
 
     try {
       const result = await api.get<{ suggestions: string[] }>(
-        `tagSuggestion/${this.desc}`,
+        `tagSuggestion/${initialDesc}`,
         { signal: this.abortController.signal },
       );
 
@@ -352,6 +354,14 @@ export class ActionForm extends ViewElement {
       }
 
       console.log('Tag suggestions retrieved:', suggestions);
+      console.log('initial desc', initialDesc, 'desc when done:', this.desc);
+
+      if (initialDesc !== this.desc) {
+        console.log(
+          'Initial desc does not match current desc, skipping update',
+        );
+        return;
+      }
 
       this.state.setTagSuggestions(
         suggestions.filter(suggestion => !this.tags.includes(suggestion)),
