@@ -292,6 +292,9 @@ export class ActionForm extends ViewElement {
       !this.lastInput.action.hadResults &&
       this.desc.startsWith(this.lastInput.action.value)
     ) {
+      console.log(
+        'Skipping action suggestions request due to no results and matching prefix',
+      );
       this.state.setActionSuggestions([]);
       return;
     }
@@ -382,17 +385,17 @@ export class ActionForm extends ViewElement {
     }, 150);
   }
 
-  private syncSuggestions() {
-    console.log('Syncing suggestions for action form');
-    this.state.setTagSuggestions([]);
-    this.state.setActionSuggestions([]);
+  private syncSuggestions(reset: boolean = false) {
+    if (reset) {
+      this.state.setTagSuggestions([]);
+      this.state.setActionSuggestions([]);
+    }
     this.requestTagSuggestions();
     this.requestActionSuggestions();
   }
 
   sync(reset: boolean = false) {
-    console.log('Syncing action form:', reset);
-    this.syncSuggestions();
+    this.syncSuggestions(reset);
   }
 
   private handleDescSubmitted(e: CustomEvent) {
