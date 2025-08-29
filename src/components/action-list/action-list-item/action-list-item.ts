@@ -44,6 +44,10 @@ export class ActionListItem extends LitElement {
       color: #888;
       font-size: 0.9rem;
     }
+
+    .properties {
+      background-color: #ffeed0;
+    }
   `;
   @property()
   [ActionListItemProp.TYPE]: ActionListItemProps[ActionListItemProp.TYPE] =
@@ -229,6 +233,7 @@ export class ActionListItem extends LitElement {
               ></action-form>
             `
           : html`
+              here
               <div
                 @mousedown=${this.handleMouseDown}
                 @mouseup=${this.handleMouseUp}
