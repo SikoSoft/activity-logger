@@ -3,7 +3,7 @@ import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum EntityListItemProp {
   TYPE = 'type',
-  ACTION_ID = 'actionId',
+  ENTITY_ID = 'entityId',
   DESC = 'desc',
   CREATED_AT = 'createdAt',
   UPDATED_AT = 'updatedAt',
@@ -16,7 +16,7 @@ export enum EntityListItemProp {
 
 export interface EntityListItemProps extends PropTypes {
   [EntityListItemProp.TYPE]: string;
-  [EntityListItemProp.ACTION_ID]: number;
+  [EntityListItemProp.ENTITY_ID]: number;
   [EntityListItemProp.DESC]: string;
   [EntityListItemProp.CREATED_AT]: string;
   [EntityListItemProp.UPDATED_AT]: string;
@@ -31,47 +31,47 @@ export const entityListItemProps: PropConfigMap<EntityListItemProps> = {
   [EntityListItemProp.TYPE]: {
     default: '',
     control: 'text',
-    description: 'The type of the action',
+    description: 'The type of the entity',
   },
-  [EntityListItemProp.ACTION_ID]: {
+  [EntityListItemProp.ENTITY_ID]: {
     default: 0,
     control: 'number',
-    description: 'The ID of the action',
+    description: 'The ID of the entity',
   },
   [EntityListItemProp.DESC]: {
     default: '',
     control: 'text',
-    description: 'The description of the action',
+    description: 'The description of the entity',
   },
   [EntityListItemProp.CREATED_AT]: {
     default: '',
     control: 'text',
-    description: 'The creation date of the action',
+    description: 'The creation date of the entity',
   },
   [EntityListItemProp.UPDATED_AT]: {
     default: '',
     control: 'text',
-    description: 'The update date of the action',
+    description: 'The update date of the entity',
   },
   [EntityListItemProp.OCCURRED_AT]: {
     default: '',
     control: 'text',
-    description: 'The occurrence date of the action',
+    description: 'The occurrence date of the entity',
   },
   [EntityListItemProp.TAGS]: {
     default: [],
     control: 'text',
-    description: 'The tags of the action',
+    description: 'The tags of the entity',
   },
   [EntityListItemProp.SELECTED]: {
     default: false,
     control: 'boolean',
-    description: 'Whether the action is selected',
+    description: 'Whether the entity is selected',
   },
   [EntityListItemProp.PROPERTIES]: {
     default: [],
     control: 'text',
-    description: 'The properties of the action',
+    description: 'The properties of the entity',
   },
   [EntityListItemProp.DEBUG]: {
     default: false,

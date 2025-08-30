@@ -53,8 +53,8 @@ export class EntityListItem extends LitElement {
     entityListItemProps[EntityListItemProp.TYPE].default;
 
   @property({ type: Number })
-  [EntityListItemProp.ACTION_ID]: EntityListItemProps[EntityListItemProp.ACTION_ID] =
-    entityListItemProps[EntityListItemProp.ACTION_ID].default;
+  [EntityListItemProp.ENTITY_ID]: EntityListItemProps[EntityListItemProp.ENTITY_ID] =
+    entityListItemProps[EntityListItemProp.ENTITY_ID].default;
 
   @property()
   [EntityListItemProp.DESC]: EntityListItemProps[EntityListItemProp.DESC] =
@@ -224,7 +224,7 @@ export class EntityListItem extends LitElement {
                 @action-item-canceled=${() => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
-                actionId=${this.actionId}
+                entityId=${this.entityId}
                 desc=${this.desc}
                 occurredAt=${this.occurredAt}
                 type=${this.type}
@@ -232,7 +232,6 @@ export class EntityListItem extends LitElement {
               ></action-form>
             `
           : html`
-              here
               <div
                 @mousedown=${this.handleMouseDown}
                 @mouseup=${this.handleMouseUp}

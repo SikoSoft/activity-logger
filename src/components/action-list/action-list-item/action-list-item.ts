@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -11,14 +11,6 @@ import {
   actionListItemProps,
   ActionListItemProps,
 } from './action-list-item.models';
-import {
-  Property,
-  PropertyConfig,
-  propertyConfigById,
-  PropertyDataType,
-  PropertyRenderType,
-} from '@/mock/entity-config';
-import { Prop } from '@ss/ui/models';
 
 export enum ActionListItemMode {
   VIEW = 'view',
@@ -43,10 +35,6 @@ export class ActionListItem extends LitElement {
     .time {
       color: #888;
       font-size: 0.9rem;
-    }
-
-    .properties {
-      background-color: #ffeed0;
     }
   `;
   @property()
@@ -80,10 +68,6 @@ export class ActionListItem extends LitElement {
   @property({ type: Boolean })
   [ActionListItemProp.SELECTED]: ActionListItemProps[ActionListItemProp.SELECTED] =
     actionListItemProps[ActionListItemProp.SELECTED].default;
-
-  @property({ type: Array })
-  [ActionListItemProp.PROPERTIES]: ActionListItemProps[ActionListItemProp.PROPERTIES] =
-    actionListItemProps[ActionListItemProp.PROPERTIES].default;
 
   @property({ type: Boolean })
   [ActionListItemProp.DEBUG]: ActionListItemProps[ActionListItemProp.DEBUG] =
@@ -167,52 +151,6 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private renderProperties() {
-    return this.properties.map(property => {
-      const propertyConfig = propertyConfigById(property.propertyId);
-      if (!propertyConfig || propertyConfig.renderType === 'hidden') {
-        return nothing;
-      }
-
-      let value: PropertyConfig['defaultValue'] = propertyConfig.defaultValue;
-
-      switch (propertyConfig.dataType) {
-        case PropertyDataType.NUMBER:
-          value = property.value as number;
-          break;
-        default:
-          value = property.value as string;
-          break;
-      }
-
-      if (propertyConfig.renderType === PropertyRenderType.IMAGE) {
-        return this.renderImageProperty(property);
-      }
-
-      return html`
-        <div class="property">
-          <span>${propertyConfig.name}</span>
-          ${propertyConfig.valuePrefix
-            ? html`<span class="property-prefix"
-                >${propertyConfig.valuePrefix}</span
-              >`
-            : nothing}<span class="property-value">${value}</span
-          >${propertyConfig.valueSuffix
-            ? html`<span class="property-suffix"
-                >${propertyConfig.valueSuffix}</span
-              >`
-            : nothing}
-        </div>
-      `;
-    });
-  }
-
-  renderImageProperty(property: Property) {
-    return html` <span class="property image"
-      ><img src=${property.value}
-    /></span>`;
-  }
-
   render() {
     return html`
       <div class=${classMap(this.classes)}>
@@ -233,19 +171,12 @@ export class ActionListItem extends LitElement {
               ></action-form>
             `
           : html`
-              here
               <div
                 @mousedown=${this.handleMouseDown}
                 @mouseup=${this.handleMouseUp}
                 @touchstart=${this.handleTouchStart}
                 @touchend=${this.handleTouchEnd}
               >
-                ${import.meta.env.APP_FF_PROPERTIES && this.debug
-                  ? html` <div class="properties">
-                      ${this.renderProperties()}
-                    </div>`
-                  : nothing}
-
                 <div class="desc">${this.desc}</div>
                 <div class="time">${this.readableTime}</div>
               </div>

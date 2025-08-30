@@ -313,7 +313,7 @@ export class EntityList extends ViewElement {
 
   private handlePointerLongPress(e: PointerLongPressEvent) {
     const listItem = e.target as EntityListItem;
-    this.state.toggleActionSelection(listItem.actionId);
+    this.state.toggleActionSelection(listItem.entityId);
   }
 
   private handlePointerUp(e: PointerUpEvent) {
@@ -322,7 +322,7 @@ export class EntityList extends ViewElement {
       listItem.setMode(EntityListItemMode.EDIT);
       return;
     }
-    this.state.toggleActionSelection(listItem.actionId);
+    this.state.toggleActionSelection(listItem.entityId);
   }
 
   private renderContextActions(type: ListContextType, item: ActionItem) {
@@ -413,7 +413,7 @@ export class EntityList extends ViewElement {
               item => item.id,
               item => html`
                 ${this.renderContextActions(ListContextType.AFTER, item)}
-                <action-list-item
+                <entity-list-item
                   ?debug=${this.state.debugMode}
                   actionId=${item.id}
                   type=${item.type}
@@ -426,7 +426,7 @@ export class EntityList extends ViewElement {
                   @pointer-up=${this.handlePointerUp}
                   @action-item-deleted=${this.handleItemDeleted}
                   @action-item-updated=${this.handleItemUpdated}
-                ></action-list-item>
+                ></entity-list-item>
                 ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
             )
