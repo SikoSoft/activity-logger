@@ -13,6 +13,8 @@ import { ListConfigChangedEvent } from '@/components/list-config/list-config.eve
 import '@/components/page-nav/page-nav';
 import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
+import '@/components/entity-form/entity-form';
+import '@/components/entity-list/entity-list';
 import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/mock-entities/mock-entities';
@@ -22,6 +24,7 @@ import '@/components/list-config/list-config';
 import { theme } from './styles/theme';
 import { api } from './lib/Api';
 import { ListFilterType } from 'api-spec/models/List';
+import { Version } from './models/Version';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -110,16 +113,27 @@ export class ActivityLogger extends MobxLitElement {
     if (!this.state.listConfig) {
       return nothing;
     }
-    switch (this.view) {
-      case PageView.INPUT:
-        return html`<action-form
+
+    if (this.state.version === Version.V2) {
+      if (this.view === PageView.INPUT) {
+        return html`<entity-form
           .tags=${this.state.listConfig.filter.tagging[
             ListFilterType.CONTAINS_ALL_OF
           ]}
-        ></action-form>`;
-      case PageView.MOCK:
-        return html`<mock-entities></mock-entities>`;
+        ></entity-form>`;
+      }
+
+      return html`<entity-list></entity-list>`;
     }
+
+    if (this.view === PageView.INPUT) {
+      return html`<action-form
+        .tags=${this.state.listConfig.filter.tagging[
+          ListFilterType.CONTAINS_ALL_OF
+        ]}
+      ></action-form>`;
+    }
+
     return html`<action-list></action-list>`;
   }
 

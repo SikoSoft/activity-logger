@@ -33,7 +33,7 @@ import {
   EntityListItem,
   EntityListItemMode,
 } from './entity-list-item/entity-list-item';
-import '@/components/entity-list/action-list-item/action-list-item';
+import '@/components/entity-list/entity-list-item/entity-list-item';
 import '@/components/list-filter/list-filter';
 import '@/components/list-sort/list-sort';
 import '@/components/list-context/list-context';
