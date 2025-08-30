@@ -91,6 +91,11 @@ export class ActionForm extends ViewElement {
       div:last-child {
         margin-top: 1rem;
       }
+
+      .type,
+      .properties {
+        background-color: #ffeed0;
+      }
     `,
   ];
 
