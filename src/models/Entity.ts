@@ -106,3 +106,13 @@ export interface Item {
   type: number;
   properties: ItemProperty[];
 }
+
+export interface EntityItem {
+  id: number;
+  type: string;
+  desc: string;
+  createdAt: string;
+  updatedAt: string;
+  occurredAt: string;
+  tags: string[];
+}
