@@ -7,7 +7,7 @@ import {
   defaultListFilter,
   defaultListSort,
 } from '@/state';
-import { ActionView, defaultActionView } from '@/models/Action';
+import { PageView, defaultPageView } from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 
@@ -89,16 +89,16 @@ export class Storage implements StorageSchema {
     );
   }
 
-  saveView(view: ActionView) {
+  saveView(view: PageView) {
     localStorage.setItem(StorageItemKey.VIEW_KEY, view);
   }
 
-  getSavedView(): ActionView {
-    let view: ActionView = defaultActionView;
+  getSavedView(): PageView {
+    let view: PageView = defaultPageView;
     try {
       const storedView = localStorage.getItem(StorageItemKey.VIEW_KEY);
       if (storedView) {
-        view = storedView as ActionView;
+        view = storedView as PageView;
       }
     } catch (error) {
       console.error(

@@ -2,34 +2,30 @@ import { LitElement, html, css, PropertyValues } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
-import { ActionView } from '@/models/Action';
+import { PageView } from '@/models/Page';
 
 import { theme } from '@/styles/theme';
-import {
-  ActionNavProp,
-  actionNavProps,
-  ActionNavProps,
-} from './action-nav.models';
+import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
-export interface ActionViewConfig {
-  id: ActionView;
+export interface PageViewConfig {
+  id: PageView;
   label: string;
 }
 
-const views: ActionViewConfig[] = [
+const views: PageViewConfig[] = [
   {
-    id: ActionView.INPUT,
+    id: PageView.INPUT,
     label: msg('New'),
   },
-  { id: ActionView.LIST, label: msg('List') },
+  { id: PageView.LIST, label: msg('List') },
 ];
 
-const debugViews = [...views, { id: ActionView.MOCK, label: msg('Mock') }];
+const debugViews = [...views, { id: PageView.MOCK, label: msg('Mock') }];
 
-@customElement('action-nav')
-export class ActionNav extends MobxLitElement {
+@customElement('page-nav')
+export class PageNav extends MobxLitElement {
   private state = appState;
 
   static styles = [
@@ -56,11 +52,11 @@ export class ActionNav extends MobxLitElement {
   ];
 
   @property()
-  [ActionNavProp.ACTIVE]: ActionNavProps[ActionNavProp.ACTIVE] =
-    actionNavProps[ActionNavProp.ACTIVE].default;
+  [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =
+    pageNavProps[PageNavProp.ACTIVE].default;
 
   @state()
-  get displayViews(): ActionViewConfig[] {
+  get displayViews(): PageViewConfig[] {
     return import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
       ? debugViews
       : views;
@@ -68,14 +64,14 @@ export class ActionNav extends MobxLitElement {
 
   protected updated(_changedProperties: PropertyValues): void {
     super.updated(_changedProperties);
-    if (_changedProperties.has(ActionNavProp.ACTIVE)) {
-      //this.setActiveView(this[ActionNavProp.ACTIVE]);
+    if (_changedProperties.has(PageNavProp.ACTIVE)) {
+      //this.setActiveView(this[PageNavProp.ACTIVE]);
     }
 
     console.log('updated', _changedProperties);
   }
 
-  setActiveView(view: ActionView) {
+  setActiveView(view: PageView) {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
         bubbles: true,

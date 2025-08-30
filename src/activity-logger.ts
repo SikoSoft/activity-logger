@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { ActionView, defaultActionView } from '@/models/Action';
+import { PageView, defaultPageView } from '@/models/Page';
 import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
@@ -10,7 +10,7 @@ import { ViewElement } from '@/lib/ViewElement';
 import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
 
-import '@/components/action-nav/action-nav';
+import '@/components/page-nav/page-nav';
 import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
 import '@/components/floating-widget/floating-widget';
@@ -24,7 +24,7 @@ import { api } from './lib/Api';
 import { ListFilterType } from 'api-spec/models/List';
 
 export interface ViewChangedEvent extends CustomEvent {
-  detail: ActionView;
+  detail: PageView;
 }
 
 @customElement('activity-logger')
@@ -32,7 +32,7 @@ export class ActivityLogger extends MobxLitElement {
   public state = appState;
   static styles = [theme];
 
-  @state() view: ActionView = defaultActionView;
+  @state() view: PageView = defaultPageView;
   @state() ready: boolean = false;
   @query('main > *') viewComponent!: ViewElement;
 
@@ -109,13 +109,13 @@ export class ActivityLogger extends MobxLitElement {
       return nothing;
     }
     switch (this.view) {
-      case ActionView.INPUT:
+      case PageView.INPUT:
         return html`<action-form
           .tags=${this.state.listConfig.filter.tagging[
             ListFilterType.CONTAINS_ALL_OF
           ]}
         ></action-form>`;
-      case ActionView.MOCK:
+      case PageView.MOCK:
         return html`<mock-entities></mock-entities>`;
     }
     return html`<action-list></action-list>`;
@@ -136,7 +136,7 @@ export class ActivityLogger extends MobxLitElement {
             @list-config-changed=${this.handleListConfigChanged}
           ></list-config>
 
-          <action-nav active=${this.view}></action-nav>
+          <page-nav active=${this.view}></page-nav>
 
           <bulk-manager
             @operation-performed=${this.handleOperationPerformed}
