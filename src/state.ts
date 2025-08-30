@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { action, makeObservable, observable } from 'mobx';
 
 import {
@@ -14,6 +13,10 @@ import {
   ListContextType,
   ListContextUnit,
 } from 'api-spec/models/List';
+
+import { ActionItem } from '@/models/Action';
+import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
+import { Version } from './models/Version';
 
 export const defaultListFilter: ListFilter = {
   tagging: {
@@ -37,10 +40,6 @@ export const defaultListContext: ListContext = {
   quantity: 1,
   unit: ListContextUnit.DAY,
 };
-
-import { Toast } from '@/models/Toast';
-import { ActionItem } from '@/models/Action';
-import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
 
 export class AppState {
   @observable
@@ -111,6 +110,12 @@ export class AppState {
 
   @observable
   public listContext: ListContext = structuredClone(defaultListContext);
+
+  @observable
+  public entityListItems: ActionItem[] = [];
+
+  @observable
+  public version: Version = Version.V1;
 
   @action
   public setActionSuggestions(suggestions: string[]) {
@@ -302,6 +307,11 @@ export class AppState {
   @action
   setLastListUrl(url: string) {
     this.lastListUrl = url;
+  }
+
+  @action
+  setVersion(version: Version) {
+    this.version = version;
   }
 
   constructor() {

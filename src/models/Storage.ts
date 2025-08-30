@@ -12,6 +12,7 @@ export enum StorageItemKey {
   LIST_CONTEXT = 'listContext',
   ACTIVE_LIST_CONFIG_ID = 'activeListConfigId',
   AUTH_TOKEN_KEY = 'authToken',
+  VERSION = 'version',
 }
 
 export interface StorageSchema {

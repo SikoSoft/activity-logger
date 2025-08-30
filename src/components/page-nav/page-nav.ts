@@ -1,4 +1,4 @@
-import { LitElement, html, css, PropertyValues } from 'lit';
+import { html, css, PropertyValues } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
@@ -8,6 +8,8 @@ import { theme } from '@/styles/theme';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import { Version } from '@/models/Version';
+import { storage } from '@/lib/Storage';
 
 export interface PageViewConfig {
   id: PageView;
@@ -21,8 +23,6 @@ const views: PageViewConfig[] = [
   },
   { id: PageView.LIST, label: msg('List') },
 ];
-
-const debugViews = [...views, { id: PageView.MOCK, label: msg('Mock') }];
 
 @customElement('page-nav')
 export class PageNav extends MobxLitElement {
@@ -55,13 +55,6 @@ export class PageNav extends MobxLitElement {
   [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =
     pageNavProps[PageNavProp.ACTIVE].default;
 
-  @state()
-  get displayViews(): PageViewConfig[] {
-    return import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
-      ? debugViews
-      : views;
-  }
-
   protected updated(_changedProperties: PropertyValues): void {
     super.updated(_changedProperties);
     if (_changedProperties.has(PageNavProp.ACTIVE)) {
@@ -81,14 +74,30 @@ export class PageNav extends MobxLitElement {
     );
   }
 
+  setVersion(e: CustomEvent) {
+    const version = e.detail.value as Version;
+    this.state.setVersion(version);
+    storage.saveVersion(version);
+    console.log('set version', version);
+  }
+
   render() {
     return html`
+      <ss-select
+        @select-changed=${(e: CustomEvent) => this.setVersion(e)}
+        selected=${this.state.version}
+        .options=${[
+          { value: Version.V1, label: msg('v1 (classic)') },
+          { value: Version.V2, label: msg('v2 (experimental)') },
+        ]}
+      >
+      </ss-select>
       <nav
         class="box"
-        style="--num-views: ${this.displayViews.length}"
+        style="--num-views: ${views.length}"
         data-debug=${this.state.debugMode}
       >
-        ${this.displayViews.map(
+        ${views.map(
           view =>
             html`<span
               @click="${() => {

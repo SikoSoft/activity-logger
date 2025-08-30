@@ -74,6 +74,8 @@ export class ActivityLogger extends MobxLitElement {
       this.state.setAdvancedMode(storage.getAdvancedMode());
       this.state.setDebugMode(storage.getDebugMode());
 
+      this.state.setVersion(storage.getVersion());
+
       const view = storage.getSavedView();
 
       if (view) {
