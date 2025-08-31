@@ -43,6 +43,7 @@ import { ListFilter } from '@/components/list-filter/list-filter';
 import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import { defaultProperties } from '@/mock/entity-config';
+import { EntityItem } from '@/models/Entity';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {
@@ -210,7 +211,7 @@ export class EntityList extends ViewElement {
         : {}),
     };
 
-    const url = `action${
+    const url = `entity${
       Object.keys(queryParams).length
         ? `?${new URLSearchParams(queryParams)}`
         : ''
@@ -227,7 +228,7 @@ export class EntityList extends ViewElement {
       this.state.setLastListUrl(url);
 
       const result = await api.get<{
-        actions: ActionItem[];
+        actions: EntityItem[];
         total: number;
         context: Record<number, ActionItem[]>;
       }>(url);
