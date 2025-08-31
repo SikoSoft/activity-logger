@@ -228,23 +228,23 @@ export class EntityList extends ViewElement {
       this.state.setLastListUrl(url);
 
       const result = await api.get<{
-        actions: EntityItem[];
+        entities: EntityItem[];
         total: number;
-        context: Record<number, ActionItem[]>;
+        context: Record<number, EntityItem[]>;
       }>(url);
 
       if (result) {
-        if (result.response.actions) {
-          this.state.setListItems(
+        if (result.response.entities) {
+          this.state.setListEntities(
             more
-              ? [...this.state.listItems, ...result.response.actions]
-              : [...result.response.actions],
+              ? [...this.state.listEntities, ...result.response.entities]
+              : [...result.response.entities],
           );
         }
 
         if (result.response.context) {
-          this.state.setContextListItems({
-            ...this.state.contextListItems,
+          this.state.setContextListEntities({
+            ...this.state.contextListEntities,
             ...result.response.context,
           });
           this.actionContextIsOpen = new Map<number, boolean>();

@@ -17,6 +17,7 @@ import {
 import { ActionItem } from '@/models/Action';
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
 import { Version } from './models/Version';
+import { EntityItem } from './models/Entity';
 
 export const defaultListFilter: ListFilter = {
   tagging: {
@@ -46,7 +47,13 @@ export class AppState {
   public listItems: ActionItem[] = [];
 
   @observable
+  public listEntities: EntityItem[] = [];
+
+  @observable
   public contextListItems: Record<number, ActionItem[]> = [];
+
+  @observable
+  public contextListEntities: Record<number, EntityItem[]> = {};
 
   @observable
   public actionSuggestions: string[] = [];
@@ -312,6 +319,16 @@ export class AppState {
   @action
   setVersion(version: Version) {
     this.version = version;
+  }
+
+  @action
+  setListEntities(entities: EntityItem[]) {
+    this.listEntities = entities;
+  }
+
+  @action
+  setContextListEntities(entities: Record<number, EntityItem[]>) {
+    this.contextListEntities = entities;
   }
 
   constructor() {
