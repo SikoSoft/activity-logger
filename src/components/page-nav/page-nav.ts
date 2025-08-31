@@ -1,4 +1,4 @@
-import { html, css, PropertyValues } from 'lit';
+import { html, css, PropertyValues, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
@@ -55,15 +55,6 @@ export class PageNav extends MobxLitElement {
   [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =
     pageNavProps[PageNavProp.ACTIVE].default;
 
-  protected updated(_changedProperties: PropertyValues): void {
-    super.updated(_changedProperties);
-    if (_changedProperties.has(PageNavProp.ACTIVE)) {
-      //this.setActiveView(this[PageNavProp.ACTIVE]);
-    }
-
-    console.log('updated', _changedProperties);
-  }
-
   setActiveView(view: PageView) {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
@@ -83,15 +74,17 @@ export class PageNav extends MobxLitElement {
 
   render() {
     return html`
-      <ss-select
-        @select-changed=${(e: CustomEvent) => this.setVersion(e)}
-        selected=${this.state.version}
-        .options=${[
-          { value: Version.V1, label: msg('v1 (classic)') },
-          { value: Version.V2, label: msg('v2 (experimental)') },
-        ]}
-      >
-      </ss-select>
+      ${this.state.debugMode
+        ? html` <ss-select
+            @select-changed=${(e: CustomEvent) => this.setVersion(e)}
+            selected=${this.state.version}
+            .options=${[
+              { value: Version.V1, label: msg('v1 (classic)') },
+              { value: Version.V2, label: msg('v2 (experimental)') },
+            ]}
+          >
+          </ss-select>`
+        : nothing}
       <nav
         class="box"
         style="--num-views: ${views.length}"
