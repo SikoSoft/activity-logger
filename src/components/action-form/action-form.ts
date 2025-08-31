@@ -40,28 +40,6 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
-import entitiesJson from 'api-spec/mock/entities';
-import propertiesJson from 'api-spec/mock/properties';
-import {
-  EntityConfig,
-  Item,
-  ItemProperty,
-  PropertyConfig,
-} from '@/models/Entity';
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { ItemPropertyUpdatedEvent } from '../mock-entities/item-property-form/item-property-form.events';
-
-const entities = entitiesJson as unknown as EntityConfig[];
-const properties = propertiesJson as unknown as PropertyConfig[];
-
-const tagHash = (tags: string[]): string => {
-  return tags
-    .map(tag => tag.toLowerCase().trim())
-    .sort()
-    .join(',')
-    .replace(/[^a-z0-9,]/g, '');
-};
-
 @customElement('action-form')
 export class ActionForm extends ViewElement {
   private state = appState;
@@ -155,12 +133,6 @@ export class ActionForm extends ViewElement {
       this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
       TagSuggestions.DISABLED
     );
-  }
-
-  @state()
-  get entityConfig(): EntityConfig | undefined {
-    console.log('Entity config for type:', this.type);
-    return entities.find(entity => entity.id === this.type);
   }
 
   connectedCallback(): void {
@@ -340,11 +312,6 @@ export class ActionForm extends ViewElement {
 
     const initialDesc = this.desc;
 
-    console.log(
-      'requestTagSuggestions:',
-      initialDesc,
-      this.tagSuggestionsEnabled,
-    );
     if (initialDesc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
@@ -360,9 +327,6 @@ export class ActionForm extends ViewElement {
       if (result) {
         suggestions = result.response.suggestions;
       }
-
-      console.log('Tag suggestions retrieved:', suggestions);
-      console.log('initial desc', initialDesc, 'desc when done:', this.desc);
 
       if (initialDesc !== this.desc) {
         console.log(
@@ -424,14 +388,8 @@ export class ActionForm extends ViewElement {
   }
 
   private handleTagsUpdated(e: TagsUpdatedEvent) {
-    console.log('Tags updated:', e.detail.tags);
     this.tags = e.detail.tags;
 
-    const newSuggestions = this.state.tagSuggestions.filter(suggestion =>
-      this.tags.includes(suggestion),
-    );
-
-    console.log('New tag suggestions:', newSuggestions);
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
         this.tags.includes(suggestion),
@@ -440,7 +398,6 @@ export class ActionForm extends ViewElement {
   }
 
   private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
-    console.log('handleTagSuggestionsRequested:', e.detail.value);
     const value = e.detail.value;
     if (
       (!this.lastInput.tag.hadResults &&
@@ -470,67 +427,9 @@ export class ActionForm extends ViewElement {
     this.tagSuggestions = tags;
   }
 
-  private handleTypeChanged(e: SelectChangedEvent<string>) {
-    this.type = parseInt(e.detail.value);
-  }
-
-  private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {
-    console.log('Property updated:', e.detail);
-    const updatedProperty = e.detail;
-    const existingIndex = this.properties.findIndex(
-      property => property.propertyId === updatedProperty.propertyId,
-    );
-
-    if (existingIndex > -1) {
-      this.properties[existingIndex] = updatedProperty;
-    } else {
-      this.properties.push(updatedProperty);
-    }
-  }
-
   render() {
     return html`
       <form class=${classMap(this.classes)}>
-        ${import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
-          ? html`
-              <div class="type">
-                <ss-select
-                  selected=${this.type}
-                  @select-changed=${this.handleTypeChanged}
-                  .options=${entities.map(entity => ({
-                    label: entity.name,
-                    value: entity.id,
-                  }))}
-                ></ss-select>
-              </div>
-
-              <div class="properties">
-                ${this.properties.length
-                  ? repeat(
-                      this.properties,
-                      property => property.propertyId,
-                      property =>
-                        html`<item-property-form
-                          propertyId=${property.propertyId}
-                          .value=${property.value}
-                          @item-property-updated=${this.handlePropertyUpdated}
-                        ></item-property-form>`,
-                    )
-                  : nothing}
-                ${this.entityConfig
-                  ? repeat(
-                      this.entityConfig.properties,
-                      propertyConfig => propertyConfig.propertyId,
-                      propertyConfig =>
-                        html`<item-property-form
-                          propertyId=${propertyConfig.propertyId}
-                        ></item-property-form>`,
-                    )
-                  : nothing}
-              </div>
-            `
-          : nothing}
-
         <div>
           <ss-input
             @input-submitted=${this.handleDescSubmitted}
