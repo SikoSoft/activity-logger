@@ -1,10 +1,10 @@
-export const entityConfigFormUpdatedEventName = 'entity-config-form-updated';
+export const entityConfigUpdatedEventName = 'entity-config-updated';
 
-export type EntityConfigFormUpdatedPayload = {};
+export type EntityConfigUpdatedPayload = {};
 
-export class EntityConfigFormUpdatedEvent extends CustomEvent<EntityConfigFormUpdatedPayload> {
-  constructor(detail: EntityConfigFormUpdatedPayload) {
-    super(entityConfigFormUpdatedEventName, {
+export class EntityConfigUpdatedEvent extends CustomEvent<EntityConfigUpdatedPayload> {
+  constructor(detail: EntityConfigUpdatedPayload) {
+    super(entityConfigUpdatedEventName, {
       detail,
       bubbles: true,
       composed: true,

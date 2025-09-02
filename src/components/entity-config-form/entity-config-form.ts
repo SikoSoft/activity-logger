@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import {
   defaultEntityConfig,
   defaultEntityPropertyConfig,
@@ -11,7 +11,7 @@ import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { storage } from '@/lib/Storage';
 
 import '@/components/property-config-form/property-config-form';
-import { PropertyConfigFormUpdatedEvent } from '../property-config-form/property-config-form.events';
+import { PropertyConfigUpdatedEvent } from '../property-config-form/property-config-form.events';
 import { produce } from 'immer';
 
 @customElement('entity-config-form')
@@ -95,9 +95,8 @@ export class EntityConfigForm extends LitElement {
             (property, index) => html`
               <property-config-form
                 .propertyConfig=${property}
-                @property-config-changed=${(
-                  e: PropertyConfigFormUpdatedEvent,
-                ) => this.updateProperty(index, e.detail)}
+                @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
+                  this.updateProperty(index, e.detail)}
               ></property-config-form>
             `,
           )}

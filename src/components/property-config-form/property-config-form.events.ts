@@ -1,13 +1,12 @@
 import { EntityPropertyConfig } from '@/models/Entity';
 
-export const propertyConfigFormUpdatedEventName =
-  'property-config-form-updated';
+export const propertyConfigUpdatedEventName = 'property-config-updated';
 
-export type PropertyConfigFormUpdatedPayload = EntityPropertyConfig;
+export type PropertyConfigUpdatedPayload = EntityPropertyConfig;
 
-export class PropertyConfigFormUpdatedEvent extends CustomEvent<PropertyConfigFormUpdatedPayload> {
-  constructor(detail: PropertyConfigFormUpdatedPayload) {
-    super(propertyConfigFormUpdatedEventName, {
+export class PropertyConfigUpdatedEvent extends CustomEvent<PropertyConfigUpdatedPayload> {
+  constructor(detail: PropertyConfigUpdatedPayload) {
+    super(propertyConfigUpdatedEventName, {
       detail,
       bubbles: true,
       composed: true,

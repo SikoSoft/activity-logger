@@ -15,7 +15,7 @@ import {
   PropertyConfigFormProps,
 } from './property-config-form.models';
 import { produce } from 'immer';
-import { PropertyConfigFormUpdatedEvent } from './property-config-form.events';
+import { PropertyConfigUpdatedEvent } from './property-config-form.events';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -55,7 +55,7 @@ export class PropertyConfigForm extends LitElement {
       ...draft,
       [field]: value,
     }));
-    this.dispatchEvent(new PropertyConfigFormUpdatedEvent(propertyConfig));
+    this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
     // this[field] = value;
   }
 
