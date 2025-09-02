@@ -50,19 +50,26 @@ export class PropertyConfigForm extends LitElement {
     return errors;
   }
 
-  updateField(field: PropertyConfigFormProp, value: string | number | boolean) {
+  updateField(
+    field: PropertyConfigFormProp,
+    rawValue: string | number | boolean,
+  ) {
+    let value = rawValue;
+    if (propertyConfigFormProps[field].control === 'number') {
+      value = Number(value) || 0;
+    }
+
     const propertyConfig = produce(this.propertyConfig, draft => ({
       ...draft,
       [field]: value,
     }));
     this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
-    // this[field] = value;
   }
 
   render() {
     return html`
-      <div class="entity-config-form">
-
+      <fieldset class="entity-config-form">
+        <legend>${msg('Property Configuration')}</legend>
 
       ${Object.values(PropertyConfigFormProp).map(
         field => html`
@@ -70,6 +77,7 @@ export class PropertyConfigForm extends LitElement {
             <label for=${field}>${msg(field)}</label>
             <ss-input
               id=${field}
+              type=${propertyConfigFormProps[field].control}
               .value=${this[field]}
               @input-changed=${(e: InputChangedEvent) => {
                 this.updateField(field, e.detail.value);
@@ -80,7 +88,7 @@ export class PropertyConfigForm extends LitElement {
       )}
 
         </div>
-      </div>
+      </fieldset>
     `;
   }
 }
