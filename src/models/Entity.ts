@@ -27,6 +27,12 @@ export interface EntityConfig {
   properties: EntityPropertyConfig[];
 }
 
+export const defaultEntityConfig: EntityConfig = {
+  id: 0,
+  name: '',
+  properties: [],
+};
+
 export interface IntValueConfig {
   id: number;
   value: number;
@@ -110,9 +116,7 @@ export interface Item {
 export interface EntityItem {
   id: number;
   type: string;
-  desc: string;
   createdAt: string;
   updatedAt: string;
-  occurredAt: string;
   tags: string[];
 }

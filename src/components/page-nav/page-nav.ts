@@ -22,6 +22,7 @@ const views: PageViewConfig[] = [
     label: msg('New'),
   },
   { id: PageView.LIST, label: msg('List') },
+  { id: PageView.ADMIN, label: msg('Admin') },
 ];
 
 @customElement('page-nav')

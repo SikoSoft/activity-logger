@@ -15,6 +15,7 @@ import '@/components/action-form/action-form';
 import '@/components/action-list/action-list';
 import '@/components/entity-form/entity-form';
 import '@/components/entity-list/entity-list';
+import '@/components/admin-dashboard/admin-dashboard';
 import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/mock-entities/mock-entities';
@@ -112,6 +113,10 @@ export class ActivityLogger extends MobxLitElement {
   activeView() {
     if (!this.state.listConfig) {
       return nothing;
+    }
+
+    if (this.view === PageView.ADMIN) {
+      return html`<admin-dashboard></admin-dashboard>`;
     }
 
     if (this.state.version === Version.V2) {

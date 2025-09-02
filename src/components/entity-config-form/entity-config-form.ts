@@ -1,14 +1,16 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import {
   EntityConfigFormProps,
   entityConfigFormProps,
 } from './entity-config-form.models';
 import { EntityConfigFormUpdatedEvent } from './entity-config-form.events';
+import { defaultEntityConfig, EntityConfig } from '@/models/Entity';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {
-  @state() private props: EntityConfigFormProps = entityConfigFormProps;
+  @state()
+  entityConfig: EntityConfig = defaultEntityConfig;
 
   static styles = css`
     :host {
@@ -24,18 +26,5 @@ export class EntityConfigForm extends LitElement {
         <div>Placeholder for entity configuration form</div>
       </div>
     `;
-  }
-
-  /**
-   * Dispatches an event when the entity config form is updated
-   */
-  private dispatchConfigUpdated() {
-    this.dispatchEvent(new EntityConfigFormUpdatedEvent(this.props));
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'entity-config-form': EntityConfigForm;
   }
 }

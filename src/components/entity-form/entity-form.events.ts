@@ -3,7 +3,6 @@ export const entityItemUpdatedEventName = 'entity-item-updated';
 export interface EntityItemUpdatedEventPayload {
   id: number;
   desc: string;
-  occurredAt: string;
   tags: string[];
 }
 

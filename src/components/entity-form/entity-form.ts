@@ -231,7 +231,6 @@ export class EntityForm extends ViewElement {
           new EntityItemUpdatedEvent({
             id: this.entityId,
             desc,
-            occurredAt: result.response.occurredAt,
             tags: this.tags,
           }),
         );
