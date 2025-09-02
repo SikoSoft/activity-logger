@@ -22,6 +22,10 @@ const views: PageViewConfig[] = [
     label: msg('New'),
   },
   { id: PageView.LIST, label: msg('List') },
+];
+
+const debugViews: PageViewConfig[] = [
+  ...views,
   { id: PageView.ADMIN, label: msg('Admin') },
 ];
 
@@ -56,6 +60,12 @@ export class PageNav extends MobxLitElement {
   [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =
     pageNavProps[PageNavProp.ACTIVE].default;
 
+  get displayViews(): PageViewConfig[] {
+    return import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
+      ? debugViews
+      : views;
+  }
+
   setActiveView(view: PageView) {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
@@ -88,10 +98,10 @@ export class PageNav extends MobxLitElement {
         : nothing}
       <nav
         class="box"
-        style="--num-views: ${views.length}"
+        style="--num-views: ${this.displayViews.length}"
         data-debug=${this.state.debugMode}
       >
-        ${views.map(
+        ${this.displayViews.map(
           view =>
             html`<span
               @click="${() => {
