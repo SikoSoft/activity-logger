@@ -21,6 +21,13 @@ export interface EntityPropertyConfig {
   required: number;
 }
 
+export const defaultEntityPropertyConfig: EntityPropertyConfig = {
+  propertyId: 0,
+  repeat: 1,
+  allowed: 1,
+  required: 0,
+};
+
 export interface EntityConfig {
   id: number;
   name: string;
