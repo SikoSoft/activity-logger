@@ -1,17 +1,10 @@
-import {
-  BooleanControl,
-  NumberControl,
-  SelectControl,
-  TextControl,
-} from './Control';
-
 export type PropTypes = Record<string, any>;
 
 export type PropControlType<T> = T extends boolean
-  ? BooleanControl | 'boolean'
+  ? 'boolean'
   : T extends number
-    ? NumberControl | 'number'
-    : TextControl | SelectControl | 'text';
+    ? 'number'
+    : 'text';
 
 export type PropConfigMap<Props extends PropTypes> = {
   [Property in keyof Props]: {
