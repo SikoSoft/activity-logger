@@ -71,6 +71,7 @@ export class ItemProperty extends LitElement {
       [RenderType.NUMBER]: () => this.renderText(),
       [RenderType.TEXT]: () => this.renderText(),
       [RenderType.IMAGE]: () => this.renderImage(),
+      [RenderType.HIDDEN]: () => nothing,
     };
 
     const renderHandler = renderHandlers[this.propertyConfig.renderType];
