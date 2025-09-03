@@ -1,6 +1,9 @@
-import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { ControlType } from '@/models/Control';
+import { DataType } from '@/models/Entity';
+import { PropConfigMap, PropTypes } from '@/models/PropV2';
 
 export enum PropertyConfigFormProp {
+  DATA_TYPE = 'dataType',
   ID = 'id',
   NAME = 'name',
   REPEAT = 'repeat',
@@ -9,6 +12,7 @@ export enum PropertyConfigFormProp {
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
+  [PropertyConfigFormProp.DATA_TYPE]: string;
   [PropertyConfigFormProp.ID]: string;
   [PropertyConfigFormProp.NAME]: string;
   [PropertyConfigFormProp.REQUIRED]: number;
@@ -17,29 +21,34 @@ export interface PropertyConfigFormProps extends PropTypes {
 }
 
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
+  [PropertyConfigFormProp.DATA_TYPE]: {
+    default: 'text',
+    control: { type: ControlType.SELECT, options: Object.values(DataType) },
+    description: 'The data type of the property',
+  },
   [PropertyConfigFormProp.ID]: {
     default: '',
-    control: 'text',
+    control: { type: ControlType.TEXT },
     description: 'The ID of the property',
   },
   [PropertyConfigFormProp.NAME]: {
     default: '',
-    control: 'text',
+    control: { type: ControlType.TEXT },
     description: 'The name of the property',
   },
   [PropertyConfigFormProp.REQUIRED]: {
     default: 0,
-    control: 'number',
+    control: { type: ControlType.NUMBER },
     description: 'How many of this property are required',
   },
   [PropertyConfigFormProp.REPEAT]: {
     default: 0,
-    control: 'number',
+    control: { type: ControlType.NUMBER },
     description: 'How many times this property can be repeated',
   },
   [PropertyConfigFormProp.ALLOWED]: {
     default: 0,
-    control: 'number',
+    control: { type: ControlType.NUMBER },
     description: 'How many of this property are allowed',
   },
 };

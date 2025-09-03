@@ -77,17 +77,18 @@ export interface Entity {
 }
 
 export enum DataType {
-  INT = 'int',
-  TEXT = 'text',
   BOOLEAN = 'boolean',
   IMAGE = 'image',
-  NUMBER = 'number',
+  INT = 'int',
+  LONG_TEXT = 'longText',
+  SHORT_TEXT = 'shortText',
 }
 
 export enum RenderType {
   TEXT = 'text',
   IMAGE = 'image',
   NUMBER = 'number',
+  HIDDEN = 'hidden',
 }
 
 export interface Entity {

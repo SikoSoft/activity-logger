@@ -13,6 +13,8 @@ import { storage } from '@/lib/Storage';
 import '@/components/property-config-form/property-config-form';
 import { PropertyConfigUpdatedEvent } from '../property-config-form/property-config-form.events';
 import { produce } from 'immer';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {
@@ -45,16 +47,26 @@ export class EntityConfigForm extends LitElement {
       console.log(
         `Entity config validation failed: ${validationErrors.join(', ')}`,
       );
+      addToast(msg('entityConfigValidationFailed'), NotificationType.ERROR);
       return;
     }
 
     console.info(`Entity config saved: ${JSON.stringify(this.entityConfig)}`);
 
+    let result: unknown;
+
     if (this.entityConfig.id) {
-      await storage.updateEntityConfig(this.entityConfig);
+      result = await storage.updateEntityConfig(this.entityConfig);
     } else {
-      await storage.addEntityConfig(this.entityConfig);
+      result = await storage.addEntityConfig(this.entityConfig);
     }
+
+    if (!result) {
+      addToast(msg('failedToSaveEntityConfig'), NotificationType.ERROR);
+      return;
+    }
+
+    addToast(msg('entityConfigSaved'), NotificationType.SUCCESS);
   }
 
   addProperty() {

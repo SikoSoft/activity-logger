@@ -8,10 +8,10 @@ import {
 export type PropTypes = Record<string, any>;
 
 export type PropControlType<T> = T extends boolean
-  ? BooleanControl | 'boolean'
+  ? BooleanControl
   : T extends number
-    ? NumberControl | 'number'
-    : TextControl | SelectControl | 'text';
+    ? NumberControl
+    : TextControl | SelectControl;
 
 export type PropConfigMap<Props extends PropTypes> = {
   [Property in keyof Props]: {

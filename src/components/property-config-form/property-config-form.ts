@@ -16,6 +16,10 @@ import {
 } from './property-config-form.models';
 import { produce } from 'immer';
 import { PropertyConfigUpdatedEvent } from './property-config-form.events';
+import { ControlType } from '@/models/Control';
+
+import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -23,6 +27,10 @@ export class PropertyConfigForm extends LitElement {
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
   static styles = css``;
+
+  @property({ type: String })
+  [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
+    propertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE].default;
 
   @property({ type: String })
   [PropertyConfigFormProp.ID]: PropertyConfigFormProps[PropertyConfigFormProp.ID] =
@@ -55,7 +63,7 @@ export class PropertyConfigForm extends LitElement {
     rawValue: string | number | boolean,
   ) {
     let value = rawValue;
-    if (propertyConfigFormProps[field].control === 'number') {
+    if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
     }
 
@@ -71,24 +79,38 @@ export class PropertyConfigForm extends LitElement {
       <fieldset class="entity-config-form">
         <legend>${msg('Property Configuration')}</legend>
 
-      ${Object.values(PropertyConfigFormProp).map(
-        field => html`
-          <div class="field">
-            <label for=${field}>${msg(field)}</label>
-            <ss-input
-              id=${field}
-              type=${propertyConfigFormProps[field].control}
-              .value=${this[field]}
-              @input-changed=${(e: InputChangedEvent) => {
-                this.updateField(field, e.detail.value);
-              }}
-            ></ss-input>
-          </div>
-        `,
-      )}
 
+      ${Object.values(PropertyConfigFormProp).map(
+        field =>
+          html` <div class="field">
+            <label for=${field}>${msg(field)}</label>
+            ${propertyConfigFormProps[field].control.type === ControlType.SELECT
+              ? html`
+                  <ss-select
+                    .options=${propertyConfigFormProps[
+                      field
+                    ].control.options.map(option => ({
+                      label: msg(option),
+                      value: option,
+                    }))}
+                    selected=${this[field]}
+                    @select-changed=${(e: InputChangedEvent) => {
+                      this.updateField(field, e.detail.value);
+                    }}
+                  ></ss-select>
+                `
+              : html`
+                  <ss-input
+                    type=${propertyConfigFormProps[field].control.type}
+                    .value=${this[field]}
+                    @input-changed=${(e: InputChangedEvent) => {
+                      this.updateField(field, e.detail.value);
+                    }}
+                  ></ss-input>
+                `}
+          </div>`,
+      )}
         </div>
-      </fieldset>
-    `;
+      </fieldset>`;
   }
 }

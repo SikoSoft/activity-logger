@@ -3,6 +3,7 @@ import { api } from './Api';
 import { StorageSchema } from '@/models/Storage';
 import { msg } from '@lit/localize';
 import { Setting } from 'api-spec/models/Setting';
+import { EntityConfig } from '@/models/Entity';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -50,6 +51,32 @@ export class NetworkStorage implements StorageSchema {
     const result = await api.put<Setting, Setting>(
       `setting/${listConfigId}`,
       setting,
+    );
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async addEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+    const result = await api.post<EntityConfig, EntityConfig>(
+      'entityConfig',
+      entityConfig,
+    );
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async updateEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+    const result = await api.put<EntityConfig, EntityConfig>(
+      `entityConfig/${entityConfig.id}`,
+      entityConfig,
     );
 
     if (result && result.isOk) {
