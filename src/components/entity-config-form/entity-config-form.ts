@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import {
   defaultEntityConfig,
   defaultEntityPropertyConfig,
@@ -15,11 +15,32 @@ import { PropertyConfigUpdatedEvent } from '../property-config-form/property-con
 import { produce } from 'immer';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import {
+  EntityConfigFormProp,
+  entityConfigFormProps,
+  EntityConfigFormProps,
+} from './entity-config-form.models';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {
   @state()
   entityConfig: EntityConfig = defaultEntityConfig;
+
+  @property({ type: Number })
+  [EntityConfigFormProp.ENTITY_CONFIG_ID]: EntityConfigFormProps[EntityConfigFormProp.ENTITY_CONFIG_ID] =
+    entityConfigFormProps[EntityConfigFormProp.ENTITY_CONFIG_ID].default;
+
+  @property({ type: String })
+  [EntityConfigFormProp.NAME]: EntityConfigFormProps[EntityConfigFormProp.NAME] =
+    entityConfigFormProps[EntityConfigFormProp.NAME].default;
+
+  @property({ type: String })
+  [EntityConfigFormProp.DESCRIPTION]: EntityConfigFormProps[EntityConfigFormProp.DESCRIPTION] =
+    entityConfigFormProps[EntityConfigFormProp.DESCRIPTION].default;
+
+  @property({ type: Array })
+  [EntityConfigFormProp.PROPERTIES]: EntityConfigFormProps[EntityConfigFormProp.PROPERTIES] =
+    entityConfigFormProps[EntityConfigFormProp.PROPERTIES].default;
 
   static styles = css`
     :host {
@@ -28,9 +49,22 @@ export class EntityConfigForm extends LitElement {
     }
   `;
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.entityConfig = {
+      id: this[EntityConfigFormProp.ENTITY_CONFIG_ID],
+      name: this[EntityConfigFormProp.NAME],
+      description: this[EntityConfigFormProp.DESCRIPTION],
+      properties: this[EntityConfigFormProp.PROPERTIES],
+    };
+  }
+
   updateName(name: string) {
-    console.info(`Entity name updated: ${name}`);
     this.entityConfig = { ...this.entityConfig, name };
+  }
+
+  updateDescription(description: string) {
+    this.entityConfig = { ...this.entityConfig, description };
   }
 
   validate() {
@@ -44,14 +78,9 @@ export class EntityConfigForm extends LitElement {
   async save() {
     const validationErrors = this.validate();
     if (validationErrors.length > 0) {
-      console.log(
-        `Entity config validation failed: ${validationErrors.join(', ')}`,
-      );
       addToast(msg('entityConfigValidationFailed'), NotificationType.ERROR);
       return;
     }
-
-    console.info(`Entity config saved: ${JSON.stringify(this.entityConfig)}`);
 
     let result: unknown;
 
@@ -70,8 +99,6 @@ export class EntityConfigForm extends LitElement {
   }
 
   addProperty() {
-    console.log('Add property clicked');
-    // this.entityConfig.properties.push({ ...defaultEntityPropertyConfig });
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties.push({ ...defaultEntityPropertyConfig });
     });
@@ -79,10 +106,6 @@ export class EntityConfigForm extends LitElement {
   }
 
   updateProperty(index: number, updatedProperty: EntityPropertyConfig) {
-    console.info(
-      `Property at index ${index} updated: ${JSON.stringify(updatedProperty)}`,
-    );
-    //this.entityConfig.properties[index] = updatedProperty;
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties[index] = updatedProperty;
     });
@@ -99,6 +122,16 @@ export class EntityConfigForm extends LitElement {
             .value=${this.entityConfig.name}
             @input-changed=${(e: InputChangedEvent) =>
               this.updateName(e.detail.value)}
+          ></ss-input>
+        </div>
+
+        <div class="field">
+          <label for="entity-description">${msg('Entity Description')}</label>
+          <ss-input
+            id="entity-description"
+            .value=${this.entityConfig.description}
+            @input-changed=${(e: InputChangedEvent) =>
+              this.updateDescription(e.detail.value)}
           ></ss-input>
         </div>
 

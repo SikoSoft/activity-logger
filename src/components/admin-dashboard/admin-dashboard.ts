@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import {
   AdminDashboardProps,
@@ -28,8 +28,6 @@ export class AdminDashboard extends MobxLitElement {
   async loadEntityConfigs() {
     const entityConfigs = await storage.getEntityConfigs();
     if (entityConfigs) {
-      console.log(entityConfigs);
-      //this.props.entityConfigs = entityConfigs;
       this.state.setEntityConfigs(entityConfigs);
     }
   }
@@ -37,11 +35,10 @@ export class AdminDashboard extends MobxLitElement {
   render() {
     return html`
       <div class="admin-dashboard box">
-        testing
         ${this.state.entityConfigs.map(
           config => html`
             <entity-config-form
-              id=${config.id}
+              entityConfigId=${config.id}
               name=${config.name}
               description=${config.description}
               .properties=${config.properties}

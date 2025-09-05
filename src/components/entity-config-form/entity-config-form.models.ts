@@ -1,23 +1,23 @@
 import { ControlType } from '@/models/Control';
-import { DataType, PropertyConfig } from 'api-spec/models/Entity';
+import { EntityPropertyConfig } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/PropV2';
 
 export enum EntityConfigFormProp {
-  ID = 'id',
+  ENTITY_CONFIG_ID = 'entityConfigId',
   NAME = 'name',
   DESCRIPTION = 'description',
   PROPERTIES = 'properties',
 }
 
 export interface EntityConfigFormProps extends PropTypes {
-  [EntityConfigFormProp.ID]: number;
+  [EntityConfigFormProp.ENTITY_CONFIG_ID]: number;
   [EntityConfigFormProp.NAME]: string;
   [EntityConfigFormProp.DESCRIPTION]: string;
-  [EntityConfigFormProp.PROPERTIES]: PropertyConfig[];
+  [EntityConfigFormProp.PROPERTIES]: EntityPropertyConfig[];
 }
 
 export const entityConfigFormProps: PropConfigMap<EntityConfigFormProps> = {
-  [EntityConfigFormProp.ID]: {
+  [EntityConfigFormProp.ENTITY_CONFIG_ID]: {
     default: 0,
     control: { type: ControlType.NUMBER },
     description: 'The unique identifier for the entity',
