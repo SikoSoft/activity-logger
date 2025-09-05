@@ -21,7 +21,7 @@ export class AdminDashboard extends MobxLitElement {
   static styles = [theme, css``];
 
   connectedCallback(): void {
-    console.log('CONNECTED');
+    super.connectedCallback();
     this.loadEntityConfigs();
   }
 
