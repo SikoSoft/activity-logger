@@ -1,5 +1,5 @@
 import { ControlType } from '@/models/Control';
-import { DataType } from '@/models/Entity';
+import { DataType } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/PropV2';
 
 export enum PropertyConfigFormProp {

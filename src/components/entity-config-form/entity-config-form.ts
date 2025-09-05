@@ -5,7 +5,7 @@ import {
   defaultEntityPropertyConfig,
   EntityConfig,
   EntityPropertyConfig,
-} from '@/models/Entity';
+} from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { storage } from '@/lib/Storage';

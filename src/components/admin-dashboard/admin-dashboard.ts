@@ -8,17 +8,46 @@ import {
 import '@/components/entity-config-form/entity-config-form';
 
 import { theme } from '@/styles/theme';
+import { storage } from '@/lib/Storage';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 @customElement('admin-dashboard')
-export class AdminDashboard extends LitElement {
+export class AdminDashboard extends MobxLitElement {
+  private state = appState;
+
   @state() private props: AdminDashboardProps = adminDashboardProps;
 
   static styles = [theme, css``];
 
+  connectedCallback(): void {
+    console.log('CONNECTED');
+    this.loadEntityConfigs();
+  }
+
+  async loadEntityConfigs() {
+    const entityConfigs = await storage.getEntityConfigs();
+    if (entityConfigs) {
+      console.log(entityConfigs);
+      //this.props.entityConfigs = entityConfigs;
+      this.state.setEntityConfigs(entityConfigs);
+    }
+  }
+
   render() {
     return html`
       <div class="admin-dashboard box">
-        <entity-config-form></entity-config-form>
+        testing
+        ${this.state.entityConfigs.map(
+          config => html`
+            <entity-config-form
+              id=${config.id}
+              name=${config.name}
+              description=${config.description}
+              .properties=${config.properties}
+            ></entity-config-form>
+          `,
+        )}
       </div>
     `;
   }

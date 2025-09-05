@@ -3,7 +3,7 @@ import { api } from './Api';
 import { StorageSchema } from '@/models/Storage';
 import { msg } from '@lit/localize';
 import { Setting } from 'api-spec/models/Setting';
-import { EntityConfig } from '@/models/Entity';
+import { EntityConfig } from 'api-spec/models/Entity';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -84,6 +84,18 @@ export class NetworkStorage implements StorageSchema {
     }
 
     return false;
+  }
+
+  async getEntityConfigs(): Promise<EntityConfig[]> {
+    const result = await api.get<{ entityConfigs: EntityConfig[] }>(
+      'entityConfig',
+    );
+
+    if (result && result.isOk) {
+      return Promise.resolve(result.response.entityConfigs);
+    }
+
+    return Promise.reject();
   }
 }
 

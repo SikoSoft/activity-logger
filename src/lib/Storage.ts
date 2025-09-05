@@ -11,7 +11,7 @@ import { PageView, defaultPageView } from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
-import { EntityConfig } from '@/models/Entity';
+import { EntityConfig } from 'api-spec/models/Entity';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -365,6 +365,11 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async updateEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
     return Promise.resolve(true);
+  }
+
+  @delegateSource()
+  async getEntityConfigs(): Promise<EntityConfig[]> {
+    return Promise.resolve([]);
   }
 }
 

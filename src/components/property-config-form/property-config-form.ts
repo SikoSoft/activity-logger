@@ -5,7 +5,7 @@ import {
   defaultEntityPropertyConfig,
   EntityConfig,
   EntityPropertyConfig,
-} from '@/models/Entity';
+} from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { storage } from '@/lib/Storage';
@@ -16,7 +16,7 @@ import {
 } from './property-config-form.models';
 import { produce } from 'immer';
 import { PropertyConfigUpdatedEvent } from './property-config-form.events';
-import { ControlType } from '@/models/Control';
+import { ControlType, SelectControl } from '@/models/Control';
 
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
@@ -87,9 +87,9 @@ export class PropertyConfigForm extends LitElement {
             ${propertyConfigFormProps[field].control.type === ControlType.SELECT
               ? html`
                   <ss-select
-                    .options=${propertyConfigFormProps[
-                      field
-                    ].control.options.map(option => ({
+                    .options=${(
+                      propertyConfigFormProps[field].control as SelectControl
+                    ).options.map(option => ({
                       label: msg(option),
                       value: option,
                     }))}

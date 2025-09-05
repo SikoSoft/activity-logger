@@ -1,4 +1,4 @@
-import { EntityPropertyConfig } from '@/models/Entity';
+import { EntityPropertyConfig } from 'api-spec/models/Entity';
 
 export const propertyConfigUpdatedEventName = 'property-config-updated';
 
