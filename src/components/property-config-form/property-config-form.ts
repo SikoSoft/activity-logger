@@ -29,6 +29,10 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
     propertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE].default;
 
+  @property({ type: String })
+  [PropertyConfigFormProp.RENDER_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE] =
+    propertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE].default;
+
   @property({ type: Number })
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: PropertyConfigFormProps[PropertyConfigFormProp.PROPERTY_CONFIG_ID] =
     propertyConfigFormProps[PropertyConfigFormProp.PROPERTY_CONFIG_ID].default;
@@ -48,6 +52,14 @@ export class PropertyConfigForm extends LitElement {
   @property({ type: Number })
   [PropertyConfigFormProp.ALLOWED]: PropertyConfigFormProps[PropertyConfigFormProp.ALLOWED] =
     propertyConfigFormProps[PropertyConfigFormProp.ALLOWED].default;
+
+  @property({ type: String })
+  [PropertyConfigFormProp.PREFIX]: PropertyConfigFormProps[PropertyConfigFormProp.PREFIX] =
+    propertyConfigFormProps[PropertyConfigFormProp.PREFIX].default;
+
+  @property({ type: String })
+  [PropertyConfigFormProp.SUFFIX]: PropertyConfigFormProps[PropertyConfigFormProp.SUFFIX] =
+    propertyConfigFormProps[PropertyConfigFormProp.SUFFIX].default;
 
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {

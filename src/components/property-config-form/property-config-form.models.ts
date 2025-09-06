@@ -1,30 +1,41 @@
 import { ControlType } from '@/models/Control';
-import { DataType } from 'api-spec/models/Entity';
+import { DataType, RenderType } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/PropV2';
 
 export enum PropertyConfigFormProp {
   DATA_TYPE = 'dataType',
+  RENDER_TYPE = 'renderType',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
   NAME = 'name',
   REPEAT = 'repeat',
   ALLOWED = 'allowed',
   REQUIRED = 'required',
+  PREFIX = 'prefix',
+  SUFFIX = 'suffix',
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.DATA_TYPE]: string;
+  [PropertyConfigFormProp.RENDER_TYPE]: string;
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: number;
   [PropertyConfigFormProp.NAME]: string;
   [PropertyConfigFormProp.REQUIRED]: number;
   [PropertyConfigFormProp.REPEAT]: number;
   [PropertyConfigFormProp.ALLOWED]: number;
+  [PropertyConfigFormProp.PREFIX]: string;
+  [PropertyConfigFormProp.SUFFIX]: string;
 }
 
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
   [PropertyConfigFormProp.DATA_TYPE]: {
-    default: 'text',
+    default: DataType.SHORT_TEXT,
     control: { type: ControlType.SELECT, options: Object.values(DataType) },
     description: 'The data type of the property',
+  },
+  [PropertyConfigFormProp.RENDER_TYPE]: {
+    default: RenderType.TEXT,
+    control: { type: ControlType.SELECT, options: Object.values(RenderType) },
+    description: 'The render type of the property',
   },
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: {
     default: 0,
@@ -50,5 +61,15 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: 0,
     control: { type: ControlType.NUMBER },
     description: 'How many of this property are allowed',
+  },
+  [PropertyConfigFormProp.PREFIX]: {
+    default: '',
+    control: { type: ControlType.TEXT },
+    description: 'The prefix of the property',
+  },
+  [PropertyConfigFormProp.SUFFIX]: {
+    default: '',
+    control: { type: ControlType.TEXT },
+    description: 'The suffix of the property',
   },
 };
