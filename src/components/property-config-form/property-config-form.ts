@@ -1,14 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
-  defaultEntityConfig,
   defaultEntityPropertyConfig,
-  EntityConfig,
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { storage } from '@/lib/Storage';
 import {
   PropertyConfigFormProp,
   propertyConfigFormProps,
@@ -52,6 +49,13 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.ALLOWED]: PropertyConfigFormProps[PropertyConfigFormProp.ALLOWED] =
     propertyConfigFormProps[PropertyConfigFormProp.ALLOWED].default;
 
+  get visibleFields(): PropertyConfigFormProp[] {
+    return Object.values(PropertyConfigFormProp).filter(field => {
+      const control = propertyConfigFormProps[field].control;
+      return control.type !== ControlType.HIDDEN;
+    }) as PropertyConfigFormProp[];
+  }
+
   validate() {
     const errors: string[] = [];
 
@@ -79,8 +83,7 @@ export class PropertyConfigForm extends LitElement {
       <fieldset class="entity-config-form">
         <legend>${msg('Property Configuration')}</legend>
 
-
-      ${Object.values(PropertyConfigFormProp).map(
+      ${this.visibleFields.map(
         field =>
           html` <div class="field">
             <label for=${field}>${msg(field)}</label>
