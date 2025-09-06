@@ -3,6 +3,7 @@ export enum ControlType {
   NUMBER = 'number',
   TEXT = 'text',
   SELECT = 'select',
+  HIDDEN = 'hidden',
 }
 
 export interface BooleanControl {
@@ -25,8 +26,13 @@ export interface SelectControl {
   options: any[];
 }
 
+export interface HiddenControl {
+  type: ControlType.HIDDEN;
+}
+
 export type Control =
   | BooleanControl
   | NumberControl
   | TextControl
-  | SelectControl;
+  | SelectControl
+  | HiddenControl;

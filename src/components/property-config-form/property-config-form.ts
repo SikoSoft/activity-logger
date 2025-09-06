@@ -32,9 +32,9 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
     propertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE].default;
 
-  @property({ type: String })
-  [PropertyConfigFormProp.ID]: PropertyConfigFormProps[PropertyConfigFormProp.ID] =
-    propertyConfigFormProps[PropertyConfigFormProp.ID].default;
+  @property({ type: Number })
+  [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: PropertyConfigFormProps[PropertyConfigFormProp.PROPERTY_CONFIG_ID] =
+    propertyConfigFormProps[PropertyConfigFormProp.PROPERTY_CONFIG_ID].default;
 
   @property({ type: String })
   [PropertyConfigFormProp.NAME]: PropertyConfigFormProps[PropertyConfigFormProp.NAME] =

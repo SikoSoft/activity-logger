@@ -4,7 +4,7 @@ import { PropConfigMap, PropTypes } from '@/models/PropV2';
 
 export enum PropertyConfigFormProp {
   DATA_TYPE = 'dataType',
-  ID = 'id',
+  PROPERTY_CONFIG_ID = 'propertyConfigId',
   NAME = 'name',
   REPEAT = 'repeat',
   ALLOWED = 'allowed',
@@ -13,7 +13,7 @@ export enum PropertyConfigFormProp {
 
 export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.DATA_TYPE]: string;
-  [PropertyConfigFormProp.ID]: string;
+  [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: number;
   [PropertyConfigFormProp.NAME]: string;
   [PropertyConfigFormProp.REQUIRED]: number;
   [PropertyConfigFormProp.REPEAT]: number;
@@ -26,9 +26,9 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     control: { type: ControlType.SELECT, options: Object.values(DataType) },
     description: 'The data type of the property',
   },
-  [PropertyConfigFormProp.ID]: {
-    default: '',
-    control: { type: ControlType.TEXT },
+  [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: {
+    default: 0,
+    control: { type: ControlType.HIDDEN },
     description: 'The ID of the property',
   },
   [PropertyConfigFormProp.NAME]: {
