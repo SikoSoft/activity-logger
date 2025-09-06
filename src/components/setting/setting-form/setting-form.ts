@@ -27,11 +27,13 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { Debouncer } from '@/lib/Debouncer';
 
 @customElement('setting-form')
 @localized()
 export class SettingForm extends MobxLitElement {
   public state = appState;
+  private saveDebouncer = new Debouncer(300);
 
   @property()
   [SettingFormProp.LIST_CONFIG_ID]: SettingFormProps[SettingFormProp.LIST_CONFIG_ID] =
@@ -77,18 +79,21 @@ export class SettingForm extends MobxLitElement {
   private async handleSettingUpdated<SettingType>(
     event: SettingUpdatedEvent<SettingType>,
   ) {
-    const setting = event.detail as Setting;
-    const isOk = await storage.saveSetting(
-      this[SettingFormProp.LIST_CONFIG_ID],
-      setting,
-    );
-    if (isOk) {
-      this.state.setSetting(setting);
-      addToast(msg('Setting updated'), NotificationType.SUCCESS);
-      return;
-    }
+    this.saveDebouncer.cancel();
+    this.saveDebouncer.debounce(async () => {
+      const setting = event.detail as Setting;
+      const isOk = await storage.saveSetting(
+        this[SettingFormProp.LIST_CONFIG_ID],
+        setting,
+      );
+      if (isOk) {
+        this.state.setSetting(setting);
+        addToast(msg('Setting updated'), NotificationType.SUCCESS);
+        return;
+      }
 
-    addToast(msg('Failed to update setting'), NotificationType.ERROR);
+      addToast(msg('Failed to update setting'), NotificationType.ERROR);
+    });
   }
 
   render() {
