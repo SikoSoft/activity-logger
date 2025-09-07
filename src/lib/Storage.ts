@@ -371,6 +371,16 @@ export class Storage implements StorageSchema {
   async getEntityConfigs(): Promise<EntityConfig[]> {
     return Promise.resolve([]);
   }
+
+  @delegateSource()
+  async deleteEntityConfig(id: number): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  @delegateSource()
+  async deletePropertyConfig(id: number): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }
 
 export const storage = new Storage();

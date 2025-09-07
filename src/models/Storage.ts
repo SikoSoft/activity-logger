@@ -1,6 +1,7 @@
 import { Setting } from 'api-spec/models/Setting';
 import { ListConfig } from 'api-spec/models/List';
 import { EntityConfig } from 'api-spec/models/Entity';
+import { defaultEntityPropertyConfig } from './Entity';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -27,4 +28,6 @@ export interface StorageSchema {
   updateEntityConfig?(entityConfig: EntityConfig): Promise<boolean>;
   addEntityConfig?(entityConfig: EntityConfig): Promise<boolean>;
   getEntityConfigs?(): Promise<EntityConfig[]>;
+  deleteEntityConfig?(id: number): Promise<boolean>;
+  deletePropertyConfig?(id: number): Promise<boolean>;
 }

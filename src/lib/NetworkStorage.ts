@@ -97,6 +97,26 @@ export class NetworkStorage implements StorageSchema {
 
     return Promise.reject();
   }
+
+  async deleteEntityConfig(id: number): Promise<boolean> {
+    const result = await api.delete<null>(`entityConfig/${id}`);
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async deletePropertyConfig(id: number): Promise<boolean> {
+    const result = await api.delete<null>(`propertyConfig/${id}`);
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export const networkStorage = new NetworkStorage();

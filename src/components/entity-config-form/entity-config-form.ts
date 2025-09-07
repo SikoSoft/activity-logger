@@ -139,7 +139,15 @@ export class EntityConfigForm extends LitElement {
           ${this.entityConfig.properties.map(
             (property, index) => html`
               <property-config-form
-                .propertyConfig=${property}
+                dataType=${property.dataType}
+                renderType=${property.renderType}
+                propertyConfigId=${property.id}
+                name=${property.name}
+                required=${property.required}
+                repeat=${property.repeat}
+                allowed=${property.allowed}
+                prefix=${property.prefix}
+                suffix=${property.suffix}
                 @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
                   this.updateProperty(index, e.detail)}
               ></property-config-form>

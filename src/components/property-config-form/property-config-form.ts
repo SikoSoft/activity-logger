@@ -15,8 +15,11 @@ import { produce } from 'immer';
 import { PropertyConfigUpdatedEvent } from './property-config-form.events';
 import { ControlType, SelectControl } from '@/models/Control';
 
+import { storage } from '@/lib/Storage';
+
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
+import '@ss/ui/components/confirmation-modal';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -60,6 +63,9 @@ export class PropertyConfigForm extends LitElement {
   @property({ type: String })
   [PropertyConfigFormProp.SUFFIX]: PropertyConfigFormProps[PropertyConfigFormProp.SUFFIX] =
     propertyConfigFormProps[PropertyConfigFormProp.SUFFIX].default;
+
+  @state()
+  confirmationModalIsOpen = false;
 
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {
@@ -117,7 +123,7 @@ export class PropertyConfigForm extends LitElement {
               : html`
                   <ss-input
                     type=${propertyConfigFormProps[field].control.type}
-                    .value=${this[field]}
+                    value=${this[field]}
                     @input-changed=${(e: InputChangedEvent) => {
                       this.updateField(field, e.detail.value);
                     }}
@@ -126,6 +132,23 @@ export class PropertyConfigForm extends LitElement {
           </div>`,
       )}
         </div>
-      </fieldset>`;
+      </fieldset>
+      <div>
+        <ss-button @click=${() => {
+          this.confirmationModalIsOpen = true;
+        }}>
+          ${msg('Delete')}
+        </ss-button>
+      </div>
+      <confirmation-modal ?open=${this.confirmationModalIsOpen} @confirmation-accepted=${() => {
+        this.confirmationModalIsOpen = false;
+        storage.deletePropertyConfig(
+          this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
+        );
+      }} @confirmation-declined=${() => {
+        this.confirmationModalIsOpen = false;
+      }}></confirmation-modal>
+
+      `;
   }
 }
