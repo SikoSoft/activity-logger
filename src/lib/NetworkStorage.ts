@@ -3,7 +3,7 @@ import { api } from './Api';
 import { StorageSchema } from '@/models/Storage';
 import { msg } from '@lit/localize';
 import { Setting } from 'api-spec/models/Setting';
-import { EntityConfig } from 'api-spec/models/Entity';
+import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -109,7 +109,42 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async deletePropertyConfig(id: number): Promise<boolean> {
+    console.log('Deleting property config', id);
     const result = await api.delete<null>(`propertyConfig/${id}`);
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async addPropertyConfig(
+    propertyConfig: EntityPropertyConfig,
+  ): Promise<boolean> {
+    console.log('Adding property config', propertyConfig);
+    const { id, entityConfigId, ...payload } = propertyConfig;
+
+    const result = await api.post<
+      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,
+      EntityPropertyConfig
+    >(`propertyConfig/${entityConfigId}`, payload);
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async updatePropertyConfig(
+    propertyConfig: EntityPropertyConfig,
+  ): Promise<boolean> {
+    const { id, entityConfigId, ...payload } = propertyConfig;
+    const result = await api.put<
+      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,
+      EntityPropertyConfig
+    >(`propertyConfig/${entityConfigId}/${id}`, payload);
 
     if (result && result.isOk) {
       return true;

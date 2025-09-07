@@ -5,6 +5,7 @@ import { PropConfigMap, PropTypes } from '@/models/PropV2';
 export enum PropertyConfigFormProp {
   DATA_TYPE = 'dataType',
   RENDER_TYPE = 'renderType',
+  ENTITY_CONFIG_ID = 'entityConfigId',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
   NAME = 'name',
   REPEAT = 'repeat',
@@ -17,6 +18,7 @@ export enum PropertyConfigFormProp {
 export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.DATA_TYPE]: string;
   [PropertyConfigFormProp.RENDER_TYPE]: string;
+  [PropertyConfigFormProp.ENTITY_CONFIG_ID]: number;
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: number;
   [PropertyConfigFormProp.NAME]: string;
   [PropertyConfigFormProp.REQUIRED]: number;
@@ -36,6 +38,11 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: RenderType.TEXT,
     control: { type: ControlType.SELECT, options: Object.values(RenderType) },
     description: 'The render type of the property',
+  },
+  [PropertyConfigFormProp.ENTITY_CONFIG_ID]: {
+    default: 0,
+    control: { type: ControlType.HIDDEN },
+    description: 'The ID of the entity config',
   },
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: {
     default: 0,

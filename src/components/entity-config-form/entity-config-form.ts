@@ -11,7 +11,10 @@ import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { storage } from '@/lib/Storage';
 
 import '@/components/property-config-form/property-config-form';
-import { PropertyConfigUpdatedEvent } from '../property-config-form/property-config-form.events';
+import {
+  PropertyConfigAddedEvent,
+  PropertyConfigUpdatedEvent,
+} from '../property-config-form/property-config-form.events';
 import { produce } from 'immer';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
@@ -139,6 +142,8 @@ export class EntityConfigForm extends LitElement {
           ${this.entityConfig.properties.map(
             (property, index) => html`
               <property-config-form
+                entityConfigId=${this.entityConfig.id}
+                propertConfigId=${property.id}
                 dataType=${property.dataType}
                 renderType=${property.renderType}
                 propertyConfigId=${property.id}
@@ -149,6 +154,8 @@ export class EntityConfigForm extends LitElement {
                 prefix=${property.prefix}
                 suffix=${property.suffix}
                 @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
+                  this.updateProperty(index, e.detail)}
+                @property-config-added=${(e: PropertyConfigAddedEvent) =>
                   this.updateProperty(index, e.detail)}
               ></property-config-form>
             `,

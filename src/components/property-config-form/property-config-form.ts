@@ -12,7 +12,10 @@ import {
   PropertyConfigFormProps,
 } from './property-config-form.models';
 import { produce } from 'immer';
-import { PropertyConfigUpdatedEvent } from './property-config-form.events';
+import {
+  PropertyConfigAddedEvent,
+  PropertyConfigUpdatedEvent,
+} from './property-config-form.events';
 import { ControlType, SelectControl } from '@/models/Control';
 
 import { storage } from '@/lib/Storage';
@@ -20,11 +23,11 @@ import { storage } from '@/lib/Storage';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/confirmation-modal';
+import { addToast } from '@/lib/Util';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
-  @state()
-  propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
+  @state() propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
   static styles = css``;
 
@@ -35,6 +38,10 @@ export class PropertyConfigForm extends LitElement {
   @property({ type: String })
   [PropertyConfigFormProp.RENDER_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE] =
     propertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE].default;
+
+  @property({ type: Number })
+  [PropertyConfigFormProp.ENTITY_CONFIG_ID]: PropertyConfigFormProps[PropertyConfigFormProp.ENTITY_CONFIG_ID] =
+    propertyConfigFormProps[PropertyConfigFormProp.ENTITY_CONFIG_ID].default;
 
   @property({ type: Number })
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: PropertyConfigFormProps[PropertyConfigFormProp.PROPERTY_CONFIG_ID] =
@@ -67,6 +74,18 @@ export class PropertyConfigForm extends LitElement {
   @state()
   confirmationModalIsOpen = false;
 
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    this.propertyConfig = {
+      ...this._propertyConfig,
+      ...Object.keys(defaultEntityPropertyConfig).reduce((acc: any, field) => {
+        acc[field] = this[field as keyof this];
+        return acc;
+      }, defaultEntityPropertyConfig as EntityPropertyConfig),
+    };
+  }
+
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {
       const control = propertyConfigFormProps[field].control;
@@ -93,7 +112,50 @@ export class PropertyConfigForm extends LitElement {
       ...draft,
       [field]: value,
     }));
-    this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
+
+    this.propertyConfig = propertyConfig;
+  }
+
+  get _propertyConfig(): EntityPropertyConfig {
+    return {
+      id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
+      entityConfigId: this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
+      dataType: this[
+        PropertyConfigFormProp.DATA_TYPE
+      ] as EntityPropertyConfig['dataType'],
+      renderType: this[
+        PropertyConfigFormProp.RENDER_TYPE
+      ] as EntityPropertyConfig['renderType'],
+      name: this[PropertyConfigFormProp.NAME] as EntityPropertyConfig['name'],
+      required: this[
+        PropertyConfigFormProp.REQUIRED
+      ] as EntityPropertyConfig['required'],
+      repeat: this[
+        PropertyConfigFormProp.REPEAT
+      ] as EntityPropertyConfig['repeat'],
+      allowed: this[
+        PropertyConfigFormProp.ALLOWED
+      ] as EntityPropertyConfig['allowed'],
+      prefix: this[
+        PropertyConfigFormProp.PREFIX
+      ] as EntityPropertyConfig['prefix'],
+      suffix: this[
+        PropertyConfigFormProp.SUFFIX
+      ] as EntityPropertyConfig['suffix'],
+    };
+  }
+
+  save() {
+    console.log('Saving property config', this.propertyConfig);
+    if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
+      storage.updatePropertyConfig(this.propertyConfig);
+      addToast(msg('Property configuration updated successfully.'));
+      this.dispatchEvent(new PropertyConfigUpdatedEvent(this.propertyConfig));
+    } else {
+      storage.addPropertyConfig(this.propertyConfig);
+      addToast(msg('Property configuration added successfully.'));
+      this.dispatchEvent(new PropertyConfigAddedEvent(this.propertyConfig));
+    }
   }
 
   render() {
@@ -133,7 +195,12 @@ export class PropertyConfigForm extends LitElement {
       )}
         </div>
       </fieldset>
-      <div>
+      <div class="buttons">
+        <ss-button @click=${() => {
+          this.save();
+        }}>
+          ${msg('Save')}
+        </ss-button>
         <ss-button @click=${() => {
           this.confirmationModalIsOpen = true;
         }}>

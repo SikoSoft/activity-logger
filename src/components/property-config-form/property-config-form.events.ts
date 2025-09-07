@@ -13,3 +13,17 @@ export class PropertyConfigUpdatedEvent extends CustomEvent<PropertyConfigUpdate
     });
   }
 }
+
+export const propertyConfigAddedEventName = 'property-config-added';
+
+export type PropertyConfigAddedPayload = EntityPropertyConfig;
+
+export class PropertyConfigAddedEvent extends CustomEvent<PropertyConfigAddedPayload> {
+  constructor(detail: PropertyConfigAddedPayload) {
+    super(propertyConfigAddedEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}

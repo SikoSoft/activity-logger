@@ -11,7 +11,7 @@ import { PageView, defaultPageView } from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
-import { EntityConfig } from 'api-spec/models/Entity';
+import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -379,6 +379,20 @@ export class Storage implements StorageSchema {
 
   @delegateSource()
   async deletePropertyConfig(id: number): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  @delegateSource()
+  async addPropertyConfig(
+    propertyConfig: EntityPropertyConfig,
+  ): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  @delegateSource()
+  async updatePropertyConfig(
+    propertyConfig: EntityPropertyConfig,
+  ): Promise<boolean> {
     return Promise.resolve(true);
   }
 }
