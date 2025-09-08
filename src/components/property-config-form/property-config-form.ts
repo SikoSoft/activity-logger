@@ -211,6 +211,7 @@ export class PropertyConfigForm extends LitElement {
       <confirmation-modal ?open=${this.confirmationModalIsOpen} @confirmation-accepted=${() => {
         this.confirmationModalIsOpen = false;
         storage.deletePropertyConfig(
+          this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
           this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
         );
       }} @confirmation-declined=${() => {

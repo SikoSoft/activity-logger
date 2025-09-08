@@ -378,7 +378,10 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async deletePropertyConfig(id: number): Promise<boolean> {
+  async deletePropertyConfig(
+    entityConfigId: number,
+    id: number,
+  ): Promise<boolean> {
     return Promise.resolve(true);
   }
 

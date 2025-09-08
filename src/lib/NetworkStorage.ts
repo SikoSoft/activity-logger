@@ -108,9 +108,14 @@ export class NetworkStorage implements StorageSchema {
     return false;
   }
 
-  async deletePropertyConfig(id: number): Promise<boolean> {
+  async deletePropertyConfig(
+    entityConfigId: number,
+    id: number,
+  ): Promise<boolean> {
     console.log('Deleting property config', id);
-    const result = await api.delete<null>(`propertyConfig/${id}`);
+    const result = await api.delete<null>(
+      `propertyConfig/${entityConfigId}/${id}`,
+    );
 
     if (result && result.isOk) {
       return true;
