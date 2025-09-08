@@ -138,6 +138,13 @@ export class EntityConfigForm extends LitElement {
           ></ss-input>
         </div>
 
+        <div class="actions">
+          <ss-button @click=${this.addProperty}
+            >${msg('Add Property')}</ss-button
+          >
+          <ss-button @click=${this.save}>${msg('Save')}</ss-button>
+        </div>
+
         <div class="properties">
           ${this.entityConfig.properties.map(
             (property, index) => html`
@@ -160,13 +167,6 @@ export class EntityConfigForm extends LitElement {
               ></property-config-form>
             `,
           )}
-        </div>
-
-        <div class="actions">
-          <ss-button @click=${this.addProperty}
-            >${msg('Add Property')}</ss-button
-          >
-          <ss-button @click=${this.save}>${msg('Save')}</ss-button>
         </div>
       </div>
     `;
