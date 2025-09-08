@@ -140,6 +140,7 @@ export class NetworkStorage implements StorageSchema {
   async updatePropertyConfig(
     propertyConfig: EntityPropertyConfig,
   ): Promise<boolean> {
+    console.log('Updating property config', propertyConfig);
     const { id, entityConfigId, ...payload } = propertyConfig;
     const result = await api.put<
       Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,

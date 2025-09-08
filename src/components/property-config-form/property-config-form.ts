@@ -83,6 +83,7 @@ export class PropertyConfigForm extends LitElement {
         acc[field] = this[field as keyof this];
         return acc;
       }, defaultEntityPropertyConfig as EntityPropertyConfig),
+      id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
     };
   }
 
