@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   defaultEntityConfig,
@@ -23,9 +23,35 @@ import {
   entityConfigFormProps,
   EntityConfigFormProps,
 } from './entity-config-form.models';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {
+  static styles = css`
+    :host {
+      display: block;
+      padding: 1rem;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .buttons {
+      padding: 0.5rem 0;
+
+      ss-button {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    property-config-form {
+      display: block;
+      margin-bottom: 1rem;
+    }
+  `;
+
   @state()
   entityConfig: EntityConfig = defaultEntityConfig;
 
@@ -44,13 +70,6 @@ export class EntityConfigForm extends LitElement {
   @property({ type: Array })
   [EntityConfigFormProp.PROPERTIES]: EntityConfigFormProps[EntityConfigFormProp.PROPERTIES] =
     entityConfigFormProps[EntityConfigFormProp.PROPERTIES].default;
-
-  static styles = css`
-    :host {
-      display: block;
-      padding: 1rem;
-    }
-  `;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -101,7 +120,16 @@ export class EntityConfigForm extends LitElement {
     addToast(msg('entityConfigSaved'), NotificationType.SUCCESS);
   }
 
-  addProperty() {
+  addPropertyToTop() {
+    console.log({ defaultEntityPropertyConfig });
+    const entityConfig = produce(this.entityConfig, draft => {
+      draft.properties.unshift({ ...defaultEntityPropertyConfig });
+    });
+    this.entityConfig = entityConfig;
+  }
+
+  addPropertyToBottom() {
+    console.log({ defaultEntityPropertyConfig });
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties.push({ ...defaultEntityPropertyConfig });
     });
@@ -111,6 +139,13 @@ export class EntityConfigForm extends LitElement {
   updateProperty(index: number, updatedProperty: EntityPropertyConfig) {
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties[index] = updatedProperty;
+    });
+    this.entityConfig = entityConfig;
+  }
+
+  deleteProperty(index: number) {
+    const entityConfig = produce(this.entityConfig, draft => {
+      draft.properties.splice(index, 1);
     });
     this.entityConfig = entityConfig;
   }
@@ -138,15 +173,18 @@ export class EntityConfigForm extends LitElement {
           ></ss-input>
         </div>
 
-        <div class="actions">
-          <ss-button @click=${this.addProperty}
-            >${msg('Add Property')}</ss-button
-          >
-          <ss-button @click=${this.save}>${msg('Save')}</ss-button>
+        <div class="buttons">
+          <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
         </div>
 
         <div class="properties">
-          ${this.entityConfig.properties.map(
+          <ss-button @click=${this.addPropertyToTop}
+            >${msg('Add Property')}</ss-button
+          >
+
+          ${repeat(
+            this.entityConfig.properties,
+            (property, index) => property.id,
             (property, index) => html`
               <property-config-form
                 entityConfigId=${this.entityConfig.id}
@@ -164,9 +202,17 @@ export class EntityConfigForm extends LitElement {
                   this.updateProperty(index, e.detail)}
                 @property-config-added=${(e: PropertyConfigAddedEvent) =>
                   this.updateProperty(index, e.detail)}
+                @property-config-deleted=${() => {
+                  this.deleteProperty(index);
+                }}
               ></property-config-form>
             `,
           )}
+          ${this.entityConfig.properties.length > 0
+            ? html` <ss-button @click=${this.addPropertyToBottom}
+                >${msg('Add Property')}</ss-button
+              >`
+            : nothing}
         </div>
       </div>
     `;

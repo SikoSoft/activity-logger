@@ -11,6 +11,7 @@ import { theme } from '@/styles/theme';
 import { storage } from '@/lib/Storage';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import { toJS } from 'mobx';
 
 @customElement('admin-dashboard')
 export class AdminDashboard extends MobxLitElement {
@@ -41,7 +42,7 @@ export class AdminDashboard extends MobxLitElement {
               entityConfigId=${config.id}
               name=${config.name}
               description=${config.description}
-              .properties=${config.properties}
+              .properties=${toJS(config.properties)}
             ></entity-config-form>
           `,
         )}

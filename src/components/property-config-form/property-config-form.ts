@@ -14,6 +14,7 @@ import {
 import { produce } from 'immer';
 import {
   PropertyConfigAddedEvent,
+  PropertyConfigDeletedEvent,
   PropertyConfigUpdatedEvent,
 } from './property-config-form.events';
 import { ControlType, SelectControl } from '@/models/Control';
@@ -29,7 +30,25 @@ import { addToast } from '@/lib/Util';
 export class PropertyConfigForm extends LitElement {
   @state() propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
-  static styles = css``;
+  static styles = css`
+    :host {
+      display: block;
+      padding: 1rem;
+    }
+
+    fieldset {
+      border-radius: 0.5rem;
+    }
+
+    .buttons {
+      padding: 0.5rem 0;
+
+      ss-button {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+    }
+  `;
 
   @property({ type: String })
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
@@ -78,7 +97,7 @@ export class PropertyConfigForm extends LitElement {
     super.connectedCallback();
 
     this.propertyConfig = {
-      ...this._propertyConfig,
+      ...this.updatedPropertyConfig,
       ...Object.keys(defaultEntityPropertyConfig).reduce((acc: any, field) => {
         acc[field] = this[field as keyof this];
         return acc;
@@ -117,7 +136,7 @@ export class PropertyConfigForm extends LitElement {
     this.propertyConfig = propertyConfig;
   }
 
-  get _propertyConfig(): EntityPropertyConfig {
+  get updatedPropertyConfig(): EntityPropertyConfig {
     return {
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
       entityConfigId: this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
@@ -146,17 +165,54 @@ export class PropertyConfigForm extends LitElement {
     };
   }
 
-  save() {
+  async save() {
     console.log('Saving property config', this.propertyConfig);
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
-      storage.updatePropertyConfig(this.propertyConfig);
-      addToast(msg('Property configuration updated successfully.'));
-      this.dispatchEvent(new PropertyConfigUpdatedEvent(this.propertyConfig));
+      const propertyConfig = await storage.updatePropertyConfig(
+        this.propertyConfig,
+      );
+      if (propertyConfig) {
+        addToast(msg('Property configuration updated successfully.'));
+        this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
+      }
     } else {
-      storage.addPropertyConfig(this.propertyConfig);
-      addToast(msg('Property configuration added successfully.'));
-      this.dispatchEvent(new PropertyConfigAddedEvent(this.propertyConfig));
+      const propertyConfig = await storage.addPropertyConfig(
+        this.propertyConfig,
+      );
+      if (propertyConfig) {
+        addToast(msg('Property configuration added successfully.'));
+        this.dispatchEvent(new PropertyConfigAddedEvent(propertyConfig));
+      }
     }
+  }
+
+  async delete() {
+    this.confirmationModalIsOpen = false;
+
+    const deleteResult = await storage.deletePropertyConfig(
+      this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
+      this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
+    );
+
+    if (deleteResult) {
+      addToast(msg('Property configuration deleted successfully.'));
+      this.dispatchEvent(
+        new PropertyConfigDeletedEvent(
+          this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
+        ),
+      );
+    }
+  }
+
+  get inSync(): boolean {
+    if (!this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
+      return false;
+    }
+
+    return (
+      JSON.stringify(this.updatedPropertyConfig) ===
+      JSON.stringify(this.propertyConfig)
+    );
   }
 
   render() {
@@ -197,26 +253,23 @@ export class PropertyConfigForm extends LitElement {
         </div>
       </fieldset>
       <div class="buttons">
-        <ss-button @click=${() => {
+        <ss-button positive ?disabled=${this.inSync} @click=${() => {
           this.save();
         }}>
           ${msg('Save')}
         </ss-button>
-        <ss-button @click=${() => {
+        <ss-button negative ?disabled=${!this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]} @click=${() => {
           this.confirmationModalIsOpen = true;
         }}>
           ${msg('Delete')}
         </ss-button>
       </div>
-      <confirmation-modal ?open=${this.confirmationModalIsOpen} @confirmation-accepted=${() => {
-        this.confirmationModalIsOpen = false;
-        storage.deletePropertyConfig(
-          this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
-          this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
-        );
-      }} @confirmation-declined=${() => {
-        this.confirmationModalIsOpen = false;
-      }}></confirmation-modal>
+      <confirmation-modal 
+        ?open=${this.confirmationModalIsOpen}
+        @confirmation-accepted=${this.delete}
+        @confirmation-declined=${() => {
+          this.confirmationModalIsOpen = false;
+        }}></confirmation-modal>
 
       `;
   }

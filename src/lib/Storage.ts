@@ -12,6 +12,7 @@ import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
+import { Entity } from 'api-spec/models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -388,15 +389,15 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async addPropertyConfig(
     propertyConfig: EntityPropertyConfig,
-  ): Promise<boolean> {
-    return Promise.resolve(true);
+  ): Promise<Entity.EntityPropertyConfig | null> {
+    return Promise.resolve(null);
   }
 
   @delegateSource()
   async updatePropertyConfig(
     propertyConfig: EntityPropertyConfig,
-  ): Promise<boolean> {
-    return Promise.resolve(true);
+  ): Promise<Entity.EntityPropertyConfig | null> {
+    return Promise.resolve(null);
   }
 }
 

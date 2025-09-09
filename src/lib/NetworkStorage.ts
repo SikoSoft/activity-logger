@@ -4,6 +4,7 @@ import { StorageSchema } from '@/models/Storage';
 import { msg } from '@lit/localize';
 import { Setting } from 'api-spec/models/Setting';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
+import { Entity } from 'api-spec/models';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -126,7 +127,7 @@ export class NetworkStorage implements StorageSchema {
 
   async addPropertyConfig(
     propertyConfig: EntityPropertyConfig,
-  ): Promise<boolean> {
+  ): Promise<Entity.EntityPropertyConfig | null> {
     console.log('Adding property config', propertyConfig);
     const { id, entityConfigId, ...payload } = propertyConfig;
 
@@ -136,15 +137,15 @@ export class NetworkStorage implements StorageSchema {
     >(`propertyConfig/${entityConfigId}`, payload);
 
     if (result && result.isOk) {
-      return true;
+      return result.response;
     }
 
-    return false;
+    return null;
   }
 
   async updatePropertyConfig(
     propertyConfig: EntityPropertyConfig,
-  ): Promise<boolean> {
+  ): Promise<Entity.EntityPropertyConfig | null> {
     console.log('Updating property config', propertyConfig);
     const { id, entityConfigId, ...payload } = propertyConfig;
     const result = await api.put<
@@ -153,10 +154,10 @@ export class NetworkStorage implements StorageSchema {
     >(`propertyConfig/${entityConfigId}/${id}`, payload);
 
     if (result && result.isOk) {
-      return true;
+      return result.response;
     }
 
-    return false;
+    return null;
   }
 }
 

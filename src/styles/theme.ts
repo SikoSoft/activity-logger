@@ -6,6 +6,8 @@ export const theme = css`
     --negative-background-color: #ffc4c4;
     --positive-color: #060;
     --positive-background-color: #c4ffc4;
+    --unsynced-color: #666;
+    --unsynced-background-color: #c4c4c4;
   }
 
   input[type='text'],
@@ -30,5 +32,11 @@ export const theme = css`
     background-color: #fff;
     border-radius: 8px;
     border: 1px #aaa solid;
+  }
+
+  .unsynced {
+    color: var(--unsynced-color);
+    background-color: var(--unsynced-background-color);
+    border: 1px solid var(--unsynced-color);
   }
 `;

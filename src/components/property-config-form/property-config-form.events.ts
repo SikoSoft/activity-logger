@@ -27,3 +27,17 @@ export class PropertyConfigAddedEvent extends CustomEvent<PropertyConfigAddedPay
     });
   }
 }
+
+export const propertyConfigDeletedEventName = 'property-config-deleted';
+
+export type PropertyConfigDeletedPayload = number;
+
+export class PropertyConfigDeletedEvent extends CustomEvent<PropertyConfigDeletedPayload> {
+  constructor(detail: PropertyConfigDeletedPayload) {
+    super(propertyConfigDeletedEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
