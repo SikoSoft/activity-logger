@@ -12,7 +12,7 @@ import { appState } from '@/state';
 import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
-} from '@/lib/Event';
+} from './tag-filters.events';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import '@ss/ui/components/tag-manager';
@@ -41,7 +41,7 @@ export class TagFilters extends MobxLitElement {
     );
   }
 
-  private _handleIncludeUntaggedChanged() {
+  private handleIncludeUntaggedChanged() {
     this.dispatchEvent(new IncludeUntaggedUpdatedEvent({}));
   }
 
@@ -118,7 +118,7 @@ export class TagFilters extends MobxLitElement {
             id="include-unchanged"
             type="checkbox"
             ?checked=${this.includeUntagged}
-            @change=${this._handleIncludeUntaggedChanged}
+            @change=${this.handleIncludeUntaggedChanged}
           />
 
           <label for="include-unchanged"
