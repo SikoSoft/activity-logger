@@ -189,7 +189,7 @@ export class EntityConfigForm extends LitElement {
 
           ${repeat(
             this.entityConfig.properties,
-            (property, index) => property.id,
+            property => property.id,
             (property, index) => html`
               <property-config-form
                 entityConfigId=${this.entityConfig.id}

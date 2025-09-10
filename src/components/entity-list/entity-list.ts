@@ -30,7 +30,6 @@ import { ListContextUpdatedEvent } from '@/components/list-context/list-context.
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
-import '@/components/entity-list/entity-list-item/entity-list-item';
 import '@/components/list-sort/list-sort';
 import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';

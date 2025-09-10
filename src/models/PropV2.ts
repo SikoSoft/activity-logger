@@ -6,6 +6,7 @@ import {
   TextControl,
 } from './Control';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PropTypes = Record<string, any>;
 
 export type PropControlType<T> = T extends boolean

@@ -10,7 +10,11 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { addToast } from '@/lib/Util';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
-import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
+import {
+  BulkOperationPayload,
+  operationTypeMsgMap,
+  taggingOperations,
+} from './bulk-manager.models';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
@@ -87,7 +91,7 @@ export class BulkManager extends MobxLitElement {
   }
 
   private async handlePerformOperation() {
-    await api.post<any, BulkOperation>('operation', {
+    await api.post<BulkOperationPayload, BulkOperation>('operation', {
       operation: { tags: this.tags, type: this.operationType },
       actions: this.state.selectedActions,
     });

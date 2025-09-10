@@ -24,7 +24,7 @@ const storageDelegates: StorageSchema[] = [networkStorage];
 
 function delegateSource() {
   return function (
-    target: any,
+    _target: unknown,
     propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {

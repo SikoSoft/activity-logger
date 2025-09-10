@@ -23,7 +23,7 @@ export interface TextControl {
 
 export interface SelectControl {
   type: ControlType.SELECT;
-  options: any[];
+  options: string[];
 }
 
 export interface HiddenControl {

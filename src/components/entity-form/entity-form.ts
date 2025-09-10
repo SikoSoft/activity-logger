@@ -45,14 +45,6 @@ import entitiesJson from 'api-spec/mock/entities';
 
 const entities = entitiesJson as unknown as EntityConfig[];
 
-const tagHash = (tags: string[]): string => {
-  return tags
-    .map(tag => tag.toLowerCase().trim())
-    .sort()
-    .join(',')
-    .replace(/[^a-z0-9,]/g, '');
-};
-
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
   private state = appState;
@@ -378,7 +370,7 @@ export class EntityForm extends ViewElement {
     this.syncSuggestions(reset);
   }
 
-  private handleDescSubmitted(e: CustomEvent) {
+  private handleDescSubmitted(_e: CustomEvent) {
     this.saveAction();
   }
 
@@ -386,15 +378,15 @@ export class EntityForm extends ViewElement {
     this.occurredAt = e.detail.value;
   }
 
-  private handleOccurredAtSubmitted(e: CustomEvent) {
+  private handleOccurredAtSubmitted(_e: CustomEvent) {
     this.saveAction();
   }
 
-  private handleSaveClick(e: CustomEvent) {
+  private handleSaveClick(_e: CustomEvent) {
     this.saveAction();
   }
 
-  private handleDeleteClick(e: CustomEvent) {
+  private handleDeleteClick(_e: CustomEvent) {
     this.confirmModalShown = true;
   }
 
