@@ -167,7 +167,6 @@ export class PropertyConfigForm extends LitElement {
   }
 
   async save() {
-    console.log('Saving property config', this.propertyConfig);
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,

@@ -335,7 +335,6 @@ export class AppState {
 
   @action
   setEntityConfigs(entityConfigs: EntityConfig[]) {
-    console.log('setEntityConfigs', entityConfigs);
     this.entityConfigs = entityConfigs;
   }
 

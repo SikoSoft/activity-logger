@@ -123,8 +123,6 @@ export class EntityConfigForm extends LitElement {
   }
 
   addPropertyToTop() {
-    console.log({ defaultEntityPropertyConfig });
-
     const entityPropertyConfig = produce(
       defaultEntityPropertyConfig,
       draft => draft,
@@ -137,7 +135,6 @@ export class EntityConfigForm extends LitElement {
   }
 
   addPropertyToBottom() {
-    console.log({ defaultEntityPropertyConfig });
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties.push(defaultEntityPropertyConfig);
     });

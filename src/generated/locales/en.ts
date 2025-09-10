@@ -6,7 +6,6 @@ import { str } from '@lit/localize';
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-console.log('in en.ts');
 export const templates = {
   s08d36fa7e8481d27: `description`,
   s1e48db0212fba0bd: `range`,

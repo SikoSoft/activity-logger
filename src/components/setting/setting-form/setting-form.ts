@@ -24,7 +24,7 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import '@/components/setting/boolean-setting/boolean-setting';
 import '@/components/setting/number-setting/number-setting';
 import '@/components/setting/select-setting/select-setting';
-import '@/components/setting/text-setting/text-setting';
+import '@/components/setting/text-setting/text-sddetting';
 
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 

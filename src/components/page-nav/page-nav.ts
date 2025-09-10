@@ -80,7 +80,6 @@ export class PageNav extends MobxLitElement {
     const version = e.detail.value as Version;
     this.state.setVersion(version);
     storage.saveVersion(version);
-    console.log('set version', version);
   }
 
   render() {

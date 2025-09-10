@@ -150,7 +150,6 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
-    console.log('Entity config for type:', this.type);
     return entities.find(entity => entity.id === this.type);
   }
 
@@ -287,9 +286,6 @@ export class EntityForm extends ViewElement {
       !this.lastInput.action.hadResults &&
       this.desc.startsWith(this.lastInput.action.value)
     ) {
-      console.log(
-        'Skipping action suggestions request due to no results and matching prefix',
-      );
       this.state.setActionSuggestions([]);
       return;
     }
@@ -330,11 +326,6 @@ export class EntityForm extends ViewElement {
 
     const initialDesc = this.desc;
 
-    console.log(
-      'requestTagSuggestions:',
-      initialDesc,
-      this.tagSuggestionsEnabled,
-    );
     if (initialDesc.length === 0 || !this.tagSuggestionsEnabled) {
       this.state.setTagSuggestions([]);
       return;
@@ -351,13 +342,7 @@ export class EntityForm extends ViewElement {
         suggestions = result.response.suggestions;
       }
 
-      console.log('Tag suggestions retrieved:', suggestions);
-      console.log('initial desc', initialDesc, 'desc when done:', this.desc);
-
       if (initialDesc !== this.desc) {
-        console.log(
-          'Initial desc does not match current desc, skipping update',
-        );
         return;
       }
 
@@ -414,14 +399,8 @@ export class EntityForm extends ViewElement {
   }
 
   private handleTagsUpdated(e: TagsUpdatedEvent) {
-    console.log('Tags updated:', e.detail.tags);
     this.tags = e.detail.tags;
 
-    const newSuggestions = this.state.tagSuggestions.filter(suggestion =>
-      this.tags.includes(suggestion),
-    );
-
-    console.log('New tag suggestions:', newSuggestions);
     this.state.setTagSuggestions(
       this.state.tagSuggestions.filter(suggestion =>
         this.tags.includes(suggestion),
@@ -430,7 +409,6 @@ export class EntityForm extends ViewElement {
   }
 
   private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
-    console.log('handleTagSuggestionsRequested:', e.detail.value);
     const value = e.detail.value;
     if (
       (!this.lastInput.tag.hadResults &&
@@ -465,7 +443,6 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {
-    console.log('Property updated:', e.detail);
     const updatedProperty = e.detail;
     const existingIndex = this.properties.findIndex(
       property => property.propertyId === updatedProperty.propertyId,

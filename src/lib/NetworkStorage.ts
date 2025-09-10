@@ -113,7 +113,6 @@ export class NetworkStorage implements StorageSchema {
     entityConfigId: number,
     id: number,
   ): Promise<boolean> {
-    console.log('Deleting property config', id);
     const result = await api.delete<null>(
       `propertyConfig/${entityConfigId}/${id}`,
     );
@@ -128,7 +127,6 @@ export class NetworkStorage implements StorageSchema {
   async addPropertyConfig(
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
-    console.log('Adding property config', propertyConfig);
     const { id, entityConfigId, ...payload } = propertyConfig;
 
     const result = await api.post<
@@ -146,7 +144,6 @@ export class NetworkStorage implements StorageSchema {
   async updatePropertyConfig(
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
-    console.log('Updating property config', propertyConfig);
     const { id, entityConfigId, ...payload } = propertyConfig;
     const result = await api.put<
       Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,

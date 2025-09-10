@@ -268,9 +268,6 @@ export class ActionForm extends ViewElement {
       !this.lastInput.action.hadResults &&
       this.desc.startsWith(this.lastInput.action.value)
     ) {
-      console.log(
-        'Skipping action suggestions request due to no results and matching prefix',
-      );
       this.state.setActionSuggestions([]);
       return;
     }
@@ -328,9 +325,6 @@ export class ActionForm extends ViewElement {
       }
 
       if (initialDesc !== this.desc) {
-        console.log(
-          'Initial desc does not match current desc, skipping update',
-        );
         return;
       }
 

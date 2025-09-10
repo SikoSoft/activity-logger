@@ -145,13 +145,6 @@ export class ListConfig extends MobxLitElement {
   }
 
   @state() get carouselStyles(): CSSResult[] {
-    /*
-    console.log(
-      'carouselStyles',
-      this.state.editListConfigMode,
-      this.setListConfigId,
-    );
-    */
     const styles: CSSResult[] = [this.defaultModeStyles];
     if (this.state.editListConfigMode) {
       styles.push(this.editModeStyles);
@@ -161,14 +154,6 @@ export class ListConfig extends MobxLitElement {
     }
     return styles;
   }
-
-  /*
-  @state() get navigationIndex(): number {
-    return this.state.listConfigs.findIndex(
-      config => config.id === this.state.listConfig.id,
-    );
-  }
-    */
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -278,7 +263,6 @@ export class ListConfig extends MobxLitElement {
                   <div
                     class="close"
                     @click=${(e: MouseEvent) => {
-                      console.log('close');
                       this.state.setSelectListConfigMode(false);
                       this.state.setEditListConfigMode(false);
                       e.stopPropagation();
