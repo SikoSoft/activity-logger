@@ -97,11 +97,11 @@ export class ActivityLogger extends MobxLitElement {
     storage.saveView(this.view);
   }
 
-  private handleOperationPerformed(e: OperationPerformedEvent) {
+  private handleOperationPerformed(_e: OperationPerformedEvent) {
     this.viewComponent.sync(false);
   }
 
-  private handleListConfigChanged(e: ListConfigChangedEvent) {
+  private handleListConfigChanged(_e: ListConfigChangedEvent) {
     this.viewComponent.sync(true);
   }
 

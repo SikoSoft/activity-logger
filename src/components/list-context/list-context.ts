@@ -70,7 +70,7 @@ export class ListContext extends MobxLitElement {
     return quantityMap[this.state.listContext.unit];
   }
 
-  private _handleToggleEnabled(e: InputEvent) {
+  private _handleToggleEnabled(_e: InputEvent) {
     const mode = !this.state.listContextMode;
     this.state.setListContextMode(mode);
     storage.saveListContextMode(mode);

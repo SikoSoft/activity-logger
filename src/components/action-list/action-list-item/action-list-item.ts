@@ -122,11 +122,9 @@ export class ActionListItem extends LitElement {
 
   private handleTouchStart(e: TouchEvent) {
     return;
-    console.log('touchstart');
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
-      console.log('in timeout');
       const time = new Date();
       if (time.getTime() - this.pointerDown.getTime() > holdThreshold) {
         this.dispatchEvent(new PointerLongPressEvent({ time }));

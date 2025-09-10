@@ -67,7 +67,7 @@ export class AccountForm extends LitElement {
     this[fieldName] = e.detail.value;
   }
 
-  private handleFieldSubmitted(e: InputSubmittedEvent): void {
+  private handleFieldSubmitted(_e: InputSubmittedEvent): void {
     this.save();
   }
 

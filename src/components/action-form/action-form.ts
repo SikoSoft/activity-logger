@@ -360,7 +360,7 @@ export class ActionForm extends ViewElement {
     this.syncSuggestions(reset);
   }
 
-  private handleDescSubmitted(e: CustomEvent) {
+  private handleDescSubmitted(_e: CustomEvent) {
     this.saveAction();
   }
 
@@ -368,15 +368,15 @@ export class ActionForm extends ViewElement {
     this.occurredAt = e.detail.value;
   }
 
-  private handleOccurredAtSubmitted(e: CustomEvent) {
+  private handleOccurredAtSubmitted(_e: CustomEvent) {
     this.saveAction();
   }
 
-  private handleSaveClick(e: CustomEvent) {
+  private handleSaveClick(_e: CustomEvent) {
     this.saveAction();
   }
 
-  private handleDeleteClick(e: CustomEvent) {
+  private handleDeleteClick(_e: CustomEvent) {
     this.confirmModalShown = true;
   }
 

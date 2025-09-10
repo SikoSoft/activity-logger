@@ -28,8 +28,6 @@ import { ListContextUpdatedEvent } from '@/components/list-context/list-context.
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
-import '@/components/action-list/action-list-item/action-list-item';
-import '@/components/list-filter/list-filter';
 import '@/components/list-sort/list-sort';
 import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
@@ -109,7 +107,7 @@ export class ActionList extends ViewElement {
   }
 
   get lazyLoaderIsVisible(): boolean {
-    var rect = this.lazyLoader.getBoundingClientRect();
+    const rect = this.lazyLoader.getBoundingClientRect();
     const docHeight =
       window.innerHeight || document.documentElement.clientHeight;
     return rect.bottom <= docHeight;
@@ -261,20 +259,20 @@ export class ActionList extends ViewElement {
     }
   }
 
-  private handleFilterUpdated(e: ListFilterUpdatedEvent) {
+  private handleFilterUpdated(_e: ListFilterUpdatedEvent) {
     this.filterIsOpen = false;
     this.load();
   }
 
-  private handleSortUpdated(e: ListSortUpdatedEvent) {
+  private handleSortUpdated(_e: ListSortUpdatedEvent) {
     this.load();
   }
 
-  private handleSettingUpdated(e: CustomEvent) {
+  private handleSettingUpdated(_e: CustomEvent) {
     this.load();
   }
 
-  private handleContextUpdated(e: ListContextUpdatedEvent) {
+  private handleContextUpdated(_e: ListContextUpdatedEvent) {
     this.load();
   }
 

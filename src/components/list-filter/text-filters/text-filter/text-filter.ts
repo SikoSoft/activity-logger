@@ -64,7 +64,7 @@ export class TextFilter extends LitElement {
     );
   }
 
-  private handleSubStrSubmitted(e: InputChangedEvent) {
+  private handleSubStrSubmitted(_e: InputChangedEvent) {
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 

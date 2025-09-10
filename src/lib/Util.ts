@@ -1,6 +1,5 @@
 import { NotificationProvider } from '@ss/ui/components/notification-provider';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
-import '@ss/ui/components/notification-provider';
 
 let notificationProvider: NotificationProvider | null = null;
 
