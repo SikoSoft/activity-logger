@@ -3,7 +3,7 @@ export class Debouncer {
 
   constructor(private wait: number = 300) {}
 
-  debounce<T extends (...args: any[]) => any>(
+  debounce<T extends (...args: unknown[]) => unknown>(
     func: T,
     ...args: Parameters<T>
   ): void {

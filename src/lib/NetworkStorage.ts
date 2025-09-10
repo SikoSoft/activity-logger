@@ -127,7 +127,11 @@ export class NetworkStorage implements StorageSchema {
   async addPropertyConfig(
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
-    const { id, entityConfigId, ...payload } = propertyConfig;
+    const {
+      id: _id,
+      entityConfigId: entityConfigId,
+      ...payload
+    } = propertyConfig;
 
     const result = await api.post<
       Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,

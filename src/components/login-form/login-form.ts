@@ -1,6 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
@@ -42,7 +42,7 @@ export class LoginForm extends MobxLitElement {
     this.username = e.detail.value;
   }
 
-  private handleUsernameSubmitted(e: InputSubmittedEvent): void {
+  private handleUsernameSubmitted(_e: InputSubmittedEvent): void {
     this.login();
   }
 
@@ -50,7 +50,7 @@ export class LoginForm extends MobxLitElement {
     this.password = e.detail.value;
   }
 
-  private handlePasswordSubmitted(e: InputSubmittedEvent): void {
+  private handlePasswordSubmitted(_e: InputSubmittedEvent): void {
     this.login();
   }
 

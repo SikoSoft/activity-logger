@@ -47,7 +47,7 @@ export class TextFilters extends LitElement {
       return;
     }
 
-    let filters = this.filters.map((filter, index) =>
+    const filters = this.filters.map((filter, index) =>
       index === textFilter.index
         ? { type: textFilter.type, subStr: textFilter.subStr }
         : filter,
@@ -60,7 +60,7 @@ export class TextFilters extends LitElement {
   }
 
   private handleSave(e: TextFilterSaveEvent) {
-    let filters: TextContext[] =
+    const filters: TextContext[] =
       e.detail.index === -1
         ? [...this.filters, this.newFilter]
         : [...this.filters.filter((filter, i) => i !== e.detail.index)];

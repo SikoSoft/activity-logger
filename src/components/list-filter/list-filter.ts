@@ -150,7 +150,7 @@ export class ListFilter extends MobxLitElement {
     this.savedFilters = storage.getSavedFilters();
   }
 
-  sync(reset: boolean = false): void {
+  sync(_reset: boolean = false): void {
     Object.values(ListFilterType).forEach(type => {
       this[type] = this.state.listFilter.tagging[type];
     });
@@ -177,7 +177,7 @@ export class ListFilter extends MobxLitElement {
     this.includeAllTagging = !this.includeAllTagging;
   }
 
-  private handleUpdateClick(e: CustomEvent): void {
+  private handleUpdateClick(_e: CustomEvent): void {
     this.state.setListFilter(this.filter);
 
     storage.saveActiveFilter(this.state.listFilter);
@@ -201,7 +201,7 @@ export class ListFilter extends MobxLitElement {
     addToast(msg('Filter saved!'), NotificationType.SUCCESS);
   }
 
-  private async handleSaveClick(e: CustomEvent): Promise<void> {
+  private async handleSaveClick(_e: CustomEvent): Promise<void> {
     await this.saveFilter();
   }
 
@@ -209,11 +209,11 @@ export class ListFilter extends MobxLitElement {
     this.filterName = e.detail.value;
   }
 
-  private handleFilterNameSubmitted(e: CustomEvent): void {
+  private handleFilterNameSubmitted(_e: CustomEvent): void {
     this.saveFilter();
   }
 
-  private handleSavedFilterChanged(e: Event) {
+  private handleSavedFilterChanged(_e: Event) {
     this.selectedSavedFilter = this.savedFiltersInput.value;
     const savedFilter = this.savedFilters.find(
       savedFilter => savedFilter.id === this.savedFiltersInput.value,
@@ -231,7 +231,7 @@ export class ListFilter extends MobxLitElement {
     }
   }
 
-  private handleDeleteSavedFilterClick(e: Event) {
+  private handleDeleteSavedFilterClick(_e: Event) {
     if (this.savedFiltersInput.value) {
       storage.deleteSavedFilter(this.savedFiltersInput.value);
       this.savedFiltersInput.value = '';

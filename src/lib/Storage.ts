@@ -332,7 +332,10 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async saveSetting(listConfigId: string, setting: Setting): Promise<boolean> {
+  async saveSetting(
+    _listConfigId: string,
+    _setting: Setting,
+  ): Promise<boolean> {
     return Promise.resolve(true);
   }
 
@@ -359,12 +362,12 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async addEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+  async addEntityConfig(_entityConfig: EntityConfig): Promise<boolean> {
     return Promise.resolve(true);
   }
 
   @delegateSource()
-  async updateEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+  async updateEntityConfig(_entityConfig: EntityConfig): Promise<boolean> {
     return Promise.resolve(true);
   }
 
@@ -374,28 +377,28 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async deleteEntityConfig(id: number): Promise<boolean> {
+  async deleteEntityConfig(_id: number): Promise<boolean> {
     return Promise.resolve(true);
   }
 
   @delegateSource()
   async deletePropertyConfig(
-    entityConfigId: number,
-    id: number,
+    _entityConfigId: number,
+    _id: number,
   ): Promise<boolean> {
     return Promise.resolve(true);
   }
 
   @delegateSource()
   async addPropertyConfig(
-    propertyConfig: EntityPropertyConfig,
+    _propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
     return Promise.resolve(null);
   }
 
   @delegateSource()
   async updatePropertyConfig(
-    propertyConfig: EntityPropertyConfig,
+    _propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
     return Promise.resolve(null);
   }
