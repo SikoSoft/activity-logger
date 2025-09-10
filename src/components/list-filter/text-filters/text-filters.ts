@@ -4,6 +4,11 @@ import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
 
 import { TextContext, TextType } from 'api-spec/models/List';
+import {
+  TextFiltersProp,
+  textFiltersProps,
+  TextFiltersProps,
+} from './text-filters.models';
 
 import { TextFiltersUpdatedEvent } from './text-filters.events';
 import {
@@ -14,11 +19,6 @@ import {
 import '@/components/list-filter/text-filters/text-filter/text-filter';
 
 import { theme } from '@/styles/theme';
-import {
-  TextFiltersProp,
-  textFiltersProps,
-  TextFiltersProps,
-} from './text-filters.models';
 
 @customElement('text-filters')
 export class TextFilters extends LitElement {

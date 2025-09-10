@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import '@/components/login-form/login-form';

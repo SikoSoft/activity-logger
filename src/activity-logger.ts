@@ -2,10 +2,13 @@ import { html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
+import { ListFilterType } from 'api-spec/models/List';
 import { PageView, defaultPageView } from '@/models/Page';
 import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
+import { api } from '@/lib/Api';
+import { Version } from '@/models/Version';
 
 import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
@@ -22,9 +25,6 @@ import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
 
 import { theme } from './styles/theme';
-import { api } from './lib/Api';
-import { ListFilterType } from 'api-spec/models/List';
-import { Version } from './models/Version';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;

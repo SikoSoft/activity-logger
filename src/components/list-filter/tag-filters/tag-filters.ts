@@ -2,21 +2,20 @@ import { html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ListFilterType } from 'api-spec/models/List';
-
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { api } from '@/lib/Api';
+import { appState } from '@/state';
 
 import {
   FilterTagsUpdatedEvent,
   IncludeUntaggedUpdatedEvent,
 } from '@/lib/Event';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import '@ss/ui/components/tag-manager';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { appState } from '@/state';
-import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),

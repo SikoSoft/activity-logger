@@ -2,17 +2,19 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { localized } from '@lit/localize';
 
-import { theme } from '@/styles/theme';
-
-import '@ss/ui/components/ss-input';
-import '@ss/ui/components/ss-toggle';
 import {
   NumberSettingProp,
   numberSettingProps,
   NumberSettingProps,
 } from './number-setting.models';
+
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
+
+import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-toggle';
+
+import { theme } from '@/styles/theme';
 
 @customElement('number-setting')
 @localized()

@@ -1,7 +1,8 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
 import {
   Setting,
@@ -9,8 +10,16 @@ import {
   ControlType,
   SettingConfig,
 } from 'api-spec/models/Setting';
-
+import { appState } from '@/state';
+import { addToast } from '@/lib/Util';
+import { Debouncer } from '@/lib/Debouncer';
 import { storage } from '@/lib/Storage';
+import {
+  SettingFormProp,
+  settingFormProps,
+  SettingFormProps,
+} from './setting-form.models';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import '@/components/setting/boolean-setting/boolean-setting';
 import '@/components/setting/number-setting/number-setting';
@@ -18,16 +27,6 @@ import '@/components/setting/select-setting/select-setting';
 import '@/components/setting/text-setting/text-setting';
 
 import { SettingUpdatedEvent } from '@/events/setting-updated';
-import {
-  SettingFormProp,
-  settingFormProps,
-  SettingFormProps,
-} from './setting-form.models';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '@/state';
-import { addToast } from '@/lib/Util';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
-import { Debouncer } from '@/lib/Debouncer';
 
 @customElement('setting-form')
 @localized()

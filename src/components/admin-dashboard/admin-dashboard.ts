@@ -1,17 +1,18 @@
 import { html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { toJS } from 'mobx';
+
 import {
   AdminDashboardProps,
   adminDashboardProps,
 } from './admin-dashboard.models';
+import { storage } from '@/lib/Storage';
+import { appState } from '@/state';
 
 import '@/components/entity-config-form/entity-config-form';
 
 import { theme } from '@/styles/theme';
-import { storage } from '@/lib/Storage';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '@/state';
-import { toJS } from 'mobx';
 
 @customElement('admin-dashboard')
 export class AdminDashboard extends MobxLitElement {

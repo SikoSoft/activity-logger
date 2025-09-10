@@ -16,6 +16,20 @@ Typescript because d'uh.
 
 Components try to follow a consistent pattern of residing in a directory which carries the same name they do. File names for components are kebab-case, in order to be consistent with their related HTML tag names. Models, interfaces and descriptive data structures are in .models.ts files, while custom events are in .events.ts files. In a few of the more rare cases, there will also be some Storybook stories, which are in .stories.ts files.
 
+#### Import convention
+
+Imports are divided into a few conceptual areas, and ordered based on this distinction.
+
+The order is as follows:
+
+- third party libraries
+- first party models/classes/interfaces
+- first party events
+- first party components
+- first party styles
+
+Perhaps should consider having a limit on maximum number of imports in a single file. It feels as though extreme importing (arguably 20+) likely is an indicator that some component should be broken up.
+
 ### UI Library
 
 Some components I frequently use here are coming from another library I maintain; creatively called [@ss/ui](https://github.com/SikoSoft/ui). (thank you!)

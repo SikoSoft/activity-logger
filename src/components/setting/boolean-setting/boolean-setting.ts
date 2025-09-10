@@ -2,16 +2,18 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { localized } from '@lit/localize';
 
-import { theme } from '@/styles/theme';
-
-import '@ss/ui/components/ss-toggle';
 import {
   BooleanSettingProp,
   booleanSettingProps,
   BooleanSettingProps,
 } from './boolean-setting.models';
+
 import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
+
+import '@ss/ui/components/ss-toggle';
+
+import { theme } from '@/styles/theme';
 
 @customElement('boolean-setting')
 @localized()

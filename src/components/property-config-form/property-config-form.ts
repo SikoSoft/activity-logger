@@ -5,26 +5,27 @@ import {
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { produce } from 'immer';
+
+import { ControlType, SelectControl } from '@/models/Control';
+import { storage } from '@/lib/Storage';
+import { addToast } from '@/lib/Util';
 import {
   PropertyConfigFormProp,
   propertyConfigFormProps,
   PropertyConfigFormProps,
 } from './property-config-form.models';
-import { produce } from 'immer';
+
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import {
   PropertyConfigAddedEvent,
   PropertyConfigDeletedEvent,
   PropertyConfigUpdatedEvent,
 } from './property-config-form.events';
-import { ControlType, SelectControl } from '@/models/Control';
-
-import { storage } from '@/lib/Storage';
 
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/confirmation-modal';
-import { addToast } from '@/lib/Util';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {

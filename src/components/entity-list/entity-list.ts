@@ -3,16 +3,18 @@ import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
 
+import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import {
   ListContextType,
   ListSortDirection,
   ListSortProperty,
 } from 'api-spec/models/List';
-
+import { EntityItem } from 'api-spec/models/Entity';
 import { ActionItem } from '@/models/Action';
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
+import { ViewElement } from '@/lib/ViewElement';
 
 import { ListSortUpdatedEvent } from '@/components/list-sort/list-sort.events';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
@@ -23,16 +25,11 @@ import {
   ActionItemUpdatedEvent,
 } from '@/components/action-form/action-form.events';
 import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
-
-import { ViewElement } from '@/lib/ViewElement';
+import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
-import {
-  EntityListItem,
-  EntityListItemMode,
-} from './entity-list-item/entity-list-item';
 import '@/components/entity-list/entity-list-item/entity-list-item';
 import '@/components/list-filter/list-filter';
 import '@/components/list-sort/list-sort';
@@ -40,10 +37,12 @@ import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
 import '@/components/setting/setting-form/setting-form';
 import { ListFilter } from '@/components/list-filter/list-filter';
-import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
-import { PaginationType, SettingName } from 'api-spec/models/Setting';
+import {
+  EntityListItem,
+  EntityListItemMode,
+} from './entity-list-item/entity-list-item';
+
 import { defaultProperties } from '@/mock/entity-config';
-import { EntityItem } from 'api-spec/models/Entity';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {

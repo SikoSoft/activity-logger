@@ -1,17 +1,19 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
+import { localized } from '@lit/localize';
 
-import { theme } from '@/styles/theme';
-
-import '@ss/ui/components/ss-select';
 import {
   SelectSettingProp,
   selectSettingProps,
   SelectSettingProps,
 } from './select-setting.models';
+
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
+
+import '@ss/ui/components/ss-select';
+
+import { theme } from '@/styles/theme';
 
 @customElement('select-setting')
 @localized()

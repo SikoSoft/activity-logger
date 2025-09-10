@@ -3,21 +3,11 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
 
+import { ListFilterType } from 'api-spec/models/List';
 import { appState } from '@/state';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
-
-import { ViewElement } from '@/lib/ViewElement';
-
-import '@ss/ui/components/ss-button';
-import '@ss/ui/components/ss-input';
-import '@ss/ui/components/ss-select';
-import '@/components/confirm-modal/confirm-modal';
-import '@ss/ui/components/tag-manager';
-
-import { theme } from '@/styles/theme';
-import { ListFilterType } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
 import {
   ActionFormProp,
@@ -27,6 +17,14 @@ import {
   SuggestionInputType,
   SuggestionLastInput,
 } from './action-form.models';
+import { ViewElement } from '@/lib/ViewElement';
+
+import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
+import '@ss/ui/components/tag-manager';
+import '@/components/confirm-modal/confirm-modal';
+
 import {
   ActionItemCanceledEvent,
   ActionItemDeletedEvent,
@@ -38,6 +36,8 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
+
+import { theme } from '@/styles/theme';
 
 @customElement('action-form')
 export class ActionForm extends ViewElement {

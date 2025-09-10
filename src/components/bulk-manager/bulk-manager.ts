@@ -3,26 +3,25 @@ import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg, str } from '@lit/localize';
+import { repeat } from 'lit/directives/repeat.js';
 
 import { BulkOperation, OperationType } from 'api-spec/models/Operation';
-
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { addToast } from '@/lib/Util';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
+import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { OperationPerformedEvent } from './bulk-manager.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/tag-manager';
 
 import { theme } from '@/styles/theme';
-import { operationTypeMsgMap, taggingOperations } from './bulk-manager.models';
-import { addToast } from '@/lib/Util';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
-import { repeat } from 'lit/directives/repeat.js';
-import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {

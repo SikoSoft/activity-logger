@@ -3,14 +3,15 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
 import { Time } from '@/lib/Time';
-import { PointerDownEvent } from '@/events/pointer-down';
-import { PointerUpEvent } from '@/events/pointer-up';
-import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import {
   ActionListItemProp,
   actionListItemProps,
   ActionListItemProps,
 } from './action-list-item.models';
+
+import { PointerDownEvent } from '@/events/pointer-down';
+import { PointerUpEvent } from '@/events/pointer-up';
+import { PointerLongPressEvent } from '@/events/pointer-long-press';
 
 export enum ActionListItemMode {
   VIEW = 'view',

@@ -1,5 +1,3 @@
-import { PropConfigMap, PropTypes } from '@/models/Prop';
-
 export enum AccountFormField {
   USERNAME = 'username',
   PASSWORD = 'password',

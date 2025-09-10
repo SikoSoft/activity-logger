@@ -1,5 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
+import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
+import { EntityItem, EntityConfig } from 'api-spec/models/Entity';
 import {
   ListFilter,
   ListFilterType,
@@ -13,12 +15,8 @@ import {
   ListContextType,
   ListContextUnit,
 } from 'api-spec/models/List';
-
 import { ActionItem } from '@/models/Action';
-import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
-import { Version } from './models/Version';
-import { EntityItem } from 'api-spec/models/Entity';
-import { EntityConfig } from 'api-spec/models/Entity';
+import { Version } from '@/models/Version';
 
 export const defaultListFilter: ListFilter = {
   tagging: {

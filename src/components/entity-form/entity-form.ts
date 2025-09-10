@@ -2,22 +2,16 @@ import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
+import { repeat } from 'lit/directives/repeat.js';
 
+import { ListFilterType } from 'api-spec/models/List';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
+import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
-
 import { ViewElement } from '@/lib/ViewElement';
-
-import '@ss/ui/components/ss-button';
-import '@ss/ui/components/ss-input';
-import '@ss/ui/components/ss-select';
-import '@/components/confirm-modal/confirm-modal';
-import '@ss/ui/components/tag-manager';
-
-import { theme } from '@/styles/theme';
-import { ListFilterType } from 'api-spec/models/List';
 import {
   EntityFormProp,
   entityFormProps,
@@ -26,6 +20,15 @@ import {
   SuggestionInputType,
   SuggestionLastInput,
 } from './entity-form.models';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
+
+import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
+import '@ss/ui/components/tag-manager';
+import '@/components/confirm-modal/confirm-modal';
+
 import {
   EntityItemCanceledEvent,
   EntityItemDeletedEvent,
@@ -33,15 +36,12 @@ import {
   ItemPropertyUpdatedEvent,
 } from './entity-form.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
-import { addToast } from '@/lib/Util';
-import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
-import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+
+import { theme } from '@/styles/theme';
 
 import entitiesJson from 'api-spec/mock/entities';
-import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 const entities = entitiesJson as unknown as EntityConfig[];
 

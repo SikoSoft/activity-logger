@@ -2,14 +2,6 @@ import { css, html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
-import '@ss/ui/components/ss-button';
-import '@ss/ui/components/ss-input';
-import '@ss/ui/components/ss-select';
-
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
-
-import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import {
   AccountFormField,
@@ -19,7 +11,16 @@ import {
   passwordFields,
 } from './account-form.models';
 import { Input } from '@ss/ui/models';
+
+import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-input';
+import '@ss/ui/components/ss-select';
+
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 import { AccountCreatedEvent } from './account-form.events';
+
+import { theme } from '@/styles/theme';
 
 @customElement('account-form')
 export class AccountForm extends LitElement {

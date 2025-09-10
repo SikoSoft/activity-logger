@@ -4,7 +4,6 @@ import { customElement } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
-
 import { appState } from '@/state';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';

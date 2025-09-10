@@ -14,14 +14,17 @@ import {
 } from 'api-spec/models/List';
 
 import { api } from '@/lib/Api';
-
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 
 import { TimeFiltersUpdatedEvent } from '@/components/list-filter/time-filters/time-filters.events';
 import { TextFiltersUpdatedEvent } from '@/components/list-filter/text-filters/text-filters.events';
 import { ListFilterUpdatedEvent } from './list-filter.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
+import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
@@ -30,10 +33,6 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
-import { addToast } from '@/lib/Util';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
-import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 const filterTypeMsgMap: Record<ListFilterType, string> = {
   [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),

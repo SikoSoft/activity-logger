@@ -2,16 +2,18 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
 
-import { theme } from '@/styles/theme';
-
-import '@ss/ui/components/ss-toggle';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { SettingUpdatedEvent } from '@/events/setting-updated';
 import {
   TextSettingProp,
   TextSettingProps,
   textSettingProps,
 } from './text-setting.models';
+
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { SettingUpdatedEvent } from '@/events/setting-updated';
+
+import '@ss/ui/components/ss-toggle';
+
+import { theme } from '@/styles/theme';
 
 @customElement('text-setting')
 @localized()

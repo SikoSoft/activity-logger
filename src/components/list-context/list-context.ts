@@ -2,22 +2,22 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
+import { classMap } from 'lit/directives/class-map.js';
 
-import { appState } from '@/state';
-
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-
-import '@ss/ui/components/ss-select';
-
-import { theme } from '@/styles/theme';
 import {
   ListContextType,
   ListContextUnit,
   ListContext as ListContextSpec,
 } from 'api-spec/models/List';
-import { classMap } from 'lit/directives/class-map.js';
-import { ListContextUpdatedEvent } from './list-context.events';
 import { storage } from '@/lib/Storage';
+import { appState } from '@/state';
+
+import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { ListContextUpdatedEvent } from './list-context.events';
+
+import '@ss/ui/components/ss-select';
+
+import { theme } from '@/styles/theme';
 
 const quantityMap: Record<ListContextUnit, number[]> = {
   [ListContextUnit.MINUTE]: [

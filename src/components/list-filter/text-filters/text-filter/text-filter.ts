@@ -3,10 +3,13 @@ import { customElement, property } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { TextType } from 'api-spec/models/List';
+import {
+  TextFilterProp,
+  textFilterProps,
+  TextFilterProps,
+} from './text-filter.models';
 
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { theme } from '@/styles/theme';
-
 import {
   TextFilterUpdatedEvent,
   TextFilterSaveEvent,
@@ -14,11 +17,7 @@ import {
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 
-import {
-  TextFilterProp,
-  textFilterProps,
-  TextFilterProps,
-} from './text-filter.models';
+import { theme } from '@/styles/theme';
 
 const textTypeMsgMap: Record<TextType, string> = {
   [TextType.EQUALS]: msg('textType.equals'),

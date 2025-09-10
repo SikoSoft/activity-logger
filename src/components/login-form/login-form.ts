@@ -4,6 +4,11 @@ import { customElement, query, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
+import { api } from '@/lib/Api';
+import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
+import { storage } from '@/lib/Storage';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
@@ -14,11 +19,6 @@ import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 import { UserLoggedInEvent } from '@/events/user-logged-in';
 
 import { theme } from '@/styles/theme';
-import { api } from '@/lib/Api';
-import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
-import { storage } from '@/lib/Storage';
-import { addToast } from '@/lib/Util';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('login-form')
 export class LoginForm extends MobxLitElement {

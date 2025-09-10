@@ -1,15 +1,17 @@
 import { theme } from '@/styles/theme';
 import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+
 import {
   ListPaginatorProp,
   listPaginatorProps,
   ListPaginatorProps,
 } from './list-paginator.models';
 
-import '@ss/ui/components/ss-button';
 import { PageChangedEvent } from './list-paginator.events';
-import { classMap } from 'lit/directives/class-map.js';
+
+import '@ss/ui/components/ss-button';
 
 @customElement('list-paginator')
 export class ListPaginator extends LitElement {

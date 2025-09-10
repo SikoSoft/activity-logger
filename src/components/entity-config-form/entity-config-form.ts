@@ -1,21 +1,15 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
+import { repeat } from 'lit/directives/repeat.js';
+import { produce } from 'immer';
+
 import {
   defaultEntityConfig,
   defaultEntityPropertyConfig,
   EntityConfig,
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
-import { msg } from '@lit/localize';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { storage } from '@/lib/Storage';
-
-import '@/components/property-config-form/property-config-form';
-import {
-  PropertyConfigAddedEvent,
-  PropertyConfigUpdatedEvent,
-} from '../property-config-form/property-config-form.events';
-import { produce } from 'immer';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import {
@@ -23,7 +17,15 @@ import {
   entityConfigFormProps,
   EntityConfigFormProps,
 } from './entity-config-form.models';
-import { repeat } from 'lit/directives/repeat.js';
+import { storage } from '@/lib/Storage';
+
+import {
+  PropertyConfigAddedEvent,
+  PropertyConfigUpdatedEvent,
+} from '@/components/property-config-form/property-config-form.events';
+import { InputChangedEvent } from '@ss/ui/events/input-changed';
+
+import '@/components/property-config-form/property-config-form';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {

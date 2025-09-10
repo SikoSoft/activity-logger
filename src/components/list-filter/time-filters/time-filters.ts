@@ -3,9 +3,13 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
-
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
+import {
+  TimeFiltersProp,
+  timeFiltersProps,
+  TimeFiltersProps,
+} from './time-filters.models';
 
 import { TimeFiltersUpdatedEvent } from './time-filters.events';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
@@ -13,11 +17,6 @@ import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { SSInput } from '@ss/ui/components/ss-input';
 
 import { theme } from '@/styles/theme';
-import {
-  TimeFiltersProp,
-  timeFiltersProps,
-  TimeFiltersProps,
-} from './time-filters.models';
 
 const filterTimeTypeMsgMap: Record<ListFilterTimeType, string> = {
   [ListFilterTimeType.ALL_TIME]: msg('filterTimeType.allTime'),

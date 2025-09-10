@@ -1,15 +1,15 @@
-import { html, css, PropertyValues, nothing } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
+import { html, css, nothing } from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { PageView } from '@/models/Page';
-
-import { theme } from '@/styles/theme';
-import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
-import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { Version } from '@/models/Version';
 import { storage } from '@/lib/Storage';
+import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
+
+import { theme } from '@/styles/theme';
 
 export interface PageViewConfig {
   id: PageView;

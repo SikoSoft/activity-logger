@@ -4,17 +4,18 @@ import { customElement, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
+import { api } from '@/lib/Api';
+import { storage } from '@/lib/Storage';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
+
+import { UserLoggedOutEvent } from '@/events/user-logged-out';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
-import { api } from '@/lib/Api';
-import { storage } from '@/lib/Storage';
-import { UserLoggedOutEvent } from '@/events/user-logged-out';
-import { addToast } from '@/lib/Util';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('user-pane')
 export class UserPane extends MobxLitElement {

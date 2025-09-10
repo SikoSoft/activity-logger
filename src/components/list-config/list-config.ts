@@ -3,8 +3,13 @@ import { css, CSSResult, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { msg } from '@lit/localize';
+import { classMap } from 'lit/directives/class-map.js';
 
 import { appState } from '@/state';
+import { storage } from '@/lib/Storage';
+import { InputType } from '@/models/Input';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-carousel';
@@ -13,14 +18,9 @@ import '@ss/ui/components/ss-select';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { ListConfigChangedEvent } from './list-config.events';
-import { InputType } from '@/models/Input';
-import { storage } from '@/lib/Storage';
+import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
 
 import { theme } from '@/styles/theme';
-import { classMap } from 'lit/directives/class-map.js';
-import { addToast } from '@/lib/Util';
-import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
