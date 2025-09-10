@@ -17,7 +17,7 @@ import {
 import { ActionItem } from '@/models/Action';
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
 import { Version } from './models/Version';
-import { EntityItem } from './models/Entity';
+import { EntityItem } from 'api-spec/models/Entity';
 import { EntityConfig } from 'api-spec/models/Entity';
 
 export const defaultListFilter: ListFilter = {

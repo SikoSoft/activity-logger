@@ -1,4 +1,4 @@
-import { ItemProperty } from '@/models/Entity';
+import { ItemProperty } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum ActionFormProp {

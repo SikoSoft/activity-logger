@@ -1,4 +1,4 @@
-import { Entity } from '@/models/Entity';
+import { Entity } from 'api-spec/models/Entity';
 
 export const entityConfigUpdatedEventName = 'entity-config-updated';
 

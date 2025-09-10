@@ -15,7 +15,6 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@/components/confirm-modal/confirm-modal';
 import '@ss/ui/components/tag-manager';
-import '@/components/mock-entities/item-property-form/item-property-form';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';

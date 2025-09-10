@@ -15,7 +15,6 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@/components/confirm-modal/confirm-modal';
 import '@ss/ui/components/tag-manager';
-import '@/components/mock-entities/item-property-form/item-property-form';
 
 import { theme } from '@/styles/theme';
 import { ListFilterType } from 'api-spec/models/List';
@@ -31,6 +30,7 @@ import {
   EntityItemCanceledEvent,
   EntityItemDeletedEvent,
   EntityItemUpdatedEvent,
+  ItemPropertyUpdatedEvent,
 } from './entity-form.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { addToast } from '@/lib/Util';
@@ -40,18 +40,10 @@ import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import entitiesJson from 'api-spec/mock/entities';
-import propertiesJson from 'api-spec/mock/properties';
-import {
-  EntityConfig,
-  EntityItem,
-  ItemProperty,
-  PropertyConfig,
-} from '@/models/Entity';
+import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { ItemPropertyUpdatedEvent } from '../mock-entities/item-property-form/item-property-form.events';
 
 const entities = entitiesJson as unknown as EntityConfig[];
-const properties = propertiesJson as unknown as PropertyConfig[];
 
 const tagHash = (tags: string[]): string => {
   return tags
@@ -518,10 +510,10 @@ export class EntityForm extends ViewElement {
                 ${this.entityConfig
                   ? repeat(
                       this.entityConfig.properties,
-                      propertyConfig => propertyConfig.propertyId,
+                      propertyConfig => propertyConfig.id,
                       propertyConfig =>
                         html`<item-property-form
-                          propertyId=${propertyConfig.propertyId}
+                          propertyId=${propertyConfig.id}
                         ></item-property-form>`,
                     )
                   : nothing}

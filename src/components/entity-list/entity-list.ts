@@ -43,7 +43,7 @@ import { ListFilter } from '@/components/list-filter/list-filter';
 import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import { defaultProperties } from '@/mock/entity-config';
-import { EntityItem } from '@/models/Entity';
+import { EntityItem } from 'api-spec/models/Entity';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {
