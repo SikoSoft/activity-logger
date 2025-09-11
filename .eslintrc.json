@@ -42,6 +42,7 @@
     "import/no-absolute-path": "error",
     "import/no-self-import": "error",
     "import/no-cycle": "warn",
+    "import/no-duplicates": "off",
 
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "prefer-const": "warn",
