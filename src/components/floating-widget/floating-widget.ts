@@ -8,7 +8,7 @@ import { msg } from '@lit/localize';
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 
-import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
+import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 
 import '@ss/ui/components/ss-toggle';
 import '@/components/user-pane/user-pane';

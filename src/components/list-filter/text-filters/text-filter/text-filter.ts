@@ -9,13 +9,15 @@ import {
   TextFilterProps,
 } from './text-filter.models';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import {
   TextFilterUpdatedEvent,
   TextFilterSaveEvent,
 } from './text-filter.events';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
+import {
+  InputChangedEvent,
+  InputSubmittedEvent,
+} from '@ss/ui/components/ss-input.events';
 
 import { theme } from '@/styles/theme';
 

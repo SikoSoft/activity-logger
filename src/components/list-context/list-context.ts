@@ -12,7 +12,7 @@ import {
 import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { ListContextUpdatedEvent } from './list-context.events';
 
 import '@ss/ui/components/ss-select';

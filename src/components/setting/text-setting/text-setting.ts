@@ -8,7 +8,7 @@ import {
   textSettingProps,
 } from './text-setting.models';
 
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-toggle';

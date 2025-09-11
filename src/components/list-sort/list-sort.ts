@@ -6,7 +6,7 @@ import { localized, msg } from '@lit/localize';
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { appState } from '@/state';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { ListSortUpdatedEvent } from './list-sort.events';
 
 import '@ss/ui/components/ss-select';

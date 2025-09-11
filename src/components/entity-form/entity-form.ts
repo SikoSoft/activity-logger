@@ -44,7 +44,7 @@ import {
 } from './entity-form.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 import { theme } from '@/styles/theme';
 
@@ -440,6 +440,7 @@ export class EntityForm extends ViewElement {
       case DataType.LONG_TEXT:
         return html`<text-field
           .propertyConfig=${propertyConfig}
+          @property-changed=${this.handlePropertyChanged}
         ></text-field>`;
       case DataType.INT:
         return html`<number-field

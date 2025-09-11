@@ -16,7 +16,7 @@ import {
   PropertyConfigFormProps,
 } from './property-config-form.models';
 
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   PropertyConfigAddedEvent,
   PropertyConfigDeletedEvent,

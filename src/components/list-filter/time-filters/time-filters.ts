@@ -12,7 +12,7 @@ import {
 } from './time-filters.models';
 
 import { TimeFiltersUpdatedEvent } from './time-filters.events';
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
 

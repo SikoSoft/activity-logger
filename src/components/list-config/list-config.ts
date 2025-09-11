@@ -15,8 +15,8 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-carousel';
 import '@ss/ui/components/ss-select';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
+import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { ListConfigChangedEvent } from './list-config.events';
 import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
 

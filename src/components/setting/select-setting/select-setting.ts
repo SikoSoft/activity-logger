@@ -8,7 +8,7 @@ import {
   SelectSettingProps,
 } from './select-setting.models';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-select';

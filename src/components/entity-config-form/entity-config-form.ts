@@ -23,7 +23,7 @@ import {
   PropertyConfigAddedEvent,
   PropertyConfigUpdatedEvent,
 } from '@/components/property-config-form/property-config-form.events';
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
+import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 
 import '@/components/property-config-form/property-config-form';
 import '@ss/ui/components/confirmation-modal';

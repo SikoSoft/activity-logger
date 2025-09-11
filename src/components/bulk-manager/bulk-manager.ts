@@ -17,7 +17,7 @@ import {
 } from './bulk-manager.models';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
-import { SelectChangedEvent } from '@ss/ui/events/select-changed';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { OperationPerformedEvent } from './bulk-manager.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';

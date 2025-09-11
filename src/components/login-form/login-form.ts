@@ -14,8 +14,10 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 
-import { InputChangedEvent } from '@ss/ui/events/input-changed';
-import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
+import {
+  InputChangedEvent,
+  InputSubmittedEvent,
+} from '@ss/ui/components/ss-input.events';
 import { UserLoggedInEvent } from '@/events/user-logged-in';
 
 import { theme } from '@/styles/theme';

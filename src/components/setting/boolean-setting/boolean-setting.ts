@@ -8,7 +8,7 @@ import {
   BooleanSettingProps,
 } from './boolean-setting.models';
 
-import { ToggleChangedEvent } from '@ss/ui/events/toggle-changed';
+import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-toggle';
