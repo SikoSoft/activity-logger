@@ -57,6 +57,9 @@ export class EntityConfigForm extends LitElement {
   @state()
   entityConfig: EntityConfig = defaultEntityConfig;
 
+  @state()
+  open: boolean = false;
+
   @property({ type: Number })
   [EntityConfigFormProp.ENTITY_CONFIG_ID]: EntityConfigFormProps[EntityConfigFormProp.ENTITY_CONFIG_ID] =
     entityConfigFormProps[EntityConfigFormProp.ENTITY_CONFIG_ID].default;
@@ -155,71 +158,81 @@ export class EntityConfigForm extends LitElement {
     this.entityConfig = entityConfig;
   }
 
+  toggle() {
+    this.open = !this.open;
+  }
+
   render() {
     return html`
-      <div class="entity-config-form">
-        <div class="field">
-          <label for="entity-name">${msg('Entity Name')}</label>
-          <ss-input
-            id="entity-name"
-            .value=${this.entityConfig.name}
-            @input-changed=${(e: InputChangedEvent) =>
-              this.updateName(e.detail.value)}
-          ></ss-input>
-        </div>
+      <ss-collapsable
+        title=${this.entityConfig.name}
+        ?open=${this.open}
+        @toggled=${this.toggle}
+      >
+        <div class="entity-config-form">
+          <div class="field">
+            <label for="entity-name">${msg('Entity Name')}</label>
+            <ss-input
+              id="entity-name"
+              .value=${this.entityConfig.name}
+              @input-changed=${(e: InputChangedEvent) =>
+                this.updateName(e.detail.value)}
+            ></ss-input>
+          </div>
 
-        <div class="field">
-          <label for="entity-description">${msg('Entity Description')}</label>
-          <ss-input
-            id="entity-description"
-            .value=${this.entityConfig.description}
-            @input-changed=${(e: InputChangedEvent) =>
-              this.updateDescription(e.detail.value)}
-          ></ss-input>
-        </div>
+          <div class="field">
+            <label for="entity-description">${msg('Entity Description')}</label>
+            <ss-input
+              id="entity-description"
+              .value=${this.entityConfig.description}
+              @input-changed=${(e: InputChangedEvent) =>
+                this.updateDescription(e.detail.value)}
+            ></ss-input>
+          </div>
 
-        <div class="buttons">
-          <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
-        </div>
+          <div class="buttons">
+            <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
+          </div>
 
-        <div class="properties">
-          <ss-button @click=${this.addPropertyToTop}
-            >${msg('Add Property')}</ss-button
-          >
+          <div class="properties">
+            <ss-button @click=${this.addPropertyToTop}
+              >${msg('Add Property')}</ss-button
+            >
 
-          ${repeat(
-            this.entityConfig.properties,
-            property => property.id,
-            (property, index) => html`
-              <property-config-form
-                entityConfigId=${this.entityConfig.id}
-                propertConfigId=${property.id}
-                dataType=${property.dataType}
-                renderType=${property.renderType}
-                propertyConfigId=${property.id}
-                name=${property.name}
-                required=${property.required}
-                repeat=${property.repeat}
-                allowed=${property.allowed}
-                prefix=${property.prefix}
-                suffix=${property.suffix}
-                @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
-                  this.updateProperty(index, e.detail)}
-                @property-config-added=${(e: PropertyConfigAddedEvent) =>
-                  this.updateProperty(index, e.detail)}
-                @property-config-deleted=${() => {
-                  this.deleteProperty(index);
-                }}
-              ></property-config-form>
-            `,
-          )}
-          ${this.entityConfig.properties.length > 0
-            ? html` <ss-button @click=${this.addPropertyToBottom}
-                >${msg('Add Property')}</ss-button
-              >`
-            : nothing}
+            ${repeat(
+              this.entityConfig.properties,
+              property => property.id,
+              (property, index) => html`
+                <property-config-form
+                  entityConfigId=${this.entityConfig.id}
+                  propertConfigId=${property.id}
+                  dataType=${property.dataType}
+                  renderType=${property.renderType}
+                  propertyConfigId=${property.id}
+                  name=${property.name}
+                  required=${property.required}
+                  repeat=${property.repeat}
+                  allowed=${property.allowed}
+                  prefix=${property.prefix}
+                  suffix=${property.suffix}
+                  @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
+                    this.updateProperty(index, e.detail)}
+                  @property-config-added=${(e: PropertyConfigAddedEvent) =>
+                    this.updateProperty(index, e.detail)}
+                  @property-config-deleted=${() => {
+                    this.deleteProperty(index);
+                  }}
+                ></property-config-form>
+              `,
+            )}
+            ${this.entityConfig.properties.length > 0
+              ? html` <ss-button @click=${this.addPropertyToBottom}
+                  >${msg('Add Property')}</ss-button
+                >`
+              : nothing}
+          </div>
         </div>
-      </div>
+      </ss-collapsable>
     `;
   }
 }
