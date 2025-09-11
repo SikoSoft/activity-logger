@@ -34,6 +34,8 @@ import '@/components/list-sort/list-sort';
 import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
 import '@/components/setting/setting-form/setting-form';
+import '@/components/entity-list/entity-list-item/entity-list-item';
+import '@/components/list-filter/list-filter';
 import { ListFilter } from '@/components/list-filter/list-filter';
 import {
   EntityListItem,
