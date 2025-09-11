@@ -1,12 +1,12 @@
-export const propertyChangedEventName = 'property-changed';
+export const textPropertyChangedEventName = 'text-property-changed';
 
-export interface PropertyChangedEventPayload {
-  property: string;
-  value: any;
+export interface TextPropertyChangedEventPayload {
+  propertyId: number;
+  value: string;
 }
 
-export class PropertyChangedEvent extends CustomEvent<PropertyChangedEventPayload> {
-  constructor(detail: PropertyChangedEventPayload) {
-    super(propertyChangedEventName, { detail });
+export class TextPropertyChangedEvent extends CustomEvent<TextPropertyChangedEventPayload> {
+  constructor(detail: TextPropertyChangedEventPayload) {
+    super(textPropertyChangedEventName, { detail });
   }
 }

@@ -7,18 +7,22 @@ import {
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { TextPropertyChangedEvent } from './text-field.events';
+import { IntPropertyChangedEvent } from './int-field.events';
 
-@customElement('text-field')
-export class TextField extends LitElement {
+@customElement('int-field')
+export class IntField extends LitElement {
   @property({ type: Object })
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
   protected handleInputChanged(e: InputChangedEvent) {
-    const value = e.detail.value;
+    const value = parseInt(e.detail.value);
+
+    if (isNaN(value)) {
+      return;
+    }
 
     this.dispatchEvent(
-      new TextPropertyChangedEvent({
+      new IntPropertyChangedEvent({
         propertyId: this.propertyConfig.id,
         value,
       }),
@@ -31,7 +35,10 @@ export class TextField extends LitElement {
         <label for=${`property-${this.propertyConfig.id}`}
           >${this.propertyConfig.name}</label
         >
-        <ss-input @input-changed=${this.handleInputChanged}></ss-input>
+        <ss-input
+          type="number"
+          @input-changed=${this.handleInputChanged}
+        ></ss-input>
       </div>
     `;
   }

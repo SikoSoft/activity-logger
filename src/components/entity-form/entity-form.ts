@@ -1,4 +1,4 @@
-import { html, css, nothing, PropertyValues } from 'lit';
+import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
@@ -14,7 +14,6 @@ import {
   ItemProperty,
 } from 'api-spec/models/Entity';
 import { appState } from '@/state';
-import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
 import { ViewElement } from '@/lib/ViewElement';
@@ -35,6 +34,7 @@ import '@ss/ui/components/ss-select';
 import '@ss/ui/components/tag-manager';
 import '@/components/confirm-modal/confirm-modal';
 import '@/components/entity-form/text-field/text-field';
+import '@/components/entity-form/int-field/int-field';
 
 import {
   EntityItemCanceledEvent,
@@ -140,7 +140,6 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
-    console.log('entityConfigs', this.state.entityConfigs);
     return this.state.entityConfigs.find(entity => entity.id === this.type);
   }
 
@@ -433,19 +432,20 @@ export class EntityForm extends ViewElement {
   }
 
   renderPropertyField(propertyConfig: EntityPropertyConfig) {
-    console.log('rendering property field', propertyConfig);
+    //console.log('rendering property field', propertyConfig);
 
     switch (propertyConfig.dataType) {
       case DataType.SHORT_TEXT:
       case DataType.LONG_TEXT:
         return html`<text-field
           .propertyConfig=${propertyConfig}
-          @property-changed=${this.handlePropertyChanged}
+          @text-property-changed=${this.handlePropertyChanged}
         ></text-field>`;
       case DataType.INT:
-        return html`<number-field
+        return html`<int-field
           .propertyConfig=${propertyConfig}
-        ></number-field>`;
+          @int-property-changed=${this.handlePropertyChanged}
+        ></int-field>`;
     }
 
     return nothing;
