@@ -63,6 +63,9 @@ export class ActivityLogger extends MobxLitElement {
         const listConfigs = await storage.getListConfigs();
         this.state.setListConfigs(listConfigs);
 
+        const entityConfigs = await storage.getEntityConfigs();
+        this.state.setEntityConfigs(entityConfigs);
+
         const listConfigId = storage.getActiveListConfigId();
         this.state.setListConfigId(listConfigId);
       }

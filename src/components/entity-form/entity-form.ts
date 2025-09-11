@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, PropertyValues } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
@@ -6,7 +6,13 @@ import { repeat } from 'lit/directives/repeat.js';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
+import {
+  DataType,
+  EntityConfig,
+  EntityItem,
+  EntityPropertyConfig,
+  ItemProperty,
+} from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { InputType } from '@/models/Input';
 import { Time } from '@/lib/Time';
@@ -28,6 +34,7 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/tag-manager';
 import '@/components/confirm-modal/confirm-modal';
+import '@/components/entity-form/text-field/text-field';
 
 import {
   EntityItemCanceledEvent,
@@ -40,10 +47,6 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 import { SelectChangedEvent } from '@ss/ui/events/select-changed';
 
 import { theme } from '@/styles/theme';
-
-import entitiesJson from 'api-spec/mock/entities';
-
-const entities = entitiesJson as unknown as EntityConfig[];
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -73,11 +76,6 @@ export class EntityForm extends ViewElement {
 
       div:last-child {
         margin-top: 1rem;
-      }
-
-      .type,
-      .properties {
-        background-color: #ffeed0;
       }
     `,
   ];
@@ -142,7 +140,8 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
-    return entities.find(entity => entity.id === this.type);
+    console.log('entityConfigs', this.state.entityConfigs);
+    return this.state.entityConfigs.find(entity => entity.id === this.type);
   }
 
   connectedCallback(): void {
@@ -346,17 +345,6 @@ export class EntityForm extends ViewElement {
     }
   }
 
-  private async handleDescChanged(e: CustomEvent) {
-    this.desc = e.detail.value;
-
-    if (this.suggestionTimeout) {
-      clearTimeout(this.suggestionTimeout);
-    }
-    this.suggestionTimeout = setTimeout(() => {
-      this.syncSuggestions();
-    }, 150);
-  }
-
   private syncSuggestions(reset: boolean = false) {
     if (reset) {
       this.state.setTagSuggestions([]);
@@ -368,18 +356,6 @@ export class EntityForm extends ViewElement {
 
   sync(reset: boolean = false) {
     this.syncSuggestions(reset);
-  }
-
-  private handleDescSubmitted(_e: CustomEvent) {
-    this.saveAction();
-  }
-
-  private handleOccurredAtChanged(e: CustomEvent) {
-    this.occurredAt = e.detail.value;
-  }
-
-  private handleOccurredAtSubmitted(_e: CustomEvent) {
-    this.saveAction();
   }
 
   private handleSaveClick(_e: CustomEvent) {
@@ -447,57 +423,71 @@ export class EntityForm extends ViewElement {
     }
   }
 
+  private handlePropertyChanged(e: CustomEvent) {
+    const propertyId = e.detail.id;
+    const value = e.detail.value;
+
+    this.properties = this.properties.map(property =>
+      property.propertyId === propertyId ? { ...property, value } : property,
+    );
+  }
+
+  renderPropertyField(propertyConfig: EntityPropertyConfig) {
+    console.log('rendering property field', propertyConfig);
+
+    switch (propertyConfig.dataType) {
+      case DataType.SHORT_TEXT:
+      case DataType.LONG_TEXT:
+        return html`<text-field
+          .propertyConfig=${propertyConfig}
+        ></text-field>`;
+      case DataType.INT:
+        return html`<number-field
+          .propertyConfig=${propertyConfig}
+        ></number-field>`;
+    }
+
+    return nothing;
+  }
+
   render() {
     return html`
       <form class=${classMap(this.classes)}>
-        ${import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
-          ? html`
-              <div class="type">
-                <ss-select
-                  selected=${this.type}
-                  @select-changed=${this.handleTypeChanged}
-                  .options=${entities.map(entity => ({
-                    label: entity.name,
-                    value: entity.id,
-                  }))}
-                ></ss-select>
-              </div>
+        <div class="type">
+          <ss-select
+            selected=${this.type}
+            @select-changed=${this.handleTypeChanged}
+            .options=${[
+              { label: 'Select an entity', value: '0' },
+              ...this.state.entityConfigs.map(entity => ({
+                label: entity.name,
+                value: entity.id,
+              })),
+            ]}
+          ></ss-select>
+        </div>
 
-              <div class="properties">
-                ${this.properties.length
-                  ? repeat(
-                      this.properties,
-                      property => property.propertyId,
-                      property =>
-                        html`<item-property-form
-                          propertyId=${property.propertyId}
-                          .value=${property.value}
-                          @item-property-updated=${this.handlePropertyUpdated}
-                        ></item-property-form>`,
-                    )
-                  : nothing}
-                ${this.entityConfig
-                  ? repeat(
-                      this.entityConfig.properties,
-                      propertyConfig => propertyConfig.id,
-                      propertyConfig =>
-                        html`<item-property-form
-                          propertyId=${propertyConfig.id}
-                        ></item-property-form>`,
-                    )
-                  : nothing}
-              </div>
-            `
-          : nothing}
-
-        <div>
-          <ss-input
-            @input-submitted=${this.handleDescSubmitted}
-            @input-changed=${this.handleDescChanged}
-            value=${this.desc}
-            .suggestions=${this.state.actionSuggestions}
-            autoComplete
-          ></ss-input>
+        <div class="properties">
+          ${this.properties.length
+            ? repeat(
+                this.properties,
+                property => property.propertyId,
+                property =>
+                  html`<item-property-form
+                    propertyId=${property.propertyId}
+                    .value=${property.value}
+                    @item-property-updated=${this.handlePropertyUpdated}
+                  ></item-property-form>`,
+              )
+            : nothing}
+          ${this.entityConfig
+            ? repeat(
+                this.entityConfig.properties,
+                propertyConfig => propertyConfig.id,
+                propertyConfig =>
+                  html`${this.renderPropertyField(propertyConfig)}`,
+              )
+            : nothing}
         </div>
 
         <tag-manager
@@ -522,19 +512,6 @@ export class EntityForm extends ViewElement {
             )}
           </div>
         </tag-manager>
-
-        ${this.entityId
-          ? html`
-              <div class="time">
-                <ss-input
-                  type=${InputType.DATETIME_LOCAL}
-                  @input-submitted=${this.handleOccurredAtSubmitted}
-                  @input-changed=${this.handleOccurredAtChanged}
-                  value=${this.occurredAt}
-                ></ss-input>
-              </div>
-            `
-          : nothing}
 
         <div>
           <ss-button
