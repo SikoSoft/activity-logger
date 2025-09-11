@@ -26,6 +26,7 @@ import {
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 
 import '@/components/property-config-form/property-config-form';
+import '@ss/ui/components/confirmation-modal';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends LitElement {
@@ -58,6 +59,9 @@ export class EntityConfigForm extends LitElement {
   entityConfig: EntityConfig = defaultEntityConfig;
 
   @state()
+  confirmationModalIsOpen: boolean = false;
+
+  @property({ type: Boolean, reflect: true })
   open: boolean = false;
 
   @property({ type: Number })
@@ -125,6 +129,17 @@ export class EntityConfigForm extends LitElement {
     addToast(msg('entityConfigSaved'), NotificationType.SUCCESS);
   }
 
+  async delete() {
+    const result = await storage.deleteEntityConfig(this.entityConfig.id);
+
+    if (!result) {
+      addToast(msg('failedToDeleteEntityConfig'), NotificationType.ERROR);
+      return;
+    }
+
+    addToast(msg('entityConfigDeleted'), NotificationType.SUCCESS);
+  }
+
   addPropertyToTop() {
     const entityPropertyConfig = produce(
       defaultEntityPropertyConfig,
@@ -165,7 +180,7 @@ export class EntityConfigForm extends LitElement {
   render() {
     return html`
       <ss-collapsable
-        title=${this.entityConfig.name}
+        title=${this.entityConfig.name || msg('Entity Configuration')}
         ?open=${this.open}
         @toggled=${this.toggle}
       >
@@ -192,6 +207,13 @@ export class EntityConfigForm extends LitElement {
 
           <div class="buttons">
             <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
+            <ss-button
+              negative
+              @click=${() => {
+                this.confirmationModalIsOpen = true;
+              }}
+              >${msg('Delete')}</ss-button
+            >
           </div>
 
           <div class="properties">
@@ -233,6 +255,13 @@ export class EntityConfigForm extends LitElement {
           </div>
         </div>
       </ss-collapsable>
+      <confirmation-modal
+        ?open=${this.confirmationModalIsOpen}
+        @confirmation-accepted=${this.delete}
+        @confirmation-declined=${() => {
+          this.confirmationModalIsOpen = false;
+        }}
+      ></confirmation-modal>
     `;
   }
 }
