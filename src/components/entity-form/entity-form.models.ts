@@ -1,5 +1,6 @@
 import { ItemProperty } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { ControlType } from '@/models/Control';
 
 export enum EntityFormProp {
   ENTITY_ID = 'entityId',
@@ -24,37 +25,51 @@ export interface EntityFormProps extends PropTypes {
 export const entityFormProps: PropConfigMap<EntityFormProps> = {
   [EntityFormProp.ENTITY_ID]: {
     default: 0,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The ID of the entity',
   },
   [EntityFormProp.TYPE]: {
     default: 0,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The type of the entity',
   },
   [EntityFormProp.DESC]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The description of the entity',
   },
   [EntityFormProp.OCCURRED_AT]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The occurrence date of the entity',
   },
   [EntityFormProp.TAGS]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The tags of the entity',
   },
   [EntityFormProp.TAG_VALUE]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The value of the tag',
   },
   [EntityFormProp.PROPERTIES]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The properties of the entity',
   },
 };

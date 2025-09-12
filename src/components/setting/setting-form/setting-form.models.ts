@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum SettingFormProp {
@@ -11,7 +12,9 @@ export interface SettingFormProps extends PropTypes {
 export const settingFormProps: PropConfigMap<SettingFormProps> = {
   [SettingFormProp.LIST_CONFIG_ID]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The ID of the list configuration the settings are for',
   },
 };

@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PageView } from '@/models/Page';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
@@ -12,7 +13,9 @@ export interface PageNavProps extends PropTypes {
 export const pageNavProps: PropConfigMap<PageNavProps> = {
   [PageNavProp.ACTIVE]: {
     default: PageView.INPUT,
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The active view',
   },
 };

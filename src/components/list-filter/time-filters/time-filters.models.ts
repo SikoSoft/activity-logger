@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ListFilterTimeType } from 'api-spec/models/List';
 
@@ -20,27 +21,37 @@ export interface TimeFiltersProps extends PropTypes {
 export const timeFiltersProps: PropConfigMap<TimeFiltersProps> = {
   [TimeFiltersProp.TIME_STR]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The time string',
   },
   [TimeFiltersProp.TYPE]: {
     default: ListFilterTimeType.ALL_TIME,
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The type of time filter',
   },
   [TimeFiltersProp.DATE]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The date',
   },
   [TimeFiltersProp.START]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The start date',
   },
   [TimeFiltersProp.END]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The end date',
   },
 };

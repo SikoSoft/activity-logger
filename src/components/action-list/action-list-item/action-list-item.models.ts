@@ -1,4 +1,5 @@
 import { Property } from '@/mock/entity-config';
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum ActionListItemProp {
@@ -30,52 +31,72 @@ export interface ActionListItemProps extends PropTypes {
 export const actionListItemProps: PropConfigMap<ActionListItemProps> = {
   [ActionListItemProp.TYPE]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The type of the action',
   },
   [ActionListItemProp.ACTION_ID]: {
     default: 0,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The ID of the action',
   },
   [ActionListItemProp.DESC]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The description of the action',
   },
   [ActionListItemProp.CREATED_AT]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The creation date of the action',
   },
   [ActionListItemProp.UPDATED_AT]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The update date of the action',
   },
   [ActionListItemProp.OCCURRED_AT]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The occurrence date of the action',
   },
   [ActionListItemProp.TAGS]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The tags of the action',
   },
   [ActionListItemProp.SELECTED]: {
     default: false,
-    control: 'boolean',
+    control: {
+      type: ControlType.BOOLEAN,
+    },
     description: 'Whether the action is selected',
   },
   [ActionListItemProp.PROPERTIES]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The properties of the action',
   },
   [ActionListItemProp.DEBUG]: {
     default: false,
-    control: 'boolean',
+    control: {
+      type: ControlType.BOOLEAN,
+    },
     description: 'Whether debug mode is enabled',
   },
 };

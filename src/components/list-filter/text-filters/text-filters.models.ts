@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { TextContext } from 'api-spec/models/List';
 
@@ -12,7 +13,9 @@ export interface TextFiltersProps extends PropTypes {
 export const textFiltersProps: PropConfigMap<TextFiltersProps> = {
   [TextFiltersProp.FILTERS]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The list of text filters to display',
   },
 };

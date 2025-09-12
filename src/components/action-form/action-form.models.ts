@@ -1,5 +1,6 @@
 import { ItemProperty } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { ControlType } from '@/models/Control';
 
 export enum ActionFormProp {
   ACTION_ID = 'actionId',
@@ -24,37 +25,51 @@ export interface ActionFormProps extends PropTypes {
 export const actionFormProps: PropConfigMap<ActionFormProps> = {
   [ActionFormProp.ACTION_ID]: {
     default: 0,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The ID of the action',
   },
   [ActionFormProp.TYPE]: {
     default: 0,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The type of the action',
   },
   [ActionFormProp.DESC]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The description of the action',
   },
   [ActionFormProp.OCCURRED_AT]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The occurrence date of the action',
   },
   [ActionFormProp.TAGS]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The tags of the action',
   },
   [ActionFormProp.TAG_VALUE]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The value of the tag',
   },
   [ActionFormProp.PROPERTIES]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The properties of the action',
   },
 };

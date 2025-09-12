@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum BooleanSettingProp {
@@ -13,12 +14,16 @@ export interface BooleanSettingProps extends PropTypes {
 export const booleanSettingProps: PropConfigMap<BooleanSettingProps> = {
   [BooleanSettingProp.NAME]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The name of the setting',
   },
   [BooleanSettingProp.VALUE]: {
     default: false,
-    control: 'boolean',
+    control: {
+      type: ControlType.BOOLEAN,
+    },
     description: 'The value of the setting',
   },
 };

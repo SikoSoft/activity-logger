@@ -1,6 +1,6 @@
 import { ControlType } from '@/models/Control';
 import { DataType, RenderType } from 'api-spec/models/Entity';
-import { PropConfigMap, PropTypes } from '@/models/PropV2';
+import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum PropertyConfigFormProp {
   DATA_TYPE = 'dataType',

@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { TextType } from 'api-spec/models/List';
 
@@ -16,17 +17,23 @@ export interface TextFilterProps extends PropTypes {
 export const textFilterProps: PropConfigMap<TextFilterProps> = {
   [TextFilterProp.TYPE]: {
     default: TextType.CONTAINS,
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The type of text filter',
   },
   [TextFilterProp.SUB_STR]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The substring to filter by',
   },
   [TextFilterProp.INDEX]: {
     default: -1,
-    control: 'number',
+    control: {
+      type: ControlType.NUMBER,
+    },
     description: 'The index of the filter',
   },
 };

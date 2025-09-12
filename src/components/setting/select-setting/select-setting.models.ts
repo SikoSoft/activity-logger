@@ -1,3 +1,4 @@
+import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum SelectSettingProp {
@@ -15,17 +16,23 @@ export interface SelectSettingProps extends PropTypes {
 export const selectSettingProps: PropConfigMap<SelectSettingProps> = {
   [SelectSettingProp.NAME]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The name of the setting',
   },
   [SelectSettingProp.VALUE]: {
     default: '',
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The value of the setting',
   },
   [SelectSettingProp.OPTIONS]: {
     default: [],
-    control: 'text',
+    control: {
+      type: ControlType.TEXT,
+    },
     description: 'The options of the setting',
   },
 };

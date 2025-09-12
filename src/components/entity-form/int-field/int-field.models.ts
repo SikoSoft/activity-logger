@@ -1,5 +1,5 @@
 import { ControlType } from '@/models/Control';
-import { PropConfigMap } from '@/models/PropV2';
+import { PropConfigMap } from '@/models/Prop';
 import {
   defaultEntityPropertyConfig,
   EntityPropertyConfig,

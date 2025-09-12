@@ -1,11 +1,19 @@
+import {
+  BooleanControl,
+  HiddenControl,
+  NumberControl,
+  SelectControl,
+  TextControl,
+} from './Control';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PropTypes = Record<string, any>;
 
 export type PropControlType<T> = T extends boolean
-  ? 'boolean'
+  ? BooleanControl | HiddenControl
   : T extends number
-    ? 'number'
-    : 'text';
+    ? NumberControl | HiddenControl
+    : TextControl | SelectControl | HiddenControl;
 
 export type PropConfigMap<Props extends PropTypes> = {
   [Property in keyof Props]: {
