@@ -83,6 +83,7 @@ export class EntityConfigForm extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.entityConfig = {
+      userId: '',
       id: this[EntityConfigFormProp.ENTITY_CONFIG_ID],
       name: this[EntityConfigFormProp.NAME],
       description: this[EntityConfigFormProp.DESCRIPTION],
