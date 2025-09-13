@@ -143,6 +143,17 @@ export class EntityForm extends ViewElement {
     return this.state.entityConfigs.find(entity => entity.id === this.type);
   }
 
+  @state()
+  get canAddProperty(): boolean {
+    if (!this.entityConfig) {
+      return false;
+    }
+
+    return this.entityConfig.properties.some(propertyConfig =>
+      this.propertyAtMax(propertyConfig.id),
+    );
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -178,6 +189,23 @@ export class EntityForm extends ViewElement {
       this.occurredAt !== this.initialOccurredAt ||
       JSON.stringify(this.tagsAndSuggestions) !== this.initialTags
     );
+  }
+
+  private propertyAtMax(propertyId: number): boolean {
+    if (!this.entityConfig) {
+      return true;
+    }
+
+    const propertyConfig = this.entityConfig.properties.find(
+      prop => prop.id === propertyId,
+    );
+    return propertyConfig
+      ? this.numberOfPropertiesWithType(propertyId) >= propertyConfig.repeat
+      : true;
+  }
+
+  private numberOfPropertiesWithType(type: number): number {
+    return this.properties.filter(prop => prop.propertyId === type).length || 0;
   }
 
   private async saveAction() {
@@ -431,6 +459,10 @@ export class EntityForm extends ViewElement {
     );
   }
 
+  private addProperty() {
+    console.log('addProperty');
+  }
+
   renderPropertyField(propertyConfig: EntityPropertyConfig) {
     //console.log('rendering property field', propertyConfig);
 
@@ -514,7 +546,11 @@ export class EntityForm extends ViewElement {
           </div>
         </tag-manager>
 
-        <div>
+        <div class="buttons">
+          <ss-button ?disabled=${this.canAddProperty} @click=${this.addProperty}
+            >${msg('Add Property')}</ss-button
+          >
+
           <ss-button
             ?positive=${!this.entityId || this.hasChanged}
             @click=${this.handleSaveClick}
