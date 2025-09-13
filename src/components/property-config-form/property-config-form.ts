@@ -1,8 +1,15 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
+  BooleanDataValue,
+  CommonEntityPropertyConfig,
+  DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
+  ImageDataValue,
+  IntDataValue,
+  PropertyDataValue,
+  ShortTextDataValue,
 } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
 import { produce } from 'immer';
@@ -91,14 +98,24 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.SUFFIX]: PropertyConfigFormProps[PropertyConfigFormProp.SUFFIX] =
     propertyConfigFormProps[PropertyConfigFormProp.SUFFIX].default;
 
+  @property()
+  [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE] =
+    propertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE].default;
+
   @state()
   confirmationModalIsOpen = false;
 
   connectedCallback(): void {
     super.connectedCallback();
 
+    this.propertyConfig = { ...this.updatedPropertyConfig };
+
+    /*
+
     this.propertyConfig = {
       ...this.updatedPropertyConfig,
+      userId: '',
+      
       ...Object.keys(defaultEntityPropertyConfig).reduce(
         (acc: Partial<EntityPropertyConfig>, field) => ({
           ...acc,
@@ -106,8 +123,10 @@ export class PropertyConfigForm extends LitElement {
         }),
         defaultEntityPropertyConfig as EntityPropertyConfig,
       ),
+      
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
     };
+    */
   }
 
   get visibleFields(): PropertyConfigFormProp[] {
@@ -141,12 +160,9 @@ export class PropertyConfigForm extends LitElement {
   }
 
   get updatedPropertyConfig(): EntityPropertyConfig {
-    return {
+    const commonEntityPropertyConfig: CommonEntityPropertyConfig = {
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
       entityConfigId: this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
-      dataType: this[
-        PropertyConfigFormProp.DATA_TYPE
-      ] as EntityPropertyConfig['dataType'],
       renderType: this[
         PropertyConfigFormProp.RENDER_TYPE
       ] as EntityPropertyConfig['renderType'],
@@ -166,7 +182,45 @@ export class PropertyConfigForm extends LitElement {
       suffix: this[
         PropertyConfigFormProp.SUFFIX
       ] as EntityPropertyConfig['suffix'],
+      dataType: DataType.BOOLEAN,
+      defaultValue: '',
+      userId: '' as EntityPropertyConfig['userId'],
     };
+
+    switch (this[PropertyConfigFormProp.DATA_TYPE]) {
+      case DataType.IMAGE:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.IMAGE,
+          defaultValue: this[
+            PropertyConfigFormProp.DEFAULT_VALUE
+          ] as ImageDataValue,
+        };
+      case DataType.INT:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.INT,
+          defaultValue:
+            Number(this[PropertyConfigFormProp.DEFAULT_VALUE]) ||
+            (0 as IntDataValue),
+        };
+      case DataType.BOOLEAN:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.BOOLEAN,
+          defaultValue: Boolean(
+            this[PropertyConfigFormProp.DEFAULT_VALUE],
+          ) as BooleanDataValue,
+        };
+      default:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.SHORT_TEXT,
+          defaultValue: this[
+            PropertyConfigFormProp.DEFAULT_VALUE
+          ] as ShortTextDataValue,
+        };
+    }
   }
 
   async save() {

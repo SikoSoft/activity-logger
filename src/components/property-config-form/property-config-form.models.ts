@@ -1,5 +1,9 @@
 import { ControlType } from '@/models/Control';
-import { DataType, RenderType } from 'api-spec/models/Entity';
+import {
+  DataType,
+  PropertyDataValue,
+  RenderType,
+} from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum PropertyConfigFormProp {
@@ -13,6 +17,7 @@ export enum PropertyConfigFormProp {
   REQUIRED = 'required',
   PREFIX = 'prefix',
   SUFFIX = 'suffix',
+  DEFAULT_VALUE = 'defaultValue',
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
@@ -26,6 +31,7 @@ export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.ALLOWED]: number;
   [PropertyConfigFormProp.PREFIX]: string;
   [PropertyConfigFormProp.SUFFIX]: string;
+  [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyDataValue;
 }
 
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
@@ -78,5 +84,10 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: '',
     control: { type: ControlType.TEXT },
     description: 'The suffix of the property',
+  },
+  [PropertyConfigFormProp.DEFAULT_VALUE]: {
+    default: '',
+    control: { type: ControlType.TEXT },
+    description: 'The default value of the property',
   },
 };
