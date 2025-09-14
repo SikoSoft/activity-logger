@@ -8,7 +8,6 @@ import {
   EntityPropertyConfig,
   ImageDataValue,
   IntDataValue,
-  PropertyDataValue,
   ShortTextDataValue,
 } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';

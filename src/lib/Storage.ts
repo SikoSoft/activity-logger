@@ -362,7 +362,6 @@ export class Storage implements StorageSchema {
   }
 
   setWindowScrollPosition(x: number, y: number): void {
-    console.log('setWindowScrollPosition', { x, y });
     localStorage.setItem(
       StorageItemKey.WINDOW_SCROLL_POSITION,
       JSON.stringify({ x, y }),
@@ -387,6 +386,33 @@ export class Storage implements StorageSchema {
     }
 
     return position;
+  }
+
+  getCollapsablePanelState(): Record<string, boolean> {
+    let state: Record<string, boolean> = {};
+    try {
+      const storedState = localStorage.getItem(
+        StorageItemKey.COLLAPSABLE_PANEL_STATE,
+      );
+      if (storedState) {
+        state = JSON.parse(storedState);
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load collapsable panel state from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return state;
+  }
+
+  setCollapsablePanelState(state: Record<string, boolean>): void {
+    localStorage.setItem(
+      StorageItemKey.COLLAPSABLE_PANEL_STATE,
+      JSON.stringify(state),
+    );
   }
 
   @delegateSource()

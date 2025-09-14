@@ -24,8 +24,10 @@ import {
   PropertyConfigUpdatedEvent,
 } from '@/components/property-config-form/property-config-form.events';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
+import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 
 import '@/components/property-config-form/property-config-form';
+import '@ss/ui/components/ss-collapsable';
 import '@ss/ui/components/confirmation-modal';
 
 @customElement('entity-config-form')
@@ -174,8 +176,8 @@ export class EntityConfigForm extends LitElement {
     this.entityConfig = entityConfig;
   }
 
-  toggle() {
-    this.open = !this.open;
+  toggle(e: CollapsableToggledEvent) {
+    this.open = e.detail.isOpen;
   }
 
   render() {
@@ -183,7 +185,8 @@ export class EntityConfigForm extends LitElement {
       <ss-collapsable
         title=${this.entityConfig.name || msg('Entity Configuration')}
         ?open=${this.open}
-        @toggled=${this.toggle}
+        panelId=${`entityConfigForm-${this.entityConfig.id}`}
+        @collapsable-toggled=${this.toggle}
       >
         <div class="entity-config-form">
           <div class="field">

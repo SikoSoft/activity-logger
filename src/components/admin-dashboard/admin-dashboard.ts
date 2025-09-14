@@ -37,12 +37,21 @@ export class AdminDashboard extends ViewElement {
     if (entityConfigs) {
       this.state.setEntityConfigs(entityConfigs);
     }
+    this.ready = true;
   }
 
   addEntityConfig() {
     const entityConfig = produce(defaultEntityConfig, draft => draft);
 
     this.state.setEntityConfigs([...this.state.entityConfigs, entityConfig]);
+  }
+
+  isPanelOpen(id: number): boolean {
+    if (!id) {
+      return true;
+    }
+
+    return this.state.collapsablePanelState[`entityConfigForm-${id}`] || false;
   }
 
   render() {
@@ -55,7 +64,7 @@ export class AdminDashboard extends ViewElement {
               name=${config.name}
               description=${config.description}
               .properties=${toJS(config.properties)}
-              ?open=${!config.id}
+              ?open=${this.isPanelOpen(config.id)}
             ></entity-config-form>
           `,
         )}

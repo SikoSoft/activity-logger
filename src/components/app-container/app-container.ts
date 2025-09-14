@@ -25,6 +25,7 @@ import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
 
 import { theme } from '@/styles/theme';
+import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -91,6 +92,8 @@ export class AppContainer extends MobxLitElement {
       this.state.setAdvancedMode(storage.getAdvancedMode());
       this.state.setDebugMode(storage.getDebugMode());
 
+      this.state.setCollapsableState(storage.getCollapsablePanelState());
+
       this.state.setVersion(storage.getVersion());
 
       const view = storage.getSavedView();
@@ -121,6 +124,12 @@ export class AppContainer extends MobxLitElement {
 
   private handleUserLoggedIn() {
     this.restoreState();
+  }
+
+  private handleCollapsableToggled(e: CollapsableToggledEvent) {
+    const { isOpen, panelId } = e.detail;
+    this.state.setCollapsablePanelState(panelId, isOpen);
+    storage.setCollapsablePanelState(this.state.collapsablePanelState);
   }
 
   activeView() {
@@ -155,7 +164,7 @@ export class AppContainer extends MobxLitElement {
     return html`<action-list></action-list>`;
   }
 
-  render() {
+  renderContent() {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html`
         <forbidden-notice
@@ -181,5 +190,16 @@ export class AppContainer extends MobxLitElement {
           <floating-widget></floating-widget>
         `
       : html`<ss-loader></ss-loader>`;
+  }
+
+  render() {
+    return html`
+      <div
+        class="app-container"
+        @collapsable-toggled=${this.handleCollapsableToggled}
+      >
+        ${this.renderContent()}
+      </div>
+    `;
   }
 }

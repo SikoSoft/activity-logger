@@ -16,6 +16,7 @@ export enum StorageItemKey {
   AUTH_TOKEN_KEY = 'authToken',
   VERSION = 'version',
   WINDOW_SCROLL_POSITION = 'windowScrollPosition',
+  COLLAPSABLE_PANEL_STATE = 'collapsablePanelState',
 }
 
 export interface StorageSchema {
@@ -38,4 +39,7 @@ export interface StorageSchema {
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null>;
   setWindowScrollPosition?(x: number, y: number): void;
+  getWindowScrollPosition?(): { x: number; y: number };
+  getCollapsablePanelState?(): Record<string, boolean>;
+  setCollapsablePanelState?(state: Record<string, boolean>): void;
 }

@@ -126,6 +126,9 @@ export class AppState {
   @observable
   public version: Version = Version.V1;
 
+  @observable
+  public collapsablePanelState: Record<string, boolean> = {};
+
   @action
   public setActionSuggestions(suggestions: string[]) {
     this.actionSuggestions = suggestions;
@@ -336,6 +339,16 @@ export class AppState {
   @action
   setEntityConfigs(entityConfigs: EntityConfig[]) {
     this.entityConfigs = entityConfigs;
+  }
+
+  @action
+  setCollapsablePanelState(panelName: string, state: boolean) {
+    this.collapsablePanelState[panelName] = state;
+  }
+
+  @action
+  setCollapsableState(state: Record<string, boolean>) {
+    this.collapsablePanelState = state;
   }
 
   constructor() {
