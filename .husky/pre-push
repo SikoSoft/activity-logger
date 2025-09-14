@@ -1,7 +1,19 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+. "$(dirname# If the build failed, prevent the push
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "❌ Build failed! Fix the build errors before pushing."
+  exit 1
+fi/husky.sh"
 
 echo "🔨 Running build check before pushing..."
+
+# Set up cleanup trap to ensure stash is restored even if script exits early
+cleanup() {
+  if [ "$STASH_NEEDED" = true ]; then
+    echo "📦 Restoring stashed changes..."
+    git stash pop
+  fi
+}
 
 # Save the current state of the working directory
 if git diff --quiet; then
@@ -10,6 +22,9 @@ else
   STASH_NEEDED=true
   echo "📦 Stashing changes before build check..."
   git stash push -m "pre-push-build-check" --include-untracked
+  
+  # Set trap to restore stash on script exit (any reason)
+  trap cleanup EXIT
 fi
 
 # Run the build process
@@ -17,7 +32,7 @@ echo "🏗️  Running build process..."
 npm run build
 BUILD_EXIT_CODE=$?
 
-# Restore the stashed changes if we stashed them
+# No need to manually restore stash here - the trap will handle it (do this before potentially exiting)
 if [ "$STASH_NEEDED" = true ]; then
   echo "📦 Restoring stashed changes..."
   git stash pop
