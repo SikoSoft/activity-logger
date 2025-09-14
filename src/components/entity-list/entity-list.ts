@@ -259,6 +259,7 @@ export class EntityList extends ViewElement {
     } catch (error) {
       console.error(`Failed to get list: ${JSON.stringify(error)}`);
     } finally {
+      this.ready = true;
       this.loading = false;
     }
   }

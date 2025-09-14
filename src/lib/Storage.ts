@@ -361,6 +361,34 @@ export class Storage implements StorageSchema {
     localStorage.setItem(StorageItemKey.VERSION, version);
   }
 
+  setWindowScrollPosition(x: number, y: number): void {
+    console.log('setWindowScrollPosition', { x, y });
+    localStorage.setItem(
+      StorageItemKey.WINDOW_SCROLL_POSITION,
+      JSON.stringify({ x, y }),
+    );
+  }
+
+  getWindowScrollPosition(): { x: number; y: number } {
+    let position = { x: 0, y: 0 };
+    try {
+      const storedPosition = localStorage.getItem(
+        StorageItemKey.WINDOW_SCROLL_POSITION,
+      );
+      if (storedPosition) {
+        position = JSON.parse(storedPosition);
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load window scroll position from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return position;
+  }
+
   @delegateSource()
   async addEntityConfig(_entityConfig: EntityConfig): Promise<boolean> {
     return Promise.resolve(true);

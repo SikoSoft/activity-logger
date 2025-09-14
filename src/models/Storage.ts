@@ -15,6 +15,7 @@ export enum StorageItemKey {
   ACTIVE_LIST_CONFIG_ID = 'activeListConfigId',
   AUTH_TOKEN_KEY = 'authToken',
   VERSION = 'version',
+  WINDOW_SCROLL_POSITION = 'windowScrollPosition',
 }
 
 export interface StorageSchema {
@@ -36,4 +37,5 @@ export interface StorageSchema {
   updatePropertyConfig?(
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null>;
+  setWindowScrollPosition?(x: number, y: number): void;
 }

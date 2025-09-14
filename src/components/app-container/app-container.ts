@@ -49,14 +49,14 @@ export class AppContainer extends MobxLitElement {
     });
 
     window.addEventListener('unload', () => {
-      console.log('unload event - saving view', this.view);
       storage.setWindowScrollPosition(window.scrollX, window.scrollY);
     });
 
-    window.addEventListener('load', () => {
-      console.log('load event - restoring scroll position');
+    window.addEventListener('view-ready', () => {
       const { x, y } = storage.getWindowScrollPosition();
-      window.scrollTo(x, y);
+      setTimeout(() => {
+        window.scrollTo(x, y);
+      }, 1);
     });
 
     this.restoreState();
