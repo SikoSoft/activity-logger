@@ -1,6 +1,5 @@
 import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
 import { toJS } from 'mobx';
 
 import { storage } from '@/lib/Storage';
@@ -13,9 +12,10 @@ import { theme } from '@/styles/theme';
 import { produce } from 'immer';
 import { defaultEntityConfig } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
+import { ViewElement } from '@/lib/ViewElement';
 
 @customElement('admin-dashboard')
-export class AdminDashboard extends MobxLitElement {
+export class AdminDashboard extends ViewElement {
   private state = appState;
 
   static styles = [
