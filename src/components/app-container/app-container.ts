@@ -24,14 +24,14 @@ import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
 
-import { theme } from './styles/theme';
+import { theme } from '@/styles/theme';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
 }
 
-@customElement('activity-logger')
-export class ActivityLogger extends MobxLitElement {
+@customElement('app-container')
+export class AppContainer extends MobxLitElement {
   public state = appState;
   static styles = [theme];
 
@@ -46,6 +46,17 @@ export class ActivityLogger extends MobxLitElement {
 
     this.addEventListener('view-changed', (e: Event) => {
       this.handleViewChanged(e);
+    });
+
+    window.addEventListener('unload', () => {
+      console.log('unload event - saving view', this.view);
+      storage.setWindowScrollPosition(window.scrollX, window.scrollY);
+    });
+
+    window.addEventListener('load', () => {
+      console.log('load event - restoring scroll position');
+      const { x, y } = storage.getWindowScrollPosition();
+      window.scrollTo(x, y);
     });
 
     this.restoreState();
