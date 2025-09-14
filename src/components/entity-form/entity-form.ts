@@ -35,6 +35,7 @@ import '@ss/ui/components/tag-manager';
 import '@/components/confirm-modal/confirm-modal';
 import '@/components/entity-form/text-field/text-field';
 import '@/components/entity-form/int-field/int-field';
+import '@/components/entity-form/image-field/image-field';
 
 import {
   EntityItemCanceledEvent,
@@ -464,9 +465,12 @@ export class EntityForm extends ViewElement {
   }
 
   renderPropertyField(propertyConfig: EntityPropertyConfig) {
-    //console.log('rendering property field', propertyConfig);
-
     switch (propertyConfig.dataType) {
+      case DataType.IMAGE:
+        return html`<image-field
+          .propertyConfig=${propertyConfig}
+          @image-property-changed=${this.handlePropertyChanged}
+        ></image-field>`;
       case DataType.SHORT_TEXT:
       case DataType.LONG_TEXT:
         return html`<text-field

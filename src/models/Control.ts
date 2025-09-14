@@ -4,6 +4,7 @@ export enum ControlType {
   TEXT = 'text',
   SELECT = 'select',
   HIDDEN = 'hidden',
+  IMAGE = 'image',
 }
 
 export interface BooleanControl {
@@ -30,9 +31,16 @@ export interface HiddenControl {
   type: ControlType.HIDDEN;
 }
 
+export interface ImageControl {
+  type: ControlType.IMAGE;
+  src: string;
+  alt: string;
+}
+
 export type Control =
   | BooleanControl
   | NumberControl
   | TextControl
   | SelectControl
-  | HiddenControl;
+  | HiddenControl
+  | ImageControl;
