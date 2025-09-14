@@ -1,9 +1,5 @@
 #!/usr/bin/env sh
-. "$(dirname# If the build failed, prevent the push
-if [ $BUILD_EXIT_CODE -ne 0 ]; then
-  echo "❌ Build failed! Fix the build errors before pushing."
-  exit 1
-fi/husky.sh"
+. "$(dirname -- "$0")/_/husky.sh"
 
 echo "🔨 Running build check before pushing..."
 
@@ -31,12 +27,6 @@ fi
 echo "🏗️  Running build process..."
 npm run build
 BUILD_EXIT_CODE=$?
-
-# No need to manually restore stash here - the trap will handle it (do this before potentially exiting)
-if [ "$STASH_NEEDED" = true ]; then
-  echo "📦 Restoring stashed changes..."
-  git stash pop
-fi
 
 # If the build failed, prevent the push
 if [ $BUILD_EXIT_CODE -ne 0 ]; then
