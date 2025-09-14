@@ -7,7 +7,7 @@ import {
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { TextPropertyChangedEvent } from './text-field.events';
+import { PropertyChangedEvent } from '../entity-form.events';
 
 @customElement('text-field')
 export class TextField extends LitElement {
@@ -18,8 +18,9 @@ export class TextField extends LitElement {
     const value = e.detail.value;
 
     this.dispatchEvent(
-      new TextPropertyChangedEvent({
+      new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
+        dataType: this.propertyConfig.dataType,
         value,
       }),
     );

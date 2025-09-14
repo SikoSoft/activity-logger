@@ -5,14 +5,15 @@ import '@ss/ui/components/ss-input';
 import {
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
+  ImageDataValue,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { ImagePropertyChangedEvent } from './image-field.events';
 import {
   ImageFieldProp,
   ImageFieldProps,
   imageFieldProps,
 } from './image-field.models';
+import { PropertyChangedEvent } from '../entity-form.events';
 
 @customElement('image-field')
 export class ImageField extends LitElement {
@@ -23,11 +24,17 @@ export class ImageField extends LitElement {
   [ImageFieldProp.VALUE]: ImageFieldProps[ImageFieldProp.VALUE] =
     imageFieldProps[ImageFieldProp.VALUE].default;
 
-  protected handleInputChanged(e: InputChangedEvent) {
+  protected handleInputChanged(_e: InputChangedEvent) {
+    const value: ImageDataValue = {
+      src: '',
+      alt: '',
+    };
+
     this.dispatchEvent(
-      new ImagePropertyChangedEvent({
+      new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
-        value: this.value,
+        dataType: this.propertyConfig.dataType,
+        value,
       }),
     );
   }

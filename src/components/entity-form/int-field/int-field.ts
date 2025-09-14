@@ -7,7 +7,7 @@ import {
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { IntPropertyChangedEvent } from './int-field.events';
+import { PropertyChangedEvent } from '../entity-form.events';
 
 @customElement('int-field')
 export class IntField extends LitElement {
@@ -22,8 +22,9 @@ export class IntField extends LitElement {
     }
 
     this.dispatchEvent(
-      new IntPropertyChangedEvent({
+      new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
+        dataType: this.propertyConfig.dataType,
         value,
       }),
     );

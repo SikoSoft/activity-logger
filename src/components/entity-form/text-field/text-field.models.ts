@@ -1,8 +1,9 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap } from '@/models/Prop';
 import {
+  DataType,
   defaultEntityPropertyConfig,
-  EntityPropertyConfig,
+  ShortTextEntityPropertyConfig,
 } from 'api-spec/models/Entity';
 
 export enum TextFieldProp {
@@ -16,7 +17,7 @@ export interface TextFieldProps {
   [TextFieldProp.VALUE]: string;
   [TextFieldProp.PLACEHOLDER]: string;
   [TextFieldProp.LABEL]: string;
-  [TextFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
+  [TextFieldProp.PROPERTY_CONFIG]: ShortTextEntityPropertyConfig;
 }
 
 export const textFieldProps: PropConfigMap<TextFieldProps> = {
@@ -42,7 +43,11 @@ export const textFieldProps: PropConfigMap<TextFieldProps> = {
     description: 'The label text for the text field',
   },
   [TextFieldProp.PROPERTY_CONFIG]: {
-    default: defaultEntityPropertyConfig,
+    default: {
+      ...defaultEntityPropertyConfig,
+      dataType: DataType.SHORT_TEXT,
+      defaultValue: '',
+    },
     control: {
       type: ControlType.TEXT,
     },

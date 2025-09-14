@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   BooleanDataValue,
-  CommonEntityPropertyConfig,
   DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
@@ -159,7 +158,7 @@ export class PropertyConfigForm extends LitElement {
   }
 
   get updatedPropertyConfig(): EntityPropertyConfig {
-    const commonEntityPropertyConfig: CommonEntityPropertyConfig = {
+    const commonEntityPropertyConfig: EntityPropertyConfig = {
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
       entityConfigId: this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
       renderType: this[
@@ -182,7 +181,7 @@ export class PropertyConfigForm extends LitElement {
         PropertyConfigFormProp.SUFFIX
       ] as EntityPropertyConfig['suffix'],
       dataType: DataType.BOOLEAN,
-      defaultValue: '',
+      defaultValue: false,
       userId: '' as EntityPropertyConfig['userId'],
     };
 

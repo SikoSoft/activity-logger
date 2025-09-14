@@ -11,7 +11,10 @@ import {
   EntityConfig,
   EntityItem,
   EntityPropertyConfig,
+  ImageEntityPropertyConfig,
   ItemProperty,
+  LongTextEntityPropertyConfig,
+  ShortTextEntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { Time } from '@/lib/Time';
@@ -452,6 +455,7 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyChanged(e: CustomEvent) {
+    console.log('Property changed:', e.detail);
     const propertyId = e.detail.id;
     const value = e.detail.value;
 
@@ -468,19 +472,23 @@ export class EntityForm extends ViewElement {
     switch (propertyConfig.dataType) {
       case DataType.IMAGE:
         return html`<image-field
-          .propertyConfig=${propertyConfig}
-          @image-property-changed=${this.handlePropertyChanged}
+          .propertyConfig=${propertyConfig as ImageEntityPropertyConfig}
+          @property-changed=${this.handlePropertyChanged}
         ></image-field>`;
       case DataType.SHORT_TEXT:
+        return html`<text-field
+          .propertyConfig=${propertyConfig as ShortTextEntityPropertyConfig}
+          @property-changed=${this.handlePropertyChanged}
+        ></text-field>`;
       case DataType.LONG_TEXT:
         return html`<text-field
-          .propertyConfig=${propertyConfig}
-          @text-property-changed=${this.handlePropertyChanged}
+          .propertyConfig=${propertyConfig as LongTextEntityPropertyConfig}
+          @property-changed=${this.handlePropertyChanged}
         ></text-field>`;
       case DataType.INT:
         return html`<int-field
           .propertyConfig=${propertyConfig}
-          @int-property-changed=${this.handlePropertyChanged}
+          @property-changed=${this.handlePropertyChanged}
         ></int-field>`;
     }
 

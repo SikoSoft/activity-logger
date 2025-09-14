@@ -1,4 +1,4 @@
-import { ItemProperty } from 'api-spec/models/Entity';
+import { ItemProperty, DataTypedValue } from 'api-spec/models/Entity';
 
 export const entityItemUpdatedEventName = 'entity-item-updated';
 
@@ -63,5 +63,21 @@ export class ItemPropertyUpdatedEvent<
       composed: true,
       detail: payload,
     });
+  }
+}
+
+export const propertyChangedEventName = 'property-changed';
+
+export type PropertyChangedEventPayload = Omit<
+  DataTypedValue,
+  'defaultValue'
+> & {
+  value: DataTypedValue['defaultValue'];
+  propertyId: number;
+};
+
+export class PropertyChangedEvent extends CustomEvent<PropertyChangedEventPayload> {
+  constructor(detail: PropertyChangedEventPayload) {
+    super(propertyChangedEventName, { detail });
   }
 }
