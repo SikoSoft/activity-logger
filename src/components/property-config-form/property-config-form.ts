@@ -146,6 +146,7 @@ export class PropertyConfigForm extends LitElement {
   }
 
   updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
+    console.log(`Updating field ${field} with value ${rawValue}`);
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -273,7 +274,7 @@ export class PropertyConfigForm extends LitElement {
   }
 
   renderDefaultValueField() {
-    switch (this[PropertyConfigFormProp.DATA_TYPE]) {
+    switch (this.propertyConfig[PropertyConfigFormProp.DATA_TYPE]) {
       case DataType.BOOLEAN:
         return html` <ss-toggle
           @toggle-changed=${(e: ToggleChangedEvent) => {
@@ -291,11 +292,25 @@ export class PropertyConfigForm extends LitElement {
           }}
         ></image-field>`;
 
+      case DataType.INT:
+        return html`
+          <ss-input
+            type="number"
+            .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
+            @input-changed=${(e: InputChangedEvent) => {
+              this.updateField(
+                PropertyConfigFormProp.DEFAULT_VALUE,
+                e.detail.value,
+              );
+            }}
+          ></ss-input>
+        `;
+
       default:
         return html`
           <ss-input
             type="text"
-            .value=${this[PropertyConfigFormProp.DEFAULT_VALUE]}
+            .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
             @input-changed=${(e: InputChangedEvent) => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
