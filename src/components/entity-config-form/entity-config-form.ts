@@ -191,6 +191,7 @@ export class EntityConfigForm extends LitElement {
         <div class="entity-config-form">
           <div class="field">
             <label for="entity-name">${msg('Entity Name')}</label>
+
             <ss-input
               id="entity-name"
               .value=${this.entityConfig.name}
@@ -201,6 +202,7 @@ export class EntityConfigForm extends LitElement {
 
           <div class="field">
             <label for="entity-description">${msg('Entity Description')}</label>
+
             <ss-input
               id="entity-description"
               .value=${this.entityConfig.description}
@@ -211,6 +213,7 @@ export class EntityConfigForm extends LitElement {
 
           <div class="buttons">
             <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
+
             <ss-button
               negative
               @click=${() => {
@@ -259,6 +262,7 @@ export class EntityConfigForm extends LitElement {
           </div>
         </div>
       </ss-collapsable>
+
       <confirmation-modal
         ?open=${this.confirmationModalIsOpen}
         @confirmation-accepted=${this.delete}

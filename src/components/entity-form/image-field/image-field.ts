@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import {
@@ -24,10 +24,16 @@ export class ImageField extends LitElement {
   [ImageFieldProp.VALUE]: ImageFieldProps[ImageFieldProp.VALUE] =
     imageFieldProps[ImageFieldProp.VALUE].default;
 
-  protected handleInputChanged(_e: InputChangedEvent) {
+  @state()
+  src = '';
+
+  @state()
+  alt = '';
+
+  protected handleValueChanged() {
     const value: ImageDataValue = {
-      src: '',
-      alt: '',
+      src: this.src,
+      alt: this.alt,
     };
 
     this.dispatchEvent(
@@ -39,6 +45,16 @@ export class ImageField extends LitElement {
     );
   }
 
+  protected handleSrcChanged(e: InputChangedEvent) {
+    this.src = e.detail.value;
+    this.handleValueChanged();
+  }
+
+  protected handleAltChanged(e: InputChangedEvent) {
+    this.alt = e.detail.value;
+    this.handleValueChanged();
+  }
+
   render() {
     return html`
       <div class="property">
@@ -46,8 +62,14 @@ export class ImageField extends LitElement {
           >${this.propertyConfig.name}</label
         >
         <ss-input
-          type="number"
-          @input-changed=${this.handleInputChanged}
+          type="text"
+          placeholder="Image URL"
+          @input-changed=${this.handleSrcChanged}
+        ></ss-input>
+        <ss-input
+          type="text"
+          placeholder="Image Alt Text"
+          @input-changed=${this.handleAltChanged}
         ></ss-input>
       </div>
     `;

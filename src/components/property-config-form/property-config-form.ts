@@ -7,6 +7,7 @@ import {
   EntityPropertyConfig,
   ImageDataValue,
   IntDataValue,
+  PropertyDataValue,
   ShortTextDataValue,
 } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
@@ -31,6 +32,10 @@ import {
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/confirmation-modal';
+import '@ss/ui/components/ss-toggle';
+import '@/components/entity-form/image-field/image-field';
+import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
+import { PropertyChangedEvent } from '../entity-form/entity-form.events';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -140,10 +145,7 @@ export class PropertyConfigForm extends LitElement {
     return errors;
   }
 
-  updateField(
-    field: PropertyConfigFormProp,
-    rawValue: string | number | boolean,
-  ) {
+  updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -270,6 +272,76 @@ export class PropertyConfigForm extends LitElement {
     );
   }
 
+  renderDefaultValueField() {
+    switch (this[PropertyConfigFormProp.DATA_TYPE]) {
+      case DataType.BOOLEAN:
+        return html` <ss-toggle
+          @toggle-changed=${(e: ToggleChangedEvent) => {
+            this.updateField(PropertyConfigFormProp.DEFAULT_VALUE, e.detail.on);
+          }}
+        ></ss-toggle>`;
+
+      case DataType.IMAGE:
+        return html` <image-field
+          @property-changed=${(e: PropertyChangedEvent) => {
+            this.updateField(
+              PropertyConfigFormProp.DEFAULT_VALUE,
+              e.detail.value,
+            );
+          }}
+        ></image-field>`;
+
+      default:
+        return html`
+          <ss-input
+            type="text"
+            .value=${this[PropertyConfigFormProp.DEFAULT_VALUE]}
+            @input-changed=${(e: InputChangedEvent) => {
+              this.updateField(
+                PropertyConfigFormProp.DEFAULT_VALUE,
+                e.detail.value,
+              );
+            }}
+          ></ss-input>
+        `;
+    }
+  }
+
+  renderField(field: PropertyConfigFormProp) {
+    if (field === PropertyConfigFormProp.DEFAULT_VALUE) {
+      return this.renderDefaultValueField();
+    }
+
+    switch (propertyConfigFormProps[field].control.type) {
+      case ControlType.SELECT:
+        return html`
+          <ss-select
+            .options=${(
+              propertyConfigFormProps[field].control as SelectControl
+            ).options.map(option => ({
+              label: msg(option),
+              value: option,
+            }))}
+            selected=${this[field]}
+            @select-changed=${(e: InputChangedEvent) => {
+              this.updateField(field, e.detail.value);
+            }}
+          ></ss-select>
+        `;
+      case ControlType.NUMBER:
+      case ControlType.TEXT:
+        return html`
+          <ss-input
+            type=${propertyConfigFormProps[field].control.type}
+            value=${this[field]}
+            @input-changed=${(e: InputChangedEvent) => {
+              this.updateField(field, e.detail.value);
+            }}
+          ></ss-input>
+        `;
+    }
+  }
+
   render() {
     return html`
       <fieldset class="entity-config-form">
@@ -279,30 +351,7 @@ export class PropertyConfigForm extends LitElement {
         field =>
           html` <div class="field">
             <label for=${field}>${msg(field)}</label>
-            ${propertyConfigFormProps[field].control.type === ControlType.SELECT
-              ? html`
-                  <ss-select
-                    .options=${(
-                      propertyConfigFormProps[field].control as SelectControl
-                    ).options.map(option => ({
-                      label: msg(option),
-                      value: option,
-                    }))}
-                    selected=${this[field]}
-                    @select-changed=${(e: InputChangedEvent) => {
-                      this.updateField(field, e.detail.value);
-                    }}
-                  ></ss-select>
-                `
-              : html`
-                  <ss-input
-                    type=${propertyConfigFormProps[field].control.type}
-                    value=${this[field]}
-                    @input-changed=${(e: InputChangedEvent) => {
-                      this.updateField(field, e.detail.value);
-                    }}
-                  ></ss-input>
-                `}
+            ${this.renderField(field)}
           </div>`,
       )}
         </div>
