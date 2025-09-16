@@ -300,7 +300,7 @@ export class PropertyConfigForm extends LitElement {
             @input-changed=${(e: InputChangedEvent) => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
-                e.detail.value,
+                parseInt(e.detail.value),
               );
             }}
           ></ss-input>
