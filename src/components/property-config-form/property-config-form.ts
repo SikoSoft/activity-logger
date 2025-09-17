@@ -115,11 +115,8 @@ export class PropertyConfigForm extends LitElement {
     this.propertyConfig = produce(this.updatedPropertyConfig, draft => draft);
   }
 
-  /*
   protected willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties);
-    console.log('Will update...', changedProperties);
-
     if (changedProperties.has('propertyConfig')) {
       const changedPropertyConfig = changedProperties.get(
         'propertyConfig',
@@ -127,12 +124,11 @@ export class PropertyConfigForm extends LitElement {
 
       if (changedPropertyConfig) {
         if (this.dataType !== changedPropertyConfig.dataType) {
-          //this.handleDataTypeChange();
+          this.handleDataTypeChange();
         }
       }
     }
   }
-    */
 
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {
@@ -147,9 +143,9 @@ export class PropertyConfigForm extends LitElement {
     return errors;
   }
 
-  handleDataTypeChange() {
+  handleDataTypeChange(dataType = this.dataType) {
     const propertyConfig = { ...this.propertyConfig };
-    switch (this.dataType) {
+    switch (dataType) {
       case DataType.BOOLEAN:
         propertyConfig.defaultValue = false;
         break;
@@ -373,6 +369,9 @@ export class PropertyConfigForm extends LitElement {
             selected=${this[field]}
             @select-changed=${(e: InputChangedEvent) => {
               this.updateField(field, e.detail.value);
+              if (field === PropertyConfigFormProp.DATA_TYPE) {
+                this.handleDataTypeChange(e.detail.value);
+              }
             }}
           ></ss-select>
         `;
