@@ -6,6 +6,7 @@ import {
 } from 'api-spec/models/Entity';
 
 export enum IntFieldProp {
+  INSTANCE_ID = 'instanceId',
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
@@ -13,6 +14,7 @@ export enum IntFieldProp {
 }
 
 export interface IntFieldProps {
+  [IntFieldProp.INSTANCE_ID]: number;
   [IntFieldProp.VALUE]: number;
   [IntFieldProp.PLACEHOLDER]: string;
   [IntFieldProp.LABEL]: string;
@@ -20,6 +22,13 @@ export interface IntFieldProps {
 }
 
 export const intFieldProps: PropConfigMap<IntFieldProps> = {
+  [IntFieldProp.INSTANCE_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.NUMBER,
+    },
+    description: 'The instance ID of the input field',
+  },
   [IntFieldProp.VALUE]: {
     default: 0,
     control: {

@@ -12,6 +12,10 @@ import { IntFieldProp, intFieldProps, IntFieldProps } from './int-field.models';
 
 @customElement('int-field')
 export class IntField extends LitElement {
+  @property({ type: Number })
+  [IntFieldProp.INSTANCE_ID]: IntFieldProps[IntFieldProp.INSTANCE_ID] =
+    intFieldProps[IntFieldProp.INSTANCE_ID].default;
+
   @property({ type: Object })
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
@@ -29,6 +33,7 @@ export class IntField extends LitElement {
     this.dispatchEvent(
       new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
+        instanceId: this[IntFieldProp.INSTANCE_ID],
         dataType: this.propertyConfig.dataType,
         value,
       }),

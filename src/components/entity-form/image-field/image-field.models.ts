@@ -7,6 +7,7 @@ import {
 } from 'api-spec/models/Entity';
 
 export enum ImageFieldProp {
+  INSTANCE_ID = 'instanceId',
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
@@ -16,6 +17,7 @@ export enum ImageFieldProp {
 }
 
 export interface ImageFieldProps extends PropTypes {
+  [ImageFieldProp.INSTANCE_ID]: number;
   [ImageFieldProp.VALUE]: ImageDataValue;
   [ImageFieldProp.PLACEHOLDER]: string;
   [ImageFieldProp.LABEL]: string;
@@ -25,6 +27,13 @@ export interface ImageFieldProps extends PropTypes {
 }
 
 export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
+  [ImageFieldProp.INSTANCE_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.NUMBER,
+    },
+    description: 'The instance ID of the image field',
+  },
   [ImageFieldProp.VALUE]: {
     default: {
       src: '',

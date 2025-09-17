@@ -7,6 +7,7 @@ import {
 } from 'api-spec/models/Entity';
 
 export enum TextFieldProp {
+  INSTANCE_ID = 'instanceId',
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
@@ -14,6 +15,7 @@ export enum TextFieldProp {
 }
 
 export interface TextFieldProps {
+  [TextFieldProp.INSTANCE_ID]: number;
   [TextFieldProp.VALUE]: string;
   [TextFieldProp.PLACEHOLDER]: string;
   [TextFieldProp.LABEL]: string;
@@ -21,6 +23,13 @@ export interface TextFieldProps {
 }
 
 export const textFieldProps: PropConfigMap<TextFieldProps> = {
+  [TextFieldProp.INSTANCE_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.NUMBER,
+    },
+    description: 'The instance ID of the text field',
+  },
   [TextFieldProp.VALUE]: {
     default: '',
     control: {

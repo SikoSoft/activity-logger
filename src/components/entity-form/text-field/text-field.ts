@@ -16,6 +16,10 @@ import {
 
 @customElement('text-field')
 export class TextField extends LitElement {
+  @property({ type: Number })
+  [TextFieldProp.INSTANCE_ID]: TextFieldProps[TextFieldProp.INSTANCE_ID] =
+    textFieldProps[TextFieldProp.INSTANCE_ID].default;
+
   @property({ type: Object })
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
@@ -29,6 +33,7 @@ export class TextField extends LitElement {
     this.dispatchEvent(
       new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
+        instanceId: this[TextFieldProp.INSTANCE_ID],
         dataType: this.propertyConfig.dataType,
         value,
       }),

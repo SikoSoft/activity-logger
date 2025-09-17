@@ -74,6 +74,7 @@ export type PropertyChangedEventPayload = Omit<
 > & {
   value: DataTypedValue['defaultValue'];
   propertyId: number;
+  instanceId: number;
 };
 
 export class PropertyChangedEvent extends CustomEvent<PropertyChangedEventPayload> {

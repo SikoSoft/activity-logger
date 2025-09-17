@@ -17,6 +17,10 @@ import { PropertyChangedEvent } from '../entity-form.events';
 
 @customElement('image-field')
 export class ImageField extends LitElement {
+  @property({ type: Number })
+  [ImageFieldProp.INSTANCE_ID]: ImageFieldProps[ImageFieldProp.INSTANCE_ID] =
+    imageFieldProps[ImageFieldProp.INSTANCE_ID].default;
+
   @property({ type: Object })
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
@@ -36,6 +40,7 @@ export class ImageField extends LitElement {
     this.dispatchEvent(
       new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
+        instanceId: this[ImageFieldProp.INSTANCE_ID],
         dataType: this.propertyConfig.dataType,
         value,
       }),
