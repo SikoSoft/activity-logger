@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   BooleanDataValue,
@@ -132,6 +132,23 @@ export class PropertyConfigForm extends LitElement {
     */
   }
 
+  protected willUpdate(changedProperties: PropertyValues): void {
+    super.willUpdate(changedProperties);
+    console.log('Will update...', changedProperties);
+
+    if (changedProperties.has('propertyConfig')) {
+      const changedPropertyConfig = changedProperties.get(
+        'propertyConfig',
+      ) as EntityPropertyConfig | null;
+
+      if (changedPropertyConfig) {
+        if (this.dataType !== changedPropertyConfig.dataType) {
+          //this.handleDataTypeChange();
+        }
+      }
+    }
+  }
+
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {
       const control = propertyConfigFormProps[field].control;
@@ -143,6 +160,30 @@ export class PropertyConfigForm extends LitElement {
     const errors: string[] = [];
 
     return errors;
+  }
+
+  handleDataTypeChange() {
+    console.log('Data type changed');
+    //this.requestUpdate();
+    //this.propertyConfig = { ...this.updatedPropertyConfig };
+    const propertyConfig = { ...this.propertyConfig };
+    switch (this.dataType) {
+      case DataType.BOOLEAN:
+        propertyConfig.defaultValue = false;
+        break;
+      case DataType.IMAGE:
+        propertyConfig.defaultValue = { src: '', alt: '' };
+        break;
+      case DataType.INT:
+        propertyConfig.defaultValue = 0;
+        break;
+      case DataType.SHORT_TEXT:
+      case DataType.LONG_TEXT:
+        propertyConfig.defaultValue = '';
+        break;
+    }
+
+    this.propertyConfig = propertyConfig;
   }
 
   updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
@@ -225,6 +266,7 @@ export class PropertyConfigForm extends LitElement {
   }
 
   async save() {
+    console.log('Saving property configuration:', this.propertyConfig);
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,
@@ -267,10 +309,12 @@ export class PropertyConfigForm extends LitElement {
       return false;
     }
 
-    return (
-      JSON.stringify(this.updatedPropertyConfig) ===
-      JSON.stringify(this.propertyConfig)
-    );
+    const updatedJson = JSON.stringify(this.updatedPropertyConfig);
+    const currentJson = JSON.stringify(this.propertyConfig);
+
+    console.log('in sync check', updatedJson, currentJson);
+
+    return updatedJson === currentJson;
   }
 
   renderDefaultValueField() {
