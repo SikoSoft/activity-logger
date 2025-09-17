@@ -472,21 +472,26 @@ export class EntityForm extends ViewElement {
     switch (propertyConfig.dataType) {
       case DataType.IMAGE:
         return html`<image-field
+          src=${propertyConfig.defaultValue.src}
+          alt=${propertyConfig.defaultValue.alt}
           .propertyConfig=${propertyConfig as ImageEntityPropertyConfig}
           @property-changed=${this.handlePropertyChanged}
         ></image-field>`;
       case DataType.SHORT_TEXT:
         return html`<text-field
+          value=${propertyConfig.defaultValue}
           .propertyConfig=${propertyConfig as ShortTextEntityPropertyConfig}
           @property-changed=${this.handlePropertyChanged}
         ></text-field>`;
       case DataType.LONG_TEXT:
         return html`<text-field
+          value=${propertyConfig.defaultValue}
           .propertyConfig=${propertyConfig as LongTextEntityPropertyConfig}
           @property-changed=${this.handlePropertyChanged}
         ></text-field>`;
       case DataType.INT:
         return html`<int-field
+          value=${propertyConfig.defaultValue}
           .propertyConfig=${propertyConfig}
           @property-changed=${this.handlePropertyChanged}
         ></int-field>`;

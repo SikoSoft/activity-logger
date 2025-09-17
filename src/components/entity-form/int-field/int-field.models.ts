@@ -5,47 +5,47 @@ import {
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 
-export enum TextFieldProp {
+export enum IntFieldProp {
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
   PROPERTY_CONFIG = 'propertyConfig',
 }
 
-export interface TextFieldProps {
-  [TextFieldProp.VALUE]: number;
-  [TextFieldProp.PLACEHOLDER]: string;
-  [TextFieldProp.LABEL]: string;
-  [TextFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
+export interface IntFieldProps {
+  [IntFieldProp.VALUE]: number;
+  [IntFieldProp.PLACEHOLDER]: string;
+  [IntFieldProp.LABEL]: string;
+  [IntFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
 }
 
-export const textFieldProps: PropConfigMap<TextFieldProps> = {
-  [TextFieldProp.VALUE]: {
+export const intFieldProps: PropConfigMap<IntFieldProps> = {
+  [IntFieldProp.VALUE]: {
     default: 0,
     control: {
       type: ControlType.NUMBER,
     },
-    description: 'The value of the text field',
+    description: 'The value of the input field',
   },
-  [TextFieldProp.PLACEHOLDER]: {
+  [IntFieldProp.PLACEHOLDER]: {
     default: '',
     control: {
       type: ControlType.TEXT,
     },
-    description: 'The placeholder text for the text field',
+    description: 'The placeholder text for the input field',
   },
-  [TextFieldProp.LABEL]: {
+  [IntFieldProp.LABEL]: {
     default: '',
     control: {
       type: ControlType.TEXT,
     },
-    description: 'The label text for the text field',
+    description: 'The label text for the input field',
   },
-  [TextFieldProp.PROPERTY_CONFIG]: {
+  [IntFieldProp.PROPERTY_CONFIG]: {
     default: defaultEntityPropertyConfig,
     control: {
       type: ControlType.TEXT,
     },
-    description: 'The property configuration for the text field',
+    description: 'The property configuration for the input field',
   },
 };

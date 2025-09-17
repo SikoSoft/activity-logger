@@ -8,11 +8,16 @@ import {
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { PropertyChangedEvent } from '../entity-form.events';
+import { IntFieldProp, intFieldProps, IntFieldProps } from './int-field.models';
 
 @customElement('int-field')
 export class IntField extends LitElement {
   @property({ type: Object })
   propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
+
+  @property({ type: Number })
+  [IntFieldProp.VALUE]: IntFieldProps[IntFieldProp.VALUE] =
+    intFieldProps[IntFieldProp.VALUE].default;
 
   protected handleInputChanged(e: InputChangedEvent) {
     const value = parseInt(e.detail.value);
@@ -38,6 +43,7 @@ export class IntField extends LitElement {
         >
         <ss-input
           type="number"
+          value=${this[IntFieldProp.VALUE]}
           @input-changed=${this.handleInputChanged}
         ></ss-input>
       </div>
