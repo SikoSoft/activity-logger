@@ -7,6 +7,7 @@ import {
   EntityPropertyConfig,
   ImageDataValue,
   IntDataValue,
+  LongTextDataValue,
   PropertyDataValue,
   ShortTextDataValue,
 } from 'api-spec/models/Entity';
@@ -111,27 +112,10 @@ export class PropertyConfigForm extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.propertyConfig = { ...this.updatedPropertyConfig };
-
-    /*
-
-    this.propertyConfig = {
-      ...this.updatedPropertyConfig,
-      userId: '',
-      
-      ...Object.keys(defaultEntityPropertyConfig).reduce(
-        (acc: Partial<EntityPropertyConfig>, field) => ({
-          ...acc,
-          [field]: this[field as keyof this],
-        }),
-        defaultEntityPropertyConfig as EntityPropertyConfig,
-      ),
-      
-      id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
-    };
-    */
+    this.propertyConfig = produce(this.updatedPropertyConfig, draft => draft);
   }
 
+  /*
   protected willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties);
     console.log('Will update...', changedProperties);
@@ -148,6 +132,7 @@ export class PropertyConfigForm extends LitElement {
       }
     }
   }
+    */
 
   get visibleFields(): PropertyConfigFormProp[] {
     return Object.values(PropertyConfigFormProp).filter(field => {
@@ -163,9 +148,6 @@ export class PropertyConfigForm extends LitElement {
   }
 
   handleDataTypeChange() {
-    console.log('Data type changed');
-    //this.requestUpdate();
-    //this.propertyConfig = { ...this.updatedPropertyConfig };
     const propertyConfig = { ...this.propertyConfig };
     switch (this.dataType) {
       case DataType.BOOLEAN:
@@ -187,7 +169,6 @@ export class PropertyConfigForm extends LitElement {
   }
 
   updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
-    console.log(`Updating field ${field} with value ${rawValue}`);
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -201,6 +182,7 @@ export class PropertyConfigForm extends LitElement {
     this.propertyConfig = propertyConfig;
   }
 
+  @state()
   get updatedPropertyConfig(): EntityPropertyConfig {
     const commonEntityPropertyConfig: EntityPropertyConfig = {
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
@@ -254,7 +236,7 @@ export class PropertyConfigForm extends LitElement {
             this[PropertyConfigFormProp.DEFAULT_VALUE],
           ) as BooleanDataValue,
         };
-      default:
+      case DataType.SHORT_TEXT:
         return {
           ...commonEntityPropertyConfig,
           dataType: DataType.SHORT_TEXT,
@@ -262,11 +244,20 @@ export class PropertyConfigForm extends LitElement {
             PropertyConfigFormProp.DEFAULT_VALUE
           ] as ShortTextDataValue,
         };
+      case DataType.LONG_TEXT:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.LONG_TEXT,
+          defaultValue: this[
+            PropertyConfigFormProp.DEFAULT_VALUE
+          ] as LongTextDataValue,
+        };
     }
+
+    return commonEntityPropertyConfig;
   }
 
   async save() {
-    console.log('Saving property configuration:', this.propertyConfig);
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,
@@ -311,8 +302,6 @@ export class PropertyConfigForm extends LitElement {
 
     const updatedJson = JSON.stringify(this.updatedPropertyConfig);
     const currentJson = JSON.stringify(this.propertyConfig);
-
-    console.log('in sync check', updatedJson, currentJson);
 
     return updatedJson === currentJson;
   }
