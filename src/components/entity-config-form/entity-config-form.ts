@@ -244,6 +244,7 @@ export class EntityConfigForm extends LitElement {
                   allowed=${property.allowed}
                   prefix=${property.prefix}
                   suffix=${property.suffix}
+                  .defaultValue=${property.defaultValue}
                   @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
                     this.updateProperty(index, e.detail)}
                   @property-config-added=${(e: PropertyConfigAddedEvent) =>
