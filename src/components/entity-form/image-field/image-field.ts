@@ -24,18 +24,15 @@ export class ImageField extends LitElement {
   [ImageFieldProp.VALUE]: ImageFieldProps[ImageFieldProp.VALUE] =
     imageFieldProps[ImageFieldProp.VALUE].default;
 
-  @state()
-  src = '';
+  @property({ type: String })
+  [ImageFieldProp.SRC]: ImageFieldProps[ImageFieldProp.SRC] =
+    imageFieldProps[ImageFieldProp.SRC].default;
 
-  @state()
-  alt = '';
+  @property({ type: String })
+  [ImageFieldProp.ALT]: ImageFieldProps[ImageFieldProp.ALT] =
+    imageFieldProps[ImageFieldProp.ALT].default;
 
-  protected handleValueChanged() {
-    const value: ImageDataValue = {
-      src: this.src,
-      alt: this.alt,
-    };
-
+  protected handleValueChanged(value: ImageDataValue) {
     this.dispatchEvent(
       new PropertyChangedEvent({
         propertyId: this.propertyConfig.id,
@@ -46,13 +43,11 @@ export class ImageField extends LitElement {
   }
 
   protected handleSrcChanged(e: InputChangedEvent) {
-    this.src = e.detail.value;
-    this.handleValueChanged();
+    this.handleValueChanged({ src: e.detail.value, alt: this.alt });
   }
 
   protected handleAltChanged(e: InputChangedEvent) {
-    this.alt = e.detail.value;
-    this.handleValueChanged();
+    this.handleValueChanged({ src: this.src, alt: e.detail.value });
   }
 
   render() {
@@ -63,11 +58,14 @@ export class ImageField extends LitElement {
         >
         <ss-input
           type="text"
+          value=${this.src}
           placeholder="Image URL"
           @input-changed=${this.handleSrcChanged}
         ></ss-input>
+
         <ss-input
           type="text"
+          value=${this.alt}
           placeholder="Image Alt Text"
           @input-changed=${this.handleAltChanged}
         ></ss-input>

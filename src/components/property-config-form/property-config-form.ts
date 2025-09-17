@@ -306,6 +306,7 @@ export class PropertyConfigForm extends LitElement {
     switch (this.propertyConfig[PropertyConfigFormProp.DATA_TYPE]) {
       case DataType.BOOLEAN:
         return html` <ss-toggle
+          ?on=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
           @toggle-changed=${(e: ToggleChangedEvent) => {
             this.updateField(PropertyConfigFormProp.DEFAULT_VALUE, e.detail.on);
           }}
@@ -313,6 +314,8 @@ export class PropertyConfigForm extends LitElement {
 
       case DataType.IMAGE:
         return html` <image-field
+          src=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE].src}
+          alt=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE].alt}
           @property-changed=${(e: PropertyChangedEvent) => {
             this.updateField(
               PropertyConfigFormProp.DEFAULT_VALUE,

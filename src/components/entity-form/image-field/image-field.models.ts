@@ -11,6 +11,8 @@ export enum ImageFieldProp {
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
   PROPERTY_CONFIG = 'propertyConfig',
+  SRC = 'src',
+  ALT = 'alt',
 }
 
 export interface ImageFieldProps extends PropTypes {
@@ -18,6 +20,8 @@ export interface ImageFieldProps extends PropTypes {
   [ImageFieldProp.PLACEHOLDER]: string;
   [ImageFieldProp.LABEL]: string;
   [ImageFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
+  [ImageFieldProp.SRC]: string;
+  [ImageFieldProp.ALT]: string;
 }
 
 export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
@@ -53,5 +57,19 @@ export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
       type: ControlType.TEXT,
     },
     description: 'The property configuration for the image field',
+  },
+  [ImageFieldProp.SRC]: {
+    default: '',
+    control: {
+      type: ControlType.TEXT,
+    },
+    description: 'The source URL for the image field',
+  },
+  [ImageFieldProp.ALT]: {
+    default: '',
+    control: {
+      type: ControlType.TEXT,
+    },
+    description: 'The alt text for the image field',
   },
 };
