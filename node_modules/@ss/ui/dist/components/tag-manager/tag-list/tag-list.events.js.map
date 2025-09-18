@@ -1,0 +1,1 @@
+{"version":3,"file":"tag-list.events.js","sourceRoot":"","sources":["../../../../src/components/tag-manager/tag-list/tag-list.events.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,mBAAmB,GAAG,aAAa,CAAC;AAMjD,MAAM,OAAO,eAAgB,SAAQ,WAAmC;IACtE,YAAY,OAA+B;QACzC,KAAK,CAAC,mBAAmB,EAAE;YACzB,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;YACd,MAAM,EAAE,OAAO;SAChB,CAAC,CAAC;IACL,CAAC;CACF"}
