@@ -37,6 +37,7 @@ import '@ss/ui/components/ss-toggle';
 import '@/components/entity-form/image-field/image-field';
 import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { PropertyChangedEvent } from '../entity-form/entity-form.events';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -61,6 +62,10 @@ export class PropertyConfigForm extends LitElement {
       }
     }
   `;
+
+  @property({ type: Boolean, reflect: true })
+  [PropertyConfigFormProp.OPEN]: PropertyConfigFormProps[PropertyConfigFormProp.OPEN] =
+    propertyConfigFormProps[PropertyConfigFormProp.OPEN].default;
 
   @property({ type: String })
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
@@ -394,37 +399,53 @@ export class PropertyConfigForm extends LitElement {
 
   render() {
     return html`
-      <fieldset class="entity-config-form">
-        <legend>${msg('Property Configuration')}</legend>
+      <ss-collapsable
+        title=${this.propertyConfig.name || msg('Property Configuration')}
+        panelId=${`propertyConfigForm-${this.propertyConfig.id}`}
+        .open=${this.open}
+      >
+        <fieldset class="entity-config-form">
+          <legend>${msg('Property Configuration')}</legend>
 
-      ${this.visibleFields.map(
-        field =>
-          html` <div class="field">
-            <label for=${field}>${msg(field)}</label>
-            ${this.renderField(field)}
-          </div>`,
-      )}
+          ${repeat(
+            this.visibleFields,
+            field => field,
+            field =>
+              html` <div class="field">
+                <label for=${field}>${msg(field)}</label>
+                ${this.renderField(field)}
+              </div>`,
+          )}
+        </fieldset>
+        <div class="buttons">
+          <ss-button
+            positive
+            ?disabled=${this.inSync}
+            @click=${() => {
+              this.save();
+            }}
+          >
+            ${msg('Save')}
+          </ss-button>
+          <ss-button
+            negative
+            ?disabled=${!this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]}
+            @click=${() => {
+              this.confirmationModalIsOpen = true;
+            }}
+          >
+            ${msg('Delete')}
+          </ss-button>
         </div>
-      </fieldset>
-      <div class="buttons">
-        <ss-button positive ?disabled=${this.inSync} @click=${() => {
-          this.save();
-        }}>
-          ${msg('Save')}
-        </ss-button>
-        <ss-button negative ?disabled=${!this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]} @click=${() => {
-          this.confirmationModalIsOpen = true;
-        }}>
-          ${msg('Delete')}
-        </ss-button>
-      </div>
-      <confirmation-modal 
+      </ss-collapsable>
+
+      <confirmation-modal
         ?open=${this.confirmationModalIsOpen}
         @confirmation-accepted=${this.delete}
         @confirmation-declined=${() => {
           this.confirmationModalIsOpen = false;
-        }}></confirmation-modal>
-
-      `;
+        }}
+      ></confirmation-modal>
+    `;
   }
 }

@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
@@ -29,9 +29,13 @@ import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events
 import '@/components/property-config-form/property-config-form';
 import '@ss/ui/components/ss-collapsable';
 import '@ss/ui/components/confirmation-modal';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 @customElement('entity-config-form')
-export class EntityConfigForm extends LitElement {
+export class EntityConfigForm extends MobxLitElement {
+  public state = appState;
+
   static styles = css`
     :host {
       display: block;
@@ -177,7 +181,17 @@ export class EntityConfigForm extends LitElement {
   }
 
   toggle(e: CollapsableToggledEvent) {
-    this.open = e.detail.isOpen;
+    //this.open = e.detail.isOpen;
+  }
+
+  isPanelOpen(id: number): boolean {
+    if (!id) {
+      return true;
+    }
+
+    return (
+      this.state.collapsablePanelState[`propertyConfigForm-${id}`] || false
+    );
   }
 
   render() {
@@ -233,6 +247,7 @@ export class EntityConfigForm extends LitElement {
               property => property.id,
               (property, index) => html`
                 <property-config-form
+                  ?open=${this.isPanelOpen(property.id)}
                   entityConfigId=${this.entityConfig.id}
                   propertConfigId=${property.id}
                   dataType=${property.dataType}

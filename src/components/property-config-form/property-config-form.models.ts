@@ -7,6 +7,7 @@ import {
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum PropertyConfigFormProp {
+  OPEN = 'open',
   DATA_TYPE = 'dataType',
   RENDER_TYPE = 'renderType',
   ENTITY_CONFIG_ID = 'entityConfigId',
@@ -21,6 +22,7 @@ export enum PropertyConfigFormProp {
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
+  [PropertyConfigFormProp.OPEN]: boolean;
   [PropertyConfigFormProp.DATA_TYPE]: string;
   [PropertyConfigFormProp.RENDER_TYPE]: string;
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: number;
@@ -35,6 +37,11 @@ export interface PropertyConfigFormProps extends PropTypes {
 }
 
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
+  [PropertyConfigFormProp.OPEN]: {
+    default: false,
+    control: { type: ControlType.BOOLEAN },
+    description: 'Whether the form is open or closed',
+  },
   [PropertyConfigFormProp.DATA_TYPE]: {
     default: DataType.SHORT_TEXT,
     control: { type: ControlType.SELECT, options: Object.values(DataType) },
