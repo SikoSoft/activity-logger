@@ -456,6 +456,13 @@ export class Storage implements StorageSchema {
   ): Promise<Entity.EntityPropertyConfig | null> {
     return Promise.resolve(null);
   }
+
+  @delegateSource() async setEntityPropertyOrder(
+    _entityConfigId: number,
+    _propertyConfigOrder: { id: number; order: number }[],
+  ): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }
 
 export const storage = new Storage();

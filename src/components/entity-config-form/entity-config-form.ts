@@ -29,8 +29,11 @@ import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events
 import '@/components/property-config-form/property-config-form';
 import '@ss/ui/components/ss-collapsable';
 import '@ss/ui/components/confirmation-modal';
+import '@ss/ui/components/sortable-list';
+import '@ss/ui/components/sortable-item';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
@@ -194,6 +197,16 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
+  sortUpdated(e: SortUpdatedEvent) {
+    const newOrder = e.detail;
+    console.log('sortUpdated', newOrder);
+
+    storage.setEntityPropertyOrder(
+      this.entityConfig.id,
+      newOrder.sortedIds.map((id, index) => ({ id: Number(id), order: index })),
+    );
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -242,34 +255,40 @@ export class EntityConfigForm extends MobxLitElement {
               >${msg('Add Property')}</ss-button
             >
 
-            ${repeat(
-              this.entityConfig.properties,
-              property => property.id,
-              (property, index) => html`
-                <property-config-form
-                  ?open=${this.isPanelOpen(property.id)}
-                  entityConfigId=${this.entityConfig.id}
-                  propertConfigId=${property.id}
-                  dataType=${property.dataType}
-                  renderType=${property.renderType}
-                  propertyConfigId=${property.id}
-                  name=${property.name}
-                  required=${property.required}
-                  repeat=${property.repeat}
-                  allowed=${property.allowed}
-                  prefix=${property.prefix}
-                  suffix=${property.suffix}
-                  .defaultValue=${property.defaultValue}
-                  @property-config-updated=${(e: PropertyConfigUpdatedEvent) =>
-                    this.updateProperty(index, e.detail)}
-                  @property-config-added=${(e: PropertyConfigAddedEvent) =>
-                    this.updateProperty(index, e.detail)}
-                  @property-config-deleted=${() => {
-                    this.deleteProperty(index);
-                  }}
-                ></property-config-form>
-              `,
-            )}
+            <sortable-list @sort-updated=${this.sortUpdated}>
+              ${repeat(
+                this.entityConfig.properties,
+                property => property.id,
+                (property, index) => html`
+                  <sortable-item id=${property.id}>
+                    <property-config-form
+                      ?open=${this.isPanelOpen(property.id)}
+                      entityConfigId=${this.entityConfig.id}
+                      propertConfigId=${property.id}
+                      dataType=${property.dataType}
+                      renderType=${property.renderType}
+                      propertyConfigId=${property.id}
+                      name=${property.name}
+                      required=${property.required}
+                      repeat=${property.repeat}
+                      allowed=${property.allowed}
+                      prefix=${property.prefix}
+                      suffix=${property.suffix}
+                      .defaultValue=${property.defaultValue}
+                      @property-config-updated=${(
+                        e: PropertyConfigUpdatedEvent,
+                      ) => this.updateProperty(index, e.detail)}
+                      @property-config-added=${(e: PropertyConfigAddedEvent) =>
+                        this.updateProperty(index, e.detail)}
+                      @property-config-deleted=${() => {
+                        this.deleteProperty(index);
+                      }}
+                    ></property-config-form>
+                  </sortable-item>
+                `,
+              )}
+            </sortable-list>
+
             ${this.entityConfig.properties.length > 0
               ? html` <ss-button @click=${this.addPropertyToBottom}
                   >${msg('Add Property')}</ss-button

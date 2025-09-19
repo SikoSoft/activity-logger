@@ -42,4 +42,8 @@ export interface StorageSchema {
   getWindowScrollPosition?(): { x: number; y: number };
   getCollapsablePanelState?(): Record<string, boolean>;
   setCollapsablePanelState?(state: Record<string, boolean>): void;
+  setEntityPropertyOrder?(
+    entityConfigId: number,
+    propertyConfigOrder: { id: number; order: number }[],
+  ): Promise<boolean>;
 }

@@ -160,6 +160,22 @@ export class NetworkStorage implements StorageSchema {
 
     return null;
   }
+
+  async setEntityPropertyOrder(
+    entityConfigId: number,
+    propertyConfigOrder: { id: number; order: number }[],
+  ): Promise<boolean> {
+    const result = await api.put<{ id: number; order: number }[], null>(
+      `propertyConfigOrder/${entityConfigId}`,
+      propertyConfigOrder,
+    );
+
+    if (result && result.isOk) {
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export const networkStorage = new NetworkStorage();
