@@ -478,6 +478,17 @@ export class EntityForm extends ViewElement {
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
     const { uiId } = e.detail;
+    const propertyInstanceIndex = this.propertyInstances.findIndex(
+      property => property.uiId === uiId,
+    );
+
+    const propertyInstances = [
+      ...this.propertyInstances.slice(0, propertyInstanceIndex + 1),
+      { ...this.propertyInstances[propertyInstanceIndex], uiId: uuidv4() },
+      ...this.propertyInstances.slice(propertyInstanceIndex + 1),
+    ];
+
+    this.propertyInstances = propertyInstances;
   }
 
   private handlePropertyDeleted(e: PropertyDeletedEvent) {
