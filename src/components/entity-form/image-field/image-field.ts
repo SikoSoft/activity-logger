@@ -1,8 +1,9 @@
-import { html } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import {
+  DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
   ImageDataValue,
@@ -17,7 +18,7 @@ import { PropertyChangedEvent } from '../entity-form.events';
 import { PropertyField } from '../property-field/property-field';
 
 @customElement('image-field')
-export class ImageField extends PropertyField {
+export class ImageField extends LitElement {
   @property({ type: Number })
   [ImageFieldProp.INSTANCE_ID]: ImageFieldProps[ImageFieldProp.INSTANCE_ID] =
     imageFieldProps[ImageFieldProp.INSTANCE_ID].default;
@@ -34,12 +35,20 @@ export class ImageField extends PropertyField {
   [ImageFieldProp.ALT]: ImageFieldProps[ImageFieldProp.ALT] =
     imageFieldProps[ImageFieldProp.ALT].default;
 
+  @property({ type: Number })
+  [ImageFieldProp.PROPERTY_CONFIG_ID]: ImageFieldProps[ImageFieldProp.PROPERTY_CONFIG_ID] =
+    imageFieldProps[ImageFieldProp.PROPERTY_CONFIG_ID].default;
+
+  @property({ type: Number })
+  [ImageFieldProp.ENTITY_CONFIG_ID]: ImageFieldProps[ImageFieldProp.ENTITY_CONFIG_ID] =
+    imageFieldProps[ImageFieldProp.ENTITY_CONFIG_ID].default;
+
   protected handleValueChanged(value: ImageDataValue) {
     this.dispatchEvent(
       new PropertyChangedEvent({
-        propertyId: this.propertyConfig.id,
+        propertyId: this.propertyConfigId,
         instanceId: this[ImageFieldProp.INSTANCE_ID],
-        dataType: this.propertyConfig.dataType,
+        dataType: DataType.IMAGE,
         value,
       }),
     );
@@ -54,7 +63,7 @@ export class ImageField extends PropertyField {
   }
 
   render() {
-    this.renderField = html`
+    return html`
       <ss-input
         type="text"
         value=${this.src}
@@ -69,6 +78,5 @@ export class ImageField extends PropertyField {
         @input-changed=${this.handleAltChanged}
       ></ss-input>
     `;
-    return super.render();
   }
 }

@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import {
+  DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
@@ -16,7 +17,7 @@ import {
 import { PropertyField } from '../property-field/property-field';
 
 @customElement('text-field')
-export class TextField extends PropertyField {
+export class TextField extends LitElement {
   @property({ type: Number })
   [TextFieldProp.INSTANCE_ID]: TextFieldProps[TextFieldProp.INSTANCE_ID] =
     textFieldProps[TextFieldProp.INSTANCE_ID].default;
@@ -25,26 +26,33 @@ export class TextField extends PropertyField {
   [TextFieldProp.VALUE]: TextFieldProps[TextFieldProp.VALUE] =
     textFieldProps[TextFieldProp.VALUE].default;
 
+  @property({ type: Number })
+  [TextFieldProp.PROPERTY_CONFIG_ID]: TextFieldProps[TextFieldProp.PROPERTY_CONFIG_ID] =
+    textFieldProps[TextFieldProp.PROPERTY_CONFIG_ID].default;
+
+  @property({ type: Number })
+  [TextFieldProp.ENTITY_CONFIG_ID]: TextFieldProps[TextFieldProp.ENTITY_CONFIG_ID] =
+    textFieldProps[TextFieldProp.ENTITY_CONFIG_ID].default;
+
   protected handleInputChanged(e: InputChangedEvent) {
     const value = e.detail.value;
 
     this.dispatchEvent(
       new PropertyChangedEvent({
-        propertyId: this.propertyConfig.id,
+        propertyId: this.propertyConfigId,
         instanceId: this[TextFieldProp.INSTANCE_ID],
-        dataType: this.propertyConfig.dataType,
+        dataType: DataType.SHORT_TEXT,
         value,
       }),
     );
   }
 
   render() {
-    this.renderField = html`
+    return html`
       <ss-input
         value=${this[TextFieldProp.VALUE]}
         @input-changed=${this.handleInputChanged}
       ></ss-input>
     `;
-    return super.render();
   }
 }

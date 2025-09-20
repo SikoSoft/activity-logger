@@ -11,7 +11,8 @@ export enum TextFieldProp {
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
-  PROPERTY_CONFIG = 'propertyConfig',
+  PROPERTY_CONFIG_ID = 'propertyConfigId',
+  ENTITY_CONFIG_ID = 'entityConfigId',
 }
 
 export interface TextFieldProps {
@@ -19,7 +20,8 @@ export interface TextFieldProps {
   [TextFieldProp.VALUE]: string;
   [TextFieldProp.PLACEHOLDER]: string;
   [TextFieldProp.LABEL]: string;
-  [TextFieldProp.PROPERTY_CONFIG]: ShortTextEntityPropertyConfig;
+  [TextFieldProp.PROPERTY_CONFIG_ID]: number;
+  [TextFieldProp.ENTITY_CONFIG_ID]: number;
 }
 
 export const textFieldProps: PropConfigMap<TextFieldProps> = {
@@ -51,15 +53,18 @@ export const textFieldProps: PropConfigMap<TextFieldProps> = {
     },
     description: 'The label text for the text field',
   },
-  [TextFieldProp.PROPERTY_CONFIG]: {
-    default: {
-      ...defaultEntityPropertyConfig,
-      dataType: DataType.SHORT_TEXT,
-      defaultValue: '',
-    },
+  [TextFieldProp.PROPERTY_CONFIG_ID]: {
+    default: 0,
     control: {
-      type: ControlType.TEXT,
+      type: ControlType.NUMBER,
     },
-    description: 'The property configuration for the text field',
+    description: 'The property configuration ID for the text field',
+  },
+  [TextFieldProp.ENTITY_CONFIG_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.NUMBER,
+    },
+    description: 'The entity configuration ID for the text field',
   },
 };

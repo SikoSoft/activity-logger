@@ -3,8 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import {
+  DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
+  ImageEntityPropertyConfig,
+  LongTextEntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { PropertyChangedEvent } from '../entity-form.events';
@@ -20,11 +23,16 @@ import {
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
+import '@/components/entity-form/int-field/int-field';
+import '@/components/entity-form/text-field/text-field';
+import '@/components/entity-form/image-field/image-field';
+import { propertyConfig } from '@/mock/entity-config';
+
 @customElement('property-field')
 export class PropertyField extends MobxLitElement {
   private state = appState;
 
-  protected renderField = html``;
+  //protected renderField = html``;
 
   @property({ type: Number })
   [PropertyFieldProp.INSTANCE_ID]: PropertyFieldProps[PropertyFieldProp.INSTANCE_ID] =
@@ -122,13 +130,46 @@ export class PropertyField extends MobxLitElement {
     );
   }
 
+  renderField() {
+    switch (this.propertyConfig.dataType) {
+      case DataType.IMAGE:
+        return html`<image-field
+          src=${this.propertyConfig.defaultValue.src}
+          alt=${this.propertyConfig.defaultValue.alt}
+          entityConfigId=${this.propertyConfig.entityConfigId}
+          propertyConfigId=${this.propertyConfig.id}
+        ></image-field>`;
+      case DataType.SHORT_TEXT:
+        return html`<text-field
+          value=${this.propertyConfig.defaultValue}
+          uiId=${this.uiId}
+          entityConfigId=${this.propertyConfig.entityConfigId}
+          propertyConfigId=${this.propertyConfig.id}
+        ></text-field>`;
+      case DataType.LONG_TEXT:
+        return html`<text-field
+          value=${this.propertyConfig.defaultValue}
+          entityConfigId=${this.propertyConfig.entityConfigId}
+          propertyConfigId=${this.propertyConfig.id}
+        ></text-field>`;
+      case DataType.INT:
+        return html`<int-field
+          value=${this.propertyConfig.defaultValue}
+          entityConfigId=${this.propertyConfig.entityConfigId}
+          propertyConfigId=${this.propertyConfig.id}
+        ></int-field>`;
+    }
+
+    return nothing;
+  }
+
   render() {
     return html`
       <div class="property">
         <label for=${`property-${this.propertyConfig.id}`}
           >${this.propertyConfig.name}</label
         >
-        ${this.renderField}
+        ${this.renderField()}
 
         <div class="buttons">
           ${this.showDeleteButton

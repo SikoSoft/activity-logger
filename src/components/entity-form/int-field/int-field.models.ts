@@ -10,7 +10,8 @@ export enum IntFieldProp {
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
-  PROPERTY_CONFIG = 'propertyConfig',
+  ENTITY_CONFIG_ID = 'entityConfigId',
+  PROPERTY_CONFIG_ID = 'propertyConfigId',
 }
 
 export interface IntFieldProps {
@@ -18,7 +19,8 @@ export interface IntFieldProps {
   [IntFieldProp.VALUE]: number;
   [IntFieldProp.PLACEHOLDER]: string;
   [IntFieldProp.LABEL]: string;
-  [IntFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
+  [IntFieldProp.PROPERTY_CONFIG_ID]: number;
+  [IntFieldProp.ENTITY_CONFIG_ID]: number;
 }
 
 export const intFieldProps: PropConfigMap<IntFieldProps> = {
@@ -50,11 +52,18 @@ export const intFieldProps: PropConfigMap<IntFieldProps> = {
     },
     description: 'The label text for the input field',
   },
-  [IntFieldProp.PROPERTY_CONFIG]: {
-    default: defaultEntityPropertyConfig,
+  [IntFieldProp.PROPERTY_CONFIG_ID]: {
+    default: defaultEntityPropertyConfig.id,
     control: {
-      type: ControlType.TEXT,
+      type: ControlType.NUMBER,
     },
-    description: 'The property configuration for the input field',
+    description: 'The property configuration ID for the input field',
+  },
+  [IntFieldProp.ENTITY_CONFIG_ID]: {
+    default: defaultEntityPropertyConfig.entityConfigId,
+    control: {
+      type: ControlType.NUMBER,
+    },
+    description: 'The entity configuration ID for the input field',
   },
 };

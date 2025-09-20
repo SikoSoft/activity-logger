@@ -38,9 +38,7 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/tag-manager';
 import '@/components/confirm-modal/confirm-modal';
-import '@/components/entity-form/text-field/text-field';
-import '@/components/entity-form/int-field/int-field';
-import '@/components/entity-form/image-field/image-field';
+import '@/components/entity-form/property-field/property-field';
 
 import {
   EntityItemCanceledEvent,
@@ -513,6 +511,17 @@ export class EntityForm extends ViewElement {
       return nothing;
     }
 
+    return html`<property-field
+      .value=${propertyConfig.defaultValue}
+      uiId=${uiId}
+      entityConfigId=${propertyConfig.entityConfigId}
+      propertyConfigId=${propertyConfig.id}
+      @property-changed=${this.handlePropertyChanged}
+      @property-cloned=${this.handlePropertyCloned}
+      @property-deleted=${this.handlePropertyDeleted}
+    ></property-field>`;
+
+    /*
     switch (propertyConfig.dataType) {
       case DataType.IMAGE:
         return html`<image-field
@@ -546,6 +555,7 @@ export class EntityForm extends ViewElement {
     }
 
     return nothing;
+    */
   }
 
   render() {
