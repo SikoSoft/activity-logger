@@ -1,13 +1,8 @@
 import { html, LitElement } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
-import {
-  DataType,
-  defaultEntityPropertyConfig,
-  EntityPropertyConfig,
-  ImageDataValue,
-} from 'api-spec/models/Entity';
+import { DataType, ImageDataValue } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   ImageFieldProp,
@@ -15,7 +10,6 @@ import {
   imageFieldProps,
 } from './image-field.models';
 import { PropertyChangedEvent } from '../entity-form.events';
-import { PropertyField } from '../property-field/property-field';
 
 @customElement('image-field')
 export class ImageField extends LitElement {

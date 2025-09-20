@@ -1,10 +1,6 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
-import {
-  defaultEntityPropertyConfig,
-  EntityPropertyConfig,
-  ImageDataValue,
-} from 'api-spec/models/Entity';
+import { ImageDataValue } from 'api-spec/models/Entity';
 
 export enum ImageFieldProp {
   INSTANCE_ID = 'instanceId',

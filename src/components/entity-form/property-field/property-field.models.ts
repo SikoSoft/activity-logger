@@ -1,11 +1,6 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap } from '@/models/Prop';
-import {
-  DataType,
-  defaultEntityPropertyConfig,
-  PropertyDataValue,
-  ShortTextEntityPropertyConfig,
-} from 'api-spec/models/Entity';
+import { PropertyDataValue } from 'api-spec/models/Entity';
 
 export enum PropertyFieldProp {
   INSTANCE_ID = 'instanceId',

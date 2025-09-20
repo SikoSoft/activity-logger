@@ -1,10 +1,5 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap } from '@/models/Prop';
-import {
-  DataType,
-  defaultEntityPropertyConfig,
-  ShortTextEntityPropertyConfig,
-} from 'api-spec/models/Entity';
 
 export enum TextFieldProp {
   INSTANCE_ID = 'instanceId',

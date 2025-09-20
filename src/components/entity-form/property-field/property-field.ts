@@ -6,8 +6,6 @@ import {
   DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
-  ImageEntityPropertyConfig,
-  LongTextEntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { PropertyChangedEvent } from '../entity-form.events';
@@ -26,13 +24,10 @@ import { appState } from '@/state';
 import '@/components/entity-form/int-field/int-field';
 import '@/components/entity-form/text-field/text-field';
 import '@/components/entity-form/image-field/image-field';
-import { propertyConfig } from '@/mock/entity-config';
 
 @customElement('property-field')
 export class PropertyField extends MobxLitElement {
   private state = appState;
-
-  //protected renderField = html``;
 
   @property({ type: Number })
   [PropertyFieldProp.INSTANCE_ID]: PropertyFieldProps[PropertyFieldProp.INSTANCE_ID] =
@@ -60,8 +55,6 @@ export class PropertyField extends MobxLitElement {
       this.propertyConfig.id,
       this.state.entityPropertyInstances[this.propertyConfig.id] || 1,
     );
-
-    console.log('Property field connected:', this.state.entityConfigs);
   }
 
   protected handleInputChanged(e: InputChangedEvent) {
@@ -102,8 +95,6 @@ export class PropertyField extends MobxLitElement {
 
   @state()
   get showCloneButton(): boolean {
-    console.log('Show clone button:', this.propertyConfig);
-
     if (
       this.state.entityPropertyInstances[this.propertyConfig.id] <
       this.propertyConfig.allowed

@@ -2,11 +2,7 @@ import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
-import {
-  DataType,
-  defaultEntityPropertyConfig,
-  EntityPropertyConfig,
-} from 'api-spec/models/Entity';
+import { DataType } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { PropertyChangedEvent } from '../entity-form.events';
 import {
@@ -14,7 +10,6 @@ import {
   TextFieldProps,
   textFieldProps,
 } from './text-field.models';
-import { PropertyField } from '../property-field/property-field';
 
 @customElement('text-field')
 export class TextField extends LitElement {

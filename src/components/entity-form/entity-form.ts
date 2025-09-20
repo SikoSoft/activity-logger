@@ -7,16 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import {
-  DataType,
-  EntityConfig,
-  EntityItem,
-  EntityPropertyConfig,
-  ImageEntityPropertyConfig,
-  ItemProperty,
-  LongTextEntityPropertyConfig,
-  ShortTextEntityPropertyConfig,
-} from 'api-spec/models/Entity';
+import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
@@ -130,6 +121,8 @@ export class EntityForm extends ViewElement {
 
   @state() propertyInstances: PropertyInstance[] = [];
 
+  @state() propertiesSetup = false;
+
   @state()
   get classes() {
     return { box: true, 'advanced-mode': this.state.advancedMode };
@@ -150,7 +143,6 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
-    //console.log('Get entity config for type:', this.type);
     return this.state.entityConfigs.find(entity => entity.id === this.type);
   }
 
@@ -191,7 +183,7 @@ export class EntityForm extends ViewElement {
 
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
-    if (this.entityConfig && !this.propertyInstances.length) {
+    if (this.entityConfig && !this.propertiesSetup) {
       this.propertyInstances = this.entityConfig.properties.map(
         propertyConfig => ({
           propertyConfig,
@@ -199,6 +191,7 @@ export class EntityForm extends ViewElement {
           uiId: uuidv4(),
         }),
       );
+      this.propertiesSetup = true;
     }
   }
 
@@ -475,7 +468,6 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyChanged(e: CustomEvent) {
-    console.log('Property changed:', e.detail);
     const propertyId = e.detail.id;
     const value = e.detail.value;
 
@@ -486,19 +478,13 @@ export class EntityForm extends ViewElement {
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
     const { uiId } = e.detail;
-    console.log('Property cloned:', uiId);
   }
 
   private handlePropertyDeleted(e: PropertyDeletedEvent) {
     const { uiId } = e.detail;
-    console.log('Property deleted:', uiId);
-    const index = this.propertyInstances.findIndex(
-      property => property.uiId === uiId,
+    this.propertyInstances = this.propertyInstances.filter(
+      property => property.uiId !== uiId,
     );
-    if (index > -1) {
-      this.propertyInstances.splice(index, 1);
-      this.propertyInstances = [...this.propertyInstances];
-    }
   }
 
   private addProperty() {
@@ -520,42 +506,6 @@ export class EntityForm extends ViewElement {
       @property-cloned=${this.handlePropertyCloned}
       @property-deleted=${this.handlePropertyDeleted}
     ></property-field>`;
-
-    /*
-    switch (propertyConfig.dataType) {
-      case DataType.IMAGE:
-        return html`<image-field
-          src=${propertyConfig.defaultValue.src}
-          alt=${propertyConfig.defaultValue.alt}
-          .propertyConfig=${propertyConfig as ImageEntityPropertyConfig}
-          @property-changed=${this.handlePropertyChanged}
-        ></image-field>`;
-      case DataType.SHORT_TEXT:
-        return html`<text-field
-          value=${propertyConfig.defaultValue}
-          uiId=${uiId}
-          entityConfigId=${propertyConfig.entityConfigId}
-          propertyConfigId=${propertyConfig.id}
-          @property-changed=${this.handlePropertyChanged}
-          @property-cloned=${this.handlePropertyCloned}
-          @property-deleted=${this.handlePropertyDeleted}
-        ></text-field>`;
-      case DataType.LONG_TEXT:
-        return html`<text-field
-          value=${propertyConfig.defaultValue}
-          .propertyConfig=${propertyConfig as LongTextEntityPropertyConfig}
-          @property-changed=${this.handlePropertyChanged}
-        ></text-field>`;
-      case DataType.INT:
-        return html`<int-field
-          value=${propertyConfig.defaultValue}
-          .propertyConfig=${propertyConfig}
-          @property-changed=${this.handlePropertyChanged}
-        ></int-field>`;
-    }
-
-    return nothing;
-    */
   }
 
   render() {

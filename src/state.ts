@@ -1,11 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
-import {
-  EntityItem,
-  EntityConfig,
-  EntityPropertyConfig,
-} from 'api-spec/models/Entity';
+import { EntityItem, EntityConfig } from 'api-spec/models/Entity';
 import {
   ListFilter,
   ListFilterType,
