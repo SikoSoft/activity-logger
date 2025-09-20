@@ -1,7 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
-import { EntityItem, EntityConfig } from 'api-spec/models/Entity';
+import {
+  EntityItem,
+  EntityConfig,
+  EntityPropertyConfig,
+} from 'api-spec/models/Entity';
 import {
   ListFilter,
   ListFilterType,
@@ -128,6 +132,9 @@ export class AppState {
 
   @observable
   public collapsablePanelState: Record<string, boolean> = {};
+
+  @observable
+  public entityPropertyInstances: Record<number, number> = {};
 
   @action
   public setActionSuggestions(suggestions: string[]) {
@@ -349,6 +356,11 @@ export class AppState {
   @action
   setCollapsableState(state: Record<string, boolean>) {
     this.collapsablePanelState = state;
+  }
+
+  @action
+  setEntityPropertyInstance(propertyConfigId: number, instanceId: number) {
+    this.entityPropertyInstances[propertyConfigId] = instanceId;
   }
 
   constructor() {

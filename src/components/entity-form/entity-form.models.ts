@@ -1,6 +1,13 @@
 import { ItemProperty } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
+import { Entity } from 'api-spec/models';
+
+export interface PropertyInstance {
+  propertyConfig: Entity.EntityPropertyConfig;
+  instanceId: number;
+  uiId: string;
+}
 
 export enum EntityFormProp {
   ENTITY_ID = 'entityId',

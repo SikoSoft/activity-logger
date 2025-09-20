@@ -3,6 +3,7 @@ import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { msg } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
@@ -24,6 +25,7 @@ import {
   EntityFormProp,
   entityFormProps,
   EntityFormProps,
+  PropertyInstance,
   RequestBody,
   SuggestionInputType,
   SuggestionLastInput,
@@ -51,6 +53,10 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 import { theme } from '@/styles/theme';
+import {
+  PropertyClonedEvent,
+  PropertyDeletedEvent,
+} from './property-field/property-field.events';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -124,6 +130,8 @@ export class EntityForm extends ViewElement {
   };
   @state() tagSuggestions: string[] = [];
 
+  @state() propertyInstances: PropertyInstance[] = [];
+
   @state()
   get classes() {
     return { box: true, 'advanced-mode': this.state.advancedMode };
@@ -144,6 +152,7 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
+    //console.log('Get entity config for type:', this.type);
     return this.state.entityConfigs.find(entity => entity.id === this.type);
   }
 
@@ -179,6 +188,19 @@ export class EntityForm extends ViewElement {
     if (this.abortController) {
       this.abortController.abort();
       this.abortController = null;
+    }
+  }
+
+  updated(changedProperties: Map<string, unknown>): void {
+    super.updated(changedProperties);
+    if (this.entityConfig && !this.propertyInstances.length) {
+      this.propertyInstances = this.entityConfig.properties.map(
+        propertyConfig => ({
+          propertyConfig,
+          instanceId: 0,
+          uiId: uuidv4(),
+        }),
+      );
     }
   }
 
@@ -464,6 +486,23 @@ export class EntityForm extends ViewElement {
     );
   }
 
+  private handlePropertyCloned(e: PropertyClonedEvent) {
+    const { propertyConfigId } = e.detail;
+    console.log('Property cloned:', propertyConfigId);
+  }
+
+  private handlePropertyDeleted(e: PropertyDeletedEvent) {
+    const { propertyConfigId } = e.detail;
+    console.log('Property deleted:', propertyConfigId);
+    const index = this.properties.findIndex(
+      property => property.propertyId === propertyConfigId,
+    );
+    if (index > -1) {
+      this.properties.splice(index, 1);
+      this.properties = [...this.properties];
+    }
+  }
+
   private addProperty() {
     console.log('addProperty');
   }
@@ -482,6 +521,8 @@ export class EntityForm extends ViewElement {
           value=${propertyConfig.defaultValue}
           .propertyConfig=${propertyConfig as ShortTextEntityPropertyConfig}
           @property-changed=${this.handlePropertyChanged}
+          @property-cloned=${this.handlePropertyCloned}
+          @property-deleted=${this.handlePropertyDeleted}
         ></text-field>`;
       case DataType.LONG_TEXT:
         return html`<text-field
@@ -530,12 +571,14 @@ export class EntityForm extends ViewElement {
                   ></item-property-form>`,
               )
             : nothing}
-          ${this.entityConfig
+          ${this.propertyInstances.length && this.entityConfig
             ? repeat(
-                this.entityConfig.properties,
-                propertyConfig => propertyConfig.id,
-                propertyConfig =>
-                  html`${this.renderPropertyField(propertyConfig)}`,
+                this.propertyInstances,
+                propertyInstance => propertyInstance.propertyConfig.id,
+                propertyInstance =>
+                  html`${this.renderPropertyField(
+                    propertyInstance.propertyConfig,
+                  )}`,
               )
             : nothing}
         </div>

@@ -13,9 +13,10 @@ import {
   TextFieldProps,
   textFieldProps,
 } from './text-field.models';
+import { PropertyField } from '../property-field/property-field';
 
 @customElement('text-field')
-export class TextField extends LitElement {
+export class TextField extends PropertyField {
   @property({ type: Number })
   [TextFieldProp.INSTANCE_ID]: TextFieldProps[TextFieldProp.INSTANCE_ID] =
     textFieldProps[TextFieldProp.INSTANCE_ID].default;
@@ -41,16 +42,12 @@ export class TextField extends LitElement {
   }
 
   render() {
-    return html`
-      <div class="property">
-        <label for=${`property-${this.propertyConfig.id}`}
-          >${this.propertyConfig.name}</label
-        >
-        <ss-input
-          value=${this[TextFieldProp.VALUE]}
-          @input-changed=${this.handleInputChanged}
-        ></ss-input>
-      </div>
+    this.renderField = html`
+      <ss-input
+        value=${this[TextFieldProp.VALUE]}
+        @input-changed=${this.handleInputChanged}
+      ></ss-input>
     `;
+    return super.render();
   }
 }
