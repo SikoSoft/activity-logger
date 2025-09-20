@@ -11,7 +11,8 @@ export enum ImageFieldProp {
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
-  PROPERTY_CONFIG = 'propertyConfig',
+  PROPERTY_CONFIG_ID = 'propertyConfigId',
+  ENTITY_CONFIG_ID = 'entityConfigId',
   SRC = 'src',
   ALT = 'alt',
 }
@@ -21,7 +22,8 @@ export interface ImageFieldProps extends PropTypes {
   [ImageFieldProp.VALUE]: ImageDataValue;
   [ImageFieldProp.PLACEHOLDER]: string;
   [ImageFieldProp.LABEL]: string;
-  [ImageFieldProp.PROPERTY_CONFIG]: EntityPropertyConfig;
+  [ImageFieldProp.PROPERTY_CONFIG_ID]: number;
+  [ImageFieldProp.ENTITY_CONFIG_ID]: number;
   [ImageFieldProp.SRC]: string;
   [ImageFieldProp.ALT]: string;
 }
@@ -60,12 +62,19 @@ export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
     },
     description: 'The label text for the image field',
   },
-  [ImageFieldProp.PROPERTY_CONFIG]: {
-    default: defaultEntityPropertyConfig,
+  [ImageFieldProp.PROPERTY_CONFIG_ID]: {
+    default: 0,
     control: {
-      type: ControlType.TEXT,
+      type: ControlType.HIDDEN,
     },
-    description: 'The property configuration for the image field',
+    description: 'The ID of the property config',
+  },
+  [ImageFieldProp.ENTITY_CONFIG_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The ID of the entity config',
   },
   [ImageFieldProp.SRC]: {
     default: '',

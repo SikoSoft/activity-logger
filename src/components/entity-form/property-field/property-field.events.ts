@@ -1,7 +1,7 @@
 export const propertyClonedEventName = 'property-cloned';
 
 export interface PropertyClonedEventPayload {
-  propertyConfigId: number;
+  uiId: string;
 }
 
 export class PropertyClonedEvent extends CustomEvent<PropertyClonedEventPayload> {
@@ -17,7 +17,7 @@ export class PropertyClonedEvent extends CustomEvent<PropertyClonedEventPayload>
 export const propertyDeletedEventName = 'property-deleted';
 
 export interface PropertyDeletedEventPayload {
-  propertyConfigId: number;
+  uiId: string;
 }
 
 export class PropertyDeletedEvent extends CustomEvent<PropertyDeletedEventPayload> {

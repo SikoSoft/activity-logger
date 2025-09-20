@@ -3,6 +3,7 @@ import { PropConfigMap } from '@/models/Prop';
 import {
   DataType,
   defaultEntityPropertyConfig,
+  PropertyDataValue,
   ShortTextEntityPropertyConfig,
 } from 'api-spec/models/Entity';
 
@@ -11,15 +12,19 @@ export enum PropertyFieldProp {
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
   LABEL = 'label',
-  PROPERTY_CONFIG = 'propertyConfig',
+  ENTITY_CONFIG_ID = 'entityConfigId',
+  PROPERTY_CONFIG_ID = 'propertyConfigId',
+  UI_ID = 'uiId',
 }
 
 export interface PropertyFieldProps {
   [PropertyFieldProp.INSTANCE_ID]: number;
-  [PropertyFieldProp.VALUE]: string;
+  [PropertyFieldProp.VALUE]: PropertyDataValue;
   [PropertyFieldProp.PLACEHOLDER]: string;
   [PropertyFieldProp.LABEL]: string;
-  [PropertyFieldProp.PROPERTY_CONFIG]: ShortTextEntityPropertyConfig;
+  [PropertyFieldProp.ENTITY_CONFIG_ID]: number;
+  [PropertyFieldProp.PROPERTY_CONFIG_ID]: number;
+  [PropertyFieldProp.UI_ID]: string;
 }
 
 export const propertyFieldProps: PropConfigMap<PropertyFieldProps> = {
@@ -51,15 +56,25 @@ export const propertyFieldProps: PropConfigMap<PropertyFieldProps> = {
     },
     description: 'The label text for the property field',
   },
-  [PropertyFieldProp.PROPERTY_CONFIG]: {
-    default: {
-      ...defaultEntityPropertyConfig,
-      dataType: DataType.SHORT_TEXT,
-      defaultValue: '',
-    },
+  [PropertyFieldProp.ENTITY_CONFIG_ID]: {
+    default: 0,
     control: {
-      type: ControlType.TEXT,
+      type: ControlType.HIDDEN,
     },
-    description: 'The property configuration for the text field',
+    description: 'The ID of the entity config',
+  },
+  [PropertyFieldProp.PROPERTY_CONFIG_ID]: {
+    default: 0,
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The ID of the property config',
+  },
+  [PropertyFieldProp.UI_ID]: {
+    default: '',
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The ID used for tracking purposes in the UI',
   },
 };

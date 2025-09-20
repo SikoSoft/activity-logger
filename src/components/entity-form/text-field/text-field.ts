@@ -21,9 +21,6 @@ export class TextField extends PropertyField {
   [TextFieldProp.INSTANCE_ID]: TextFieldProps[TextFieldProp.INSTANCE_ID] =
     textFieldProps[TextFieldProp.INSTANCE_ID].default;
 
-  @property({ type: Object })
-  propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
-
   @property({ type: String })
   [TextFieldProp.VALUE]: TextFieldProps[TextFieldProp.VALUE] =
     textFieldProps[TextFieldProp.VALUE].default;

@@ -9,15 +9,13 @@ import {
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { PropertyChangedEvent } from '../entity-form.events';
 import { IntFieldProp, intFieldProps, IntFieldProps } from './int-field.models';
+import { PropertyField } from '../property-field/property-field';
 
 @customElement('int-field')
-export class IntField extends LitElement {
+export class IntField extends PropertyField {
   @property({ type: Number })
   [IntFieldProp.INSTANCE_ID]: IntFieldProps[IntFieldProp.INSTANCE_ID] =
     intFieldProps[IntFieldProp.INSTANCE_ID].default;
-
-  @property({ type: Object })
-  propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
   @property({ type: Number })
   [IntFieldProp.VALUE]: IntFieldProps[IntFieldProp.VALUE] =
@@ -41,17 +39,13 @@ export class IntField extends LitElement {
   }
 
   render() {
-    return html`
-      <div class="property">
-        <label for=${`property-${this.propertyConfig.id}`}
-          >${this.propertyConfig.name}</label
-        >
-        <ss-input
-          type="number"
-          value=${this[IntFieldProp.VALUE]}
-          @input-changed=${this.handleInputChanged}
-        ></ss-input>
-      </div>
+    this.renderField = html`
+      <ss-input
+        type="number"
+        value=${this[IntFieldProp.VALUE]}
+        @input-changed=${this.handleInputChanged}
+      ></ss-input>
     `;
+    return super.render();
   }
 }

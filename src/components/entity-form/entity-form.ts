@@ -487,19 +487,19 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
-    const { propertyConfigId } = e.detail;
-    console.log('Property cloned:', propertyConfigId);
+    const { uiId } = e.detail;
+    console.log('Property cloned:', uiId);
   }
 
   private handlePropertyDeleted(e: PropertyDeletedEvent) {
-    const { propertyConfigId } = e.detail;
-    console.log('Property deleted:', propertyConfigId);
-    const index = this.properties.findIndex(
-      property => property.propertyId === propertyConfigId,
+    const { uiId } = e.detail;
+    console.log('Property deleted:', uiId);
+    const index = this.propertyInstances.findIndex(
+      property => property.uiId === uiId,
     );
     if (index > -1) {
-      this.properties.splice(index, 1);
-      this.properties = [...this.properties];
+      this.propertyInstances.splice(index, 1);
+      this.propertyInstances = [...this.propertyInstances];
     }
   }
 
@@ -507,7 +507,12 @@ export class EntityForm extends ViewElement {
     console.log('addProperty');
   }
 
-  renderPropertyField(propertyConfig: EntityPropertyConfig) {
+  renderPropertyField(propertyInstance: PropertyInstance) {
+    const { propertyConfig, uiId } = propertyInstance;
+    if (!propertyConfig) {
+      return nothing;
+    }
+
     switch (propertyConfig.dataType) {
       case DataType.IMAGE:
         return html`<image-field
@@ -519,7 +524,9 @@ export class EntityForm extends ViewElement {
       case DataType.SHORT_TEXT:
         return html`<text-field
           value=${propertyConfig.defaultValue}
-          .propertyConfig=${propertyConfig as ShortTextEntityPropertyConfig}
+          uiId=${uiId}
+          entityConfigId=${propertyConfig.entityConfigId}
+          propertyConfigId=${propertyConfig.id}
           @property-changed=${this.handlePropertyChanged}
           @property-cloned=${this.handlePropertyCloned}
           @property-deleted=${this.handlePropertyDeleted}
@@ -576,9 +583,7 @@ export class EntityForm extends ViewElement {
                 this.propertyInstances,
                 propertyInstance => propertyInstance.propertyConfig.id,
                 propertyInstance =>
-                  html`${this.renderPropertyField(
-                    propertyInstance.propertyConfig,
-                  )}`,
+                  html`${this.renderPropertyField(propertyInstance)}`,
               )
             : nothing}
         </div>

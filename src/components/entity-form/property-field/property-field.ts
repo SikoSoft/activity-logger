@@ -30,8 +30,17 @@ export class PropertyField extends MobxLitElement {
   [PropertyFieldProp.INSTANCE_ID]: PropertyFieldProps[PropertyFieldProp.INSTANCE_ID] =
     propertyFieldProps[PropertyFieldProp.INSTANCE_ID].default;
 
-  @property({ type: Object })
-  propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
+  @property({ type: Number })
+  [PropertyFieldProp.ENTITY_CONFIG_ID]: PropertyFieldProps[PropertyFieldProp.ENTITY_CONFIG_ID] =
+    propertyFieldProps[PropertyFieldProp.ENTITY_CONFIG_ID].default;
+
+  @property({ type: Number })
+  [PropertyFieldProp.PROPERTY_CONFIG_ID]: PropertyFieldProps[PropertyFieldProp.PROPERTY_CONFIG_ID] =
+    propertyFieldProps[PropertyFieldProp.PROPERTY_CONFIG_ID].default;
+
+  @property({ type: String })
+  [PropertyFieldProp.UI_ID]: PropertyFieldProps[PropertyFieldProp.UI_ID] =
+    propertyFieldProps[PropertyFieldProp.UI_ID].default;
 
   @property({ type: String })
   [PropertyFieldProp.VALUE]: PropertyFieldProps[PropertyFieldProp.VALUE] =
@@ -61,6 +70,24 @@ export class PropertyField extends MobxLitElement {
   }
 
   @state()
+  get propertyConfig(): EntityPropertyConfig {
+    let propertyConfig = defaultEntityPropertyConfig;
+
+    const entityConfig = this.state.entityConfigs.find(
+      config => config.id === this[PropertyFieldProp.ENTITY_CONFIG_ID],
+    );
+
+    if (entityConfig) {
+      propertyConfig =
+        entityConfig.properties.find(
+          prop => prop.id === this[PropertyFieldProp.PROPERTY_CONFIG_ID],
+        ) || defaultEntityPropertyConfig;
+    }
+
+    return propertyConfig;
+  }
+
+  @state()
   get showDeleteButton(): boolean {
     return true;
   }
@@ -79,6 +106,22 @@ export class PropertyField extends MobxLitElement {
     return false;
   }
 
+  delete() {
+    this.dispatchEvent(
+      new PropertyDeletedEvent({
+        uiId: this[PropertyFieldProp.UI_ID],
+      }),
+    );
+  }
+
+  clone() {
+    this.dispatchEvent(
+      new PropertyClonedEvent({
+        uiId: this[PropertyFieldProp.UI_ID],
+      }),
+    );
+  }
+
   render() {
     return html`
       <div class="property">
@@ -89,26 +132,10 @@ export class PropertyField extends MobxLitElement {
 
         <div class="buttons">
           ${this.showDeleteButton
-            ? html` <ss-button
-                @click=${() =>
-                  this.dispatchEvent(
-                    new PropertyDeletedEvent({
-                      propertyConfigId: this.propertyConfig.id,
-                    }),
-                  )}
-                >Delete</ss-button
-              >`
+            ? html` <ss-button @click=${this.delete}>Delete</ss-button>`
             : nothing}
           ${this.showCloneButton
-            ? html` <ss-button
-                @click=${() =>
-                  this.dispatchEvent(
-                    new PropertyClonedEvent({
-                      propertyConfigId: this.propertyConfig.id,
-                    }),
-                  )}
-                >Clone</ss-button
-              >`
+            ? html` <ss-button @click=${this.clone}>Clone</ss-button>`
             : nothing}
         </div>
       </div>

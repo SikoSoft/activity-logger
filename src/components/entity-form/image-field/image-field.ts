@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -14,15 +14,13 @@ import {
   imageFieldProps,
 } from './image-field.models';
 import { PropertyChangedEvent } from '../entity-form.events';
+import { PropertyField } from '../property-field/property-field';
 
 @customElement('image-field')
-export class ImageField extends LitElement {
+export class ImageField extends PropertyField {
   @property({ type: Number })
   [ImageFieldProp.INSTANCE_ID]: ImageFieldProps[ImageFieldProp.INSTANCE_ID] =
     imageFieldProps[ImageFieldProp.INSTANCE_ID].default;
-
-  @property({ type: Object })
-  propertyConfig: EntityPropertyConfig = defaultEntityPropertyConfig;
 
   @property({ type: Object })
   [ImageFieldProp.VALUE]: ImageFieldProps[ImageFieldProp.VALUE] =
@@ -56,25 +54,21 @@ export class ImageField extends LitElement {
   }
 
   render() {
-    return html`
-      <div class="property">
-        <label for=${`property-${this.propertyConfig.id}`}
-          >${this.propertyConfig.name}</label
-        >
-        <ss-input
-          type="text"
-          value=${this.src}
-          placeholder="Image URL"
-          @input-changed=${this.handleSrcChanged}
-        ></ss-input>
+    this.renderField = html`
+      <ss-input
+        type="text"
+        value=${this.src}
+        placeholder="Image URL"
+        @input-changed=${this.handleSrcChanged}
+      ></ss-input>
 
-        <ss-input
-          type="text"
-          value=${this.alt}
-          placeholder="Image Alt Text"
-          @input-changed=${this.handleAltChanged}
-        ></ss-input>
-      </div>
+      <ss-input
+        type="text"
+        value=${this.alt}
+        placeholder="Image Alt Text"
+        @input-changed=${this.handleAltChanged}
+      ></ss-input>
     `;
+    return super.render();
   }
 }
