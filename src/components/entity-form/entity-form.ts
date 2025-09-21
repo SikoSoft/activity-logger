@@ -28,7 +28,7 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/tag-manager';
-import '@/components/confirm-modal/confirm-modal';
+import '@ss/ui/components/confirmation-modal';
 import '@/components/entity-form/property-field/property-field';
 
 import {
@@ -606,11 +606,12 @@ export class EntityForm extends ViewElement {
                   text=${msg('Delete')}
                 ></ss-button>
 
-                <action-confirm-modal
-                  @confirm=${this.deleteAction}
-                  @cancel=${() => (this.confirmModalShown = false)}
+                <confirmation-modal
+                  @confirmation-accepted=${this.deleteAction}
+                  @confirmation-declined=${() =>
+                    (this.confirmModalShown = false)}
                   ?open=${this.confirmModalShown}
-                ></action-confirm-modal>
+                ></confirmation-modal>
               `
             : nothing}
         </div>

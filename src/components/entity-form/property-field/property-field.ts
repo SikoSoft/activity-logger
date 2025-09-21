@@ -49,6 +49,9 @@ export class PropertyField extends MobxLitElement {
   [PropertyFieldProp.VALUE]: PropertyFieldProps[PropertyFieldProp.VALUE] =
     propertyFieldProps[PropertyFieldProp.VALUE].default;
 
+  @state()
+  confirmationModalIsOpen = false;
+
   connectedCallback(): void {
     super.connectedCallback();
     this.state.setEntityPropertyInstance(
@@ -130,6 +133,7 @@ export class PropertyField extends MobxLitElement {
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></image-field>`;
+
       case DataType.SHORT_TEXT:
         return html`<text-field
           value=${this.propertyConfig.defaultValue}
@@ -137,12 +141,14 @@ export class PropertyField extends MobxLitElement {
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></text-field>`;
+
       case DataType.LONG_TEXT:
         return html`<text-field
           value=${this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></text-field>`;
+
       case DataType.INT:
         return html`<int-field
           value=${this.propertyConfig.defaultValue}
@@ -164,12 +170,26 @@ export class PropertyField extends MobxLitElement {
 
         <div class="buttons">
           ${this.showDeleteButton
-            ? html` <ss-button @click=${this.delete}>Delete</ss-button>`
+            ? html` <ss-button
+                negative
+                @click=${() => {
+                  this.confirmationModalIsOpen = true;
+                }}
+                >Delete</ss-button
+              >`
             : nothing}
           ${this.showCloneButton
-            ? html` <ss-button @click=${this.clone}>Clone</ss-button>`
+            ? html` <ss-button positive @click=${this.clone}>Clone</ss-button>`
             : nothing}
         </div>
+
+        <confirmation-modal
+          ?open=${this.confirmationModalIsOpen}
+          @confirmation-accepted=${this.delete}
+          @confirmation-declined=${() => {
+            this.confirmationModalIsOpen = false;
+          }}
+        ></confirmation-modal>
       </div>
     `;
   }
