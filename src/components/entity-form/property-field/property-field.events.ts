@@ -1,3 +1,25 @@
+import { DataTypedValue } from 'api-spec/models/Entity';
+
+export const propertyChangedEventName = 'property-changed';
+
+export type PropertyChangedEventPayload = Omit<
+  DataTypedValue,
+  'defaultValue'
+> & {
+  value: DataTypedValue['defaultValue'];
+  uiId: string;
+};
+
+export class PropertyChangedEvent extends CustomEvent<PropertyChangedEventPayload> {
+  constructor(payload: PropertyChangedEventPayload) {
+    super(propertyChangedEventName, {
+      bubbles: true,
+      composed: true,
+      detail: payload,
+    });
+  }
+}
+
 export const propertyClonedEventName = 'property-cloned';
 
 export interface PropertyClonedEventPayload {

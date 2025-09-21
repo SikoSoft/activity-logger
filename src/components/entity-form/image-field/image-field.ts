@@ -9,7 +9,7 @@ import {
   ImageFieldProps,
   imageFieldProps,
 } from './image-field.models';
-import { PropertyChangedEvent } from '../entity-form.events';
+import { PropertyChangedEvent } from '../property-field/property-field.events';
 
 @customElement('image-field')
 export class ImageField extends LitElement {
@@ -37,11 +37,14 @@ export class ImageField extends LitElement {
   [ImageFieldProp.ENTITY_CONFIG_ID]: ImageFieldProps[ImageFieldProp.ENTITY_CONFIG_ID] =
     imageFieldProps[ImageFieldProp.ENTITY_CONFIG_ID].default;
 
+  @property({ type: String })
+  [ImageFieldProp.UI_ID]: ImageFieldProps[ImageFieldProp.UI_ID] =
+    imageFieldProps[ImageFieldProp.UI_ID].default;
+
   protected handleValueChanged(value: ImageDataValue) {
     this.dispatchEvent(
       new PropertyChangedEvent({
-        propertyId: this.propertyConfigId,
-        instanceId: this[ImageFieldProp.INSTANCE_ID],
+        uiId: this[ImageFieldProp.UI_ID],
         dataType: DataType.IMAGE,
         value,
       }),

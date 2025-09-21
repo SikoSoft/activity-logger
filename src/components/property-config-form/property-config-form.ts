@@ -36,7 +36,7 @@ import '@ss/ui/components/confirmation-modal';
 import '@ss/ui/components/ss-toggle';
 import '@/components/entity-form/image-field/image-field';
 import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
-import { PropertyChangedEvent } from '../entity-form/entity-form.events';
+import { PropertyChangedEvent } from '../entity-form/property-field/property-field.events';
 import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('property-config-form')

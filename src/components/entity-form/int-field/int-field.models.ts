@@ -9,6 +9,7 @@ export enum IntFieldProp {
   LABEL = 'label',
   ENTITY_CONFIG_ID = 'entityConfigId',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
+  UI_ID = 'uiId',
 }
 
 export interface IntFieldProps {
@@ -18,6 +19,7 @@ export interface IntFieldProps {
   [IntFieldProp.LABEL]: string;
   [IntFieldProp.PROPERTY_CONFIG_ID]: number;
   [IntFieldProp.ENTITY_CONFIG_ID]: number;
+  [IntFieldProp.UI_ID]: string;
 }
 
 export const intFieldProps: PropConfigMap<IntFieldProps> = {
@@ -62,5 +64,12 @@ export const intFieldProps: PropConfigMap<IntFieldProps> = {
       type: ControlType.NUMBER,
     },
     description: 'The entity configuration ID for the input field',
+  },
+  [IntFieldProp.UI_ID]: {
+    default: '',
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The UI ID for the input field',
   },
 };

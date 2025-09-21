@@ -7,17 +7,16 @@ import {
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
-import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { PropertyChangedEvent } from '../entity-form.events';
 import {
   PropertyFieldProp,
   PropertyFieldProps,
   propertyFieldProps,
 } from './property-field.models';
 import {
+  PropertyChangedEvent,
   PropertyClonedEvent,
   PropertyDeletedEvent,
-} from './property-field.events';
+} from '@/components/entity-form/property-field/property-field.events';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
@@ -57,19 +56,6 @@ export class PropertyField extends MobxLitElement {
     this.state.setEntityPropertyInstance(
       this.propertyConfig.id,
       (this.state.entityPropertyInstances[this.propertyConfig.id] || 0) + 1,
-    );
-  }
-
-  protected handleInputChanged(e: InputChangedEvent) {
-    const value = e.detail.value;
-
-    this.dispatchEvent(
-      new PropertyChangedEvent({
-        propertyId: this.propertyConfig.id,
-        instanceId: this[PropertyFieldProp.INSTANCE_ID],
-        dataType: this.propertyConfig.dataType,
-        value,
-      }),
     );
   }
 

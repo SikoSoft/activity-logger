@@ -8,6 +8,7 @@ export enum TextFieldProp {
   LABEL = 'label',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
   ENTITY_CONFIG_ID = 'entityConfigId',
+  UI_ID = 'uiId',
 }
 
 export interface TextFieldProps {
@@ -17,6 +18,7 @@ export interface TextFieldProps {
   [TextFieldProp.LABEL]: string;
   [TextFieldProp.PROPERTY_CONFIG_ID]: number;
   [TextFieldProp.ENTITY_CONFIG_ID]: number;
+  [TextFieldProp.UI_ID]: string;
 }
 
 export const textFieldProps: PropConfigMap<TextFieldProps> = {
@@ -61,5 +63,12 @@ export const textFieldProps: PropConfigMap<TextFieldProps> = {
       type: ControlType.NUMBER,
     },
     description: 'The entity configuration ID for the text field',
+  },
+  [TextFieldProp.UI_ID]: {
+    default: '',
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The UI ID for the text field',
   },
 };

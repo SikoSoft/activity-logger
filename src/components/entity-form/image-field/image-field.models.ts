@@ -11,6 +11,7 @@ export enum ImageFieldProp {
   ENTITY_CONFIG_ID = 'entityConfigId',
   SRC = 'src',
   ALT = 'alt',
+  UI_ID = 'uiId',
 }
 
 export interface ImageFieldProps extends PropTypes {
@@ -22,6 +23,7 @@ export interface ImageFieldProps extends PropTypes {
   [ImageFieldProp.ENTITY_CONFIG_ID]: number;
   [ImageFieldProp.SRC]: string;
   [ImageFieldProp.ALT]: string;
+  [ImageFieldProp.UI_ID]: string;
 }
 
 export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
@@ -85,5 +87,12 @@ export const imageFieldProps: PropConfigMap<ImageFieldProps> = {
       type: ControlType.TEXT,
     },
     description: 'The alt text for the image field',
+  },
+  [ImageFieldProp.UI_ID]: {
+    default: '',
+    control: {
+      type: ControlType.HIDDEN,
+    },
+    description: 'The UI ID for the image field',
   },
 };

@@ -44,6 +44,7 @@ import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 import { theme } from '@/styles/theme';
 import {
+  PropertyChangedEvent,
   PropertyClonedEvent,
   PropertyDeletedEvent,
 } from './property-field/property-field.events';
@@ -511,13 +512,17 @@ export class EntityForm extends ViewElement {
     }
   }
 
-  private handlePropertyChanged(e: CustomEvent) {
-    const propertyId = e.detail.id;
+  private handlePropertyChanged(e: PropertyChangedEvent) {
+    //const propertyId = e.detail.id;
     const value = e.detail.value;
 
+    /*
     this.properties = this.properties.map(property =>
       property.propertyId === propertyId ? { ...property, value } : property,
     );
+    */
+
+    console.log('properties after change:', this.properties);
   }
 
   private handlePropertyCloned(e: PropertyClonedEvent) {

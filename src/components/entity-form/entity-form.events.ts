@@ -64,20 +64,3 @@ export class ItemPropertyUpdatedEvent<
     });
   }
 }
-
-export const propertyChangedEventName = 'property-changed';
-
-export type PropertyChangedEventPayload = Omit<
-  DataTypedValue,
-  'defaultValue'
-> & {
-  value: DataTypedValue['defaultValue'];
-  propertyId: number;
-  instanceId: number;
-};
-
-export class PropertyChangedEvent extends CustomEvent<PropertyChangedEventPayload> {
-  constructor(detail: PropertyChangedEventPayload) {
-    super(propertyChangedEventName, { detail });
-  }
-}
