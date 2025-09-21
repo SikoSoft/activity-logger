@@ -1,6 +1,9 @@
 export enum Language {
   EN = 'en',
-  SE = 'se',
 }
 
-export type StringMap = Record<Language, Record<string, string>>;
+export const DEFAULT_LANGUAGE = Language.EN;
+
+export type LocalizationStringMap = Record<string, string>;
+
+export type LocalizationLanguageMap = Record<Language, LocalizationStringMap>;

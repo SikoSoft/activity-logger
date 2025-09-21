@@ -20,6 +20,7 @@ import {
   RequestBody,
   SuggestionInputType,
   SuggestionLastInput,
+  ValidateionResult,
 } from './entity-form.models';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
@@ -46,6 +47,7 @@ import {
   PropertyClonedEvent,
   PropertyDeletedEvent,
 } from './property-field/property-field.events';
+import { translate } from '@/lib/Localization';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -225,18 +227,61 @@ export class EntityForm extends ViewElement {
     return this.properties.filter(prop => prop.propertyId === type).length || 0;
   }
 
+  private validateConstraints(): ValidateionResult {
+    const errors: string[] = [];
+
+    if (!this.entityConfig) {
+      errors.push(msg('entityTypeRequired'));
+      return { isValid: false, errors };
+    }
+
+    this.entityConfig.properties.forEach(propertyConfig => {
+      const count = this.numberOfPropertiesWithType(propertyConfig.id);
+      if (count < propertyConfig.required) {
+        errors.push(
+          translate('entityPropertyMinCount', {
+            property: propertyConfig.name,
+            count: propertyConfig.required,
+          }),
+        );
+      }
+
+      if (count > propertyConfig.repeat) {
+        errors.push(
+          translate('entityPropertyMaxCount', {
+            property: propertyConfig.name,
+            count: propertyConfig.repeat,
+          }),
+        );
+      }
+    });
+
+    if (errors.length > 0) {
+      return { isValid: false, errors };
+    }
+
+    return { isValid: true };
+  }
+
   private async saveAction() {
     this.loading = true;
-    const desc = this.desc.trim();
+    const validationResult = this.validateConstraints();
+
+    if (!validationResult.isValid) {
+      this.loading = false;
+
+      validationResult.errors.forEach(error =>
+        addToast(error, NotificationType.ERROR),
+      );
+
+      return;
+    }
 
     try {
-      if (desc && this.hasChanged) {
-        const occurredAt = this.occurredAt;
+      if (validationResult.isValid && this.hasChanged) {
         const timeZone = new Date().getTimezoneOffset();
 
         const payload: RequestBody = {
-          desc,
-          occurredAt,
           timeZone,
           tags: this.tagsAndSuggestions,
           properties: this.properties,
@@ -256,7 +301,6 @@ export class EntityForm extends ViewElement {
         this.dispatchEvent(
           new EntityItemUpdatedEvent({
             id: this.entityId,
-            desc,
             tags: this.tags,
           }),
         );

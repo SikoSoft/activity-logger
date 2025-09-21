@@ -1,0 +1,11 @@
+{
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "edit": "Edit",
+  "close": "Close",
+  "entityPropertyMinCount": "At least {count} '{property}' required",
+  "entityPropertyMaxCount": "At most {count} '{property}' allowed",
+  "deletePropertyConfirmation": "Are you sure you want to delete this property?"
+}

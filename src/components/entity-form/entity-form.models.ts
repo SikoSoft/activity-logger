@@ -3,6 +3,15 @@ import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
 import { Entity } from 'api-spec/models';
 
+export type ValidateionResult =
+  | {
+      isValid: true;
+    }
+  | {
+      isValid: false;
+      errors: string[];
+    };
+
 export interface PropertyInstance {
   propertyConfig: Entity.EntityPropertyConfig;
   instanceId: number;
@@ -82,8 +91,6 @@ export const entityFormProps: PropConfigMap<EntityFormProps> = {
 };
 
 export interface RequestBody {
-  desc: string;
-  occurredAt: string;
   timeZone: number;
   tags: string[];
   properties: ItemProperty[];
