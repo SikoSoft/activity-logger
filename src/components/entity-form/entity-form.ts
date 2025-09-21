@@ -493,8 +493,23 @@ export class EntityForm extends ViewElement {
 
   private handlePropertyDeleted(e: PropertyDeletedEvent) {
     const { uiId } = e.detail;
+
+    const instanceToRemove = this.propertyInstances.find(
+      property => property.uiId === uiId,
+    );
+
+    if (!instanceToRemove) {
+      return;
+    }
+
     this.propertyInstances = this.propertyInstances.filter(
       property => property.uiId !== uiId,
+    );
+
+    this.state.setEntityPropertyInstance(
+      instanceToRemove.propertyConfig.id,
+      this.state.entityPropertyInstances[instanceToRemove.propertyConfig.id] -
+        1,
     );
   }
 

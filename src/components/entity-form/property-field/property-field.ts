@@ -56,7 +56,7 @@ export class PropertyField extends MobxLitElement {
     super.connectedCallback();
     this.state.setEntityPropertyInstance(
       this.propertyConfig.id,
-      this.state.entityPropertyInstances[this.propertyConfig.id] || 1,
+      (this.state.entityPropertyInstances[this.propertyConfig.id] || 0) + 1,
     );
   }
 
@@ -92,16 +92,21 @@ export class PropertyField extends MobxLitElement {
   }
 
   @state()
-  get showDeleteButton(): boolean {
+  get usedInstancesOfThisProperty(): number {
+    return this.state.entityPropertyInstances[this.propertyConfig.id] || 0;
+  }
+
+  @state()
+  get canDelete(): boolean {
+    if (this.usedInstancesOfThisProperty < this.propertyConfig.required + 1) {
+      return false;
+    }
     return true;
   }
 
   @state()
-  get showCloneButton(): boolean {
-    if (
-      this.state.entityPropertyInstances[this.propertyConfig.id] <
-      this.propertyConfig.allowed
-    ) {
+  get canClone(): boolean {
+    if (this.usedInstancesOfThisProperty < this.propertyConfig.allowed) {
       return true;
     }
 
@@ -109,6 +114,11 @@ export class PropertyField extends MobxLitElement {
   }
 
   delete() {
+    if (!this.canDelete) {
+      console.log('cannot delete, limit reached');
+      return;
+    }
+
     this.dispatchEvent(
       new PropertyDeletedEvent({
         uiId: this[PropertyFieldProp.UI_ID],
@@ -117,11 +127,21 @@ export class PropertyField extends MobxLitElement {
   }
 
   clone() {
+    if (!this.canClone) {
+      console.log('cannot clone, limit reached');
+      return;
+    }
+
     this.dispatchEvent(
       new PropertyClonedEvent({
         uiId: this[PropertyFieldProp.UI_ID],
       }),
     );
+  }
+
+  setConfirmationModalIsOpen(isOpen: boolean) {
+    console.log('Confirmation modal state changed:', this.uiId, isOpen);
+    this.confirmationModalIsOpen = isOpen;
   }
 
   renderField() {
@@ -168,17 +188,24 @@ export class PropertyField extends MobxLitElement {
         >
         ${this.renderField()}
 
-        <div class="buttons">
-          ${this.showDeleteButton
+        <div
+          class="buttons"
+          data-used-instances=${this.usedInstancesOfThisProperty}
+        >
+          ${this.canDelete
             ? html` <ss-button
                 negative
                 @click=${() => {
-                  this.confirmationModalIsOpen = true;
+                  console.log(
+                    'Delete button clicked',
+                    this.confirmationModalIsOpen,
+                  );
+                  this.setConfirmationModalIsOpen(true);
                 }}
                 >Delete</ss-button
               >`
             : nothing}
-          ${this.showCloneButton
+          ${this.canClone
             ? html` <ss-button positive @click=${this.clone}>Clone</ss-button>`
             : nothing}
         </div>
@@ -187,7 +214,7 @@ export class PropertyField extends MobxLitElement {
           ?open=${this.confirmationModalIsOpen}
           @confirmation-accepted=${this.delete}
           @confirmation-declined=${() => {
-            this.confirmationModalIsOpen = false;
+            this.setConfirmationModalIsOpen(false);
           }}
         ></confirmation-modal>
       </div>
