@@ -10,6 +10,7 @@ import {
   imageFieldProps,
 } from './image-field.models';
 import { PropertyChangedEvent } from '../property-field/property-field.events';
+import { translate } from '@/lib/Localization';
 
 @customElement('image-field')
 export class ImageField extends LitElement {
@@ -64,14 +65,14 @@ export class ImageField extends LitElement {
       <ss-input
         type="text"
         value=${this.src}
-        placeholder="Image URL"
+        placeholder=${translate('imageUrl')}
         @input-changed=${this.handleSrcChanged}
       ></ss-input>
 
       <ss-input
         type="text"
         value=${this.alt}
-        placeholder="Image Alt Text"
+        placeholder=${translate('imageAltText')}
         @input-changed=${this.handleAltChanged}
       ></ss-input>
     `;

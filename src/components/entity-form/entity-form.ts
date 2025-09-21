@@ -1,7 +1,6 @@
 import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { msg } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -266,7 +265,7 @@ export class EntityForm extends ViewElement {
     const errors: string[] = [];
 
     if (!this.entityConfig) {
-      errors.push(msg('entityTypeRequired'));
+      errors.push(translate('entityTypeRequired'));
       return { isValid: false, errors };
     }
 
@@ -356,7 +355,7 @@ export class EntityForm extends ViewElement {
         );
 
         addToast(
-          this.entityId ? msg('Updated!') : msg('Added!'),
+          this.entityId ? translate('updated') : translate('added'),
           NotificationType.SUCCESS,
         );
         return;
@@ -395,7 +394,7 @@ export class EntityForm extends ViewElement {
     try {
       await api.delete(this.apiUrl);
 
-      addToast(msg('Removed!'), NotificationType.INFO);
+      addToast(translate('removed'), NotificationType.INFO);
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }
@@ -704,7 +703,7 @@ export class EntityForm extends ViewElement {
 
         <div class="buttons">
           <ss-button ?disabled=${this.canAddProperty} @click=${this.addProperty}
-            >${msg('Add Property')}</ss-button
+            >${translate('addProperty')}</ss-button
           >
 
           <ss-button
@@ -712,9 +711,9 @@ export class EntityForm extends ViewElement {
             @click=${this.handleSaveClick}
             text=${this.entityId
               ? this.hasChanged
-                ? msg('Update')
-                : msg('Cancel')
-              : msg('Add')}
+                ? translate('update')
+                : translate('cancel')
+              : translate('add')}
             ?loading=${this.loading}
           ></ss-button>
 
@@ -723,7 +722,7 @@ export class EntityForm extends ViewElement {
                 <ss-button
                   negative
                   @click=${this.handleDeleteClick}
-                  text=${msg('Delete')}
+                  text=${translate('delete')}
                 ></ss-button>
 
                 <confirmation-modal

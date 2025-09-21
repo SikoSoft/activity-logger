@@ -45,9 +45,7 @@ export class TextField extends LitElement {
       value,
     };
 
-    console.log('TextField handleInputChanged:', changedPayload);
     const changedEvent = new PropertyChangedEvent(changedPayload);
-    console.log('is this even fucking emitting', changedEvent);
     this.dispatchEvent(changedEvent);
   }
 

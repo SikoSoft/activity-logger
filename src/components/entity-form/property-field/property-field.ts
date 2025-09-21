@@ -23,6 +23,7 @@ import { appState } from '@/state';
 import '@/components/entity-form/int-field/int-field';
 import '@/components/entity-form/text-field/text-field';
 import '@/components/entity-form/image-field/image-field';
+import { translate } from '@/lib/Localization';
 
 @customElement('property-field')
 export class PropertyField extends MobxLitElement {
@@ -188,11 +189,13 @@ export class PropertyField extends MobxLitElement {
                   );
                   this.setConfirmationModalIsOpen(true);
                 }}
-                >Delete</ss-button
+                >${translate('delete')}</ss-button
               >`
             : nothing}
           ${this.canClone
-            ? html` <ss-button positive @click=${this.clone}>Clone</ss-button>`
+            ? html` <ss-button positive @click=${this.clone}
+                >${translate('clone')}</ss-button
+              >`
             : nothing}
         </div>
 
