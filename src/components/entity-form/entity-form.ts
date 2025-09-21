@@ -10,6 +10,7 @@ import {
   DataType,
   EntityConfig,
   EntityItem,
+  EntityProperty,
   ItemProperty,
   PropertyDataValue,
 } from 'api-spec/models/Entity';
@@ -191,6 +192,7 @@ export class EntityForm extends ViewElement {
 
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
+
     if (this.entityConfig && !this.propertiesSetup) {
       this.propertyInstances = this.entityConfig.properties.map(
         propertyConfig => ({
@@ -324,11 +326,13 @@ export class EntityForm extends ViewElement {
       if (validationResult.isValid && this.hasChanged) {
         const timeZone = new Date().getTimezoneOffset();
 
-        const properties = this.propertyInstances.map(propertyInstance => ({
-          instanceId: propertyInstance.instanceId,
-          propertyConfigId: propertyInstance.propertyConfig.id,
-          value: propertyInstance.value,
-        }));
+        const properties: EntityProperty[] = this.propertyInstances.map(
+          propertyInstance => ({
+            id: propertyInstance.instanceId,
+            propertyConfigId: propertyInstance.propertyConfig.id,
+            value: propertyInstance.value,
+          }),
+        );
 
         const payload: RequestBody = {
           timeZone,
@@ -545,6 +549,8 @@ export class EntityForm extends ViewElement {
 
   private handleTypeChanged(e: SelectChangedEvent<string>) {
     this.type = parseInt(e.detail.value);
+    this.propertiesSetup = false;
+    this.propertyInstances = [];
   }
 
   private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {

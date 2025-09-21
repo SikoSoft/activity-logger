@@ -1,4 +1,4 @@
-import { PropertyDataValue } from 'api-spec/models/Entity';
+import { EntityProperty, PropertyDataValue } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
 import { Entity } from 'api-spec/models';
@@ -11,12 +11,6 @@ export type ValidateionResult =
       isValid: false;
       errors: string[];
     };
-
-export type EntityProperty = {
-  instanceId: number;
-  propertyConfigId: number;
-  value: PropertyDataValue;
-};
 
 export interface PropertyInstance {
   propertyConfig: Entity.EntityPropertyConfig;
