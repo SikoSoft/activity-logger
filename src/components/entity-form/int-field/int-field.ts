@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import '@ss/ui/components/ss-input';
 import { DataType } from 'api-spec/models/Entity';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { PropertyChangedEvent } from '../property-field/property-field.events';
+import { PropertyChangedEvent } from '@/components/entity-form/property-field/property-field.events';
 import { IntFieldProp, intFieldProps, IntFieldProps } from './int-field.models';
 
 @customElement('int-field')

@@ -7,7 +7,7 @@ import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   PropertyChangedEvent,
   PropertyChangedEventPayload,
-} from '../property-field/property-field.events';
+} from '@/components/entity-form/property-field/property-field.events';
 import {
   TextFieldProp,
   TextFieldProps,

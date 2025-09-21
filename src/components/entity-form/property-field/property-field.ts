@@ -135,6 +135,7 @@ export class PropertyField extends MobxLitElement {
     switch (this.propertyConfig.dataType) {
       case DataType.IMAGE:
         return html`<image-field
+          uiId=${this.uiId}
           src=${this.propertyConfig.defaultValue.src}
           alt=${this.propertyConfig.defaultValue.alt}
           entityConfigId=${this.propertyConfig.entityConfigId}
@@ -143,14 +144,15 @@ export class PropertyField extends MobxLitElement {
 
       case DataType.SHORT_TEXT:
         return html`<text-field
-          value=${this.propertyConfig.defaultValue}
           uiId=${this.uiId}
+          value=${this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></text-field>`;
 
       case DataType.LONG_TEXT:
         return html`<text-field
+          uiId=${this.uiId}
           value=${this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
@@ -158,6 +160,7 @@ export class PropertyField extends MobxLitElement {
 
       case DataType.INT:
         return html`<int-field
+          uiId=${this.uiId}
           value=${this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
