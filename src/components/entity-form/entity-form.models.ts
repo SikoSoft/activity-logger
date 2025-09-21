@@ -1,4 +1,4 @@
-import { ItemProperty } from 'api-spec/models/Entity';
+import { PropertyDataValue } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
 import { Entity } from 'api-spec/models';
@@ -12,10 +12,17 @@ export type ValidateionResult =
       errors: string[];
     };
 
+export type EntityProperty = {
+  instanceId: number;
+  propertyConfigId: number;
+  value: PropertyDataValue;
+};
+
 export interface PropertyInstance {
   propertyConfig: Entity.EntityPropertyConfig;
   instanceId: number;
   uiId: string;
+  value: PropertyDataValue;
 }
 
 export enum EntityFormProp {
@@ -35,7 +42,7 @@ export interface EntityFormProps extends PropTypes {
   [EntityFormProp.OCCURRED_AT]: string;
   [EntityFormProp.TAGS]: string[];
   [EntityFormProp.TAG_VALUE]: string;
-  [EntityFormProp.PROPERTIES]: ItemProperty[];
+  [EntityFormProp.PROPERTIES]: EntityProperty[];
 }
 
 export const entityFormProps: PropConfigMap<EntityFormProps> = {
@@ -93,7 +100,7 @@ export const entityFormProps: PropConfigMap<EntityFormProps> = {
 export interface RequestBody {
   timeZone: number;
   tags: string[];
-  properties: ItemProperty[];
+  properties: EntityProperty[];
 }
 
 export enum SuggestionInputType {

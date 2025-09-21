@@ -7,7 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { EntityConfig, EntityItem, ItemProperty } from 'api-spec/models/Entity';
+import {
+  DataType,
+  EntityConfig,
+  EntityItem,
+  ItemProperty,
+  PropertyDataValue,
+} from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
@@ -192,6 +198,7 @@ export class EntityForm extends ViewElement {
           propertyConfig,
           instanceId: 0,
           uiId: uuidv4(),
+          value: propertyConfig.defaultValue,
         }),
       );
       this.propertiesSetup = true;
@@ -204,11 +211,14 @@ export class EntityForm extends ViewElement {
 
   @state()
   get hasChanged(): boolean {
+    return true;
+    /*
     return (
       this.desc.trim() !== this.initialDesc ||
       this.occurredAt !== this.initialOccurredAt ||
       JSON.stringify(this.tagsAndSuggestions) !== this.initialTags
     );
+    */
   }
 
   private propertyAtMax(propertyId: number): boolean {
@@ -225,7 +235,31 @@ export class EntityForm extends ViewElement {
   }
 
   private numberOfPropertiesWithType(type: number): number {
-    return this.properties.filter(prop => prop.propertyId === type).length || 0;
+    //return this.properties.filter(prop => prop.propertyId === type).length || 0;
+    return this.propertyInstances.filter(
+      prop =>
+        prop.propertyConfig.id === type &&
+        this.validateTypedData(prop.propertyConfig.dataType, prop.value),
+    ).length;
+  }
+
+  private validateTypedData(
+    dataType: DataType,
+    value: PropertyDataValue,
+  ): boolean {
+    switch (dataType) {
+      case DataType.SHORT_TEXT:
+      case DataType.LONG_TEXT:
+        return (
+          typeof value === 'string' && value.length > 0 && value.length <= 255
+        );
+      case DataType.INT:
+        return typeof value === 'number';
+      case DataType.BOOLEAN:
+        return typeof value === 'boolean';
+      default:
+        return false;
+    }
   }
 
   private validateConstraints(): ValidateionResult {
@@ -238,6 +272,14 @@ export class EntityForm extends ViewElement {
 
     this.entityConfig.properties.forEach(propertyConfig => {
       const count = this.numberOfPropertiesWithType(propertyConfig.id);
+
+      console.log(
+        'Validating property:',
+        propertyConfig.name,
+        propertyConfig.id,
+        'Count:',
+        count,
+      );
       if (count < propertyConfig.required) {
         errors.push(
           translate('entityPropertyMinCount', {
@@ -247,11 +289,11 @@ export class EntityForm extends ViewElement {
         );
       }
 
-      if (count > propertyConfig.repeat) {
+      if (count > propertyConfig.allowed) {
         errors.push(
           translate('entityPropertyMaxCount', {
             property: propertyConfig.name,
-            count: propertyConfig.repeat,
+            count: propertyConfig.allowed,
           }),
         );
       }
@@ -261,6 +303,7 @@ export class EntityForm extends ViewElement {
       return { isValid: false, errors };
     }
 
+    console.log('Validation passed');
     return { isValid: true };
   }
 
@@ -282,10 +325,16 @@ export class EntityForm extends ViewElement {
       if (validationResult.isValid && this.hasChanged) {
         const timeZone = new Date().getTimezoneOffset();
 
+        const properties = this.propertyInstances.map(propertyInstance => ({
+          instanceId: propertyInstance.instanceId,
+          propertyConfigId: propertyInstance.propertyConfig.id,
+          value: propertyInstance.value,
+        }));
+
         const payload: RequestBody = {
           timeZone,
           tags: this.tagsAndSuggestions,
-          properties: this.properties,
+          properties,
         };
 
         const result = this.entityId
@@ -500,6 +549,8 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {
+    return;
+    /*
     const updatedProperty = e.detail;
     const existingIndex = this.properties.findIndex(
       property => property.propertyId === updatedProperty.propertyId,
@@ -510,19 +561,24 @@ export class EntityForm extends ViewElement {
     } else {
       this.properties.push(updatedProperty);
     }
+      */
   }
 
   private handlePropertyChanged(e: PropertyChangedEvent) {
     //const propertyId = e.detail.id;
-    const value = e.detail.value;
+    const { value, uiId } = e.detail;
 
-    /*
-    this.properties = this.properties.map(property =>
-      property.propertyId === propertyId ? { ...property, value } : property,
+    const propertyInstance = this.propertyInstances.find(
+      property => property.uiId === uiId,
     );
-    */
 
-    console.log('properties after change:', this.properties);
+    if (!propertyInstance) {
+      return;
+    }
+
+    propertyInstance.value = value;
+
+    console.log('properties after change:', this.propertyInstances);
   }
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
@@ -604,10 +660,10 @@ export class EntityForm extends ViewElement {
           ${this.properties.length
             ? repeat(
                 this.properties,
-                property => property.propertyId,
+                property => property.propertyConfigId,
                 property =>
                   html`<item-property-form
-                    propertyId=${property.propertyId}
+                    propertyId=${property.propertyConfigId}
                     .value=${property.value}
                     @item-property-updated=${this.handlePropertyUpdated}
                   ></item-property-form>`,
