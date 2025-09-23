@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import {
   BooleanDataValue,
   DataType,
+  DataTypedValue,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
   ImageDataValue,
@@ -129,7 +130,7 @@ export class PropertyConfigForm extends LitElement {
 
       if (changedPropertyConfig) {
         if (this.dataType !== changedPropertyConfig.dataType) {
-          this.handleDataTypeChange();
+          //this.handleDataTypeChange();
         }
       }
     }
@@ -148,28 +149,42 @@ export class PropertyConfigForm extends LitElement {
     return errors;
   }
 
-  handleDataTypeChange(dataType = this.dataType) {
-    const propertyConfig = { ...this.propertyConfig };
+  handleDataTypeChange(dataType: DataType = this.dataType as DataType) {
+    console.log('handleDataTypeChange', dataType);
+
+    let typedValue: DataTypedValue;
+
+    //const propertyConfig = { ...this.propertyConfig };
     switch (dataType) {
       case DataType.BOOLEAN:
-        propertyConfig.defaultValue = false;
+        typedValue = { dataType, defaultValue: false };
         break;
       case DataType.IMAGE:
-        propertyConfig.defaultValue = { src: '', alt: '' };
+        typedValue = { dataType, defaultValue: { src: '', alt: '' } };
         break;
       case DataType.INT:
-        propertyConfig.defaultValue = 0;
+        typedValue = { dataType, defaultValue: 0 };
         break;
       case DataType.SHORT_TEXT:
       case DataType.LONG_TEXT:
-        propertyConfig.defaultValue = '';
+        typedValue = { dataType, defaultValue: '' };
         break;
     }
 
+    const propertyConfig: EntityPropertyConfig = produce(
+      this.propertyConfig,
+      draft => ({
+        ...draft,
+        ...typedValue,
+      }),
+    );
+
+    console.log('new propertyConfig', JSON.stringify(propertyConfig));
     this.propertyConfig = propertyConfig;
   }
 
   updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
+    console.log('updateField', field, rawValue);
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -181,6 +196,8 @@ export class PropertyConfigForm extends LitElement {
     }));
 
     this.propertyConfig = propertyConfig;
+
+    console.log('updated propertyConfig', JSON.stringify(this.propertyConfig));
   }
 
   @state()
@@ -260,21 +277,23 @@ export class PropertyConfigForm extends LitElement {
 
   async save() {
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
+      console.log('updating property config', this.propertyConfig);
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,
       );
+
       if (propertyConfig) {
         addToast(msg('Property configuration updated successfully.'));
         this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
       }
-    } else {
-      const propertyConfig = await storage.addPropertyConfig(
-        this.propertyConfig,
-      );
-      if (propertyConfig) {
-        addToast(msg('Property configuration added successfully.'));
-        this.dispatchEvent(new PropertyConfigAddedEvent(propertyConfig));
-      }
+      return;
+    }
+
+    console.log('adding property config', this.propertyConfig);
+    const propertyConfig = await storage.addPropertyConfig(this.propertyConfig);
+    if (propertyConfig) {
+      addToast(msg('Property configuration added successfully.'));
+      this.dispatchEvent(new PropertyConfigAddedEvent(propertyConfig));
     }
   }
 
@@ -333,7 +352,7 @@ export class PropertyConfigForm extends LitElement {
         return html`
           <ss-input
             type="number"
-            .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
+            value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
             @input-changed=${(e: InputChangedEvent) => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
@@ -347,7 +366,7 @@ export class PropertyConfigForm extends LitElement {
         return html`
           <ss-input
             type="text"
-            .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
+            value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
             @input-changed=${(e: InputChangedEvent) => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
@@ -376,9 +395,10 @@ export class PropertyConfigForm extends LitElement {
             }))}
             selected=${this[field]}
             @select-changed=${(e: InputChangedEvent) => {
-              this.updateField(field, e.detail.value);
               if (field === PropertyConfigFormProp.DATA_TYPE) {
-                this.handleDataTypeChange(e.detail.value);
+                this.handleDataTypeChange(e.detail.value as DataType);
+              } else {
+                this.updateField(field, e.detail.value);
               }
             }}
           ></ss-select>
