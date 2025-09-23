@@ -170,6 +170,7 @@ export class EntityConfigForm extends MobxLitElement {
   }
 
   updateProperty(index: number, updatedProperty: EntityPropertyConfig) {
+    console.log('updateProperty', index, updatedProperty);
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties[index] = updatedProperty;
     });

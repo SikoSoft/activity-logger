@@ -335,6 +335,7 @@ export class EntityForm extends ViewElement {
         );
 
         const payload: RequestBody = {
+          entityConfigId: this.type,
           timeZone,
           tags: this.tagsAndSuggestions,
           properties,

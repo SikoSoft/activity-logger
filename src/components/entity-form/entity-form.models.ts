@@ -92,6 +92,7 @@ export const entityFormProps: PropConfigMap<EntityFormProps> = {
 };
 
 export interface RequestBody {
+  entityConfigId: number;
   timeZone: number;
   tags: string[];
   properties: EntityProperty[];
