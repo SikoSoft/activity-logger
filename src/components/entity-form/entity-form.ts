@@ -347,7 +347,8 @@ export class EntityForm extends ViewElement {
         this.reset();
         this.loading = false;
 
-        if (!result) {
+        if (!result || !result.isOk) {
+          addToast(translate('entityFailedToSave'), NotificationType.ERROR);
           return;
         }
 

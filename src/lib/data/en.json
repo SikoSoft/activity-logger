@@ -27,5 +27,6 @@
   "close": "Close",
   "entityPropertyMinCount": "At least {count} '{property}' required",
   "entityPropertyMaxCount": "At most {count} '{property}' allowed",
-  "deletePropertyConfirmation": "Are you sure you want to delete this property?"
+  "deletePropertyConfirmation": "Are you sure you want to delete this property?",
+  "entityFailedToSave": "Failed to save entity. Please try again."
 }
