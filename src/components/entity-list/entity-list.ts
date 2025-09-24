@@ -9,8 +9,7 @@ import {
   ListSortDirection,
   ListSortProperty,
 } from 'api-spec/models/List';
-import { Entity, EntityItem } from 'api-spec/models/Entity';
-import { ActionItem } from '@/models/Action';
+import { Entity } from 'api-spec/models/Entity';
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
@@ -37,12 +36,9 @@ import '@/components/setting/setting-form/setting-form';
 import '@/components/entity-list/entity-list-item/entity-list-item';
 import '@/components/list-filter/list-filter';
 import { ListFilter } from '@/components/list-filter/list-filter';
-import {
-  EntityListItem,
-  EntityListItemMode,
-} from './entity-list-item/entity-list-item';
+import { EntityListItem } from './entity-list-item/entity-list-item';
 
-import { defaultProperties } from '@/mock/entity-config';
+import { EntityListItemMode } from './entity-list-item/entity-list-item.models';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {
@@ -418,6 +414,7 @@ export class EntityList extends ViewElement {
                   ?debug=${this.state.debugMode}
                   actionId=${item.id}
                   type=${item.type}
+                  createdAt=${item.createdAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
                   .properties=${item.properties}

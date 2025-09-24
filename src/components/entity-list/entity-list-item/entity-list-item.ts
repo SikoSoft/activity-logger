@@ -1,17 +1,7 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-
-import { Time } from '@/lib/Time';
-import {
-  EntityListItemProp,
-  entityListItemProps,
-  EntityListItemProps,
-} from './entity-list-item.models';
-
-import { PointerDownEvent } from '@/events/pointer-down';
-import { PointerUpEvent } from '@/events/pointer-up';
-import { PointerLongPressEvent } from '@/events/pointer-long-press';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
 import {
   DataType,
@@ -19,17 +9,23 @@ import {
   EntityProperty,
   EntityPropertyConfig,
   ImageDataValue,
-  ImageProperty,
   PropertyDataValue,
   RenderType,
 } from 'api-spec/models/Entity';
-import { MobxLitElement } from '@adobe/lit-mobx';
+import { Time } from '@/lib/Time';
+import {
+  EntityListItemMode,
+  EntityListItemProp,
+  entityListItemProps,
+  EntityListItemProps,
+} from './entity-list-item.models';
 import { appState } from '@/state';
 
-export enum EntityListItemMode {
-  VIEW = 'view',
-  EDIT = 'edit',
-}
+import { PointerDownEvent } from '@/events/pointer-down';
+import { PointerUpEvent } from '@/events/pointer-up';
+import { PointerLongPressEvent } from '@/events/pointer-long-press';
+
+import '@/components/entity-form/entity-form';
 
 const holdThreshold = 500;
 
@@ -51,10 +47,6 @@ export class EntityListItem extends MobxLitElement {
     .time {
       color: #888;
       font-size: 0.9rem;
-    }
-
-    .properties {
-      background-color: #ffeed0;
     }
   `;
   @property({ type: Number })
@@ -249,7 +241,7 @@ export class EntityListItem extends MobxLitElement {
       <div class=${classMap(this.classes)}>
         ${this.mode === EntityListItemMode.EDIT
           ? html`
-              <action-form
+              <entity-form
                 @action-item-updated=${() => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
@@ -259,7 +251,7 @@ export class EntityListItem extends MobxLitElement {
                 entityId=${this.entityId}
                 type=${this.type}
                 .tags=${this.tags}
-              ></action-form>
+              ></entity-form>
             `
           : html`
               <div

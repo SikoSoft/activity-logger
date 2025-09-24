@@ -3,6 +3,11 @@ import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { EntityProperty } from 'api-spec/models/Entity';
 
+export enum EntityListItemMode {
+  VIEW = 'view',
+  EDIT = 'edit',
+}
+
 export enum EntityListItemProp {
   TYPE = 'type',
   ENTITY_ID = 'entityId',
