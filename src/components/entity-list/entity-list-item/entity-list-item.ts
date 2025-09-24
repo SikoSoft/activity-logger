@@ -251,6 +251,7 @@ export class EntityListItem extends MobxLitElement {
                 entityId=${this.entityId}
                 type=${this.type}
                 .tags=${this.tags}
+                .properties=${this.properties}
               ></entity-form>
             `
           : html`

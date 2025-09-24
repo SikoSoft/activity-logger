@@ -11,11 +11,9 @@ import {
   EntityConfig,
   EntityItem,
   EntityProperty,
-  ItemProperty,
   PropertyDataValue,
 } from 'api-spec/models/Entity';
 import { appState } from '@/state';
-import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
 import { ViewElement } from '@/lib/ViewElement';
 import {
@@ -42,7 +40,6 @@ import {
   EntityItemCanceledEvent,
   EntityItemDeletedEvent,
   EntityItemUpdatedEvent,
-  ItemPropertyUpdatedEvent,
 } from './entity-form.events';
 import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
@@ -96,14 +93,6 @@ export class EntityForm extends ViewElement {
   [EntityFormProp.TYPE]: EntityFormProps[EntityFormProp.TYPE] =
     entityFormProps[EntityFormProp.TYPE].default;
 
-  @property()
-  [EntityFormProp.DESC]: EntityFormProps[EntityFormProp.DESC] =
-    entityFormProps[EntityFormProp.DESC].default;
-
-  @property()
-  [EntityFormProp.OCCURRED_AT]: EntityFormProps[EntityFormProp.OCCURRED_AT] =
-    entityFormProps[EntityFormProp.OCCURRED_AT].default;
-
   @property({ type: Array })
   [EntityFormProp.TAGS]: EntityFormProps[EntityFormProp.TAGS] =
     entityFormProps[EntityFormProp.TAGS].default;
@@ -116,8 +105,6 @@ export class EntityForm extends ViewElement {
   [EntityFormProp.PROPERTIES]: EntityFormProps[EntityFormProp.PROPERTIES] =
     entityFormProps[EntityFormProp.PROPERTIES].default;
 
-  @state() initialDesc: string = '';
-  @state() initialOccurredAt: string = '';
   @state() initialTags: string = '';
   @state() confirmModalShown: boolean = false;
   @state() advancedMode: boolean = false;
@@ -169,11 +156,9 @@ export class EntityForm extends ViewElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.desc = this.desc.trim();
-    this.occurredAt = Time.formatDateTime(new Date(this.occurredAt));
-    this.initialDesc = this.desc;
-    this.initialOccurredAt = this.occurredAt;
     this.initialTags = JSON.stringify(this.tags);
+
+    console.log('properties on connect:', JSON.stringify(this.properties));
   }
 
   disconnectedCallback(): void {
@@ -213,13 +198,6 @@ export class EntityForm extends ViewElement {
   @state()
   get hasChanged(): boolean {
     return true;
-    /*
-    return (
-      this.desc.trim() !== this.initialDesc ||
-      this.occurredAt !== this.initialOccurredAt ||
-      JSON.stringify(this.tagsAndSuggestions) !== this.initialTags
-    );
-    */
   }
 
   private propertyAtMax(propertyId: number): boolean {
@@ -236,7 +214,6 @@ export class EntityForm extends ViewElement {
   }
 
   private numberOfPropertiesWithType(type: number): number {
-    //return this.properties.filter(prop => prop.propertyId === type).length || 0;
     return this.propertyInstances.filter(
       prop =>
         prop.propertyConfig.id === type &&
@@ -274,13 +251,6 @@ export class EntityForm extends ViewElement {
     this.entityConfig.properties.forEach(propertyConfig => {
       const count = this.numberOfPropertiesWithType(propertyConfig.id);
 
-      console.log(
-        'Validating property:',
-        propertyConfig.name,
-        propertyConfig.id,
-        'Count:',
-        count,
-      );
       if (count < propertyConfig.required) {
         errors.push(
           translate('entityPropertyMinCount', {
@@ -304,7 +274,6 @@ export class EntityForm extends ViewElement {
       return { isValid: false, errors };
     }
 
-    console.log('Validation passed');
     return { isValid: true };
   }
 
@@ -380,7 +349,6 @@ export class EntityForm extends ViewElement {
   }
 
   private reset(): void {
-    this.desc = '';
     this.tagValue = '';
     if (!this.entityId) {
       this.tags =
@@ -411,94 +379,7 @@ export class EntityForm extends ViewElement {
       }),
     );
 
-    this.desc = '';
     this.loading = false;
-  }
-
-  private async requestActionSuggestions(): Promise<void> {
-    if (
-      !this.lastInput.action.hadResults &&
-      this.desc.startsWith(this.lastInput.action.value)
-    ) {
-      this.state.setActionSuggestions([]);
-      return;
-    }
-
-    try {
-      this.lastInput.action.hadResults = false;
-      let suggestions: string[] = [];
-
-      if (this.desc.length >= this.minLengthForSuggestion) {
-        const result = await api.get<{ suggestions: string[] }>(
-          `actionSuggestion/${this.desc}`,
-        );
-        if (result) {
-          suggestions = result.response.suggestions;
-        }
-      }
-
-      if (suggestions.length || this.desc === '') {
-        this.lastInput.action.hadResults = true;
-      }
-
-      this.state.setActionSuggestions(suggestions);
-    } catch (error) {
-      console.error(
-        `Failed to get action suggestions: ${JSON.stringify(error)}`,
-      );
-    }
-
-    this.lastInput.action.value = this.desc;
-  }
-
-  private async requestTagSuggestions(): Promise<void> {
-    if (this.abortController) {
-      this.abortController.abort();
-    }
-
-    this.abortController = new AbortController();
-
-    const initialDesc = this.desc;
-
-    if (initialDesc.length === 0 || !this.tagSuggestionsEnabled) {
-      this.state.setTagSuggestions([]);
-      return;
-    }
-
-    try {
-      const result = await api.get<{ suggestions: string[] }>(
-        `tagSuggestion/${initialDesc}`,
-        { signal: this.abortController.signal },
-      );
-
-      let suggestions: string[] = [];
-      if (result) {
-        suggestions = result.response.suggestions;
-      }
-
-      if (initialDesc !== this.desc) {
-        return;
-      }
-
-      this.state.setTagSuggestions(
-        suggestions.filter(suggestion => !this.tags.includes(suggestion)),
-      );
-    } catch (error) {
-      console.error(`Failed to get tag suggestions: ${JSON.stringify(error)}`);
-    }
-  }
-
-  private syncSuggestions(reset: boolean = false) {
-    if (reset) {
-      this.state.setTagSuggestions([]);
-      this.state.setActionSuggestions([]);
-    }
-    this.requestTagSuggestions();
-    this.requestActionSuggestions();
-  }
-
-  sync(reset: boolean = false) {
-    this.syncSuggestions(reset);
   }
 
   private handleSaveClick(_e: CustomEvent) {
@@ -555,24 +436,7 @@ export class EntityForm extends ViewElement {
     this.propertyInstances = [];
   }
 
-  private handlePropertyUpdated(e: ItemPropertyUpdatedEvent<ItemProperty>) {
-    return;
-    /*
-    const updatedProperty = e.detail;
-    const existingIndex = this.properties.findIndex(
-      property => property.propertyId === updatedProperty.propertyId,
-    );
-
-    if (existingIndex > -1) {
-      this.properties[existingIndex] = updatedProperty;
-    } else {
-      this.properties.push(updatedProperty);
-    }
-      */
-  }
-
   private handlePropertyChanged(e: PropertyChangedEvent) {
-    //const propertyId = e.detail.id;
     const { value, uiId } = e.detail;
 
     const propertyInstance = this.propertyInstances.find(
@@ -584,8 +448,6 @@ export class EntityForm extends ViewElement {
     }
 
     propertyInstance.value = value;
-
-    console.log('properties after change:', this.propertyInstances);
   }
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
@@ -664,18 +526,6 @@ export class EntityForm extends ViewElement {
         </div>
 
         <div class="properties">
-          ${this.properties.length
-            ? repeat(
-                this.properties,
-                property => property.propertyConfigId,
-                property =>
-                  html`<item-property-form
-                    propertyId=${property.propertyConfigId}
-                    .value=${property.value}
-                    @item-property-updated=${this.handlePropertyUpdated}
-                  ></item-property-form>`,
-              )
-            : nothing}
           ${this.propertyInstances.length && this.entityConfig
             ? repeat(
                 this.propertyInstances,
