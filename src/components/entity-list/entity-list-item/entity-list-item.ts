@@ -14,12 +14,17 @@ import { PointerUpEvent } from '@/events/pointer-up';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 
 import {
-  Property,
-  PropertyConfig,
-  propertyConfigById,
-  PropertyDataType,
-  PropertyRenderType,
-} from '@/mock/entity-config';
+  DataType,
+  EntityConfig,
+  EntityProperty,
+  EntityPropertyConfig,
+  ImageDataValue,
+  ImageProperty,
+  PropertyDataValue,
+  RenderType,
+} from 'api-spec/models/Entity';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 export enum EntityListItemMode {
   VIEW = 'view',
@@ -29,7 +34,9 @@ export enum EntityListItemMode {
 const holdThreshold = 500;
 
 @customElement('entity-list-item')
-export class EntityListItem extends LitElement {
+export class EntityListItem extends MobxLitElement {
+  private state = appState;
+
   static styles = css`
     .action-list-item {
       padding: 0.5rem;
@@ -50,7 +57,7 @@ export class EntityListItem extends LitElement {
       background-color: #ffeed0;
     }
   `;
-  @property()
+  @property({ type: Number })
   [EntityListItemProp.TYPE]: EntityListItemProps[EntityListItemProp.TYPE] =
     entityListItemProps[EntityListItemProp.TYPE].default;
 
@@ -59,20 +66,12 @@ export class EntityListItem extends LitElement {
     entityListItemProps[EntityListItemProp.ENTITY_ID].default;
 
   @property()
-  [EntityListItemProp.DESC]: EntityListItemProps[EntityListItemProp.DESC] =
-    entityListItemProps[EntityListItemProp.DESC].default;
-
-  @property()
   [EntityListItemProp.CREATED_AT]: EntityListItemProps[EntityListItemProp.CREATED_AT] =
     entityListItemProps[EntityListItemProp.CREATED_AT].default;
 
   @property()
   [EntityListItemProp.UPDATED_AT]: EntityListItemProps[EntityListItemProp.UPDATED_AT] =
     entityListItemProps[EntityListItemProp.UPDATED_AT].default;
-
-  @property()
-  [EntityListItemProp.OCCURRED_AT]: EntityListItemProps[EntityListItemProp.OCCURRED_AT] =
-    entityListItemProps[EntityListItemProp.OCCURRED_AT].default;
 
   @property({ type: Array })
   [EntityListItemProp.TAGS]: EntityListItemProps[EntityListItemProp.TAGS] =
@@ -99,8 +98,24 @@ export class EntityListItem extends LitElement {
     return { 'action-list-item': true, selected: this.selected };
   }
 
+  @state()
+  get entityConfig(): EntityConfig | undefined {
+    return this.state.entityConfigs.find(entity => {
+      return entity.id === this.type;
+    });
+  }
+
+  @state()
+  get propertyConfigs(): EntityPropertyConfig[] | undefined {
+    if (!this.entityConfig) {
+      return undefined;
+    }
+
+    return this.entityConfig.properties;
+  }
+
   get readableTime() {
-    const date = new Date(this.occurredAt);
+    const date = new Date(this.createdAt);
     return Time.formatDateTime(date);
   }
 
@@ -168,15 +183,15 @@ export class EntityListItem extends LitElement {
 
   private renderProperties() {
     return this.properties.map(property => {
-      const propertyConfig = propertyConfigById(property.propertyId);
-      if (!propertyConfig || propertyConfig.renderType === 'hidden') {
+      const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
+      if (!propertyConfig || propertyConfig.renderType === RenderType.HIDDEN) {
         return nothing;
       }
 
-      let value: PropertyConfig['defaultValue'] = propertyConfig.defaultValue;
+      let value: PropertyDataValue = propertyConfig.defaultValue;
 
       switch (propertyConfig.dataType) {
-        case PropertyDataType.NUMBER:
+        case DataType.INT:
           value = property.value as number;
           break;
         default:
@@ -184,21 +199,21 @@ export class EntityListItem extends LitElement {
           break;
       }
 
-      if (propertyConfig.renderType === PropertyRenderType.IMAGE) {
+      if (propertyConfig.renderType === RenderType.IMAGE) {
         return this.renderImageProperty(property);
       }
 
       return html`
         <div class="property">
           <span>${propertyConfig.name}</span>
-          ${propertyConfig.valuePrefix
+          ${propertyConfig.prefix
             ? html`<span class="property-prefix"
-                >${propertyConfig.valuePrefix}</span
+                >${propertyConfig.prefix}</span
               >`
             : nothing}<span class="property-value">${value}</span
-          >${propertyConfig.valueSuffix
+          >${propertyConfig.suffix
             ? html`<span class="property-suffix"
-                >${propertyConfig.valueSuffix}</span
+                >${propertyConfig.suffix}</span
               >`
             : nothing}
         </div>
@@ -206,10 +221,27 @@ export class EntityListItem extends LitElement {
     });
   }
 
-  renderImageProperty(property: Property) {
+  renderImageProperty(property: EntityProperty) {
+    const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
+    if (!propertyConfig || propertyConfig.dataType !== DataType.IMAGE) {
+      return nothing;
+    }
+
+    const value = property.value as ImageDataValue;
+
     return html` <span class="property image"
-      ><img src=${property.value}
+      ><img src=${value.src} alt=${value.alt}
     /></span>`;
+  }
+
+  getPropertyConfig(
+    propertyConfigId: number,
+  ): EntityPropertyConfig | undefined {
+    if (!this.propertyConfigs) {
+      return undefined;
+    }
+
+    return this.propertyConfigs.find(config => config.id === propertyConfigId);
   }
 
   render() {
@@ -225,8 +257,6 @@ export class EntityListItem extends LitElement {
                   this.mode = EntityListItemMode.VIEW;
                 }}
                 entityId=${this.entityId}
-                desc=${this.desc}
-                occurredAt=${this.occurredAt}
                 type=${this.type}
                 .tags=${this.tags}
               ></action-form>
@@ -238,13 +268,7 @@ export class EntityListItem extends LitElement {
                 @touchstart=${this.handleTouchStart}
                 @touchend=${this.handleTouchEnd}
               >
-                ${import.meta.env.APP_FF_PROPERTIES && this.debug
-                  ? html` <div class="properties">
-                      ${this.renderProperties()}
-                    </div>`
-                  : nothing}
-
-                <div class="desc">${this.desc}</div>
+                <div class="properties">${this.renderProperties()}</div>
                 <div class="time">${this.readableTime}</div>
               </div>
             `}

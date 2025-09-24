@@ -9,7 +9,7 @@ import {
   ListSortDirection,
   ListSortProperty,
 } from 'api-spec/models/List';
-import { EntityItem } from 'api-spec/models/Entity';
+import { Entity, EntityItem } from 'api-spec/models/Entity';
 import { ActionItem } from '@/models/Action';
 import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
@@ -227,9 +227,9 @@ export class EntityList extends ViewElement {
       this.state.setLastListUrl(url);
 
       const result = await api.get<{
-        entities: EntityItem[];
+        entities: Entity[];
         total: number;
-        context: Record<number, EntityItem[]>;
+        context: Record<number, Entity[]>;
       }>(url);
 
       if (result) {
@@ -326,7 +326,7 @@ export class EntityList extends ViewElement {
     this.state.toggleActionSelection(listItem.entityId);
   }
 
-  private renderContextActions(type: ListContextType, item: ActionItem) {
+  private renderContextActions(type: ListContextType, item: Entity) {
     return this.state.listContext.type === type &&
       this.state.contextListItems[item.id]?.length
       ? html`
@@ -408,9 +408,9 @@ export class EntityList extends ViewElement {
 
       <div class="box list-items">
         ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
-        ${this.state.listItems.length
+        ${this.state.listEntities.length
           ? repeat(
-              this.state.listItems,
+              this.state.listEntities,
               item => item.id,
               item => html`
                 ${this.renderContextActions(ListContextType.AFTER, item)}
@@ -418,11 +418,9 @@ export class EntityList extends ViewElement {
                   ?debug=${this.state.debugMode}
                   actionId=${item.id}
                   type=${item.type}
-                  desc=${item.desc}
-                  occurredAt=${item.occurredAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
-                  .properties=${defaultProperties}
+                  .properties=${item.properties}
                   @pointer-long-press=${this.handlePointerLongPress}
                   @pointer-up=${this.handlePointerUp}
                   @action-item-deleted=${this.handleItemDeleted}

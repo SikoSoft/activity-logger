@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
-import { EntityItem, EntityConfig } from 'api-spec/models/Entity';
+import { EntityItem, EntityConfig, Entity } from 'api-spec/models/Entity';
 import {
   ListFilter,
   ListFilterType,
@@ -49,13 +49,13 @@ export class AppState {
   public listItems: ActionItem[] = [];
 
   @observable
-  public listEntities: EntityItem[] = [];
+  public listEntities: Entity[] = [];
 
   @observable
   public contextListItems: Record<number, ActionItem[]> = [];
 
   @observable
-  public contextListEntities: Record<number, EntityItem[]> = {};
+  public contextListEntities: Record<number, Entity[]> = {};
 
   @observable
   public actionSuggestions: string[] = [];
@@ -330,12 +330,12 @@ export class AppState {
   }
 
   @action
-  setListEntities(entities: EntityItem[]) {
+  setListEntities(entities: Entity[]) {
     this.listEntities = entities;
   }
 
   @action
-  setContextListEntities(entities: Record<number, EntityItem[]>) {
+  setContextListEntities(entities: Record<number, Entity[]>) {
     this.contextListEntities = entities;
   }
 

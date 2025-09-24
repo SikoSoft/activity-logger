@@ -1,14 +1,13 @@
 import { Property } from '@/mock/entity-config';
 import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { EntityProperty } from 'api-spec/models/Entity';
 
 export enum EntityListItemProp {
   TYPE = 'type',
   ENTITY_ID = 'entityId',
-  DESC = 'desc',
   CREATED_AT = 'createdAt',
   UPDATED_AT = 'updatedAt',
-  OCCURRED_AT = 'occurredAt',
   TAGS = 'tags',
   SELECTED = 'selected',
   PROPERTIES = 'properties',
@@ -16,23 +15,21 @@ export enum EntityListItemProp {
 }
 
 export interface EntityListItemProps extends PropTypes {
-  [EntityListItemProp.TYPE]: string;
+  [EntityListItemProp.TYPE]: number;
   [EntityListItemProp.ENTITY_ID]: number;
-  [EntityListItemProp.DESC]: string;
   [EntityListItemProp.CREATED_AT]: string;
   [EntityListItemProp.UPDATED_AT]: string;
-  [EntityListItemProp.OCCURRED_AT]: string;
   [EntityListItemProp.TAGS]: string[];
   [EntityListItemProp.SELECTED]: boolean;
-  [EntityListItemProp.PROPERTIES]: Property[];
+  [EntityListItemProp.PROPERTIES]: EntityProperty[];
   [EntityListItemProp.DEBUG]: boolean;
 }
 
 export const entityListItemProps: PropConfigMap<EntityListItemProps> = {
   [EntityListItemProp.TYPE]: {
-    default: '',
+    default: 0,
     control: {
-      type: ControlType.TEXT,
+      type: ControlType.NUMBER,
     },
     description: 'The type of the entity',
   },
@@ -42,13 +39,6 @@ export const entityListItemProps: PropConfigMap<EntityListItemProps> = {
       type: ControlType.NUMBER,
     },
     description: 'The ID of the entity',
-  },
-  [EntityListItemProp.DESC]: {
-    default: '',
-    control: {
-      type: ControlType.TEXT,
-    },
-    description: 'The description of the entity',
   },
   [EntityListItemProp.CREATED_AT]: {
     default: '',
@@ -63,13 +53,6 @@ export const entityListItemProps: PropConfigMap<EntityListItemProps> = {
       type: ControlType.TEXT,
     },
     description: 'The update date of the entity',
-  },
-  [EntityListItemProp.OCCURRED_AT]: {
-    default: '',
-    control: {
-      type: ControlType.TEXT,
-    },
-    description: 'The occurrence date of the entity',
   },
   [EntityListItemProp.TAGS]: {
     default: [],
