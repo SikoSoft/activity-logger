@@ -412,7 +412,7 @@ export class EntityList extends ViewElement {
                 ${this.renderContextActions(ListContextType.AFTER, item)}
                 <entity-list-item
                   ?debug=${this.state.debugMode}
-                  actionId=${item.id}
+                  entityId=${item.id}
                   type=${item.type}
                   createdAt=${item.createdAt}
                   .tags=${item.tags}
