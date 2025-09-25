@@ -6,6 +6,9 @@ import {
   DataType,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
+  ImageDataValue,
+  IntDataValue,
+  PropertyDataValue,
 } from 'api-spec/models/Entity';
 import {
   PropertyFieldProp,
@@ -58,6 +61,8 @@ export class PropertyField extends MobxLitElement {
       this.propertyConfig.id,
       (this.state.entityPropertyInstances[this.propertyConfig.id] || 0) + 1,
     );
+
+    console.log('property value', this.value);
   }
 
   @state()
@@ -132,12 +137,14 @@ export class PropertyField extends MobxLitElement {
   }
 
   renderField() {
+    let value: PropertyDataValue;
     switch (this.propertyConfig.dataType) {
       case DataType.IMAGE:
+        value = this.value as ImageDataValue;
         return html`<image-field
           uiId=${this.uiId}
-          src=${this.propertyConfig.defaultValue.src}
-          alt=${this.propertyConfig.defaultValue.alt}
+          src=${value.src || this.propertyConfig.defaultValue.src}
+          alt=${value.alt || this.propertyConfig.defaultValue.alt}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></image-field>`;
@@ -145,7 +152,7 @@ export class PropertyField extends MobxLitElement {
       case DataType.SHORT_TEXT:
         return html`<text-field
           uiId=${this.uiId}
-          value=${this.propertyConfig.defaultValue}
+          value=${this.value || this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></text-field>`;
@@ -153,15 +160,16 @@ export class PropertyField extends MobxLitElement {
       case DataType.LONG_TEXT:
         return html`<text-field
           uiId=${this.uiId}
-          value=${this.propertyConfig.defaultValue}
+          value=${this.value || this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></text-field>`;
 
       case DataType.INT:
+        value = this.value as IntDataValue;
         return html`<int-field
           uiId=${this.uiId}
-          value=${this.propertyConfig.defaultValue}
+          value=${this.value || this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
         ></int-field>`;

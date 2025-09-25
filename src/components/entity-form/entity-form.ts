@@ -178,17 +178,7 @@ export class EntityForm extends ViewElement {
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
 
-    if (this.entityConfig && !this.propertiesSetup) {
-      this.propertyInstances = this.entityConfig.properties.map(
-        propertyConfig => ({
-          propertyConfig,
-          instanceId: 0,
-          uiId: uuidv4(),
-          value: propertyConfig.defaultValue,
-        }),
-      );
-      this.propertiesSetup = true;
-    }
+    this.setupProperties();
   }
 
   get apiUrl(): string {
@@ -198,6 +188,36 @@ export class EntityForm extends ViewElement {
   @state()
   get hasChanged(): boolean {
     return true;
+  }
+
+  setupProperties() {
+    if (!this.entityConfig) {
+      return;
+    }
+
+    if (this.entityConfig && !this.propertiesSetup) {
+      const existingProperties: PropertyInstance[] = this.properties.map(
+        property => ({
+          propertyConfig: this.entityConfig!.properties.find(
+            config => config.id === property.propertyConfigId,
+          )!,
+          instanceId: property.id,
+          uiId: uuidv4(),
+          value: property.value,
+        }),
+      );
+
+      const availableProperties: PropertyInstance[] =
+        this.entityConfig.properties.map(propertyConfig => ({
+          propertyConfig,
+          instanceId: 0,
+          uiId: uuidv4(),
+          value: propertyConfig.defaultValue,
+        }));
+
+      this.propertyInstances = [...existingProperties, ...availableProperties];
+      this.propertiesSetup = true;
+    }
   }
 
   private propertyAtMax(propertyId: number): boolean {
@@ -492,13 +512,15 @@ export class EntityForm extends ViewElement {
   }
 
   renderPropertyField(propertyInstance: PropertyInstance) {
+    console.log('renderPropertyField', propertyInstance);
+
     const { propertyConfig, uiId } = propertyInstance;
     if (!propertyConfig) {
       return nothing;
     }
 
     return html`<property-field
-      .value=${propertyConfig.defaultValue}
+      .value=${propertyInstance.value}
       uiId=${uiId}
       entityConfigId=${propertyConfig.entityConfigId}
       propertyConfigId=${propertyConfig.id}
