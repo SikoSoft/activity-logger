@@ -208,12 +208,19 @@ export class EntityForm extends ViewElement {
       );
 
       const availableProperties: PropertyInstance[] =
-        this.entityConfig.properties.map(propertyConfig => ({
-          propertyConfig,
-          instanceId: 0,
-          uiId: uuidv4(),
-          value: propertyConfig.defaultValue,
-        }));
+        this.entityConfig.properties
+          .filter(
+            propertyConfig =>
+              !existingProperties.some(
+                existing => existing.propertyConfig.id === propertyConfig.id,
+              ),
+          )
+          .map(propertyConfig => ({
+            propertyConfig,
+            instanceId: 0,
+            uiId: uuidv4(),
+            value: propertyConfig.defaultValue,
+          }));
 
       this.propertyInstances = [...existingProperties, ...availableProperties];
       this.propertiesSetup = true;
