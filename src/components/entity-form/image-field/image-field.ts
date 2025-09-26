@@ -1,8 +1,10 @@
-import { html, LitElement } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import { DataType, ImageDataValue } from 'api-spec/models/Entity';
+import { translate } from '@/lib/Localization';
+
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   ImageFieldProp,
@@ -10,10 +12,15 @@ import {
   imageFieldProps,
 } from './image-field.models';
 import { PropertyChangedEvent } from '../property-field/property-field.events';
-import { translate } from '@/lib/Localization';
+
+import '@ss/ui/components/file-upload';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 @customElement('image-field')
-export class ImageField extends LitElement {
+export class ImageField extends MobxLitElement {
+  private state = appState;
+
   @property({ type: Number })
   [ImageFieldProp.INSTANCE_ID]: ImageFieldProps[ImageFieldProp.INSTANCE_ID] =
     imageFieldProps[ImageFieldProp.INSTANCE_ID].default;
@@ -42,6 +49,10 @@ export class ImageField extends LitElement {
   [ImageFieldProp.UI_ID]: ImageFieldProps[ImageFieldProp.UI_ID] =
     imageFieldProps[ImageFieldProp.UI_ID].default;
 
+  get uploadUrl() {
+    return new URL('file', import.meta.env.APP_BASE_API_URL).toString();
+  }
+
   protected handleValueChanged(value: ImageDataValue) {
     this.dispatchEvent(
       new PropertyChangedEvent({
@@ -62,6 +73,12 @@ export class ImageField extends LitElement {
 
   render() {
     return html`
+      <file-upload
+        preview
+        endpointUrl=${this.uploadUrl}
+        authToken=${this.state.authToken}
+      ></file-upload>
+
       <ss-input
         type="text"
         value=${this.src}
