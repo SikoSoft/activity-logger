@@ -16,6 +16,12 @@ import { PropertyChangedEvent } from '../property-field/property-field.events';
 import '@ss/ui/components/file-upload';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
+import {
+  FileUploadSuccessEvent,
+  FileUploadFailedEvent,
+} from '@ss/ui/components/file-upload.events';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('image-field')
 export class ImageField extends MobxLitElement {
@@ -71,12 +77,24 @@ export class ImageField extends MobxLitElement {
     this.handleValueChanged({ src: this.src, alt: e.detail.value });
   }
 
+  fileUploadSuccess(e: FileUploadSuccessEvent) {
+    this.handleValueChanged({ src: e.detail.url, alt: this.alt });
+    this.src = e.detail.url;
+    addToast(translate('fileUploadSuccess'), NotificationType.SUCCESS);
+  }
+
+  fileUploadFailed(e: FileUploadFailedEvent) {
+    addToast(translate('fileUploadFailed'), NotificationType.ERROR);
+  }
+
   render() {
     return html`
       <file-upload
         preview
         endpointUrl=${this.uploadUrl}
         authToken=${this.state.authToken}
+        @file-upload-success=${this.fileUploadSuccess}
+        @file-upload-failed=${this.fileUploadFailed}
       ></file-upload>
 
       <ss-input
