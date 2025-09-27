@@ -12,7 +12,6 @@ import {
   PropertyDataValue,
   ShortTextDataValue,
 } from 'api-spec/models/Entity';
-import { msg } from '@lit/localize';
 import { produce } from 'immer';
 
 import { ControlType, SelectControl } from '@/models/Control';
@@ -39,6 +38,7 @@ import '@/components/entity-form/image-field/image-field';
 import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { PropertyChangedEvent } from '../entity-form/property-field/property-field.events';
 import { repeat } from 'lit/directives/repeat.js';
+import { translate } from '@/lib/Localization';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -289,7 +289,7 @@ export class PropertyConfigForm extends LitElement {
       );
 
       if (propertyConfig) {
-        addToast(msg('Property configuration updated successfully.'));
+        addToast(translate('propertyConfig.updatedSuccessfully'));
         this.dispatchEvent(new PropertyConfigUpdatedEvent(propertyConfig));
       }
       return;
@@ -298,7 +298,7 @@ export class PropertyConfigForm extends LitElement {
     console.log('adding property config', this.propertyConfig);
     const propertyConfig = await storage.addPropertyConfig(this.propertyConfig);
     if (propertyConfig) {
-      addToast(msg('Property configuration added successfully.'));
+      addToast(translate('propertyConfig.addedSuccessfully'));
       this.dispatchEvent(new PropertyConfigAddedEvent(propertyConfig));
     }
   }
@@ -312,7 +312,7 @@ export class PropertyConfigForm extends LitElement {
     );
 
     if (deleteResult) {
-      addToast(msg('Property configuration deleted successfully.'));
+      addToast(translate('propertyConfig.deletedSuccessfully'));
       this.dispatchEvent(
         new PropertyConfigDeletedEvent(
           this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
@@ -396,7 +396,7 @@ export class PropertyConfigForm extends LitElement {
             .options=${(
               propertyConfigFormProps[field].control as SelectControl
             ).options.map(option => ({
-              label: msg(option),
+              label: translate(option),
               value: option,
             }))}
             selected=${this[field]}
@@ -435,19 +435,21 @@ export class PropertyConfigForm extends LitElement {
   render() {
     return html`
       <ss-collapsable
-        title=${this.propertyConfig.name || msg('Property Configuration')}
+        title=${this.propertyConfig.name || translate('propertyConfiguration')}
         panelId=${`propertyConfigForm-${this.propertyConfig.id}`}
         .open=${this.open}
       >
         <fieldset class="entity-config-form">
-          <legend>${msg('Property Configuration')}</legend>
+          <legend>${translate('propertyConfiguration')}</legend>
 
           ${repeat(
             this.visibleFields,
             field => field,
             field =>
               html` <div class="field">
-                <label for=${field}>${msg(field)}</label>
+                <label for=${field}
+                  >${translate(`propertyConfig.field.${field}`)}</label
+                >
                 ${this.renderField(field)}
               </div>`,
           )}
@@ -460,7 +462,7 @@ export class PropertyConfigForm extends LitElement {
               this.save();
             }}
           >
-            ${msg('Save')}
+            ${translate('save')}
           </ss-button>
           <ss-button
             negative
@@ -469,7 +471,7 @@ export class PropertyConfigForm extends LitElement {
               this.confirmationModalIsOpen = true;
             }}
           >
-            ${msg('Delete')}
+            ${translate('delete')}
           </ss-button>
         </div>
       </ss-collapsable>
