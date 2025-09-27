@@ -54,6 +54,14 @@ export class PropertyConfigForm extends LitElement {
       border-radius: 0.5rem;
     }
 
+    .field {
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+      }
+    }
+
     .buttons {
       padding: 0.5rem 0;
 
@@ -71,10 +79,6 @@ export class PropertyConfigForm extends LitElement {
   @property({ type: String })
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
     propertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE].default;
-
-  @property({ type: String })
-  [PropertyConfigFormProp.RENDER_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE] =
-    propertyConfigFormProps[PropertyConfigFormProp.RENDER_TYPE].default;
 
   @property({ type: Number })
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: PropertyConfigFormProps[PropertyConfigFormProp.ENTITY_CONFIG_ID] =
@@ -404,6 +408,15 @@ export class PropertyConfigForm extends LitElement {
               }
             }}
           ></ss-select>
+        `;
+      case ControlType.BOOLEAN:
+        return html`
+          <ss-toggle
+            ?on=${this[field]}
+            @toggle-changed=${(e: ToggleChangedEvent) => {
+              this.updateField(field, e.detail.on);
+            }}
+          ></ss-toggle>
         `;
       case ControlType.NUMBER:
       case ControlType.TEXT:

@@ -5,7 +5,6 @@ import { PropConfigMap, PropTypes } from '@/models/Prop';
 export enum PropertyConfigFormProp {
   OPEN = 'open',
   DATA_TYPE = 'dataType',
-  RENDER_TYPE = 'renderType',
   ENTITY_CONFIG_ID = 'entityConfigId',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
   NAME = 'name',
@@ -36,7 +35,7 @@ export interface PropertyConfigFormProps extends PropTypes {
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
   [PropertyConfigFormProp.OPEN]: {
     default: false,
-    control: { type: ControlType.BOOLEAN },
+    control: { type: ControlType.HIDDEN },
     description: 'Whether the form is open or closed',
   },
   [PropertyConfigFormProp.DATA_TYPE]: {
