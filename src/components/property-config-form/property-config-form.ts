@@ -108,6 +108,10 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.SUFFIX]: PropertyConfigFormProps[PropertyConfigFormProp.SUFFIX] =
     propertyConfigFormProps[PropertyConfigFormProp.SUFFIX].default;
 
+  @property({ type: Boolean })
+  [PropertyConfigFormProp.HIDDEN]: PropertyConfigFormProps[PropertyConfigFormProp.HIDDEN] =
+    propertyConfigFormProps[PropertyConfigFormProp.HIDDEN].default;
+
   @property()
   [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE] =
     propertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE].default;
@@ -205,9 +209,7 @@ export class PropertyConfigForm extends LitElement {
     const commonEntityPropertyConfig: EntityPropertyConfig = {
       id: this[PropertyConfigFormProp.PROPERTY_CONFIG_ID],
       entityConfigId: this[PropertyConfigFormProp.ENTITY_CONFIG_ID],
-      renderType: this[
-        PropertyConfigFormProp.RENDER_TYPE
-      ] as EntityPropertyConfig['renderType'],
+      hidden: this[PropertyConfigFormProp.HIDDEN],
       name: this[PropertyConfigFormProp.NAME] as EntityPropertyConfig['name'],
       required: this[
         PropertyConfigFormProp.REQUIRED

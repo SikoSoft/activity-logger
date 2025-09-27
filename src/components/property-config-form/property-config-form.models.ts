@@ -1,9 +1,5 @@
 import { ControlType } from '@/models/Control';
-import {
-  DataType,
-  PropertyDataValue,
-  RenderType,
-} from 'api-spec/models/Entity';
+import { DataType, PropertyDataValue } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum PropertyConfigFormProp {
@@ -18,13 +14,13 @@ export enum PropertyConfigFormProp {
   REQUIRED = 'required',
   PREFIX = 'prefix',
   SUFFIX = 'suffix',
+  HIDDEN = 'hidden',
   DEFAULT_VALUE = 'defaultValue',
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.OPEN]: boolean;
   [PropertyConfigFormProp.DATA_TYPE]: string;
-  [PropertyConfigFormProp.RENDER_TYPE]: string;
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: number;
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: number;
   [PropertyConfigFormProp.NAME]: string;
@@ -33,6 +29,7 @@ export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.ALLOWED]: number;
   [PropertyConfigFormProp.PREFIX]: string;
   [PropertyConfigFormProp.SUFFIX]: string;
+  [PropertyConfigFormProp.HIDDEN]: boolean;
   [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyDataValue;
 }
 
@@ -46,11 +43,6 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: DataType.SHORT_TEXT,
     control: { type: ControlType.SELECT, options: Object.values(DataType) },
     description: 'The data type of the property',
-  },
-  [PropertyConfigFormProp.RENDER_TYPE]: {
-    default: RenderType.TEXT,
-    control: { type: ControlType.SELECT, options: Object.values(RenderType) },
-    description: 'The render type of the property',
   },
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: {
     default: 0,
@@ -91,6 +83,11 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: '',
     control: { type: ControlType.TEXT },
     description: 'The suffix of the property',
+  },
+  [PropertyConfigFormProp.HIDDEN]: {
+    default: false,
+    control: { type: ControlType.BOOLEAN },
+    description: 'Whether the property is hidden',
   },
   [PropertyConfigFormProp.DEFAULT_VALUE]: {
     default: '',

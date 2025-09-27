@@ -1,4 +1,3 @@
-import { ItemProperty } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
 
@@ -9,7 +8,6 @@ export enum ActionFormProp {
   OCCURRED_AT = 'occurredAt',
   TAGS = 'tags',
   TAG_VALUE = 'tagValue',
-  PROPERTIES = 'properties',
 }
 
 export interface ActionFormProps extends PropTypes {
@@ -19,7 +17,6 @@ export interface ActionFormProps extends PropTypes {
   [ActionFormProp.OCCURRED_AT]: string;
   [ActionFormProp.TAGS]: string[];
   [ActionFormProp.TAG_VALUE]: string;
-  [ActionFormProp.PROPERTIES]: ItemProperty[];
 }
 
 export const actionFormProps: PropConfigMap<ActionFormProps> = {
@@ -65,13 +62,6 @@ export const actionFormProps: PropConfigMap<ActionFormProps> = {
     },
     description: 'The value of the tag',
   },
-  [ActionFormProp.PROPERTIES]: {
-    default: [],
-    control: {
-      type: ControlType.TEXT,
-    },
-    description: 'The properties of the action',
-  },
 };
 
 export interface RequestBody {
@@ -79,7 +69,6 @@ export interface RequestBody {
   occurredAt: string;
   timeZone: number;
   tags: string[];
-  properties: ItemProperty[];
 }
 
 export enum SuggestionInputType {

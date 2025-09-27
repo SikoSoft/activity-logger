@@ -267,7 +267,6 @@ export class EntityConfigForm extends MobxLitElement {
                       entityConfigId=${this.entityConfig.id}
                       propertConfigId=${property.id}
                       dataType=${property.dataType}
-                      renderType=${property.renderType}
                       propertyConfigId=${property.id}
                       name=${property.name}
                       required=${property.required}
@@ -275,6 +274,7 @@ export class EntityConfigForm extends MobxLitElement {
                       allowed=${property.allowed}
                       prefix=${property.prefix}
                       suffix=${property.suffix}
+                      ?hidden=${property.hidden}
                       .defaultValue=${property.defaultValue}
                       @property-config-updated=${(
                         e: PropertyConfigUpdatedEvent,

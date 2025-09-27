@@ -100,10 +100,6 @@ export class ActionForm extends ViewElement {
   [ActionFormProp.TAG_VALUE]: ActionFormProps[ActionFormProp.TAG_VALUE] =
     actionFormProps[ActionFormProp.TAG_VALUE].default;
 
-  @property({ type: Array })
-  [ActionFormProp.PROPERTIES]: ActionFormProps[ActionFormProp.PROPERTIES] =
-    actionFormProps[ActionFormProp.PROPERTIES].default;
-
   @state() initialDesc: string = '';
   @state() initialOccurredAt: string = '';
   @state() initialTags: string = '';
@@ -185,7 +181,6 @@ export class ActionForm extends ViewElement {
           occurredAt,
           timeZone,
           tags: this.tagsAndSuggestions,
-          properties: this.properties,
         };
 
         const result = this.actionId

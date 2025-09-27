@@ -10,7 +10,6 @@ import {
   EntityPropertyConfig,
   ImageDataValue,
   PropertyDataValue,
-  RenderType,
 } from 'api-spec/models/Entity';
 import { Time } from '@/lib/Time';
 import {
@@ -182,7 +181,7 @@ export class EntityListItem extends MobxLitElement {
   private renderProperties() {
     return this.properties.map(property => {
       const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
-      if (!propertyConfig || propertyConfig.renderType === RenderType.HIDDEN) {
+      if (!propertyConfig || propertyConfig.hidden) {
         return nothing;
       }
 
@@ -197,7 +196,7 @@ export class EntityListItem extends MobxLitElement {
           break;
       }
 
-      if (propertyConfig.renderType === RenderType.IMAGE) {
+      if (propertyConfig.dataType === DataType.IMAGE) {
         return this.renderImageProperty(property);
       }
 
