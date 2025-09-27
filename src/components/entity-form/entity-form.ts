@@ -9,7 +9,7 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import {
   DataType,
   EntityConfig,
-  EntityItem,
+  Entity,
   EntityProperty,
   PropertyDataValue,
 } from 'api-spec/models/Entity';
@@ -338,8 +338,8 @@ export class EntityForm extends ViewElement {
         };
 
         const result = this.entityId
-          ? await api.put<RequestBody, EntityItem>(this.apiUrl, payload)
-          : await api.post<RequestBody, EntityItem>(this.apiUrl, payload);
+          ? await api.put<RequestBody, Entity>(this.apiUrl, payload)
+          : await api.post<RequestBody, Entity>(this.apiUrl, payload);
 
         this.reset();
         this.loading = false;

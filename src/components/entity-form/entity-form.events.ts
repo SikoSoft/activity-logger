@@ -1,5 +1,3 @@
-import { ItemProperty, DataTypedValue } from 'api-spec/models/Entity';
-
 export const entityItemUpdatedEventName = 'entity-item-updated';
 
 export interface EntityItemUpdatedEventPayload {
@@ -42,22 +40,6 @@ export interface EntityItemCanceledEventPayload {
 export class EntityItemCanceledEvent extends CustomEvent<EntityItemCanceledEventPayload> {
   constructor(payload: EntityItemCanceledEventPayload) {
     super(entityItemCanceledEventName, {
-      bubbles: true,
-      composed: true,
-      detail: payload,
-    });
-  }
-}
-
-export const itemPropertyUpdatedEventName = 'item-property-updated';
-
-export type ItemPropertyUpdatedEventPayload<T extends ItemProperty> = T;
-
-export class ItemPropertyUpdatedEvent<
-  T extends ItemProperty,
-> extends CustomEvent<ItemPropertyUpdatedEventPayload<T>> {
-  constructor(payload: ItemPropertyUpdatedEventPayload<T>) {
-    super(itemPropertyUpdatedEventName, {
       bubbles: true,
       composed: true,
       detail: payload,
