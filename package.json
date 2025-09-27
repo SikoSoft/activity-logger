@@ -19,7 +19,7 @@
   "dependencies": {
     "@adobe/lit-mobx": "^2.2.2",
     "@lit/localize": "^0.12.2",
-    "@ss/ui": "github:SikoSoft/ui#2.3.2",
+    "@ss/ui": "github:SikoSoft/ui#2.4.0",
     "api-spec": "github:SikoSoft/api-spec#1.27.0",
     "immer": "^10.1.1",
     "lit": "~3.1.3",

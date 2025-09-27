@@ -48,6 +48,12 @@ export class EntityListItem extends MobxLitElement {
       color: #888;
       font-size: 0.9rem;
     }
+
+    .property.image {
+      img {
+        max-width: 100%;
+      }
+    }
   `;
   @property({ type: Number })
   [EntityListItemProp.TYPE]: EntityListItemProps[EntityListItemProp.TYPE] =
