@@ -464,6 +464,7 @@ export class EntityForm extends ViewElement {
   }
 
   private handlePropertyChanged(e: PropertyChangedEvent) {
+    console.log('handlePropertyChanged', e.detail);
     const { value, uiId } = e.detail;
 
     const propertyInstance = this.propertyInstances.find(

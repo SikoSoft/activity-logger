@@ -60,6 +60,7 @@ export class ImageField extends MobxLitElement {
   }
 
   protected handleValueChanged(value: ImageDataValue) {
+    console.log('handleValueChanged', value);
     this.dispatchEvent(
       new PropertyChangedEvent({
         uiId: this[ImageFieldProp.UI_ID],
@@ -70,10 +71,12 @@ export class ImageField extends MobxLitElement {
   }
 
   protected handleSrcChanged(e: InputChangedEvent) {
+    console.log('handleSrcChanged', e.detail.value);
     this.handleValueChanged({ src: e.detail.value, alt: this.alt });
   }
 
   protected handleAltChanged(e: InputChangedEvent) {
+    console.log('handleAltChanged', e.detail.value);
     this.handleValueChanged({ src: this.src, alt: e.detail.value });
   }
 

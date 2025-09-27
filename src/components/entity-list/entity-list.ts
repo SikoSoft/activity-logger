@@ -39,6 +39,10 @@ import { ListFilter } from '@/components/list-filter/list-filter';
 import { EntityListItem } from './entity-list-item/entity-list-item';
 
 import { EntityListItemMode } from './entity-list-item/entity-list-item.models';
+import {
+  EntityItemDeletedEvent,
+  EntityItemUpdatedEvent,
+} from '../entity-form/entity-form.events';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {
@@ -128,8 +132,8 @@ export class EntityList extends ViewElement {
     const urlHasChanged = this.state.lastListUrl !== this.getUrl();
 
     if (urlHasChanged) {
-      this.state.setListItems([]);
-      this.state.setContextListItems([]);
+      this.state.setListEntities([]);
+      this.state.setContextListEntities([]);
     }
 
     this.load();
@@ -149,34 +153,23 @@ export class EntityList extends ViewElement {
     this.load();
   }
 
-  private handleItemDeleted(e: ActionItemDeletedEvent) {
-    this.state.setListItems(
-      this.state.listItems.filter(item => item.id !== e.detail.id),
+  private handleItemDeleted(e: EntityItemDeletedEvent) {
+    this.state.setListEntities(
+      this.state.listEntities.filter(item => item.id !== e.detail.id),
     );
   }
 
-  private handleItemUpdated(e: ActionItemUpdatedEvent) {
-    const updatedList = this.state.listItems
-      .map(item =>
-        item.id === e.detail.id
-          ? {
-              ...item,
-              desc: e.detail.desc,
-              occurredAt: e.detail.occurredAt,
-              tags: e.detail.tags,
-            }
-          : item,
-      )
-      .sort((a, b) =>
-        this.state.listSort.direction === ListSortDirection.DESC
-          ? b[this.state.listSort.property].localeCompare(
-              a[this.state.listSort.property],
-            )
-          : a[this.state.listSort.property].localeCompare(
-              b[this.state.listSort.property],
-            ),
-      );
-    this.state.setListItems(updatedList);
+  private handleItemUpdated(e: EntityItemUpdatedEvent) {
+    const updatedList = this.state.listEntities.map(item =>
+      item.id === e.detail.id
+        ? {
+            ...item,
+            tags: e.detail.tags,
+          }
+        : item,
+    );
+
+    this.state.setListEntities(updatedList);
   }
 
   private handleScroll() {
@@ -324,7 +317,7 @@ export class EntityList extends ViewElement {
 
   private renderContextActions(type: ListContextType, item: Entity) {
     return this.state.listContext.type === type &&
-      this.state.contextListItems[item.id]?.length
+      this.state.contextListEntities[item.id]?.length
       ? html`
           <ss-collapsable
             title=${msg('Show context')}
@@ -333,21 +326,19 @@ export class EntityList extends ViewElement {
             }}
             ?open=${this.actionContextIsOpen.get(item.id)}
           >
-            ${this.state.contextListItems[item.id].map(
+            ${this.state.contextListEntities[item.id].map(
               contextAction => html`
-                <action-list-item
+                <entity-list-item
                   ?debug=${this.state.debugMode}
                   actionId=${contextAction.id}
                   type=${contextAction.type}
-                  desc=${contextAction.desc}
-                  occurredAt=${contextAction.occurredAt}
                   .tags=${contextAction.tags}
                   ?selected=${this.state.selectedActions.includes(
                     contextAction.id,
                   )}
                   @pointer-long-press=${this.handlePointerLongPress}
                   @pointer-up=${this.handlePointerUp}
-                ></action-list-item>
+                ></entity-list-item>
               `,
             )}
           </ss-collapsable>
@@ -420,8 +411,8 @@ export class EntityList extends ViewElement {
                   .properties=${item.properties}
                   @pointer-long-press=${this.handlePointerLongPress}
                   @pointer-up=${this.handlePointerUp}
-                  @action-item-deleted=${this.handleItemDeleted}
-                  @action-item-updated=${this.handleItemUpdated}
+                  @entity-item-deleted=${this.handleItemDeleted}
+                  @entity-item-updated=${this.handleItemUpdated}
                 ></entity-list-item>
                 ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
