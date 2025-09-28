@@ -61,8 +61,6 @@ export class PropertyField extends MobxLitElement {
       this.propertyConfig.id,
       (this.state.entityPropertyInstances[this.propertyConfig.id] || 0) + 1,
     );
-
-    console.log('property value', this.value);
   }
 
   @state()

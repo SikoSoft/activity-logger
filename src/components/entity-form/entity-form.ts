@@ -53,12 +53,16 @@ import {
 } from './property-field/property-field.events';
 import { translate } from '@/lib/Localization';
 
+import '@ss/ui/components/sortable-list';
+import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
+
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
   private state = appState;
   private minLengthForSuggestion = 1;
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
   private abortController: AbortController | null = null;
+  private sortedIds: string[] = [];
 
   static styles = [
     theme,
@@ -323,11 +327,13 @@ export class EntityForm extends ViewElement {
         const timeZone = new Date().getTimezoneOffset();
 
         const properties: EntityProperty[] = this.propertyInstances.map(
-          (propertyInstance, index) => ({
+          propertyInstance => ({
             id: propertyInstance.instanceId,
             propertyConfigId: propertyInstance.propertyConfig.id,
             value: propertyInstance.value,
-            order: index,
+            order:
+              this.sortedIds.indexOf(propertyInstance.uiId) ??
+              this.propertyInstances.length,
           }),
         );
 
@@ -520,6 +526,10 @@ export class EntityForm extends ViewElement {
     console.log('addProperty');
   }
 
+  sortUpdated(e: SortUpdatedEvent) {
+    this.sortedIds = e.detail.sortedIds;
+  }
+
   renderPropertyField(propertyInstance: PropertyInstance) {
     console.log('renderPropertyField', propertyInstance);
 
@@ -557,14 +567,20 @@ export class EntityForm extends ViewElement {
         </div>
 
         <div class="properties">
-          ${this.propertyInstances.length && this.entityConfig
-            ? repeat(
-                this.propertyInstances,
-                propertyInstance => propertyInstance.propertyConfig.id,
-                propertyInstance =>
-                  html`${this.renderPropertyField(propertyInstance)}`,
-              )
-            : nothing}
+          <sortable-list @sort-updated=${this.sortUpdated}>
+            ${this.propertyInstances.length && this.entityConfig
+              ? repeat(
+                  this.propertyInstances,
+                  propertyInstance => propertyInstance.propertyConfig.id,
+                  propertyInstance =>
+                    html`<sortable-item id=${propertyInstance.uiId}
+                      >${this.renderPropertyField(
+                        propertyInstance,
+                      )}</sortable-item
+                    >`,
+                )
+              : nothing}
+          </sortable-list>
         </div>
 
         <tag-manager
