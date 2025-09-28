@@ -247,10 +247,10 @@ export class EntityListItem extends MobxLitElement {
         ${this.mode === EntityListItemMode.EDIT
           ? html`
               <entity-form
-                @action-item-updated=${() => {
+                @entity-item-updated=${() => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
-                @action-item-canceled=${() => {
+                @entity-item-canceled=${() => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
                 entityId=${this.entityId}
