@@ -8,6 +8,13 @@ export const theme = css`
     --positive-background-color: #c4ffc4;
     --unsynced-color: #666;
     --unsynced-background-color: #c4c4c4;
+    --primary-color: #0066ff;
+    --border-color: #ccc;
+    --border-radius: 0.5rem;
+    --padding: 0.5rem;
+    --font-size: 1rem;
+    --text-color: #000;
+    --background-color: #fff;
   }
 
   input[type='text'],

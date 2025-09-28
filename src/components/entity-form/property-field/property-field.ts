@@ -16,7 +16,6 @@ import {
   propertyFieldProps,
 } from './property-field.models';
 import {
-  PropertyChangedEvent,
   PropertyClonedEvent,
   PropertyDeletedEvent,
 } from '@/components/entity-form/property-field/property-field.events';
@@ -24,6 +23,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
 import '@/components/entity-form/int-field/int-field';
+import '@/components/entity-form/long-text-field/long-text-field';
 import '@/components/entity-form/short-text-field/short-text-field';
 import '@/components/entity-form/image-field/image-field';
 import { translate } from '@/lib/Localization';
@@ -156,12 +156,12 @@ export class PropertyField extends MobxLitElement {
         ></short-text-field>`;
 
       case DataType.LONG_TEXT:
-        return html`<text-field
+        return html`<long-text-field
           uiId=${this.uiId}
           value=${this.value || this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
-        ></text-field>`;
+        ></long-text-field>`;
 
       case DataType.INT:
         value = this.value as IntDataValue;
