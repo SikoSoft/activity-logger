@@ -132,11 +132,13 @@ export class NetworkStorage implements StorageSchema {
       entityConfigId: entityConfigId,
       ...payload
     } = propertyConfig;
-
+    const timeZone = new Date().getTimezoneOffset();
     const result = await api.post<
-      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,
+      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'> & {
+        timeZone: number;
+      },
       EntityPropertyConfig
-    >(`propertyConfig/${entityConfigId}`, payload);
+    >(`propertyConfig/${entityConfigId}`, { ...payload, timeZone });
 
     if (result && result.isOk) {
       return result.response;
@@ -149,10 +151,13 @@ export class NetworkStorage implements StorageSchema {
     propertyConfig: EntityPropertyConfig,
   ): Promise<Entity.EntityPropertyConfig | null> {
     const { id, entityConfigId, ...payload } = propertyConfig;
+    const timeZone = new Date().getTimezoneOffset();
     const result = await api.put<
-      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'>,
+      Omit<EntityPropertyConfig, 'id' | 'entityConfigId'> & {
+        timeZone: number;
+      },
       EntityPropertyConfig
-    >(`propertyConfig/${entityConfigId}/${id}`, payload);
+    >(`propertyConfig/${entityConfigId}/${id}`, { ...payload, timeZone });
 
     if (result && result.isOk) {
       return result.response;

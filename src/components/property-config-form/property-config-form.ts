@@ -167,6 +167,9 @@ export class PropertyConfigForm extends LitElement {
       case DataType.BOOLEAN:
         typedValue = { dataType, defaultValue: false };
         break;
+      case DataType.DATE:
+        typedValue = { dataType, defaultValue: new Date() };
+        break;
       case DataType.IMAGE:
         typedValue = { dataType, defaultValue: { src: '', alt: '' } };
         break;
