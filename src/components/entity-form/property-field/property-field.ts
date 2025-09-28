@@ -4,6 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import '@ss/ui/components/ss-input';
 import {
   DataType,
+  DateDataValue,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
   ImageDataValue,
@@ -22,6 +23,7 @@ import {
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
+import '@/components/entity-form/date-field/date-field';
 import '@/components/entity-form/int-field/int-field';
 import '@/components/entity-form/long-text-field/long-text-field';
 import '@/components/entity-form/short-text-field/short-text-field';
@@ -137,6 +139,15 @@ export class PropertyField extends MobxLitElement {
   renderField() {
     let value: PropertyDataValue;
     switch (this.propertyConfig.dataType) {
+      case DataType.DATE:
+        value = this.value as DateDataValue;
+        return html`<date-field
+          uiId=${this.uiId}
+          .value=${value || this.propertyConfig.defaultValue}
+          entityConfigId=${this.propertyConfig.entityConfigId}
+          propertyConfigId=${this.propertyConfig.id}
+        ></date-field>`;
+
       case DataType.IMAGE:
         value = this.value as ImageDataValue;
         return html`<image-field
