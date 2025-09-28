@@ -24,7 +24,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
 import '@/components/entity-form/int-field/int-field';
-import '@/components/entity-form/text-field/text-field';
+import '@/components/entity-form/short-text-field/short-text-field';
 import '@/components/entity-form/image-field/image-field';
 import { translate } from '@/lib/Localization';
 
@@ -148,12 +148,12 @@ export class PropertyField extends MobxLitElement {
         ></image-field>`;
 
       case DataType.SHORT_TEXT:
-        return html`<text-field
+        return html`<short-text-field
           uiId=${this.uiId}
           value=${this.value || this.propertyConfig.defaultValue}
           entityConfigId=${this.propertyConfig.entityConfigId}
           propertyConfigId=${this.propertyConfig.id}
-        ></text-field>`;
+        ></short-text-field>`;
 
       case DataType.LONG_TEXT:
         return html`<text-field

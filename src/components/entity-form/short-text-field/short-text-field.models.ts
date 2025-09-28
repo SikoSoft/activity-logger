@@ -1,7 +1,7 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap } from '@/models/Prop';
 
-export enum TextFieldProp {
+export enum ShortTextFieldProp {
   INSTANCE_ID = 'instanceId',
   VALUE = 'value',
   PLACEHOLDER = 'placeholder',
@@ -11,60 +11,60 @@ export enum TextFieldProp {
   UI_ID = 'uiId',
 }
 
-export interface TextFieldProps {
-  [TextFieldProp.INSTANCE_ID]: number;
-  [TextFieldProp.VALUE]: string;
-  [TextFieldProp.PLACEHOLDER]: string;
-  [TextFieldProp.LABEL]: string;
-  [TextFieldProp.PROPERTY_CONFIG_ID]: number;
-  [TextFieldProp.ENTITY_CONFIG_ID]: number;
-  [TextFieldProp.UI_ID]: string;
+export interface ShortTextFieldProps {
+  [ShortTextFieldProp.INSTANCE_ID]: number;
+  [ShortTextFieldProp.VALUE]: string;
+  [ShortTextFieldProp.PLACEHOLDER]: string;
+  [ShortTextFieldProp.LABEL]: string;
+  [ShortTextFieldProp.PROPERTY_CONFIG_ID]: number;
+  [ShortTextFieldProp.ENTITY_CONFIG_ID]: number;
+  [ShortTextFieldProp.UI_ID]: string;
 }
 
-export const textFieldProps: PropConfigMap<TextFieldProps> = {
-  [TextFieldProp.INSTANCE_ID]: {
+export const shortTextFieldProps: PropConfigMap<ShortTextFieldProps> = {
+  [ShortTextFieldProp.INSTANCE_ID]: {
     default: 0,
     control: {
       type: ControlType.NUMBER,
     },
     description: 'The instance ID of the text field',
   },
-  [TextFieldProp.VALUE]: {
+  [ShortTextFieldProp.VALUE]: {
     default: '',
     control: {
       type: ControlType.TEXT,
     },
     description: 'The value of the text field',
   },
-  [TextFieldProp.PLACEHOLDER]: {
+  [ShortTextFieldProp.PLACEHOLDER]: {
     default: '',
     control: {
       type: ControlType.TEXT,
     },
     description: 'The placeholder text for the text field',
   },
-  [TextFieldProp.LABEL]: {
+  [ShortTextFieldProp.LABEL]: {
     default: '',
     control: {
       type: ControlType.TEXT,
     },
     description: 'The label text for the text field',
   },
-  [TextFieldProp.PROPERTY_CONFIG_ID]: {
+  [ShortTextFieldProp.PROPERTY_CONFIG_ID]: {
     default: 0,
     control: {
       type: ControlType.NUMBER,
     },
     description: 'The property configuration ID for the text field',
   },
-  [TextFieldProp.ENTITY_CONFIG_ID]: {
+  [ShortTextFieldProp.ENTITY_CONFIG_ID]: {
     default: 0,
     control: {
       type: ControlType.NUMBER,
     },
     description: 'The entity configuration ID for the text field',
   },
-  [TextFieldProp.UI_ID]: {
+  [ShortTextFieldProp.UI_ID]: {
     default: '',
     control: {
       type: ControlType.HIDDEN,
