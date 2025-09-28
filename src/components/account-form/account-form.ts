@@ -10,7 +10,7 @@ import {
   CreateAccountResponseBody,
   passwordFields,
 } from './account-form.models';
-import { Input } from '@ss/ui/models';
+import { InputType } from '@ss/ui/components/ss-input.models';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
@@ -104,8 +104,8 @@ export class AccountForm extends LitElement {
           fieldName =>
             html` <ss-input
               type=${passwordFields.includes(fieldName)
-                ? Input.InputType.PASSWORD
-                : Input.InputType.TEXT}
+                ? InputType.PASSWORD
+                : InputType.TEXT}
               id=${fieldName}
               placeholder=${fieldName}
               @input-submitted=${this.handleFieldSubmitted}

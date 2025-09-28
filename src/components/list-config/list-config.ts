@@ -7,7 +7,7 @@ import { classMap } from 'lit/directives/class-map.js';
 
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
-import { InputType } from '@/models/Input';
+import { InputType } from '@ss/ui/components/ss-input.models';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 

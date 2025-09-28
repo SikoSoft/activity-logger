@@ -3,7 +3,7 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
-import { InputType } from '@/models/Input';
+import { InputType } from '@ss/ui/components/ss-input.models';
 import { Time } from '@/lib/Time';
 import {
   TimeFiltersProp,

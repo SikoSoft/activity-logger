@@ -5,7 +5,7 @@ import { msg } from '@lit/localize';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { appState } from '@/state';
-import { InputType } from '@/models/Input';
+import { InputType } from '@ss/ui/components/ss-input.models';
 import { Time } from '@/lib/Time';
 import { api } from '@/lib/Api';
 import { ActionItem } from '@/models/Action';
