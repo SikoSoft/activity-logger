@@ -227,6 +227,7 @@ export class EntityForm extends ViewElement {
           }));
 
       this.propertyInstances = [...existingProperties, ...availableProperties];
+      this.sortedIds = this.propertyInstances.map(prop => prop.uiId);
       this.propertiesSetup = true;
     }
   }
