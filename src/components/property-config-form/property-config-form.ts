@@ -4,6 +4,7 @@ import {
   BooleanDataValue,
   DataType,
   DataTypedValue,
+  DateDataValue,
   defaultEntityPropertyConfig,
   EntityPropertyConfig,
   ImageDataValue,
@@ -34,6 +35,7 @@ import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/confirmation-modal';
 import '@ss/ui/components/ss-toggle';
+import '@/components/entity-form/date-field/date-field';
 import '@/components/entity-form/image-field/image-field';
 import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { PropertyChangedEvent } from '../entity-form/property-field/property-field.events';
@@ -239,6 +241,22 @@ export class PropertyConfigForm extends LitElement {
     };
 
     switch (this[PropertyConfigFormProp.DATA_TYPE]) {
+      case DataType.BOOLEAN:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.BOOLEAN,
+          defaultValue: Boolean(
+            this[PropertyConfigFormProp.DEFAULT_VALUE],
+          ) as BooleanDataValue,
+        };
+      case DataType.DATE:
+        return {
+          ...commonEntityPropertyConfig,
+          dataType: DataType.DATE,
+          defaultValue: this[
+            PropertyConfigFormProp.DEFAULT_VALUE
+          ] as DateDataValue,
+        };
       case DataType.IMAGE:
         return {
           ...commonEntityPropertyConfig,
@@ -254,14 +272,6 @@ export class PropertyConfigForm extends LitElement {
           defaultValue:
             Number(this[PropertyConfigFormProp.DEFAULT_VALUE]) ||
             (0 as IntDataValue),
-        };
-      case DataType.BOOLEAN:
-        return {
-          ...commonEntityPropertyConfig,
-          dataType: DataType.BOOLEAN,
-          defaultValue: Boolean(
-            this[PropertyConfigFormProp.DEFAULT_VALUE],
-          ) as BooleanDataValue,
         };
       case DataType.SHORT_TEXT:
         return {
@@ -337,6 +347,16 @@ export class PropertyConfigForm extends LitElement {
 
   renderDefaultValueField() {
     switch (this.propertyConfig[PropertyConfigFormProp.DATA_TYPE]) {
+      case DataType.DATE:
+        return html` <date-field
+          .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
+          @property-changed=${(e: PropertyChangedEvent) => {
+            this.updateField(
+              PropertyConfigFormProp.DEFAULT_VALUE,
+              e.detail.value,
+            );
+          }}
+        ></date-field>`;
       case DataType.BOOLEAN:
         return html` <ss-toggle
           ?on=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
