@@ -323,10 +323,11 @@ export class EntityForm extends ViewElement {
         const timeZone = new Date().getTimezoneOffset();
 
         const properties: EntityProperty[] = this.propertyInstances.map(
-          propertyInstance => ({
+          (propertyInstance, index) => ({
             id: propertyInstance.instanceId,
             propertyConfigId: propertyInstance.propertyConfig.id,
             value: propertyInstance.value,
+            order: index,
           }),
         );
 
