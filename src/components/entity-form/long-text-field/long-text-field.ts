@@ -81,9 +81,10 @@ export class LongTextField extends LitElement {
 
   render() {
     return html`
-      <textarea @input=${this.handleInputChanged}>
-${this[LongTextFieldProp.VALUE]}</textarea
-      >
+      <textarea
+        @input=${this.handleInputChanged}
+        .value=${this[LongTextFieldProp.VALUE]}
+      ></textarea>
     `;
   }
 }
