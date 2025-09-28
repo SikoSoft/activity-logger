@@ -13,6 +13,7 @@ import {
   DateFieldProps,
   dateFieldProps,
 } from './date-field.models';
+import { Time } from '@/lib/Time';
 
 @customElement('date-field')
 export class DateField extends LitElement {
@@ -49,11 +50,15 @@ export class DateField extends LitElement {
     this.dispatchEvent(changedEvent);
   }
 
+  get formattedValue() {
+    return Time.formatDateTime(new Date(this[DateFieldProp.VALUE]));
+  }
+
   render() {
     return html`
       <ss-input
         type="datetime-local"
-        value=${this[DateFieldProp.VALUE]}
+        value=${this.formattedValue}
         @input-changed=${this.handleInputChanged}
       ></ss-input>
     `;
