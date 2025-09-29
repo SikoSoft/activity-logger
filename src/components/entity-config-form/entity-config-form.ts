@@ -57,11 +57,6 @@ export class EntityConfigForm extends MobxLitElement {
         margin-bottom: 0.5rem;
       }
     }
-
-    property-config-form {
-      display: block;
-      margin-bottom: 1rem;
-    }
   `;
 
   @state()
@@ -69,6 +64,9 @@ export class EntityConfigForm extends MobxLitElement {
 
   @state()
   confirmationModalIsOpen: boolean = false;
+
+  @state()
+  isSaving = false;
 
   @property({ type: Boolean, reflect: true })
   open: boolean = false;
@@ -88,6 +86,20 @@ export class EntityConfigForm extends MobxLitElement {
   @property({ type: Array })
   [EntityConfigFormProp.PROPERTIES]: EntityConfigFormProps[EntityConfigFormProp.PROPERTIES] =
     entityConfigFormProps[EntityConfigFormProp.PROPERTIES].default;
+
+  get inSync(): boolean {
+    return (
+      this.entityConfig.name === this[EntityConfigFormProp.NAME] &&
+      this.entityConfig.description ===
+        this[EntityConfigFormProp.DESCRIPTION] &&
+      JSON.stringify(this.entityConfig.properties) ===
+        JSON.stringify(this[EntityConfigFormProp.PROPERTIES])
+    );
+  }
+
+  get isSaveEnabled(): boolean {
+    return !this.isSaving && !this.inSync;
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -123,6 +135,7 @@ export class EntityConfigForm extends MobxLitElement {
       return;
     }
 
+    this.isSaving = true;
     let result: unknown;
 
     if (this.entityConfig.id) {
@@ -130,6 +143,8 @@ export class EntityConfigForm extends MobxLitElement {
     } else {
       result = await storage.addEntityConfig(this.entityConfig);
     }
+
+    this.isSaving = false;
 
     if (!result) {
       addToast(msg('failedToSaveEntityConfig'), NotificationType.ERROR);
@@ -240,7 +255,12 @@ export class EntityConfigForm extends MobxLitElement {
           </div>
 
           <div class="buttons">
-            <ss-button positive @click=${this.save}>${msg('Save')}</ss-button>
+            <ss-button
+              positive
+              ?disabled=${!this.isSaveEnabled}
+              @click=${this.save}
+              >${msg('Save')}</ss-button
+            >
 
             <ss-button
               negative
