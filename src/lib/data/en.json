@@ -43,5 +43,6 @@
   "propertyConfig.field.defaultValue": "Default Value",
   "propertyConfig.addedSuccessfully": "Property configuration added successfully.",
   "propertyConfig.updatedSuccessfully": "Property configuration updated successfully.",
-  "propertyConfig.deletedSuccessfully": "Property configuration deleted successfully."
+  "propertyConfig.deletedSuccessfully": "Property configuration deleted successfully.",
+  "propertyConfig.breakingChangeDetected": "Breaking change detected! Please review your changes."
 }

@@ -41,6 +41,8 @@ import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { PropertyChangedEvent } from '../entity-form/property-field/property-field.events';
 import { repeat } from 'lit/directives/repeat.js';
 import { translate } from '@/lib/Localization';
+import { Revision } from 'api-spec/lib/Revision';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {
@@ -150,12 +152,6 @@ export class PropertyConfigForm extends LitElement {
       const control = propertyConfigFormProps[field].control;
       return control.type !== ControlType.HIDDEN;
     }) as PropertyConfigFormProp[];
-  }
-
-  validate() {
-    const errors: string[] = [];
-
-    return errors;
   }
 
   handleDataTypeChange(dataType: DataType = this.dataType as DataType) {
@@ -293,9 +289,31 @@ export class PropertyConfigForm extends LitElement {
     return commonEntityPropertyConfig;
   }
 
+  validate(): boolean {
+    const revisionResult = Revision.propertyIsSafe(
+      this.updatedPropertyConfig,
+      this.propertyConfig,
+    );
+    if (!revisionResult.isValid) {
+      addToast(
+        translate('propertyConfig.breakingChangeDetected'),
+        NotificationType.ERROR,
+      );
+      return false;
+    }
+
+    return true;
+  }
+
   async save() {
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       console.log('updating property config', this.propertyConfig);
+
+      const isValid = this.validate();
+      if (!isValid) {
+        return;
+      }
+
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,
       );
