@@ -3,7 +3,6 @@ import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { msg } from '@lit/localize';
 
 import {
   ListFilterType,
@@ -12,6 +11,7 @@ import {
   TimeContext,
   TextContext,
 } from 'api-spec/models/List';
+import { translate } from '@/lib/Localization';
 
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
@@ -33,11 +33,6 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
-
-const filterTypeMsgMap: Record<ListFilterType, string> = {
-  [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
-  [ListFilterType.CONTAINS_ONE_OF]: msg('filterType.containsOneOf'),
-};
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -182,7 +177,7 @@ export class ListFilter extends MobxLitElement {
 
     storage.saveActiveFilter(this.state.listFilter);
     this.dispatchEvent(new ListFilterUpdatedEvent({}));
-    addToast(msg('Filter updated!'), NotificationType.INFO);
+    addToast(translate('filterUpdated'), NotificationType.INFO);
   }
 
   private async saveFilter() {
@@ -198,7 +193,7 @@ export class ListFilter extends MobxLitElement {
     this.filterNameInput.clear();
     this.saveMode = false;
 
-    addToast(msg('Filter saved!'), NotificationType.SUCCESS);
+    addToast(translate('filterSaved'), NotificationType.SUCCESS);
   }
 
   private async handleSaveClick(_e: CustomEvent): Promise<void> {
@@ -238,7 +233,7 @@ export class ListFilter extends MobxLitElement {
       this.savedFiltersInput.dispatchEvent(new Event('change'));
     }
     this.savedFilters = storage.getSavedFilters();
-    addToast(msg('Filter deleted!'), NotificationType.INFO);
+    addToast(translate('filterDeleted'), NotificationType.INFO);
   }
 
   private handleTimeChanged(e: TimeFiltersUpdatedEvent) {
@@ -292,7 +287,7 @@ export class ListFilter extends MobxLitElement {
                   id="saved-filters"
                   @change=${this.handleSavedFilterChanged}
                 >
-                  <option value="">${msg('Saved filters')}</option>
+                  <option value="">${translate('savedFilters')}</option>
                   ${repeat(
                     this.savedFilters,
                     filter => filter.id,
@@ -306,7 +301,7 @@ export class ListFilter extends MobxLitElement {
                   ? html`
                       <ss-button
                         @click=${this.handleDeleteSavedFilterClick}
-                        text=${msg('Delete filter')}
+                        text=${translate('deleteFilter')}
                       ></ss-button>
                     `
                   : nothing}
@@ -322,7 +317,7 @@ export class ListFilter extends MobxLitElement {
             @change=${this.handleIncludeAllChanged}
           />
 
-          <label for="include-all">${msg('Include all actions')}</label>
+          <label for="include-all">${translate('includeAllActions')}</label>
         </div>
 
         <div class="filters">
@@ -333,7 +328,7 @@ export class ListFilter extends MobxLitElement {
           ></text-filters>
 
           <fieldset class=${classMap(this.taggingClasses)}>
-            <legend>${msg('Tagging')}</legend>
+            <legend>${translate('tagging')}</legend>
 
             <div class="all">
               <input
@@ -343,7 +338,9 @@ export class ListFilter extends MobxLitElement {
                 @change=${this.handleIncludeAllTaggingChanged}
               />
 
-              <label for="include-all-tagging">${msg('Include all')}</label>
+              <label for="include-all-tagging"
+                >${translate('includeAll')}</label
+              >
             </div>
 
             <div class="tag-rules">
@@ -352,7 +349,7 @@ export class ListFilter extends MobxLitElement {
                 type => type,
                 type => html`
                   <fieldset>
-                    <legend>${filterTypeMsgMap[type]}</legend>
+                    <legend>${translate(`filterType.${type}`)}</legend>
 
                     <tag-manager
                       ?enableSuggestions=${this.tagSuggestionsEnabled}
@@ -391,7 +388,7 @@ export class ListFilter extends MobxLitElement {
                 />
 
                 <label for="include-untagged"
-                  >${msg('Include actions without tags')}</label
+                  >${translate('includeActionsWithoutTags')}</label
                 >
               </div>
             </div>
@@ -417,7 +414,7 @@ export class ListFilter extends MobxLitElement {
           @click=${(e: CustomEvent) => {
             this.handleUpdateClick(e);
           }}
-          text=${msg('Use filter')}
+          text=${translate('useFilter')}
         ></ss-button>
 
         <div class="save">
@@ -429,14 +426,14 @@ export class ListFilter extends MobxLitElement {
               this.handleFilterNameSubmitted(e);
             }}
             id="filter-name"
-            placeholder=${msg('Filter name')}
+            placeholder=${translate('filterName')}
           ></ss-input>
 
           <ss-button
             @click=${(e: CustomEvent) => {
               this.handleSaveClick(e);
             }}
-            text=${msg('Save filter')}
+            text=${translate('saveFilter')}
             ?disabled=${!this.saveButtonIsEnabled}
           ></ss-button>
         </div>

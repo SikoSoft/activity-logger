@@ -1,6 +1,5 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 
 import { TextType } from 'api-spec/models/List';
 import {
@@ -8,6 +7,7 @@ import {
   textFilterProps,
   TextFilterProps,
 } from './text-filter.models';
+import { translate } from '@/lib/Localization';
 
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import {
@@ -20,13 +20,6 @@ import {
 } from '@ss/ui/components/ss-input.events';
 
 import { theme } from '@/styles/theme';
-
-const textTypeMsgMap: Record<TextType, string> = {
-  [TextType.EQUALS]: msg('textType.equals'),
-  [TextType.CONTAINS]: msg('textType.contains'),
-  [TextType.ENDS_WITH]: msg('textType.endsWith'),
-  [TextType.STARTS_WITH]: msg('textType.startsWith'),
-};
 
 @customElement('text-filter')
 export class TextFilter extends LitElement {
@@ -84,7 +77,7 @@ export class TextFilter extends LitElement {
           }}
           .options=${Object.values(TextType).map(type => ({
             value: type,
-            label: textTypeMsgMap[type],
+            label: translate(`textType.${type}`),
           }))}
         ></ss-select>
 

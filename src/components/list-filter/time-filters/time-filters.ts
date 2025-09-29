@@ -1,6 +1,5 @@
 import { html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
 import { InputType } from '@ss/ui/components/ss-input.models';
@@ -10,6 +9,7 @@ import {
   timeFiltersProps,
   TimeFiltersProps,
 } from './time-filters.models';
+import { translate } from '@/lib/Localization';
 
 import { TimeFiltersUpdatedEvent } from './time-filters.events';
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
@@ -17,12 +17,6 @@ import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { SSInput } from '@ss/ui/components/ss-input';
 
 import { theme } from '@/styles/theme';
-
-const filterTimeTypeMsgMap: Record<ListFilterTimeType, string> = {
-  [ListFilterTimeType.ALL_TIME]: msg('filterTimeType.allTime'),
-  [ListFilterTimeType.EXACT_DATE]: msg('filterTimeType.exactDate'),
-  [ListFilterTimeType.RANGE]: msg('filterTimeType.range'),
-};
 
 @customElement('time-filters')
 export class TimeFilters extends LitElement {
@@ -119,7 +113,7 @@ export class TimeFilters extends LitElement {
   render() {
     return html`
       <fieldset>
-        <legend>${msg('Time')}</legend>
+        <legend>${translate('time')}</legend>
 
         <ss-select
           selected=${this.type}
@@ -128,7 +122,7 @@ export class TimeFilters extends LitElement {
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({
             value: type,
-            label: filterTimeTypeMsgMap[type],
+            label: translate(`filterTimeType.${type}`),
           }))}
         ></ss-select>
 

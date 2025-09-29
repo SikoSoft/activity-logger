@@ -5,6 +5,7 @@ import { localized, msg } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { appState } from '@/state';
+import { translate } from '@/lib/Localization';
 
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { ListSortUpdatedEvent } from './list-sort.events';
@@ -12,17 +13,6 @@ import { ListSortUpdatedEvent } from './list-sort.events';
 import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
-
-const sortPropertyMsgMap: Record<ListSortProperty, string> = {
-  [ListSortProperty.CREATED_AT]: msg('sortProperty.createdAt'),
-  [ListSortProperty.DESC]: msg('sortProperty.desc'),
-  [ListSortProperty.OCCURRED_AT]: msg('sortProperty.occurredAt'),
-};
-
-const sortDirectionMsgMap: Record<ListSortDirection, string> = {
-  [ListSortDirection.ASC]: msg('sortDirection.asc'),
-  [ListSortDirection.DESC]: msg('sortDirection.desc'),
-};
 
 @customElement('list-sort')
 @localized()
@@ -70,7 +60,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
               value: type,
-              label: sortPropertyMsgMap[type],
+              label: translate(`sortProperty.${type}`),
             }))}
           >
           </ss-select>
@@ -82,7 +72,7 @@ export class ListSort extends MobxLitElement {
             }}
             .options=${Object.values(ListSortDirection).map(type => ({
               value: type,
-              label: sortDirectionMsgMap[type],
+              label: translate(`sortDirection.${type}`),
             }))}
           >
           </ss-select>
