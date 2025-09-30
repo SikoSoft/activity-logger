@@ -27,6 +27,8 @@ import {
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   PropertyConfigAddedEvent,
+  PropertyConfigBreakingChangeDetectedEvent,
+  PropertyConfigBreakingChangesResolvedEvent,
   PropertyConfigDeletedEvent,
   PropertyConfigUpdatedEvent,
 } from './property-config-form.events';
@@ -295,12 +297,25 @@ export class PropertyConfigForm extends LitElement {
       this.propertyConfig,
     );
     if (!revisionResult.isValid) {
+      this.dispatchEvent(
+        new PropertyConfigBreakingChangeDetectedEvent({
+          propertyConfig: this.updatedPropertyConfig,
+          problems: revisionResult.problems,
+        }),
+      );
+
       addToast(
         translate('propertyConfig.breakingChangeDetected'),
         NotificationType.ERROR,
       );
       return false;
     }
+
+    this.dispatchEvent(
+      new PropertyConfigBreakingChangesResolvedEvent({
+        propertyConfig: this.updatedPropertyConfig,
+      }),
+    );
 
     return true;
   }

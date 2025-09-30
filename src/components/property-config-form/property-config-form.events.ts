@@ -1,4 +1,5 @@
 import { EntityPropertyConfig } from 'api-spec/models/Entity';
+import { RevisionProblems } from 'api-spec/models/Revision';
 
 export const propertyConfigUpdatedEventName = 'property-config-updated';
 
@@ -35,6 +36,41 @@ export type PropertyConfigDeletedPayload = number;
 export class PropertyConfigDeletedEvent extends CustomEvent<PropertyConfigDeletedPayload> {
   constructor(detail: PropertyConfigDeletedPayload) {
     super(propertyConfigDeletedEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export const propertyConfigBreakingChangeDetectedEventName =
+  'property-config-breaking-change-detected';
+
+export type PropertyConfigBreakingChangeDetectedPayload = {
+  propertyConfig: EntityPropertyConfig;
+  problems: RevisionProblems;
+};
+
+export class PropertyConfigBreakingChangeDetectedEvent extends CustomEvent<PropertyConfigBreakingChangeDetectedPayload> {
+  constructor(detail: PropertyConfigBreakingChangeDetectedPayload) {
+    super(propertyConfigBreakingChangeDetectedEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export const propertyConfigBreakingChangesResolvedEventName =
+  'property-config-breaking-changes-resolved';
+
+export type PropertyConfigBreakingChangesResolvedPayload = {
+  propertyConfig: EntityPropertyConfig;
+};
+
+export class PropertyConfigBreakingChangesResolvedEvent extends CustomEvent<PropertyConfigBreakingChangesResolvedPayload> {
+  constructor(detail: PropertyConfigBreakingChangesResolvedPayload) {
+    super(propertyConfigBreakingChangesResolvedEventName, {
       detail,
       bubbles: true,
       composed: true,
