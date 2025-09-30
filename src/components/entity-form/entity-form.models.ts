@@ -1,7 +1,13 @@
 import { EntityProperty, PropertyDataValue } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
-import { Entity } from 'api-spec/models';
+
+export interface PropertyInstance {
+  propertyConfigId: number;
+  instanceId: number;
+  uiId: string;
+  value: PropertyDataValue;
+}
 
 export type ValidateionResult =
   | {
@@ -11,13 +17,6 @@ export type ValidateionResult =
       isValid: false;
       errors: string[];
     };
-
-export interface PropertyInstance {
-  propertyConfigId: number; //Entity.EntityPropertyConfig;
-  instanceId: number;
-  uiId: string;
-  value: PropertyDataValue;
-}
 
 export enum EntityFormProp {
   ENTITY_ID = 'entityId',

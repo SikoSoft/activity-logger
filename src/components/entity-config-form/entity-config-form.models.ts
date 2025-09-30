@@ -1,6 +1,16 @@
 import { ControlType } from '@/models/Control';
 import { EntityPropertyConfig } from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { RevisionProblems } from 'api-spec/models/Revision';
+
+export interface PropertyConfigInstance {
+  propertyConfigId: number;
+  instanceId: number;
+  uiId: string;
+  problems: RevisionProblems;
+}
+
+export type PropertyConfigProblemMap = Record<number, RevisionProblems>;
 
 export enum EntityConfigFormProp {
   ENTITY_CONFIG_ID = 'entityConfigId',

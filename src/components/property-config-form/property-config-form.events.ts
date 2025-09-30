@@ -47,6 +47,7 @@ export const propertyConfigBreakingChangeDetectedEventName =
   'property-config-breaking-change-detected';
 
 export type PropertyConfigBreakingChangeDetectedPayload = {
+  uiId: string;
   propertyConfig: EntityPropertyConfig;
   problems: RevisionProblems;
 };
@@ -65,6 +66,7 @@ export const propertyConfigBreakingChangesResolvedEventName =
   'property-config-breaking-changes-resolved';
 
 export type PropertyConfigBreakingChangesResolvedPayload = {
+  uiId: string;
   propertyConfig: EntityPropertyConfig;
 };
 

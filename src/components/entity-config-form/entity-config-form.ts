@@ -16,11 +16,14 @@ import {
   EntityConfigFormProp,
   entityConfigFormProps,
   EntityConfigFormProps,
+  PropertyConfigInstance,
 } from './entity-config-form.models';
 import { storage } from '@/lib/Storage';
 
 import {
   PropertyConfigAddedEvent,
+  PropertyConfigBreakingChangeDetectedEvent,
+  PropertyConfigBreakingChangesResolvedEvent,
   PropertyConfigUpdatedEvent,
 } from '@/components/property-config-form/property-config-form.events';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
@@ -67,6 +70,9 @@ export class EntityConfigForm extends MobxLitElement {
 
   @state()
   isSaving = false;
+
+  @state()
+  propertyConfigInstances: PropertyConfigInstance[] = [];
 
   @property({ type: Boolean, reflect: true })
   open: boolean = false;
@@ -223,6 +229,22 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
+  breakingChangeDetected(
+    index: number,
+    e: PropertyConfigBreakingChangeDetectedEvent,
+  ) {
+    const { propertyConfig, problems } = e.detail;
+    console.log('breakingChangeDetected', propertyConfig, problems, index);
+  }
+
+  breakingChangesResolved(
+    index: number,
+    e: PropertyConfigBreakingChangesResolvedEvent,
+  ) {
+    const { propertyConfig } = e.detail;
+    console.log('breakingChangesResolved', propertyConfig, index);
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -303,6 +325,16 @@ export class EntityConfigForm extends MobxLitElement {
                         this.updateProperty(index, e.detail)}
                       @property-config-deleted=${() => {
                         this.deleteProperty(index);
+                      }}
+                      @property-config-breaking-change-detected=${(
+                        e: PropertyConfigBreakingChangeDetectedEvent,
+                      ) => {
+                        this.breakingChangeDetected(index, e);
+                      }}
+                      @property-config-breaking-changes-resolved=${(
+                        e: PropertyConfigBreakingChangesResolvedEvent,
+                      ) => {
+                        this.breakingChangesResolved(index, e);
                       }}
                     ></property-config-form>
                   </sortable-item>

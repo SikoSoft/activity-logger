@@ -82,6 +82,10 @@ export class PropertyConfigForm extends LitElement {
     propertyConfigFormProps[PropertyConfigFormProp.OPEN].default;
 
   @property({ type: String })
+  [PropertyConfigFormProp.UI_ID]: PropertyConfigFormProps[PropertyConfigFormProp.UI_ID] =
+    propertyConfigFormProps[PropertyConfigFormProp.UI_ID].default;
+
+  @property({ type: String })
   [PropertyConfigFormProp.DATA_TYPE]: PropertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE] =
     propertyConfigFormProps[PropertyConfigFormProp.DATA_TYPE].default;
 
@@ -299,6 +303,7 @@ export class PropertyConfigForm extends LitElement {
     if (!revisionResult.isValid) {
       this.dispatchEvent(
         new PropertyConfigBreakingChangeDetectedEvent({
+          uiId: this[PropertyConfigFormProp.UI_ID],
           propertyConfig: this.updatedPropertyConfig,
           problems: revisionResult.problems,
         }),
@@ -313,6 +318,7 @@ export class PropertyConfigForm extends LitElement {
 
     this.dispatchEvent(
       new PropertyConfigBreakingChangesResolvedEvent({
+        uiId: this[PropertyConfigFormProp.UI_ID],
         propertyConfig: this.updatedPropertyConfig,
       }),
     );

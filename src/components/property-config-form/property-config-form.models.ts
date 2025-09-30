@@ -5,6 +5,7 @@ import { PropConfigMap, PropTypes } from '@/models/Prop';
 export enum PropertyConfigFormProp {
   OPEN = 'open',
   DATA_TYPE = 'dataType',
+  UI_ID = 'uiId',
   ENTITY_CONFIG_ID = 'entityConfigId',
   PROPERTY_CONFIG_ID = 'propertyConfigId',
   NAME = 'name',
@@ -20,6 +21,7 @@ export enum PropertyConfigFormProp {
 export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.OPEN]: boolean;
   [PropertyConfigFormProp.DATA_TYPE]: string;
+  [PropertyConfigFormProp.UI_ID]: string;
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: number;
   [PropertyConfigFormProp.PROPERTY_CONFIG_ID]: number;
   [PropertyConfigFormProp.NAME]: string;
@@ -42,6 +44,11 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: DataType.SHORT_TEXT,
     control: { type: ControlType.SELECT, options: Object.values(DataType) },
     description: 'The data type of the property',
+  },
+  [PropertyConfigFormProp.UI_ID]: {
+    default: '',
+    control: { type: ControlType.HIDDEN },
+    description: 'The UI ID of the property',
   },
   [PropertyConfigFormProp.ENTITY_CONFIG_ID]: {
     default: 0,
