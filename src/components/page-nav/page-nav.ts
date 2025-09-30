@@ -61,9 +61,7 @@ export class PageNav extends MobxLitElement {
     pageNavProps[PageNavProp.ACTIVE].default;
 
   get displayViews(): PageViewConfig[] {
-    return import.meta.env.APP_FF_PROPERTIES && this.state.debugMode
-      ? debugViews
-      : views;
+    return this.state.debugMode ? debugViews : views;
   }
 
   setActiveView(view: PageView) {
