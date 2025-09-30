@@ -202,9 +202,12 @@ export class EntityForm extends ViewElement {
     if (this.entityConfig && !this.propertiesSetup) {
       const existingProperties: PropertyInstance[] = this.properties.map(
         property => ({
-          propertyConfig: this.entityConfig!.properties.find(
+          propertyConfigId: property.propertyConfigId,
+
+          /*this.entityConfig!.properties.find(
             config => config.id === property.propertyConfigId,
           )!,
+          */
           instanceId: property.id,
           uiId: uuidv4(),
           value: property.value,
@@ -216,11 +219,11 @@ export class EntityForm extends ViewElement {
           .filter(
             propertyConfig =>
               !existingProperties.some(
-                existing => existing.propertyConfig.id === propertyConfig.id,
+                existing => existing.propertyConfigId === propertyConfig.id,
               ),
           )
           .map(propertyConfig => ({
-            propertyConfig,
+            propertyConfigId: propertyConfig.id,
             instanceId: 0,
             uiId: uuidv4(),
             value: propertyConfig.defaultValue,
@@ -241,15 +244,20 @@ export class EntityForm extends ViewElement {
       prop => prop.id === propertyId,
     );
     return propertyConfig
-      ? this.numberOfPropertiesWithType(propertyId) >= propertyConfig.repeat
+      ? this.numberOfPropertiesWithType(propertyConfig.dataType, propertyId) >=
+          propertyConfig.repeat
       : true;
   }
 
-  private numberOfPropertiesWithType(type: number): number {
+  private numberOfPropertiesWithType(dataType: DataType, type: number): number {
+    if (!this.entityConfig) {
+      return 0;
+    }
+
     return this.propertyInstances.filter(
       prop =>
-        prop.propertyConfig.id === type &&
-        this.validateTypedData(prop.propertyConfig.dataType, prop.value),
+        prop.propertyConfigId === type &&
+        this.validateTypedData(dataType, prop.value),
     ).length;
   }
 
@@ -281,7 +289,10 @@ export class EntityForm extends ViewElement {
     }
 
     this.entityConfig.properties.forEach(propertyConfig => {
-      const count = this.numberOfPropertiesWithType(propertyConfig.id);
+      const count = this.numberOfPropertiesWithType(
+        propertyConfig.dataType,
+        propertyConfig.id,
+      );
 
       if (count < propertyConfig.required) {
         errors.push(
@@ -330,7 +341,7 @@ export class EntityForm extends ViewElement {
         const properties: EntityProperty[] = this.propertyInstances.map(
           propertyInstance => ({
             id: propertyInstance.instanceId,
-            propertyConfigId: propertyInstance.propertyConfig.id,
+            propertyConfigId: propertyInstance.propertyConfigId,
             value: propertyInstance.value,
             order:
               this.sortedIds.indexOf(propertyInstance.uiId) ??
@@ -517,9 +528,8 @@ export class EntityForm extends ViewElement {
     );
 
     this.state.setEntityPropertyInstance(
-      instanceToRemove.propertyConfig.id,
-      this.state.entityPropertyInstances[instanceToRemove.propertyConfig.id] -
-        1,
+      instanceToRemove.propertyConfigId,
+      this.state.entityPropertyInstances[instanceToRemove.propertyConfigId] - 1,
     );
   }
 
@@ -534,16 +544,16 @@ export class EntityForm extends ViewElement {
   renderPropertyField(propertyInstance: PropertyInstance) {
     console.log('renderPropertyField', propertyInstance);
 
-    const { propertyConfig, uiId } = propertyInstance;
-    if (!propertyConfig) {
+    const { propertyConfigId, uiId } = propertyInstance;
+    if (!propertyConfigId || !this.entityConfig) {
       return nothing;
     }
 
     return html`<property-field
       .value=${propertyInstance.value}
       uiId=${uiId}
-      entityConfigId=${propertyConfig.entityConfigId}
-      propertyConfigId=${propertyConfig.id}
+      entityConfigId=${this.entityConfig.id}
+      propertyConfigId=${propertyConfigId}
       @property-changed=${this.handlePropertyChanged}
       @property-cloned=${this.handlePropertyCloned}
       @property-deleted=${this.handlePropertyDeleted}
@@ -572,7 +582,7 @@ export class EntityForm extends ViewElement {
             ${this.propertyInstances.length && this.entityConfig
               ? repeat(
                   this.propertyInstances,
-                  propertyInstance => propertyInstance.propertyConfig.id,
+                  propertyInstance => propertyInstance.propertyConfigId,
                   propertyInstance =>
                     html`<sortable-item id=${propertyInstance.uiId}
                       >${this.renderPropertyField(

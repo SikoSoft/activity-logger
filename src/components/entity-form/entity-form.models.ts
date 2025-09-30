@@ -13,7 +13,7 @@ export type ValidateionResult =
     };
 
 export interface PropertyInstance {
-  propertyConfig: Entity.EntityPropertyConfig;
+  propertyConfigId: number; //Entity.EntityPropertyConfig;
   instanceId: number;
   uiId: string;
   value: PropertyDataValue;
