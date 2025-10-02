@@ -71,5 +71,7 @@
   "sortProperty.desc": "Description",
   "sortProperty.occurredAt": "Occurred at",
   "sortDirection.asc": "Ascending",
-  "sortDirection.desc": "Descending"
+  "sortDirection.desc": "Descending",
+  "breakingChangeWarning": "Warning: Changes are detected which would cause issues with existing data.",
+  "createNewRevision": "Create New Revision"
 }

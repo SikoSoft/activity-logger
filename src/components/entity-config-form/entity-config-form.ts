@@ -1,5 +1,5 @@
 import { html, css, nothing } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
 import { produce } from 'immer';
@@ -17,6 +17,7 @@ import {
   entityConfigFormProps,
   EntityConfigFormProps,
   PropertyConfigInstance,
+  PropertyConfigProblemMap,
 } from './entity-config-form.models';
 import { storage } from '@/lib/Storage';
 
@@ -37,6 +38,7 @@ import '@ss/ui/components/sortable-item';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
+import { translate } from '@/lib/Localization';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
@@ -60,6 +62,20 @@ export class EntityConfigForm extends MobxLitElement {
         margin-bottom: 0.5rem;
       }
     }
+
+    .revision-info {
+      border: 1px solid #ffa500;
+      background-color: #ffe4b1;
+      color: #000;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .warning {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
   `;
 
   @state()
@@ -73,6 +89,12 @@ export class EntityConfigForm extends MobxLitElement {
 
   @state()
   propertyConfigInstances: PropertyConfigInstance[] = [];
+
+  @state()
+  propertyConfigProblems: PropertyConfigProblemMap = [];
+
+  @state()
+  saveNewRevision: boolean = false;
 
   @property({ type: Boolean, reflect: true })
   open: boolean = false;
@@ -93,6 +115,12 @@ export class EntityConfigForm extends MobxLitElement {
   [EntityConfigFormProp.PROPERTIES]: EntityConfigFormProps[EntityConfigFormProp.PROPERTIES] =
     entityConfigFormProps[EntityConfigFormProp.PROPERTIES].default;
 
+  @state()
+  get hasBreakingChanges(): boolean {
+    return this.propertyConfigProblems.some(problems => problems !== undefined);
+  }
+
+  @state()
   get inSync(): boolean {
     return (
       this.entityConfig.name === this[EntityConfigFormProp.NAME] &&
@@ -102,6 +130,9 @@ export class EntityConfigForm extends MobxLitElement {
         JSON.stringify(this[EntityConfigFormProp.PROPERTIES])
     );
   }
+
+  @query('.revision-target')
+  revisionInfo!: HTMLElement;
 
   get isSaveEnabled(): boolean {
     return !this.isSaving && !this.inSync;
@@ -235,6 +266,17 @@ export class EntityConfigForm extends MobxLitElement {
   ) {
     const { propertyConfig, problems } = e.detail;
     console.log('breakingChangeDetected', propertyConfig, problems, index);
+    this.propertyConfigProblems = produce(
+      this.propertyConfigProblems,
+      draft => {
+        draft[index] = problems;
+      },
+    );
+
+    if (this.revisionInfo) {
+      console.log('scrolling to revision info');
+      this.revisionInfo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   breakingChangesResolved(
@@ -243,6 +285,12 @@ export class EntityConfigForm extends MobxLitElement {
   ) {
     const { propertyConfig } = e.detail;
     console.log('breakingChangesResolved', propertyConfig, index);
+    this.propertyConfigProblems = produce(
+      this.propertyConfigProblems,
+      draft => {
+        draft[index] = undefined;
+      },
+    );
   }
 
   render() {
@@ -276,12 +324,35 @@ export class EntityConfigForm extends MobxLitElement {
             ></ss-input>
           </div>
 
+          <div class="revision-target"></div>
+
+          ${this.hasBreakingChanges
+            ? html` <div class="revision-info">
+                <div class="warning">${translate('breakingChangeWarning')}</div>
+
+                <input
+                  type="checkbox"
+                  id="new-revision"
+                  ?checked=${this.saveNewRevision}
+                  @click=${() => {
+                    this.saveNewRevision = !this.saveNewRevision;
+                  }}
+                />
+
+                <label for="new-revision"
+                  >${translate('createNewRevision')}</label
+                >
+              </div>`
+            : nothing}
+
           <div class="buttons">
             <ss-button
               positive
               ?disabled=${!this.isSaveEnabled}
               @click=${this.save}
-              >${msg('Save')}</ss-button
+              >${translate(
+                this.saveNewRevision ? 'createNewRevision' : 'save',
+              )}</ss-button
             >
 
             <ss-button

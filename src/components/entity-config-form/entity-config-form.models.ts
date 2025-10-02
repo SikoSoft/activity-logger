@@ -10,7 +10,7 @@ export interface PropertyConfigInstance {
   problems: RevisionProblems;
 }
 
-export type PropertyConfigProblemMap = Record<number, RevisionProblems>;
+export type PropertyConfigProblemMap = RevisionProblems[] | undefined[];
 
 export enum EntityConfigFormProp {
   ENTITY_CONFIG_ID = 'entityConfigId',
