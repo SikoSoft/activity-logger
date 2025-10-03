@@ -1,6 +1,5 @@
 import { html, css, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
 import { produce } from 'immer';
 
@@ -135,7 +134,7 @@ export class EntityConfigForm extends MobxLitElement {
   revisionInfo!: HTMLElement;
 
   get isSaveEnabled(): boolean {
-    return !this.isSaving && !this.inSync;
+    return !this.isSaving && (!this.inSync || this.saveNewRevision);
   }
 
   connectedCallback(): void {
@@ -146,6 +145,7 @@ export class EntityConfigForm extends MobxLitElement {
       name: this[EntityConfigFormProp.NAME],
       description: this[EntityConfigFormProp.DESCRIPTION],
       properties: this[EntityConfigFormProp.PROPERTIES],
+      revisionOf: null,
     };
   }
 
@@ -160,7 +160,7 @@ export class EntityConfigForm extends MobxLitElement {
   validate() {
     const errors: string[] = [];
     if (!this.entityConfig.name) {
-      errors.push(msg('entityConfigNameRequired'));
+      errors.push(translate('entityConfigNameRequired'));
     }
     return errors;
   }
@@ -168,38 +168,49 @@ export class EntityConfigForm extends MobxLitElement {
   async save() {
     const validationErrors = this.validate();
     if (validationErrors.length > 0) {
-      addToast(msg('entityConfigValidationFailed'), NotificationType.ERROR);
+      addToast(
+        translate('entityConfigValidationFailed'),
+        NotificationType.ERROR,
+      );
       return;
     }
 
     this.isSaving = true;
     let result: unknown;
 
-    if (this.entityConfig.id) {
-      result = await storage.updateEntityConfig(this.entityConfig);
+    const entityConfig = produce(this.entityConfig, draft => {
+      if (this.saveNewRevision) {
+        draft.id = 0;
+        draft.revisionOf = this.entityConfig.id;
+        draft.properties = draft.properties.map(p => ({ ...p, id: 0 }));
+      }
+    });
+
+    if (entityConfig.id) {
+      result = await storage.updateEntityConfig(entityConfig);
     } else {
-      result = await storage.addEntityConfig(this.entityConfig);
+      result = await storage.addEntityConfig(entityConfig);
     }
 
     this.isSaving = false;
 
     if (!result) {
-      addToast(msg('failedToSaveEntityConfig'), NotificationType.ERROR);
+      addToast(translate('failedToSaveEntityConfig'), NotificationType.ERROR);
       return;
     }
 
-    addToast(msg('entityConfigSaved'), NotificationType.SUCCESS);
+    addToast(translate('entityConfigSaved'), NotificationType.SUCCESS);
   }
 
   async delete() {
     const result = await storage.deleteEntityConfig(this.entityConfig.id);
 
     if (!result) {
-      addToast(msg('failedToDeleteEntityConfig'), NotificationType.ERROR);
+      addToast(translate('failedToDeleteEntityConfig'), NotificationType.ERROR);
       return;
     }
 
-    addToast(msg('entityConfigDeleted'), NotificationType.SUCCESS);
+    addToast(translate('entityConfigDeleted'), NotificationType.SUCCESS);
   }
 
   addPropertyToTop() {
@@ -296,14 +307,14 @@ export class EntityConfigForm extends MobxLitElement {
   render() {
     return html`
       <ss-collapsable
-        title=${this.entityConfig.name || msg('Entity Configuration')}
+        title=${this.entityConfig.name || translate('entityConfiguration')}
         ?open=${this.open}
         panelId=${`entityConfigForm-${this.entityConfig.id}`}
         @collapsable-toggled=${this.toggle}
       >
         <div class="entity-config-form">
           <div class="field">
-            <label for="entity-name">${msg('Entity Name')}</label>
+            <label for="entity-name">${translate('entityName')}</label>
 
             <ss-input
               id="entity-name"
@@ -314,7 +325,9 @@ export class EntityConfigForm extends MobxLitElement {
           </div>
 
           <div class="field">
-            <label for="entity-description">${msg('Entity Description')}</label>
+            <label for="entity-description"
+              >${translate('entityDescription')}</label
+            >
 
             <ss-input
               id="entity-description"
@@ -360,13 +373,13 @@ export class EntityConfigForm extends MobxLitElement {
               @click=${() => {
                 this.confirmationModalIsOpen = true;
               }}
-              >${msg('Delete')}</ss-button
+              >${translate('delete')}</ss-button
             >
           </div>
 
           <div class="properties">
             <ss-button @click=${this.addPropertyToTop}
-              >${msg('Add Property')}</ss-button
+              >${translate('addProperty')}</ss-button
             >
 
             <sortable-list @sort-updated=${this.sortUpdated}>
@@ -415,7 +428,7 @@ export class EntityConfigForm extends MobxLitElement {
 
             ${this.entityConfig.properties.length > 0
               ? html` <ss-button @click=${this.addPropertyToBottom}
-                  >${msg('Add Property')}</ss-button
+                  >${translate('addProperty')}</ss-button
                 >`
               : nothing}
           </div>

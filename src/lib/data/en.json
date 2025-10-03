@@ -73,5 +73,14 @@
   "sortDirection.asc": "Ascending",
   "sortDirection.desc": "Descending",
   "breakingChangeWarning": "Warning: Changes are detected which would cause issues with existing data.",
-  "createNewRevision": "Create New Revision"
+  "createNewRevision": "Create New Revision",
+  "entityConfigNameRequired": "Entity config name is required",
+  "entityConfigValidationFailed": "Entity config validation failed. Please check the form for errors.",
+  "failedToSaveEntityConfig": "Failed to save entity config. Please try again.",
+  "entityConfigSaved": "Entity config saved successfully.",
+  "failedToDeleteEntityConfig": "Failed to delete entity config. Please try again.",
+  "entityConfigDeleted": "Entity config deleted successfully.",
+  "entityConfiguration": "Entity Configuration",
+  "entityName": "Entity Name",
+  "entityDescription": "Entity Description"
 }
