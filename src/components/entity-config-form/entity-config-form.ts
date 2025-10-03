@@ -38,6 +38,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 import { translate } from '@/lib/Localization';
+import { EntityConfigDeletedEvent } from './entity-config-form.events';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
@@ -211,6 +212,10 @@ export class EntityConfigForm extends MobxLitElement {
     }
 
     addToast(translate('entityConfigDeleted'), NotificationType.SUCCESS);
+
+    this.dispatchEvent(
+      new EntityConfigDeletedEvent({ id: this.entityConfig.id }),
+    );
   }
 
   addPropertyToTop() {

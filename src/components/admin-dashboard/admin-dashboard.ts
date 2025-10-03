@@ -13,6 +13,8 @@ import { produce } from 'immer';
 import { defaultEntityConfig } from 'api-spec/models/Entity';
 import { msg } from '@lit/localize';
 import { ViewElement } from '@/lib/ViewElement';
+import { EntityConfigDeletedEvent } from '../entity-config-form/entity-config-form.events';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('admin-dashboard')
 export class AdminDashboard extends ViewElement {
@@ -46,6 +48,12 @@ export class AdminDashboard extends ViewElement {
     this.state.setEntityConfigs([...this.state.entityConfigs, entityConfig]);
   }
 
+  handleEntityConfigDeleted(e: EntityConfigDeletedEvent) {
+    this.state.setEntityConfigs(
+      this.state.entityConfigs.filter(config => config.id !== e.detail.id),
+    );
+  }
+
   isPanelOpen(id: number): boolean {
     if (!id) {
       return true;
@@ -57,7 +65,9 @@ export class AdminDashboard extends ViewElement {
   render() {
     return html`
       <div class="admin-dashboard box">
-        ${this.state.entityConfigs.map(
+        ${repeat(
+          this.state.entityConfigs,
+          config => config.id,
           config => html`
             <entity-config-form
               entityConfigId=${config.id}
@@ -65,6 +75,7 @@ export class AdminDashboard extends ViewElement {
               description=${config.description}
               .properties=${toJS(config.properties)}
               ?open=${this.isPanelOpen(config.id)}
+              @entity-config-deleted=${this.handleEntityConfigDeleted}
             ></entity-config-form>
           `,
         )}

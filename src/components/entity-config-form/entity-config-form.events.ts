@@ -13,3 +13,17 @@ export class EntityConfigUpdatedEvent extends CustomEvent<EntityConfigUpdatedPay
     });
   }
 }
+
+export const entityConfigDeletedEventName = 'entity-config-deleted';
+
+export type EntityConfigDeletedPayload = { id: number };
+
+export class EntityConfigDeletedEvent extends CustomEvent<EntityConfigDeletedPayload> {
+  constructor(detail: EntityConfigDeletedPayload) {
+    super(entityConfigDeletedEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
