@@ -82,5 +82,6 @@
   "entityConfigDeleted": "Entity config deleted successfully.",
   "entityConfiguration": "Entity Configuration",
   "entityName": "Entity Name",
-  "entityDescription": "Entity Description"
+  "entityDescription": "Entity Description",
+  "create": "Create"
 }

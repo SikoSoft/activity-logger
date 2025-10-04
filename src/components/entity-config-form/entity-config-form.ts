@@ -369,7 +369,11 @@ export class EntityConfigForm extends MobxLitElement {
               ?disabled=${!this.isSaveEnabled}
               @click=${this.save}
               >${translate(
-                this.saveNewRevision ? 'createNewRevision' : 'save',
+                this.saveNewRevision
+                  ? 'createNewRevision'
+                  : this.entityConfig.id
+                    ? 'update'
+                    : 'create',
               )}</ss-button
             >
 
@@ -382,61 +386,66 @@ export class EntityConfigForm extends MobxLitElement {
             >
           </div>
 
-          <div class="properties">
-            <ss-button @click=${this.addPropertyToTop}
-              >${translate('addProperty')}</ss-button
-            >
+          ${this.entityConfig.id
+            ? html`
+                <div class="properties">
+                  <ss-button @click=${this.addPropertyToTop}
+                    >${translate('addProperty')}</ss-button
+                  >
 
-            <sortable-list @sort-updated=${this.sortUpdated}>
-              ${repeat(
-                this.entityConfig.properties,
-                property => property.id,
-                (property, index) => html`
-                  <sortable-item id=${property.id}>
-                    <property-config-form
-                      ?open=${this.isPanelOpen(property.id)}
-                      entityConfigId=${this.entityConfig.id}
-                      propertConfigId=${property.id}
-                      dataType=${property.dataType}
-                      propertyConfigId=${property.id}
-                      name=${property.name}
-                      required=${property.required}
-                      repeat=${property.repeat}
-                      allowed=${property.allowed}
-                      prefix=${property.prefix}
-                      suffix=${property.suffix}
-                      ?hidden=${property.hidden}
-                      .defaultValue=${property.defaultValue}
-                      @property-config-updated=${(
-                        e: PropertyConfigUpdatedEvent,
-                      ) => this.updateProperty(index, e.detail)}
-                      @property-config-added=${(e: PropertyConfigAddedEvent) =>
-                        this.updateProperty(index, e.detail)}
-                      @property-config-deleted=${() => {
-                        this.deleteProperty(index);
-                      }}
-                      @property-config-breaking-change-detected=${(
-                        e: PropertyConfigBreakingChangeDetectedEvent,
-                      ) => {
-                        this.breakingChangeDetected(index, e);
-                      }}
-                      @property-config-breaking-changes-resolved=${(
-                        e: PropertyConfigBreakingChangesResolvedEvent,
-                      ) => {
-                        this.breakingChangesResolved(index, e);
-                      }}
-                    ></property-config-form>
-                  </sortable-item>
-                `,
-              )}
-            </sortable-list>
+                  <sortable-list @sort-updated=${this.sortUpdated}>
+                    ${repeat(
+                      this.entityConfig.properties,
+                      property => property.id,
+                      (property, index) => html`
+                        <sortable-item id=${property.id}>
+                          <property-config-form
+                            ?open=${this.isPanelOpen(property.id)}
+                            entityConfigId=${this.entityConfig.id}
+                            propertConfigId=${property.id}
+                            dataType=${property.dataType}
+                            propertyConfigId=${property.id}
+                            name=${property.name}
+                            required=${property.required}
+                            repeat=${property.repeat}
+                            allowed=${property.allowed}
+                            prefix=${property.prefix}
+                            suffix=${property.suffix}
+                            ?hidden=${property.hidden}
+                            .defaultValue=${property.defaultValue}
+                            @property-config-updated=${(
+                              e: PropertyConfigUpdatedEvent,
+                            ) => this.updateProperty(index, e.detail)}
+                            @property-config-added=${(
+                              e: PropertyConfigAddedEvent,
+                            ) => this.updateProperty(index, e.detail)}
+                            @property-config-deleted=${() => {
+                              this.deleteProperty(index);
+                            }}
+                            @property-config-breaking-change-detected=${(
+                              e: PropertyConfigBreakingChangeDetectedEvent,
+                            ) => {
+                              this.breakingChangeDetected(index, e);
+                            }}
+                            @property-config-breaking-changes-resolved=${(
+                              e: PropertyConfigBreakingChangesResolvedEvent,
+                            ) => {
+                              this.breakingChangesResolved(index, e);
+                            }}
+                          ></property-config-form>
+                        </sortable-item>
+                      `,
+                    )}
+                  </sortable-list>
 
-            ${this.entityConfig.properties.length > 0
-              ? html` <ss-button @click=${this.addPropertyToBottom}
-                  >${translate('addProperty')}</ss-button
-                >`
-              : nothing}
-          </div>
+                  ${this.entityConfig.properties.length > 0
+                    ? html` <ss-button @click=${this.addPropertyToBottom}
+                        >${translate('addProperty')}</ss-button
+                      >`
+                    : nothing}
+                </div>
+              `
+            : nothing}
         </div>
       </ss-collapsable>
 
