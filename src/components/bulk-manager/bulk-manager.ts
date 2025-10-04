@@ -2,9 +2,9 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { msg, str } from '@lit/localize';
 import { repeat } from 'lit/directives/repeat.js';
 
+import { translate } from '@/lib/Localization';
 import { BulkOperation, OperationType } from 'api-spec/models/Operation';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { addToast } from '@/lib/Util';
@@ -99,7 +99,7 @@ export class BulkManager extends MobxLitElement {
     this.state.setSelectedActions([]);
     this.state.setSelectMode(false);
     addToast(
-      msg('The operation has been performed successfully.'),
+      translate('operationPerformedSuccessfully'),
       NotificationType.INFO,
     );
 
@@ -189,21 +189,21 @@ export class BulkManager extends MobxLitElement {
 
         <div class="number-selected">
           ${this.state.selectedActions.length === 1
-            ? msg('1 item selected')
-            : msg(
-                str`${this.state.selectedActions.length.toString()} items selected`,
-              )}
+            ? translate('1ItemSelected')
+            : translate('xItemsSelected', {
+                count: this.state.selectedActions.length,
+              })}
         </div>
 
         <div class="select-all">
           <ss-button
-            text=${msg('Select all')}
+            text=${translate('selectAll')}
             @click=${this.handleSelectAll}
           ></ss-button>
         </div>
 
         <ss-button
-          text=${msg('Perform operation')}
+          text=${translate('performOperation')}
           @click=${this.handlePerformOperation}
         ></ss-button>
       </div>

@@ -1,7 +1,7 @@
 import { html, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { msg } from '@lit/localize';
+import { translate } from '@/lib/Localization';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { appState } from '@/state';
@@ -204,7 +204,7 @@ export class ActionForm extends ViewElement {
         );
 
         addToast(
-          this.actionId ? msg('Updated!') : msg('Added!'),
+          this.actionId ? translate('actionUpdated') : translate('actionAdded'),
           NotificationType.SUCCESS,
         );
         return;
@@ -243,7 +243,7 @@ export class ActionForm extends ViewElement {
     try {
       await api.delete(this.apiUrl);
 
-      addToast(msg('Removed!'), NotificationType.INFO);
+      addToast(translate('actionDeleted'), NotificationType.INFO);
     } catch (error) {
       console.error(`Error encountered when deleting action: ${error}`);
     }
@@ -470,9 +470,9 @@ export class ActionForm extends ViewElement {
             @click=${this.handleSaveClick}
             text=${this.actionId
               ? this.hasChanged
-                ? msg('Update')
-                : msg('Cancel')
-              : msg('Add')}
+                ? translate('update')
+                : translate('cancel')
+              : translate('add')}
             ?loading=${this.loading}
           ></ss-button>
 
@@ -481,7 +481,7 @@ export class ActionForm extends ViewElement {
                 <ss-button
                   negative
                   @click=${this.handleDeleteClick}
-                  text=${msg('Delete')}
+                  text=${translate('delete')}
                 ></ss-button>
 
                 <confirmation-modal

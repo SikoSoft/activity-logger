@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { translate } from '@/lib/Localization';
 
 import { api } from '@/lib/Api';
 import {
@@ -118,7 +118,7 @@ export class AccountForm extends LitElement {
 
         <ss-button
           @click=${this.save}
-          text=${msg('Create Account')}
+          text=${translate('createAccount')}
           ?loading=${this.loading}
         ></ss-button>
       </form>

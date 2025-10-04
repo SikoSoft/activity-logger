@@ -83,5 +83,22 @@
   "entityConfiguration": "Entity Configuration",
   "entityName": "Entity Name",
   "entityDescription": "Entity Description",
-  "create": "Create"
+  "create": "Create",
+  "createAccount": "Create Account",
+  "actionUpdated": "Action updated",
+  "actionAdded": "Action added",
+  "actionDeleted": "Action deleted",
+  "showContext": "Show context",
+  "settings": "Settings",
+  "filter": "Filter",
+  "sort": "Sort",
+  "context": "Context",
+  "noActionsFound": "No actions found",
+  "loadMore": "Load more",
+  "addEntityConfig": "Add Entity Config",
+  "operationPerformedSuccessfully": "The operation has been performed successfully.",
+  "1ItemSelected": "1 item selected",
+  "xItemsSelected": "{count} items selected",
+  "selectAll": "Select all",
+  "performOperation": "Perform operation"
 }

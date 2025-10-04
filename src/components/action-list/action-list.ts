@@ -1,7 +1,7 @@
 import { css, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { msg } from '@lit/localize';
+import { translate } from '@/lib/Localization';
 
 import {
   ListContextType,
@@ -329,7 +329,7 @@ export class ActionList extends ViewElement {
       this.state.contextListItems[item.id]?.length
       ? html`
           <ss-collapsable
-            title=${msg('Show context')}
+            title=${translate('showContext')}
             @toggled=${() => {
               this.toggleActionContext(item.id);
             }}
@@ -360,7 +360,7 @@ export class ActionList extends ViewElement {
   render() {
     return html`
       <ss-collapsable
-        title=${msg('Settings')}
+        title=${translate('settings')}
         ?open=${this.settingIsOpen}
         @toggled=${this.toggleSetting}
       >
@@ -371,7 +371,7 @@ export class ActionList extends ViewElement {
       </ss-collapsable>
 
       <ss-collapsable
-        title=${msg('Filter')}
+        title=${translate('filter')}
         ?open=${this.filterIsOpen}
         @toggled=${this.toggleFilter}
       >
@@ -383,7 +383,7 @@ export class ActionList extends ViewElement {
       </ss-collapsable>
 
       <ss-collapsable
-        title=${msg('Sort')}
+        title=${translate('sort')}
         ?open=${this.sortIsOpen}
         @toggled=${this.toggleSort}
       >
@@ -393,7 +393,7 @@ export class ActionList extends ViewElement {
       ${!this.state.listFilter.includeAll
         ? html`
             <ss-collapsable
-              title=${msg('Context')}
+              title=${translate('context')}
               ?open=${this.contextIsOpen}
               @toggled=${this.toggleContext}
             >
@@ -429,7 +429,9 @@ export class ActionList extends ViewElement {
               `,
             )
           : !this.loading
-            ? html` <div class="no-actions">${msg('No actions found')}</div>`
+            ? html` <div class="no-actions">
+                ${translate('noActionsFound')}
+              </div>`
             : nothing}
         <div id="lazy-loader"></div>
       </div>
@@ -446,7 +448,7 @@ export class ActionList extends ViewElement {
           ? html`
               <div class="more box">
                 <ss-button
-                  text=${msg('Load more')}
+                  text=${translate('loadMore')}
                   @click=${() => this.load(true)}
                   ?loading=${this.loading}
                   ?disabled=${this.loading}

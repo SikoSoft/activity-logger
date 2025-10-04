@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { toJS } from 'mobx';
 
+import { translate } from '@/lib/Localization';
 import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 
@@ -11,7 +12,6 @@ import '@/components/entity-config-form/entity-config-form';
 import { theme } from '@/styles/theme';
 import { produce } from 'immer';
 import { defaultEntityConfig } from 'api-spec/models/Entity';
-import { msg } from '@lit/localize';
 import { ViewElement } from '@/lib/ViewElement';
 import { EntityConfigDeletedEvent } from '../entity-config-form/entity-config-form.events';
 import { repeat } from 'lit/directives/repeat.js';
@@ -82,7 +82,7 @@ export class AdminDashboard extends ViewElement {
 
         <div class="buttons">
           <ss-button @click=${this.addEntityConfig}>
-            ${msg('Add Entity Config')}
+            ${translate('addEntityConfig')}
           </ss-button>
         </div>
       </div>
