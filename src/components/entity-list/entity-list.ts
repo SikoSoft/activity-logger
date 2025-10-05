@@ -1,7 +1,6 @@
 import { css, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { msg } from '@lit/localize';
 
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import {

@@ -1,4 +1,3 @@
-import { msg } from '@lit/localize';
 import { OperationType } from 'api-spec/models/Operation';
 
 export interface BulkOperationPayload {

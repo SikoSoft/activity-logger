@@ -7,6 +7,7 @@ Activity Logger is a modern web application built with Lit web components, TypeS
 ## Working Effectively
 
 ### Essential Setup Commands
+
 Run these commands in order to bootstrap the development environment:
 
 ```bash
@@ -21,7 +22,9 @@ npm run lint
 ```
 
 ### Development Server
+
 Start the development server:
+
 ```bash
 # Development server on http://localhost:5173
 npm run dev
@@ -33,28 +36,28 @@ npm run preview
 **NEVER CANCEL** any build or development commands. All commands complete quickly (under 30 seconds).
 
 ### Build and Testing Commands
+
 - `npm run build` - TypeScript compilation + Vite build (3-4 seconds)
 - `npm run lint` - ESLint validation (4 seconds)
 - `npm run lint:fix` - Auto-fix linting issues
 - **NO TEST SUITE**: This project does not have automated tests
 
-### Localization Commands
-- `npm run localize-extract` - Extract translatable strings (may fail with dynamic msg() calls)
-- `npm run localize-build` - Build localized templates (works but shows missing translations)
-
 ## Critical Development Requirements
 
 ### Timeout Settings
+
 - **Build commands**: Use 60+ second timeouts (though builds complete in ~3-4 seconds)
 - **Dev server**: Starts in ~1 second, no special timeout needed
 - **Linting**: Completes in ~4 seconds, use 30+ second timeout
 
 ### Git Hooks (Husky)
+
 - **Pre-commit**: Runs ESLint on staged TypeScript files
 - **Pre-push**: Runs full build check with automatic stashing/unstashing
 - **ALWAYS** run `npm run lint` before committing or the hooks will prevent the commit
 
 ### Validation Requirements
+
 **ALWAYS validate changes by:**
 
 1. **Build validation**: Run `npm run build` after any code changes
@@ -65,14 +68,16 @@ npm run preview
 ### Application Architecture
 
 #### Key Technologies
+
 - **Lit**: Web components with reactive properties
 - **TypeScript**: Type-safe development with strict compilation
 - **Vite**: Fast build tool and dev server
 - **MobX**: State management with `@adobe/lit-mobx`
-- **Internationalization**: lit-localize supporting English, German, Swedish
 
 #### Component Structure
+
 The application has 23 main components organized in directories:
+
 - `account-form` - User account management
 - `action-form` - Activity entry form
 - `action-list` - List view of activities
@@ -83,11 +88,13 @@ The application has 23 main components organized in directories:
 - `page-nav` - Navigation between views
 
 #### State Management
+
 - Global state in `src/state.ts` using MobX
 - Authentication state managed centrally
 - Local storage integration for persistence
 
 #### Configuration
+
 - API endpoints configured in `src/config.json`
 - Environment variables prefixed with `APP_` (see `vite.config.ts`)
 - Mock data available in `src/mock/` for development
@@ -95,19 +102,22 @@ The application has 23 main components organized in directories:
 ## File Organization Conventions
 
 ### Import Order (as documented in README)
+
 1. Third-party libraries
-2. First-party models/classes/interfaces  
+2. First-party models/classes/interfaces
 3. First-party events
 4. First-party components
 5. First-party styles
 
 ### Component File Structure
+
 - Components in kebab-case directories matching tag names
 - `.models.ts` files for interfaces and data structures
 - `.events.ts` files for custom events
 - `.stories.ts` files for Storybook (rare)
 
 ### Generated Files
+
 - `src/generated/locale-codes.ts` - Auto-generated locale configuration
 - `src/generated/locales/` - Auto-generated translation files
 - **NEVER** manually edit files marked with "Do not modify this file by hand!"
@@ -115,25 +125,23 @@ The application has 23 main components organized in directories:
 ## Common Development Tasks
 
 ### Adding New Components
+
 1. Create kebab-case directory in `src/components/`
 2. Follow existing patterns for `.ts`, `.models.ts`, `.events.ts` files
 3. Register with `@customElement('component-name')`
 4. Import in parent components where needed
 
-### Internationalization
-1. Use `msg('Text to translate')` for translatable strings
-2. Run `npm run localize-extract` to extract messages (may have issues with dynamic strings)
-3. Translations stored in `xliff/` directory
-4. Run `npm run localize-build` to generate runtime files
-
 ### Property Configuration System
+
 The application uses a sophisticated property system for customizable activity tracking:
+
 - Property configs in `src/mock/entity-config.ts`
 - Supports text, number, boolean data types
 - Configurable control types (text, number, boolean, select)
 - Various render types (plain text, rich text, image, video, hidden)
 
 ### State Management
+
 - Import `appState` from `@/state`
 - Use MobX reactive patterns with `@adobe/lit-mobx`
 - Access via `this.state = appState` in components
@@ -141,18 +149,22 @@ The application uses a sophisticated property system for customizable activity t
 ## Backend Integration
 
 ### API Configuration
+
 - Production API: `https://sikosoft.azurewebsites.net/api/action`
 - Development: Configure `APP_BASE_API_URL` environment variable
 - Authentication: JWT token-based system
 
 ### Authentication Flow
+
 1. User enters credentials in login form
 2. Application calls `/login` endpoint
 3. JWT token stored in localStorage
 4. Token included in subsequent API requests
 
 ### Mock Data
+
 Development mock data available:
+
 - `src/mock/entities.json` - Sample entity data
 - `src/mock/entity-config.ts` - Property configurations
 - Use for offline development and testing
@@ -160,6 +172,7 @@ Development mock data available:
 ## Deployment & CI/CD
 
 ### GitHub Actions Workflow
+
 - Triggers on push to `master` branch
 - Uses Node.js 20.x
 - Builds with `npm run build`
@@ -167,12 +180,14 @@ Development mock data available:
 - Purges CDN cache
 
 ### Environment Variables
+
 - `APP_BASE_API_URL` - API endpoint URL
 - `BASE_URL` - Application base path (default: `/`)
 
 ## Validation Scenarios
 
 ### Manual Testing Checklist
+
 After making changes, always test:
 
 1. **Application loads**: `npm run dev` and visit http://localhost:5173
@@ -182,6 +197,7 @@ After making changes, always test:
 5. **Linting passes**: `npm run lint` shows no errors
 
 ### UI Testing
+
 - Application shows clean login interface
 - Form fields are properly styled with Poppins font
 - Responsive design works on different viewport sizes
@@ -189,22 +205,14 @@ After making changes, always test:
 
 ## Common Issues & Solutions
 
-### Localization Extract Errors
-- `npm run localize-extract` may fail with dynamic `msg()` calls
-- Use static strings in `msg()` function calls
-- Check `src/components/property-config-form/property-config-form.ts` for examples
-
-### Missing Translations
-- `npm run localize-build` shows warnings for missing translations
-- Add translations to `xliff/` files or use fallback behavior
-- English is the source locale, German and Swedish are targets
-
 ### Authentication Required
+
 - Application requires backend API for full functionality
 - Login screen appears without valid API connection
 - Use mock data for offline development scenarios
 
 ### Import Resolution
+
 - Use `@/` path alias for `src/` directory imports
 - TypeScript and ESLint configured for path resolution
 - Follow established import order conventions
@@ -212,11 +220,13 @@ After making changes, always test:
 ## External Dependencies
 
 ### UI Library
+
 - Uses `@ss/ui` component library (github:SikoSoft/ui#2.1.0)
 - Provides buttons, inputs, selects, and other UI components
 - Documentation available in separate repository
 
 ### API Specification
+
 - Uses `api-spec` package (github:SikoSoft/api-spec#1.25.1)
 - Provides TypeScript interfaces for API contracts
 - Keep in sync when making API-related changes
