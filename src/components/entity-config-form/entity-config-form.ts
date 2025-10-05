@@ -38,7 +38,11 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 import { translate } from '@/lib/Localization';
-import { EntityConfigDeletedEvent } from './entity-config-form.events';
+import {
+  EntityConfigDeletedEvent,
+  EntityConfigUpdatedEvent,
+} from './entity-config-form.events';
+import { Entity } from 'api-spec/models';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
@@ -177,7 +181,7 @@ export class EntityConfigForm extends MobxLitElement {
     }
 
     this.isSaving = true;
-    let result: unknown;
+    let result: Entity.EntityConfig | null = null;
 
     const entityConfig = produce(this.entityConfig, draft => {
       if (this.saveNewRevision) {
@@ -200,6 +204,7 @@ export class EntityConfigForm extends MobxLitElement {
       return;
     }
 
+    this.dispatchEvent(new EntityConfigUpdatedEvent({ ...result }));
     addToast(translate('entityConfigSaved'), NotificationType.SUCCESS);
   }
 

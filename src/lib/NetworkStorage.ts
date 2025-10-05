@@ -61,30 +61,34 @@ export class NetworkStorage implements StorageSchema {
     return false;
   }
 
-  async addEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+  async addEntityConfig(
+    entityConfig: EntityConfig,
+  ): Promise<EntityConfig | null> {
     const result = await api.post<EntityConfig, EntityConfig>(
       'entityConfig',
       entityConfig,
     );
 
     if (result && result.isOk) {
-      return true;
+      return result.response;
     }
 
-    return false;
+    return null;
   }
 
-  async updateEntityConfig(entityConfig: EntityConfig): Promise<boolean> {
+  async updateEntityConfig(
+    entityConfig: EntityConfig,
+  ): Promise<EntityConfig | null> {
     const result = await api.put<EntityConfig, EntityConfig>(
       `entityConfig/${entityConfig.id}`,
       entityConfig,
     );
 
     if (result && result.isOk) {
-      return true;
+      return result.response;
     }
 
-    return false;
+    return null;
   }
 
   async getEntityConfigs(): Promise<EntityConfig[]> {

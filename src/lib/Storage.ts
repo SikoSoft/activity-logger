@@ -416,13 +416,17 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async addEntityConfig(_entityConfig: EntityConfig): Promise<boolean> {
-    return Promise.resolve(true);
+  async addEntityConfig(
+    _entityConfig: EntityConfig,
+  ): Promise<Entity.EntityConfig | null> {
+    return Promise.resolve(null);
   }
 
   @delegateSource()
-  async updateEntityConfig(_entityConfig: EntityConfig): Promise<boolean> {
-    return Promise.resolve(true);
+  async updateEntityConfig(
+    _entityConfig: EntityConfig,
+  ): Promise<Entity.EntityConfig | null> {
+    return Promise.resolve(null);
   }
 
   @delegateSource()

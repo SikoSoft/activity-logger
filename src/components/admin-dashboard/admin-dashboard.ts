@@ -13,7 +13,10 @@ import { theme } from '@/styles/theme';
 import { produce } from 'immer';
 import { defaultEntityConfig } from 'api-spec/models/Entity';
 import { ViewElement } from '@/lib/ViewElement';
-import { EntityConfigDeletedEvent } from '../entity-config-form/entity-config-form.events';
+import {
+  EntityConfigDeletedEvent,
+  EntityConfigUpdatedEvent,
+} from '../entity-config-form/entity-config-form.events';
 import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('admin-dashboard')
@@ -54,6 +57,14 @@ export class AdminDashboard extends ViewElement {
     );
   }
 
+  handleEntityConfigUpdated(e: EntityConfigUpdatedEvent, index: number) {
+    const updatedConfigs = produce(toJS(this.state.entityConfigs), draft => {
+      draft[index] = e.detail;
+    });
+
+    this.state.setEntityConfigs(updatedConfigs);
+  }
+
   isPanelOpen(id: number): boolean {
     if (!id) {
       return true;
@@ -68,7 +79,7 @@ export class AdminDashboard extends ViewElement {
         ${repeat(
           this.state.entityConfigs,
           config => config.id,
-          config => html`
+          (config, index) => html`
             <entity-config-form
               entityConfigId=${config.id}
               name=${config.name}
@@ -76,6 +87,8 @@ export class AdminDashboard extends ViewElement {
               .properties=${toJS(config.properties)}
               ?open=${this.isPanelOpen(config.id)}
               @entity-config-deleted=${this.handleEntityConfigDeleted}
+              @entity-config-updated=${(e: EntityConfigUpdatedEvent) =>
+                this.handleEntityConfigUpdated(e, index)}
             ></entity-config-form>
           `,
         )}

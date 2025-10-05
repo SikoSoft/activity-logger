@@ -27,8 +27,12 @@ export interface StorageSchema {
   deleteListConfig?(id: string): Promise<boolean>;
   saveListConfig?(listConfig: ListConfig): Promise<void>;
   saveSetting?(listConfigId: string, setting: Setting): Promise<boolean>;
-  updateEntityConfig?(entityConfig: EntityConfig): Promise<boolean>;
-  addEntityConfig?(entityConfig: EntityConfig): Promise<boolean>;
+  updateEntityConfig?(
+    entityConfig: EntityConfig,
+  ): Promise<Entity.EntityConfig | null>;
+  addEntityConfig?(
+    entityConfig: EntityConfig,
+  ): Promise<Entity.EntityConfig | null>;
   getEntityConfigs?(): Promise<EntityConfig[]>;
   deleteEntityConfig?(id: number): Promise<boolean>;
   deletePropertyConfig?(entityConfigId: number, id: number): Promise<boolean>;

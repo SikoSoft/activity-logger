@@ -1,8 +1,8 @@
-import { Entity } from 'api-spec/models/Entity';
+import { EntityConfig } from 'api-spec/models/Entity';
 
 export const entityConfigUpdatedEventName = 'entity-config-updated';
 
-export type EntityConfigUpdatedPayload = Entity;
+export type EntityConfigUpdatedPayload = EntityConfig;
 
 export class EntityConfigUpdatedEvent extends CustomEvent<EntityConfigUpdatedPayload> {
   constructor(detail: EntityConfigUpdatedPayload) {
