@@ -2,9 +2,9 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, CSSResult, html, nothing } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { msg } from '@lit/localize';
 import { classMap } from 'lit/directives/class-map.js';
 
+import { translate } from '@/lib/Localization';
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 import { InputType } from '@ss/ui/components/ss-input.models';
@@ -190,7 +190,7 @@ export class ListConfig extends MobxLitElement {
   }
 
   async saveConfig() {
-    addToast(msg('The configuration has been saved'), NotificationType.SUCCESS);
+    addToast(translate('configSaved'), NotificationType.SUCCESS);
     await storage.saveListConfig({
       id: this.id,
       name: this.name,
@@ -203,7 +203,7 @@ export class ListConfig extends MobxLitElement {
 
   async deleteConfig() {
     await storage.deleteListConfig(this.id);
-    addToast(msg('The configuration has been deleted'), NotificationType.INFO);
+    addToast(translate('configDeleted'), NotificationType.INFO);
     const listConfigs = await storage.getListConfigs();
     if (listConfigs.length) {
       this.setListConfigId(listConfigs[0].id);
@@ -214,7 +214,7 @@ export class ListConfig extends MobxLitElement {
 
   async addConfig() {
     const id = await storage.addListConfig();
-    addToast(msg('The configuration has been added'), NotificationType.SUCCESS);
+    addToast(translate('configAdded'), NotificationType.SUCCESS);
     const listConfigs = await storage.getListConfigs();
     this.state.setListConfigs(listConfigs);
     this.setListConfigId(id);
@@ -284,12 +284,12 @@ export class ListConfig extends MobxLitElement {
 
                       <div class="buttons">
                         <ss-button
-                          text=${msg('Save configuration')}
+                          text=${translate('saveConfiguration')}
                           @click=${this.saveConfig}
                         ></ss-button>
 
                         <ss-button
-                          text=${msg('Delete configuration')}
+                          text=${translate('deleteConfiguration')}
                           @click=${this.deleteConfig}
                         ></ss-button>
                       </div>
@@ -298,11 +298,11 @@ export class ListConfig extends MobxLitElement {
                     <div class="edit-button">
                       <ss-button
                         @click=${this.enableEditMode}
-                        text=${msg('Edit configuration')}
+                        text=${translate('editConfiguration')}
                       ></ss-button>
 
                       <ss-button
-                        text=${msg('Add configuration')}
+                        text=${translate('addConfiguration')}
                         @click=${this.addConfig}
                       ></ss-button>
                     </div>

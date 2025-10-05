@@ -108,5 +108,18 @@
   "noItemsFound": "No items found",
   "advancedMode": "Advanced mode",
   "debugMode": "Debug mode",
-  "forbiddenMessage": "You need to login to view this."
+  "forbiddenMessage": "You need to login to view this.",
+  "configSaved": "The configuration has been saved",
+  "configDeleted": "The configuration has been deleted",
+  "configAdded": "The configuration has been added",
+  "saveConfiguration": "Save configuration",
+  "deleteConfiguration": "Delete configuration",
+  "editConfiguration": "Edit configuration",
+  "addConfiguration": "Add configuration",
+  "contextUnit.minute": "Minute",
+  "contextUnit.hour": "Hour",
+  "contextUnit.day": "Day",
+  "contextType.before": "Before",
+  "contextType.after": "After",
+  "useContext": "Use Context"
 }

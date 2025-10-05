@@ -1,13 +1,13 @@
 import { html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { msg } from '@lit/localize';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
+import { translate } from '@/lib/Localization';
 
 import {
   FilterTagsUpdatedEvent,
@@ -16,11 +16,6 @@ import {
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import '@ss/ui/components/tag-manager';
-
-const filterTypeMsgMap: Record<ListFilterType, string> = {
-  [ListFilterType.CONTAINS_ALL_OF]: msg('filterType.containsAllOf'),
-  [ListFilterType.CONTAINS_ONE_OF]: msg('filterType.containsOneOf'),
-};
 
 @customElement('tag-filters')
 export class TagFilters extends MobxLitElement {
@@ -81,14 +76,14 @@ export class TagFilters extends MobxLitElement {
   render() {
     return html`
       <fieldset>
-        <legend>${msg('tagging')}</legend>
+        <legend>${translate('tagging')}</legend>
 
         ${repeat(
           Object.values(ListFilterType),
           type => type,
           type => html`
             <fieldset>
-              <legend>${filterTypeMsgMap[type]}</legend>
+              <legend>${translate(`filterType.${type}`)}</legend>
               <tag-manager
                 ?enableSuggestions=${this.tagSuggestionsEnabled}
                 @tags-updated=${this.handleTagsUpdated}
@@ -122,7 +117,7 @@ export class TagFilters extends MobxLitElement {
           />
 
           <label for="include-unchanged"
-            >${msg('Include actions without tags')}</label
+            >${translate('includeActionsWithoutTags')}</label
           >
         </div>
       </fieldset>
