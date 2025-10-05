@@ -1,8 +1,8 @@
 import { html, css, nothing } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
+import { translate } from '@/lib/Localization';
 import { PageView } from '@/models/Page';
 import { appState } from '@/state';
 import { Version } from '@/models/Version';
@@ -19,14 +19,14 @@ export interface PageViewConfig {
 const views: PageViewConfig[] = [
   {
     id: PageView.INPUT,
-    label: msg('New'),
+    label: translate('new'),
   },
-  { id: PageView.LIST, label: msg('List') },
+  { id: PageView.LIST, label: translate('list') },
 ];
 
 const debugViews: PageViewConfig[] = [
   ...views,
-  { id: PageView.ADMIN, label: msg('Admin') },
+  { id: PageView.ADMIN, label: translate('admin') },
 ];
 
 @customElement('page-nav')
@@ -87,8 +87,8 @@ export class PageNav extends MobxLitElement {
             @select-changed=${(e: CustomEvent) => this.setVersion(e)}
             selected=${this.state.version}
             .options=${[
-              { value: Version.V1, label: msg('v1 (classic)') },
-              { value: Version.V2, label: msg('v2 (experimental)') },
+              { value: Version.V1, label: translate('v1Classic') },
+              { value: Version.V2, label: translate('v2Experimental') },
             ]}
           >
           </ss-select>`

@@ -1,7 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 
 import { appState } from '@/state';
 import { api } from '@/lib/Api';
@@ -9,6 +8,7 @@ import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
 import { storage } from '@/lib/Storage';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { translate } from '@/lib/Localization';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
@@ -68,13 +68,13 @@ export class LoginForm extends MobxLitElement {
       api.setAuthToken(result.response.authToken);
       this.state.setAuthToken(result.response.authToken);
       this.state.setForbidden(false);
-      addToast(msg('You are now logged in.'), NotificationType.SUCCESS);
+      addToast(translate('youAreNowLoggedIn'), NotificationType.SUCCESS);
       this.dispatchEvent(new UserLoggedInEvent({}));
       return;
     }
 
     addToast(
-      msg('Incorrect username and password combination.'),
+      translate('incorrectUsernameAndPasswordCombination'),
       NotificationType.ERROR,
     );
     this.loading = false;
@@ -85,7 +85,7 @@ export class LoginForm extends MobxLitElement {
       <form>
         <ss-input
           id="username"
-          placeholder=${msg('Username')}
+          placeholder=${translate('username')}
           @input-submitted=${this.handleUsernameSubmitted}
           @input-changed=${this.handleUsernameChanged}
           value=${this.username}
@@ -93,7 +93,7 @@ export class LoginForm extends MobxLitElement {
 
         <ss-input
           id="password"
-          placeholder=${msg('Password')}
+          placeholder=${translate('password')}
           type="password"
           @input-submitted=${this.handlePasswordSubmitted}
           @input-changed=${this.handlePasswordChanged}
@@ -102,7 +102,7 @@ export class LoginForm extends MobxLitElement {
 
         <ss-button
           @click=${this.login}
-          text=${msg('Login')}
+          text=${translate('login')}
           ?loading=${this.loading}
         ></ss-button>
       </form>

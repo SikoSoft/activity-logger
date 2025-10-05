@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
-import { msg } from '@lit/localize';
 import { networkStorage } from './NetworkStorage';
 import {
   defaultListContext,
@@ -13,6 +12,7 @@ import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
+import { translate } from './Localization';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -211,7 +211,7 @@ export class Storage implements StorageSchema {
     const id = uuidv4();
     const listConfig = {
       id,
-      name: msg('Config Name'),
+      name: translate('configName'),
       filter: defaultListFilter,
       sort: defaultListSort,
     };

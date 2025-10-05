@@ -121,5 +121,20 @@
   "contextUnit.day": "Day",
   "contextType.before": "Before",
   "contextType.after": "After",
-  "useContext": "Use Context"
+  "useContext": "Use Context",
+  "sortBy": "Sort by",
+  "youAreNowLoggedIn": "You are now logged in.",
+  "incorrectUsernameAndPasswordCombination": "Incorrect username and password combination.",
+  "username": "Username",
+  "password": "Password",
+  "login": "Login",
+  "logout": "Logout",
+  "v1Classic": "v1 (classic)",
+  "v2Experimental": "v2 (experimental)",
+  "list": "List",
+  "new": "New",
+  "admin": "Admin",
+  "settingUpdated": "Setting updated",
+  "failedToUpdateSetting": "Failed to update setting",
+  "youAreNowLoggedOut": "You are now logged out."
 }

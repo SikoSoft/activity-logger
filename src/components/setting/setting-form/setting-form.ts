@@ -1,9 +1,9 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
+import { translate } from '@/lib/Localization';
 import {
   Setting,
   settingsConfig,
@@ -29,7 +29,6 @@ import '@/components/setting/text-setting/text-setting';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 @customElement('setting-form')
-@localized()
 export class SettingForm extends MobxLitElement {
   public state = appState;
   private saveDebouncer = new Debouncer(300);
@@ -87,11 +86,11 @@ export class SettingForm extends MobxLitElement {
       );
       if (isOk) {
         this.state.setSetting(setting);
-        addToast(msg('Setting updated'), NotificationType.SUCCESS);
+        addToast(translate('settingUpdated'), NotificationType.SUCCESS);
         return;
       }
 
-      addToast(msg('Failed to update setting'), NotificationType.ERROR);
+      addToast(translate('failedToUpdateSetting'), NotificationType.ERROR);
     });
   }
 

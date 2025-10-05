@@ -1,8 +1,8 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
 
+import { translate } from '@/lib/Localization';
 import { appState } from '@/state';
 import { api } from '@/lib/Api';
 import { storage } from '@/lib/Storage';
@@ -41,7 +41,7 @@ export class UserPane extends MobxLitElement {
       api.setAuthToken('');
       this.state.setAuthToken('');
       this.state.setForbidden(true);
-      addToast(msg('You are now logged out.'), NotificationType.INFO);
+      addToast(translate('youAreNowLoggedOut'), NotificationType.INFO);
       this.dispatchEvent(new UserLoggedOutEvent({}));
     }
   }
@@ -49,7 +49,7 @@ export class UserPane extends MobxLitElement {
   render() {
     return html`
       <div>
-        <button @click=${this.logout}>${msg('Logout')}</button>
+        <button @click=${this.logout}>${translate('logout')}</button>
       </div>
     `;
   }

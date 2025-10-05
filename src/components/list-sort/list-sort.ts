@@ -1,7 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
 import { appState } from '@/state';
@@ -15,7 +14,6 @@ import '@ss/ui/components/ss-select';
 import { theme } from '@/styles/theme';
 
 @customElement('list-sort')
-@localized()
 export class ListSort extends MobxLitElement {
   static styles = [
     theme,
@@ -51,7 +49,7 @@ export class ListSort extends MobxLitElement {
   render() {
     return html`
       <div class="box">
-        <div>${msg('Sort by')}</div>
+        <div>${translate('sortBy')}</div>
         <div>
           <ss-select
             selected=${this.state.listSort.property}
