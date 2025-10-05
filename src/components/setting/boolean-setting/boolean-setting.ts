@@ -1,6 +1,5 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized } from '@lit/localize';
 
 import {
   BooleanSettingProp,
@@ -16,7 +15,6 @@ import '@ss/ui/components/ss-toggle';
 import { theme } from '@/styles/theme';
 
 @customElement('boolean-setting')
-@localized()
 export class BooleanSetting extends LitElement {
   @property()
   [BooleanSettingProp.NAME]: BooleanSettingProps[BooleanSettingProp.NAME] =

@@ -1,6 +1,5 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized } from '@lit/localize';
 
 import {
   NumberSettingProp,
@@ -17,7 +16,6 @@ import '@ss/ui/components/ss-toggle';
 import { theme } from '@/styles/theme';
 
 @customElement('number-setting')
-@localized()
 export class NumberSetting extends LitElement {
   @property()
   [NumberSettingProp.NAME]: NumberSettingProps[NumberSettingProp.NAME] =

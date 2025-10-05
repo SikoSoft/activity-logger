@@ -1,6 +1,5 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { localized } from '@lit/localize';
 
 import {
   SelectSettingProp,
@@ -16,7 +15,6 @@ import '@ss/ui/components/ss-select';
 import { theme } from '@/styles/theme';
 
 @customElement('select-setting')
-@localized()
 export class SelectSetting extends LitElement {
   @property()
   [SelectSettingProp.NAME]: SelectSettingProps[SelectSettingProp.NAME] =
