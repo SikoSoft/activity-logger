@@ -18,6 +18,7 @@ import {
   EntityConfigUpdatedEvent,
 } from '../entity-config-form/entity-config-form.events';
 import { repeat } from 'lit/directives/repeat.js';
+import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 
 @customElement('admin-dashboard')
 export class AdminDashboard extends ViewElement {
@@ -62,6 +63,12 @@ export class AdminDashboard extends ViewElement {
       draft[index] = e.detail;
     });
 
+    this.dispatchEvent(
+      new CollapsableToggledEvent({
+        isOpen: true,
+        panelId: `entityConfigForm-${e.detail.id}`,
+      }),
+    );
     this.state.setEntityConfigs(updatedConfigs);
   }
 
