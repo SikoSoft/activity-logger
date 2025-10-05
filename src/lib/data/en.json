@@ -100,5 +100,13 @@
   "1ItemSelected": "1 item selected",
   "xItemsSelected": "{count} items selected",
   "selectAll": "Select all",
-  "performOperation": "Perform operation"
+  "performOperation": "Perform operation",
+  "operationType.addTags": "Add Tags",
+  "operationType.delete": "Delete",
+  "operationType.removeTags": "Remove Tags",
+  "operationType.replaceTags": "Replace Tags",
+  "noItemsFound": "No items found",
+  "advancedMode": "Advanced mode",
+  "debugMode": "Debug mode",
+  "forbiddenMessage": "You need to login to view this."
 }

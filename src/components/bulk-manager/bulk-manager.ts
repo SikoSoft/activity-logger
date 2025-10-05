@@ -10,11 +10,7 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { addToast } from '@/lib/Util';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
-import {
-  BulkOperationPayload,
-  operationTypeMsgMap,
-  taggingOperations,
-} from './bulk-manager.models';
+import { BulkOperationPayload, taggingOperations } from './bulk-manager.models';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
@@ -156,7 +152,7 @@ export class BulkManager extends MobxLitElement {
           @select-changed=${this.handleTypeChanged}
           .options=${Object.values(OperationType).map(type => ({
             value: type,
-            label: operationTypeMsgMap[type],
+            label: translate(`operationType.${type}`),
           }))}
         ></ss-select>
 

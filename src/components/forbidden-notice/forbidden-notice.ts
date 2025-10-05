@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+
+import { translate } from '@/lib/Localization';
 
 import '@/components/login-form/login-form';
 
@@ -28,7 +29,7 @@ export class ForbiddenNotice extends LitElement {
   render() {
     return html`
       <div class="box forbidden">
-        <div class="message">${msg('You need to login to view this.')}</div>
+        <div class="message">${translate('forbiddenMessage')}</div>
 
         <div class="login-form">
           <login-form></login-form>

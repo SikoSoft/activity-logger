@@ -14,15 +14,12 @@ import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
+import { translate } from '@/lib/Localization';
 
 import { ListSortUpdatedEvent } from '@/components/list-sort/list-sort.events';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
-import {
-  ActionItemDeletedEvent,
-  ActionItemUpdatedEvent,
-} from '@/components/action-form/action-form.events';
 import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
 import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 
@@ -320,7 +317,7 @@ export class EntityList extends ViewElement {
       this.state.contextListEntities[item.id]?.length
       ? html`
           <ss-collapsable
-            title=${msg('Show context')}
+            title=${translate('showContext')}
             @toggled=${() => {
               this.toggleActionContext(item.id);
             }}
@@ -349,7 +346,7 @@ export class EntityList extends ViewElement {
   render() {
     return html`
       <ss-collapsable
-        title=${msg('Settings')}
+        title=${translate('settings')}
         ?open=${this.settingIsOpen}
         @toggled=${this.toggleSetting}
       >
@@ -360,7 +357,7 @@ export class EntityList extends ViewElement {
       </ss-collapsable>
 
       <ss-collapsable
-        title=${msg('Filter')}
+        title=${translate('filter')}
         ?open=${this.filterIsOpen}
         @toggled=${this.toggleFilter}
       >
@@ -372,7 +369,7 @@ export class EntityList extends ViewElement {
       </ss-collapsable>
 
       <ss-collapsable
-        title=${msg('Sort')}
+        title=${translate('sort')}
         ?open=${this.sortIsOpen}
         @toggled=${this.toggleSort}
       >
@@ -382,7 +379,7 @@ export class EntityList extends ViewElement {
       ${!this.state.listFilter.includeAll
         ? html`
             <ss-collapsable
-              title=${msg('Context')}
+              title=${translate('context')}
               ?open=${this.contextIsOpen}
               @toggled=${this.toggleContext}
             >
@@ -418,7 +415,7 @@ export class EntityList extends ViewElement {
               `,
             )
           : !this.loading
-            ? html` <div class="no-actions">${msg('No actions found')}</div>`
+            ? html` <div class="no-actions">${translate('noItemsFound')}</div>`
             : nothing}
         <div id="lazy-loader"></div>
       </div>
@@ -435,7 +432,7 @@ export class EntityList extends ViewElement {
           ? html`
               <div class="more box">
                 <ss-button
-                  text=${msg('Load more')}
+                  text=${translate('loadMore')}
                   @click=${() => this.load(true)}
                   ?loading=${this.loading}
                   ?disabled=${this.loading}

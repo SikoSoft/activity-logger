@@ -3,8 +3,8 @@ import { html } from 'lit/static-html.js';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { msg } from '@lit/localize';
 
+import { translate } from '@/lib/Localization';
 import { appState } from '@/state';
 import { storage } from '@/lib/Storage';
 
@@ -222,7 +222,7 @@ export class FloatingWidget extends MobxLitElement {
           </div>
 
           <div class="option">
-            <h4>${msg('Advanced mode')}</h4>
+            <h4>${translate('advancedMode')}</h4>
             <ss-toggle
               @toggle-changed=${this.handleToggleAdvancedChanged}
               ?on=${this.state.advancedMode}
@@ -230,7 +230,7 @@ export class FloatingWidget extends MobxLitElement {
           </div>
 
           <div class="option">
-            <h4>${msg('Debug mode')}</h4>
+            <h4>${translate('debugMode')}</h4>
             <ss-toggle
               @toggle-changed=${this.handleToggleDebugChanged}
               ?on=${this.state.debugMode}
