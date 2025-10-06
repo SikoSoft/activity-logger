@@ -136,5 +136,6 @@
   "admin": "Admin",
   "settingUpdated": "Setting updated",
   "failedToUpdateSetting": "Failed to update setting",
-  "youAreNowLoggedOut": "You are now logged out."
+  "youAreNowLoggedOut": "You are now logged out.",
+  "allowPropertyOrdering": "Allow Property Ordering"
 }

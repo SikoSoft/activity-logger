@@ -34,6 +34,7 @@ import '@ss/ui/components/ss-collapsable';
 import '@ss/ui/components/confirmation-modal';
 import '@ss/ui/components/sortable-list';
 import '@ss/ui/components/sortable-item';
+import '@ss/ui/components/ss-toggle';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
@@ -43,6 +44,7 @@ import {
   EntityConfigUpdatedEvent,
 } from './entity-config-form.events';
 import { Entity } from 'api-spec/models';
+import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
@@ -119,6 +121,10 @@ export class EntityConfigForm extends MobxLitElement {
   [EntityConfigFormProp.PROPERTIES]: EntityConfigFormProps[EntityConfigFormProp.PROPERTIES] =
     entityConfigFormProps[EntityConfigFormProp.PROPERTIES].default;
 
+  @property({ type: Boolean })
+  [EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]: EntityConfigFormProps[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING] =
+    entityConfigFormProps[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING].default;
+
   @state()
   get hasBreakingChanges(): boolean {
     return this.propertyConfigProblems.some(problems => problems !== undefined);
@@ -131,7 +137,9 @@ export class EntityConfigForm extends MobxLitElement {
       this.entityConfig.description ===
         this[EntityConfigFormProp.DESCRIPTION] &&
       JSON.stringify(this.entityConfig.properties) ===
-        JSON.stringify(this[EntityConfigFormProp.PROPERTIES])
+        JSON.stringify(this[EntityConfigFormProp.PROPERTIES]) &&
+      this.entityConfig.allowPropertyOrdering ===
+        this[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]
     );
   }
 
@@ -151,6 +159,7 @@ export class EntityConfigForm extends MobxLitElement {
       description: this[EntityConfigFormProp.DESCRIPTION],
       properties: this[EntityConfigFormProp.PROPERTIES],
       revisionOf: null,
+      allowPropertyOrdering: this[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING],
     };
   }
 
@@ -314,6 +323,12 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
+  updateAllowPropertyOrdering(allow: boolean) {
+    this.entityConfig = produce(this.entityConfig, draft => {
+      draft.allowPropertyOrdering = allow;
+    });
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -345,6 +360,19 @@ export class EntityConfigForm extends MobxLitElement {
               @input-changed=${(e: InputChangedEvent) =>
                 this.updateDescription(e.detail.value)}
             ></ss-input>
+          </div>
+
+          <div class="field">
+            <label for="allow-property-ordering"
+              >${translate('allowPropertyOrdering')}</label
+            >
+
+            <ss-toggle
+              ?on=${this[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]}
+              @toggle-changed=${(e: ToggleChangedEvent) => {
+                this.updateAllowPropertyOrdering(e.detail.on);
+              }}
+            ></ss-toggle>
           </div>
 
           <div class="revision-target"></div>

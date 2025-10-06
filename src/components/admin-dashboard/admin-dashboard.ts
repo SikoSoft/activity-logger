@@ -92,6 +92,7 @@ export class AdminDashboard extends ViewElement {
               name=${config.name}
               description=${config.description}
               .properties=${toJS(config.properties)}
+              ?allowPropertyOrdering=${config.allowPropertyOrdering}
               ?open=${this.isPanelOpen(config.id)}
               @entity-config-deleted=${this.handleEntityConfigDeleted}
               @entity-config-updated=${(e: EntityConfigUpdatedEvent) =>

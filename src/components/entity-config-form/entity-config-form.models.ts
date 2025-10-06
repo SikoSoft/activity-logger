@@ -17,6 +17,7 @@ export enum EntityConfigFormProp {
   NAME = 'name',
   DESCRIPTION = 'description',
   PROPERTIES = 'properties',
+  ALLOW_PROPERTY_ORDERING = 'allowPropertyOrdering',
 }
 
 export interface EntityConfigFormProps extends PropTypes {
@@ -24,6 +25,7 @@ export interface EntityConfigFormProps extends PropTypes {
   [EntityConfigFormProp.NAME]: string;
   [EntityConfigFormProp.DESCRIPTION]: string;
   [EntityConfigFormProp.PROPERTIES]: EntityPropertyConfig[];
+  [EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]: boolean;
 }
 
 export const entityConfigFormProps: PropConfigMap<EntityConfigFormProps> = {
@@ -46,5 +48,10 @@ export const entityConfigFormProps: PropConfigMap<EntityConfigFormProps> = {
     default: [],
     control: { type: ControlType.TEXT },
     description: 'The properties of the entity',
+  },
+  [EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]: {
+    default: false,
+    control: { type: ControlType.BOOLEAN },
+    description: 'Whether property ordering is allowed for this entity',
   },
 };
