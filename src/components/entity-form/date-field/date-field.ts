@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -67,6 +67,14 @@ export class DateField extends LitElement {
   @state()
   useNow = false;
 
+  protected firstUpdated(changedProperties: PropertyValues): void {
+    super.firstUpdated(changedProperties);
+
+    if (!this[DateFieldProp.VALUE]) {
+      this.useNow = true;
+    }
+  }
+
   protected handleInputChanged(e: InputChangedEvent) {
     const value = e.detail.value;
 
@@ -95,7 +103,7 @@ export class DateField extends LitElement {
       return;
     }
 
-    this.sendUpdatedEvent(this.inputElement.value);
+    this.sendUpdatedEvent(this.inputElement?.value || '');
   }
 
   sendUpdatedEvent(value: DateDataValue | string) {
