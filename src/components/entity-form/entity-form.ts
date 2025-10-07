@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, PropertyValues } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -176,6 +176,15 @@ export class EntityForm extends ViewElement {
     if (this.abortController) {
       this.abortController.abort();
       this.abortController = null;
+    }
+  }
+
+  protected firstUpdated(changedProperties: PropertyValues): void {
+    super.firstUpdated(changedProperties);
+
+    if (this.state.entityConfigs.length === 1) {
+      this.type = this.state.entityConfigs[0].id;
+      this.setupProperties();
     }
   }
 
@@ -542,8 +551,6 @@ export class EntityForm extends ViewElement {
   }
 
   renderPropertyField(propertyInstance: PropertyInstance) {
-    console.log('renderPropertyField', propertyInstance);
-
     const { propertyConfigId, uiId } = propertyInstance;
     if (!propertyConfigId || !this.entityConfig) {
       return nothing;
@@ -563,19 +570,21 @@ export class EntityForm extends ViewElement {
   render() {
     return html`
       <form class=${classMap(this.classes)}>
-        <div class="type">
-          <ss-select
-            selected=${this.type}
-            @select-changed=${this.handleTypeChanged}
-            .options=${[
-              { label: 'Select an entity', value: '0' },
-              ...this.state.entityConfigs.map(entity => ({
-                label: entity.name,
-                value: entity.id,
-              })),
-            ]}
-          ></ss-select>
-        </div>
+        ${this.state.entityConfigs.length > 1
+          ? html` <div class="type">
+              <ss-select
+                selected=${this.type}
+                @select-changed=${this.handleTypeChanged}
+                .options=${[
+                  { label: 'Select an entity', value: '0' },
+                  ...this.state.entityConfigs.map(entity => ({
+                    label: entity.name,
+                    value: entity.id,
+                  })),
+                ]}
+              ></ss-select>
+            </div>`
+          : nothing}
 
         <div class="properties">
           <sortable-list
