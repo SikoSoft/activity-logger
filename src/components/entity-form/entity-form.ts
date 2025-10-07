@@ -578,13 +578,18 @@ export class EntityForm extends ViewElement {
         </div>
 
         <div class="properties">
-          <sortable-list @sort-updated=${this.sortUpdated}>
+          <sortable-list
+            @sort-updated=${this.sortUpdated}
+            ?disabled=${!this.entityConfig?.allowPropertyOrdering}
+          >
             ${this.propertyInstances.length && this.entityConfig
               ? repeat(
                   this.propertyInstances,
                   propertyInstance => propertyInstance.propertyConfigId,
                   propertyInstance =>
-                    html`<sortable-item id=${propertyInstance.uiId}
+                    html`<sortable-item
+                      id=${propertyInstance.uiId}
+                      ?disabled=${!this.entityConfig?.allowPropertyOrdering}
                       >${this.renderPropertyField(
                         propertyInstance,
                       )}</sortable-item
