@@ -1,8 +1,12 @@
-import { html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { css, html, LitElement } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
-import { DataType } from 'api-spec/models/Entity';
+import { DataType, DateDataValue } from 'api-spec/models/Entity';
+
+import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-icon';
+
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   PropertyChangedEvent,
@@ -14,9 +18,29 @@ import {
   dateFieldProps,
 } from './date-field.models';
 import { Time } from '@/lib/Time';
+import { translate } from '@/lib/Localization';
+import { SSInput } from '@ss/ui/components/ss-input';
 
 @customElement('date-field')
 export class DateField extends LitElement {
+  static styles = css`
+    .date-field-wrapper {
+      position: relative;
+    }
+
+    ss-icon {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    ss-input::part(input) {
+      padding-left: 36px;
+    }
+  `;
+
   @property({ type: Number })
   [DateFieldProp.INSTANCE_ID]: DateFieldProps[DateFieldProp.INSTANCE_ID] =
     dateFieldProps[DateFieldProp.INSTANCE_ID].default;
@@ -37,30 +61,82 @@ export class DateField extends LitElement {
   [DateFieldProp.UI_ID]: DateFieldProps[DateFieldProp.UI_ID] =
     dateFieldProps[DateFieldProp.UI_ID].default;
 
+  @query('ss-input')
+  inputElement!: SSInput;
+
+  @state()
+  useNow = false;
+
   protected handleInputChanged(e: InputChangedEvent) {
     const value = e.detail.value;
 
-    const changedPayload: PropertyChangedEventPayload = {
-      uiId: this[DateFieldProp.UI_ID],
-      dataType: DataType.DATE,
-      value,
-    };
-
-    const changedEvent = new PropertyChangedEvent(changedPayload);
-    this.dispatchEvent(changedEvent);
+    this.dispatchEvent(
+      new PropertyChangedEvent({
+        uiId: this[DateFieldProp.UI_ID],
+        dataType: DataType.DATE,
+        value,
+      }),
+    );
   }
 
   get formattedValue() {
     return Time.formatDateTime(new Date(this[DateFieldProp.VALUE]));
   }
 
-  render() {
+  toggleUseNow() {
+    this.useNow = !this.useNow;
+
+    this.syncValue();
+  }
+
+  syncValue() {
+    if (this.useNow) {
+      this.sendUpdatedEvent(null);
+      return;
+    }
+
+    this.sendUpdatedEvent(this.inputElement.value);
+  }
+
+  sendUpdatedEvent(value: DateDataValue | string) {
+    this.dispatchEvent(
+      new PropertyChangedEvent({
+        uiId: this[DateFieldProp.UI_ID],
+        dataType: DataType.DATE,
+        value,
+      }),
+    );
+  }
+
+  renderUseNow() {
+    return html`<span>${translate('dateField.useNow')}</span
+      ><ss-button @click=${this.toggleUseNow}
+        >${translate('dateField.useCustom')}</ss-button
+      >`;
+  }
+
+  renderUseCustom() {
     return html`
+      <ss-icon
+        color="#000000"
+        name="validCircle"
+        @click=${this.toggleUseNow}
+        size="20"
+      ></ss-icon>
+
       <ss-input
         type="datetime-local"
         value=${this.formattedValue}
         @input-changed=${this.handleInputChanged}
       ></ss-input>
+    `;
+  }
+
+  render() {
+    return html`
+      <div class="date-field-wrapper">
+        ${this.useNow ? this.renderUseNow() : this.renderUseCustom()}
+      </div>
     `;
   }
 }
