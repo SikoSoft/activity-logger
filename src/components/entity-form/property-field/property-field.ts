@@ -59,9 +59,22 @@ export class PropertyField extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
     this.state.setEntityPropertyInstance(
       this.propertyConfig.id,
       (this.state.entityPropertyInstances[this.propertyConfig.id] || 0) + 1,
+    );
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    this.state.setEntityPropertyInstance(
+      this.propertyConfig.id,
+      Math.max(
+        0,
+        (this.state.entityPropertyInstances[this.propertyConfig.id] || 1) - 1,
+      ),
     );
   }
 
