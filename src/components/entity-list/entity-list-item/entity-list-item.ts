@@ -111,8 +111,13 @@ export class EntityListItem extends MobxLitElement {
     return this.entityConfig.properties;
   }
 
-  get readableTime() {
+  get readableTime(): string {
     const date = new Date(this.createdAt);
+    return Time.formatDateTime(date);
+  }
+
+  getReadableTime(timeString: string): string {
+    const date = new Date(timeString);
     return Time.formatDateTime(date);
   }
 
@@ -188,6 +193,9 @@ export class EntityListItem extends MobxLitElement {
       let value: PropertyDataValue = propertyConfig.defaultValue;
 
       switch (propertyConfig.dataType) {
+        case DataType.DATE:
+          value = this.getReadableTime(property.value as string);
+          break;
         case DataType.INT:
           value = property.value as number;
           break;
