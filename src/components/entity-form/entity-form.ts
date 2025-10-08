@@ -26,7 +26,7 @@ import {
   SuggestionLastInput,
   ValidateionResult,
 } from './entity-form.models';
-import { addToast } from '@/lib/Util';
+import { addToast, sha256 } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import '@ss/ui/components/ss-button';
@@ -123,6 +123,9 @@ export class EntityForm extends ViewElement {
 
   @state() propertiesSetup = false;
 
+  @state() initialHash = '';
+  @state() instancesHash = '';
+
   @state()
   get classes() {
     return { box: true, 'advanced-mode': this.state.advancedMode };
@@ -157,12 +160,22 @@ export class EntityForm extends ViewElement {
     );
   }
 
+  @state()
+  get hasChanged(): boolean {
+    return (
+      this.initialHash !== this.instancesHash ||
+      JSON.stringify(this.tagsAndSuggestions) !== this.initialTags
+    );
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
     this.initialTags = JSON.stringify(this.tags);
 
     console.log('properties on connect:', JSON.stringify(this.properties));
+
+    // this.initialHash = JSON.stringify(this.properties);
   }
 
   disconnectedCallback(): void {
@@ -198,12 +211,11 @@ export class EntityForm extends ViewElement {
     return this.entityId ? `entity/${this.entityId}` : `entity`;
   }
 
-  @state()
-  get hasChanged(): boolean {
-    return true;
+  async getInstancesHash(): Promise<string> {
+    return await sha256(JSON.stringify(this.mapInstancesToProperties()));
   }
 
-  setupProperties() {
+  async setupProperties() {
     if (!this.entityConfig) {
       return;
     }
@@ -241,6 +253,7 @@ export class EntityForm extends ViewElement {
       this.propertyInstances = [...existingProperties, ...availableProperties];
       this.sortedIds = this.propertyInstances.map(prop => prop.uiId);
       this.propertiesSetup = true;
+      this.initialHash = this.instancesHash = await this.getInstancesHash();
     }
   }
 
@@ -289,6 +302,17 @@ export class EntityForm extends ViewElement {
       default:
         return false;
     }
+  }
+
+  private mapInstancesToProperties(): EntityProperty[] {
+    return this.propertyInstances.map(propertyInstance => ({
+      id: propertyInstance.instanceId,
+      propertyConfigId: propertyInstance.propertyConfigId,
+      value: propertyInstance.value,
+      order:
+        this.sortedIds.indexOf(propertyInstance.uiId) ??
+        this.propertyInstances.length,
+    }));
   }
 
   private validateConstraints(): ValidateionResult {
@@ -349,16 +373,7 @@ export class EntityForm extends ViewElement {
       if (validationResult.isValid && this.hasChanged) {
         const timeZone = new Date().getTimezoneOffset();
 
-        const properties: EntityProperty[] = this.propertyInstances.map(
-          propertyInstance => ({
-            id: propertyInstance.instanceId,
-            propertyConfigId: propertyInstance.propertyConfigId,
-            value: propertyInstance.value,
-            order:
-              this.sortedIds.indexOf(propertyInstance.uiId) ??
-              this.propertyInstances.length,
-          }),
-        );
+        const properties: EntityProperty[] = this.mapInstancesToProperties();
 
         const payload: RequestBody = {
           entityConfigId: this.type,
@@ -493,7 +508,7 @@ export class EntityForm extends ViewElement {
     this.propertyInstances = [];
   }
 
-  private handlePropertyChanged(e: PropertyChangedEvent) {
+  private async handlePropertyChanged(e: PropertyChangedEvent) {
     console.log('handlePropertyChanged', e.detail);
     const { value, uiId } = e.detail;
 
@@ -506,6 +521,8 @@ export class EntityForm extends ViewElement {
     }
 
     propertyInstance.value = value;
+
+    this.instancesHash = await this.getInstancesHash();
   }
 
   private handlePropertyCloned(e: PropertyClonedEvent) {
