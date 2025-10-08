@@ -284,6 +284,8 @@ export class EntityForm extends ViewElement {
         return typeof value === 'number';
       case DataType.BOOLEAN:
         return typeof value === 'boolean';
+      case DataType.DATE:
+        return value === null || !isNaN(new Date(value as string).getTime());
       default:
         return false;
     }
