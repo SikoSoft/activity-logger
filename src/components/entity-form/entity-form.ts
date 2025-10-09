@@ -421,6 +421,12 @@ export class EntityForm extends ViewElement {
   }
 
   private reset(): void {
+    this.propertiesSetup = false;
+    this.propertyInstances = [];
+    this.initialHash = '';
+    this.instancesHash = '';
+    this.setupProperties();
+
     this.tagValue = '';
     if (!this.entityId) {
       this.tags =
