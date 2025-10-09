@@ -91,8 +91,24 @@ export class DateField extends LitElement {
     return Time.formatDateTime(new Date(this[DateFieldProp.VALUE]));
   }
 
-  toggleUseNow() {
+  resetTime() {
+    if (!this[DateFieldProp.VALUE]) {
+      const now = new Date();
+      this.inputElement.value = Time.formatDateTime(now);
+      return;
+    }
+
+    this.inputElement.value = this.formattedValue;
+  }
+
+  async toggleUseNow() {
     this.useNow = !this.useNow;
+
+    await this.updateComplete;
+
+    if (!this.useNow) {
+      this.resetTime();
+    }
 
     this.syncValue();
   }
