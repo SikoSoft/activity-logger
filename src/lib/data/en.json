@@ -139,5 +139,6 @@
   "youAreNowLoggedOut": "You are now logged out.",
   "allowPropertyOrdering": "Allow Property Ordering",
   "dateField.useNow": "Use the current time at creation",
-  "dateField.useCustom": "Use Custom Date"
+  "dateField.useCustom": "Use Custom Date",
+  "dataManager": "Data Manager"
 }
