@@ -415,6 +415,28 @@ export class Storage implements StorageSchema {
     );
   }
 
+  getTabState(): Record<string, number> {
+    let state: Record<string, number> = {};
+    try {
+      const storedState = localStorage.getItem(StorageItemKey.TAB_INDEX_STATE);
+      if (storedState) {
+        state = JSON.parse(storedState);
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load tab state from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return state;
+  }
+
+  setTabState(state: Record<string, number>): void {
+    localStorage.setItem(StorageItemKey.TAB_INDEX_STATE, JSON.stringify(state));
+  }
+
   @delegateSource()
   async addEntityConfig(
     _entityConfig: EntityConfig,

@@ -130,6 +130,9 @@ export class AppState {
   public collapsablePanelState: Record<string, boolean> = {};
 
   @observable
+  public tabState: Record<string, number> = {};
+
+  @observable
   public entityPropertyInstances: Record<number, number> = {};
 
   @action
@@ -352,6 +355,15 @@ export class AppState {
   @action
   setCollapsableState(state: Record<string, boolean>) {
     this.collapsablePanelState = state;
+  }
+
+  @action
+  setTabPaneState(paneId: string, index: number) {
+    this.tabState[paneId] = index;
+  }
+
+  setTabState(state: Record<string, number>) {
+    this.tabState = state;
   }
 
   @action

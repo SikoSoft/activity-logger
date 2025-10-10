@@ -26,6 +26,7 @@ import '@/components/list-config/list-config';
 
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
+import { TabIndexChangedEvent } from '../tab-container/tab-container.events';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -93,6 +94,7 @@ export class AppContainer extends MobxLitElement {
       this.state.setDebugMode(storage.getDebugMode());
 
       this.state.setCollapsableState(storage.getCollapsablePanelState());
+      this.state.setTabState(storage.getTabState());
 
       this.state.setVersion(storage.getVersion());
 
@@ -130,6 +132,12 @@ export class AppContainer extends MobxLitElement {
     const { isOpen, panelId } = e.detail;
     this.state.setCollapsablePanelState(panelId, isOpen);
     storage.setCollapsablePanelState(this.state.collapsablePanelState);
+  }
+
+  private handleTabChanged(e: TabIndexChangedEvent) {
+    const { index, paneId } = e.detail;
+    this.state.setTabPaneState(paneId, index);
+    storage.setTabState(this.state.tabState);
   }
 
   activeView() {
@@ -196,6 +204,7 @@ export class AppContainer extends MobxLitElement {
     return html`
       <div
         class="app-container"
+        @tab-index-changed=${this.handleTabChanged}
         @collapsable-toggled=${this.handleCollapsableToggled}
       >
         ${this.renderContent()}

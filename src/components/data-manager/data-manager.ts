@@ -1,13 +1,19 @@
 import { translate } from '@/lib/Localization';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { MobxLitElement } from '@adobe/lit-mobx';
+
+import { appState } from '@/state';
 
 import '@ss/ui/components/ss-collapsable';
+import '@/components/tab-container/tab-container';
+import '@/components/tab-container/tab-pane/tab-pane';
+import '@/components/data-manager/export-tool/export-tool';
+import '@/components/data-manager/import-tool/import-tool';
+
+import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 
 import { theme } from '@/styles/theme';
-import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { appState } from '@/state';
 
 @customElement('data-manager')
 export class DataManager extends MobxLitElement {
@@ -40,6 +46,11 @@ export class DataManager extends MobxLitElement {
     console.log('TOGGLE', e.detail);
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    console.log('Data manager connected', this.state.tabState);
+  }
+
   render() {
     return html`
       <ss-collapsable
@@ -48,13 +59,17 @@ export class DataManager extends MobxLitElement {
         panelId=${`data-manager`}
         @collapsable-toggled=${this.toggle}
       >
-        <div class="import">
-          <textarea></textarea>
-
-          <div class="buttons">
-            <ss-button>${translate('importData')}</ss-button>
-          </div>
-        </div>
+        <tab-container
+          paneId="data-manager"
+          index=${this.state.tabState['data-manager'] ?? 0}
+        >
+          <tab-pane title=${translate('exportData')}>
+            <export-tool></export-tool>
+          </tab-pane>
+          <tab-pane title=${translate('importData')}>
+            <import-tool></import-tool>
+          </tab-pane>
+        </tab-container>
       </ss-collapsable>
     `;
   }
