@@ -26,7 +26,7 @@ import '@/components/list-config/list-config';
 
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
-import { TabIndexChangedEvent } from '../tab-container/tab-container.events';
+import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;

@@ -6,8 +6,8 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 
 import '@ss/ui/components/ss-collapsable';
-import '@/components/tab-container/tab-container';
-import '@/components/tab-container/tab-pane/tab-pane';
+import '@ss/ui/components/tab-container';
+import '@ss/ui/components/tab-pane';
 import '@/components/data-manager/export-tool/export-tool';
 import '@/components/data-manager/import-tool/import-tool';
 
