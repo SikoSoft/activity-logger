@@ -53,21 +53,34 @@ export class ExportTool extends MobxLitElement {
     this.includeEntities = !this.includeEntities;
   }
 
-  exportData() {
-    console.log('Exporting data', {
-      includeConfigs: this.includeConfigs,
-      includeEntities: this.includeEntities,
-    });
-
-    this.download();
+  mapConfigData(): string {
+    return JSON.stringify(
+      this.state.entityConfigs.map(config => {
+        const { id, userId, ...rest } = config;
+        return {
+          ...rest,
+          properties: rest.properties.map(prop => {
+            const { id, entityConfigId, userId, ...propRest } = prop;
+            return propRest;
+          }),
+        };
+      }),
+    );
   }
 
-  async download(): Promise<void> {
+  async exportData(): Promise<void> {
     try {
       const zip = new JSZip();
 
-      zip.file(FileName.CONFIGS, this.configsJson);
-      zip.file(FileName.ENTITIES, this.entitiesJson);
+      if (this.includeConfigs) {
+        this.configsJson = this.mapConfigData();
+        zip.file(FileName.CONFIGS, this.configsJson);
+      }
+
+      if (this.includeEntities) {
+        //this.entitiesJson = JSON.stringify(this.state.entities, null, 2);
+        zip.file(FileName.ENTITIES, this.entitiesJson);
+      }
 
       const content = await zip.generateAsync({
         type: 'blob',
