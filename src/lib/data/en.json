@@ -142,5 +142,8 @@
   "dateField.useCustom": "Use Custom Date",
   "dataManager": "Data Manager",
   "importData": "Import Data",
-  "exportData": "Export Data"
+  "exportData": "Export Data",
+  "includeConfigs": "Include Configs",
+  "includeEntities": "Include Entities",
+  "fileDownloaded": "File downloaded"
 }
