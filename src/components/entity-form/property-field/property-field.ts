@@ -120,7 +120,6 @@ export class PropertyField extends MobxLitElement {
 
   delete() {
     if (!this.canDelete) {
-      console.log('cannot delete, limit reached');
       return;
     }
 
@@ -133,7 +132,6 @@ export class PropertyField extends MobxLitElement {
 
   clone() {
     if (!this.canClone) {
-      console.log('cannot clone, limit reached');
       return;
     }
 
@@ -145,7 +143,6 @@ export class PropertyField extends MobxLitElement {
   }
 
   setConfirmationModalIsOpen(isOpen: boolean) {
-    console.log('Confirmation modal state changed:', this.uiId, isOpen);
     this.confirmationModalIsOpen = isOpen;
   }
 
@@ -216,10 +213,6 @@ export class PropertyField extends MobxLitElement {
             ? html` <ss-button
                 negative
                 @click=${() => {
-                  console.log(
-                    'Delete button clicked',
-                    this.confirmationModalIsOpen,
-                  );
                   this.setConfirmationModalIsOpen(true);
                 }}
                 >${translate('delete')}</ss-button

@@ -23,11 +23,9 @@ import { storage } from '@/lib/Storage';
 import {
   PropertyConfigAddedEvent,
   PropertyConfigBreakingChangeDetectedEvent,
-  PropertyConfigBreakingChangesResolvedEvent,
   PropertyConfigUpdatedEvent,
 } from '@/components/property-config-form/property-config-form.events';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 
 import '@/components/property-config-form/property-config-form';
 import '@ss/ui/components/ss-collapsable';
@@ -252,7 +250,6 @@ export class EntityConfigForm extends MobxLitElement {
   }
 
   updateProperty(index: number, updatedProperty: EntityPropertyConfig) {
-    console.log('updateProperty', index, updatedProperty);
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties[index] = updatedProperty;
     });
@@ -264,10 +261,6 @@ export class EntityConfigForm extends MobxLitElement {
       draft.properties.splice(index, 1);
     });
     this.entityConfig = entityConfig;
-  }
-
-  toggle(e: CollapsableToggledEvent) {
-    //this.open = e.detail.isOpen;
   }
 
   isPanelOpen(id: number): boolean {
@@ -282,7 +275,6 @@ export class EntityConfigForm extends MobxLitElement {
 
   sortUpdated(e: SortUpdatedEvent) {
     const newOrder = e.detail;
-    console.log('sortUpdated', newOrder);
 
     storage.setEntityPropertyOrder(
       this.entityConfig.id,
@@ -294,8 +286,7 @@ export class EntityConfigForm extends MobxLitElement {
     index: number,
     e: PropertyConfigBreakingChangeDetectedEvent,
   ) {
-    const { propertyConfig, problems } = e.detail;
-    console.log('breakingChangeDetected', propertyConfig, problems, index);
+    const { problems } = e.detail;
     this.propertyConfigProblems = produce(
       this.propertyConfigProblems,
       draft => {
@@ -304,17 +295,11 @@ export class EntityConfigForm extends MobxLitElement {
     );
 
     if (this.revisionInfo) {
-      console.log('scrolling to revision info');
       this.revisionInfo.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
-  breakingChangesResolved(
-    index: number,
-    e: PropertyConfigBreakingChangesResolvedEvent,
-  ) {
-    const { propertyConfig } = e.detail;
-    console.log('breakingChangesResolved', propertyConfig, index);
+  breakingChangesResolved(index: number) {
     this.propertyConfigProblems = produce(
       this.propertyConfigProblems,
       draft => {
@@ -335,7 +320,6 @@ export class EntityConfigForm extends MobxLitElement {
         title=${this.entityConfig.name || translate('entityConfiguration')}
         ?open=${this.open}
         panelId=${`entityConfigForm-${this.entityConfig.id}`}
-        @collapsable-toggled=${this.toggle}
       >
         <div class="entity-config-form">
           <div class="field">
@@ -460,10 +444,8 @@ export class EntityConfigForm extends MobxLitElement {
                             ) => {
                               this.breakingChangeDetected(index, e);
                             }}
-                            @property-config-breaking-changes-resolved=${(
-                              e: PropertyConfigBreakingChangesResolvedEvent,
-                            ) => {
-                              this.breakingChangesResolved(index, e);
+                            @property-config-breaking-changes-resolved=${() => {
+                              this.breakingChangesResolved(index);
                             }}
                           ></property-config-form>
                         </sortable-item>

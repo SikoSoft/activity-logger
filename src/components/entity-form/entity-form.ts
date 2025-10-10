@@ -172,10 +172,6 @@ export class EntityForm extends ViewElement {
     super.connectedCallback();
 
     this.initialTags = JSON.stringify(this.tags);
-
-    console.log('properties on connect:', JSON.stringify(this.properties));
-
-    // this.initialHash = JSON.stringify(this.properties);
   }
 
   disconnectedCallback(): void {
@@ -515,7 +511,6 @@ export class EntityForm extends ViewElement {
   }
 
   private async handlePropertyChanged(e: PropertyChangedEvent) {
-    console.log('handlePropertyChanged', e.detail);
     const { value, uiId } = e.detail;
 
     const propertyInstance = this.propertyInstances.find(
@@ -565,10 +560,6 @@ export class EntityForm extends ViewElement {
       instanceToRemove.propertyConfigId,
       this.state.entityPropertyInstances[instanceToRemove.propertyConfigId] - 1,
     );
-  }
-
-  private addProperty() {
-    console.log('addProperty');
   }
 
   sortUpdated(e: SortUpdatedEvent) {
@@ -657,10 +648,6 @@ export class EntityForm extends ViewElement {
         </tag-manager>
 
         <div class="buttons">
-          <ss-button ?disabled=${this.canAddProperty} @click=${this.addProperty}
-            >${translate('addProperty')}</ss-button
-          >
-
           <ss-button
             ?positive=${!this.entityId || this.hasChanged}
             @click=${this.handleSaveClick}

@@ -3,7 +3,6 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import { DataType } from 'api-spec/models/Entity';
-import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import {
   PropertyChangedEvent,
   PropertyChangedEventPayload,
@@ -62,7 +61,7 @@ export class LongTextField extends LitElement {
   @query('textarea')
   textareaElement: HTMLTextAreaElement | undefined;
 
-  protected handleInputChanged(e: InputEvent) {
+  protected handleInputChanged() {
     if (!this.textareaElement) {
       return;
     }

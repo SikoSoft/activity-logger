@@ -1,4 +1,3 @@
-import { Property } from '@/mock/entity-config';
 import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { EntityProperty } from 'api-spec/models/Entity';

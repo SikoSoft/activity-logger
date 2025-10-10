@@ -69,10 +69,6 @@ export class TabContainer extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    const numFound = this.querySelectorAll(':has-slotted').length;
-
-    console.log('NOT FOUND', numFound);
-
     this.setupPanes();
   }
 

@@ -8,10 +8,7 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-icon';
 
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import {
-  PropertyChangedEvent,
-  PropertyChangedEventPayload,
-} from '@/components/entity-form/property-field/property-field.events';
+import { PropertyChangedEvent } from '@/components/entity-form/property-field/property-field.events';
 import {
   DateFieldProp,
   DateFieldProps,

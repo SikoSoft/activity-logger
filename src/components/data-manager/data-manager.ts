@@ -11,8 +11,6 @@ import '@/components/tab-container/tab-pane/tab-pane';
 import '@/components/data-manager/export-tool/export-tool';
 import '@/components/data-manager/import-tool/import-tool';
 
-import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
-
 import { theme } from '@/styles/theme';
 
 @customElement('data-manager')
@@ -42,13 +40,8 @@ export class DataManager extends MobxLitElement {
   @state()
   open: boolean = this.state.collapsablePanelState['data-manager'] ?? true;
 
-  toggle(e: ToggleChangedEvent) {
-    console.log('TOGGLE', e.detail);
-  }
-
   connectedCallback(): void {
     super.connectedCallback();
-    console.log('Data manager connected', this.state.tabState);
   }
 
   render() {
@@ -57,7 +50,6 @@ export class DataManager extends MobxLitElement {
         title=${translate('dataManager')}
         ?open=${this.open}
         panelId=${`data-manager`}
-        @collapsable-toggled=${this.toggle}
       >
         <tab-container
           paneId="data-manager"

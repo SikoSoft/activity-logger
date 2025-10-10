@@ -161,11 +161,8 @@ export class PropertyConfigForm extends LitElement {
   }
 
   handleDataTypeChange(dataType: DataType = this.dataType as DataType) {
-    console.log('handleDataTypeChange', dataType);
-
     let typedValue: DataTypedValue;
 
-    //const propertyConfig = { ...this.propertyConfig };
     switch (dataType) {
       case DataType.BOOLEAN:
         typedValue = { dataType, defaultValue: false };
@@ -193,12 +190,10 @@ export class PropertyConfigForm extends LitElement {
       }),
     );
 
-    console.log('new propertyConfig', JSON.stringify(propertyConfig));
     this.propertyConfig = propertyConfig;
   }
 
   updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
-    console.log('updateField', field, rawValue);
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -210,8 +205,6 @@ export class PropertyConfigForm extends LitElement {
     }));
 
     this.propertyConfig = propertyConfig;
-
-    console.log('updated propertyConfig', JSON.stringify(this.propertyConfig));
   }
 
   @state()
@@ -328,8 +321,6 @@ export class PropertyConfigForm extends LitElement {
 
   async save() {
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
-      console.log('updating property config', this.propertyConfig);
-
       const isValid = this.validate();
       if (!isValid) {
         return;
@@ -346,7 +337,6 @@ export class PropertyConfigForm extends LitElement {
       return;
     }
 
-    console.log('adding property config', this.propertyConfig);
     const propertyConfig = await storage.addPropertyConfig(this.propertyConfig);
     if (propertyConfig) {
       addToast(translate('propertyConfig.addedSuccessfully'));
