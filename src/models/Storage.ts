@@ -53,4 +53,5 @@ export interface StorageSchema {
     entityConfigId: number,
     propertyConfigOrder: { id: number; order: number }[],
   ): Promise<boolean>;
+  export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
 }

@@ -483,11 +483,17 @@ export class Storage implements StorageSchema {
     return Promise.resolve(null);
   }
 
-  @delegateSource() async setEntityPropertyOrder(
+  @delegateSource()
+  async setEntityPropertyOrder(
     _entityConfigId: number,
     _propertyConfigOrder: { id: number; order: number }[],
   ): Promise<boolean> {
     return Promise.resolve(true);
+  }
+
+  @delegateSource()
+  async export(_entityConfigIds: number[]): Promise<Entity.Entity[]> {
+    return Promise.resolve([]);
   }
 }
 

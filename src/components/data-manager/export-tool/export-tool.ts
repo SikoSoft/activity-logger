@@ -18,6 +18,7 @@ import {
 import { addToast } from '@/lib/Util';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { repeat } from 'lit/directives/repeat.js';
+import { storage } from '@/lib/Storage';
 
 @customElement('export-tool')
 export class ExportTool extends MobxLitElement {
@@ -69,6 +70,18 @@ export class ExportTool extends MobxLitElement {
     return JSON.stringify(configData);
   }
 
+  getEntityConfigIdsForData(): number[] {
+    const ids = this.selectedDataSets
+      .filter(ds => ds.dataType === ExportDataType.ENTITIES)
+      .map(ds => ds.entityConfigId);
+    return Array.from(new Set(ids));
+  }
+
+  async getEntityData(): Promise<string> {
+    const data = await storage.export(this.getEntityConfigIdsForData());
+    return JSON.stringify(data);
+  }
+
   async exportData(): Promise<void> {
     try {
       const zip = new JSZip();
@@ -85,7 +98,7 @@ export class ExportTool extends MobxLitElement {
           ds => ds.dataType === ExportDataType.ENTITIES,
         )
       ) {
-        zip.file(FileName.ENTITIES, this.entitiesJson);
+        zip.file(FileName.ENTITIES, await this.getEntityData());
       }
 
       const content = await zip.generateAsync({
