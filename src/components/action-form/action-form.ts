@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { translate } from '@/lib/Localization';
@@ -167,7 +167,7 @@ export class ActionForm extends ViewElement {
     );
   }
 
-  private async saveAction() {
+  private async saveAction(): Promise<void> {
     this.loading = true;
     const desc = this.desc.trim();
 
@@ -237,7 +237,7 @@ export class ActionForm extends ViewElement {
     }
   }
 
-  private async deleteAction() {
+  private async deleteAction(): Promise<void> {
     this.loading = true;
 
     try {
@@ -331,7 +331,7 @@ export class ActionForm extends ViewElement {
     }
   }
 
-  private async handleDescChanged(e: CustomEvent) {
+  private async handleDescChanged(e: CustomEvent): Promise<void> {
     this.desc = e.detail.value;
 
     if (this.suggestionTimeout) {
@@ -342,7 +342,7 @@ export class ActionForm extends ViewElement {
     }, 150);
   }
 
-  private syncSuggestions(reset: boolean = false) {
+  private syncSuggestions(reset: boolean = false): void {
     if (reset) {
       this.state.setTagSuggestions([]);
       this.state.setActionSuggestions([]);
@@ -351,31 +351,31 @@ export class ActionForm extends ViewElement {
     this.requestActionSuggestions();
   }
 
-  sync(reset: boolean = false) {
+  sync(reset: boolean = false): void {
     this.syncSuggestions(reset);
   }
 
-  private handleDescSubmitted(_e: CustomEvent) {
+  private handleDescSubmitted(_e: CustomEvent): void {
     this.saveAction();
   }
 
-  private handleOccurredAtChanged(e: CustomEvent) {
+  private handleOccurredAtChanged(e: CustomEvent): void {
     this.occurredAt = e.detail.value;
   }
 
-  private handleOccurredAtSubmitted(_e: CustomEvent) {
+  private handleOccurredAtSubmitted(_e: CustomEvent): void {
     this.saveAction();
   }
 
-  private handleSaveClick(_e: CustomEvent) {
+  private handleSaveClick(_e: CustomEvent): void {
     this.saveAction();
   }
 
-  private handleDeleteClick(_e: CustomEvent) {
+  private handleDeleteClick(_e: CustomEvent): void {
     this.confirmModalShown = true;
   }
 
-  private handleTagsUpdated(e: TagsUpdatedEvent) {
+  private handleTagsUpdated(e: TagsUpdatedEvent): void {
     this.tags = e.detail.tags;
 
     this.state.setTagSuggestions(
@@ -385,7 +385,9 @@ export class ActionForm extends ViewElement {
     );
   }
 
-  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
     const value = e.detail.value;
     if (
       (!this.lastInput.tag.hadResults &&
@@ -415,7 +417,7 @@ export class ActionForm extends ViewElement {
     this.tagSuggestions = tags;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <form class=${classMap(this.classes)}>
         <div>

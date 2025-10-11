@@ -1,4 +1,4 @@
-import { css, html, nothing } from 'lit';
+import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { translate } from '@/lib/Localization';
@@ -151,13 +151,13 @@ export class ActionList extends ViewElement {
     this.load();
   }
 
-  private handleItemDeleted(e: ActionItemDeletedEvent) {
+  private handleItemDeleted(e: ActionItemDeletedEvent): void {
     this.state.setListItems(
       this.state.listItems.filter(item => item.id !== e.detail.id),
     );
   }
 
-  private handleItemUpdated(e: ActionItemUpdatedEvent) {
+  private handleItemUpdated(e: ActionItemUpdatedEvent): void {
     const updatedList = this.state.listItems
       .map(item =>
         item.id === e.detail.id
@@ -181,7 +181,7 @@ export class ActionList extends ViewElement {
     this.state.setListItems(updatedList);
   }
 
-  private handleScroll() {
+  private handleScroll(): void {
     if (this.paginationType === PaginationType.LAZY) {
       if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
         this.load(true);
@@ -262,45 +262,45 @@ export class ActionList extends ViewElement {
     }
   }
 
-  private handleFilterUpdated(_e: ListFilterUpdatedEvent) {
+  private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
     this.filterIsOpen = false;
     this.load();
   }
 
-  private handleSortUpdated(_e: ListSortUpdatedEvent) {
+  private handleSortUpdated(_e: ListSortUpdatedEvent): void {
     this.load();
   }
 
-  private handleSettingUpdated(_e: CustomEvent) {
+  private handleSettingUpdated(_e: CustomEvent): void {
     this.load();
   }
 
-  private handleContextUpdated(_e: ListContextUpdatedEvent) {
+  private handleContextUpdated(_e: ListContextUpdatedEvent): void {
     this.load();
   }
 
-  private handlePageChanged(e: PageChangedEvent) {
+  private handlePageChanged(e: PageChangedEvent): void {
     this.start = e.detail.start;
     this.load();
   }
 
-  private toggleSetting() {
+  private toggleSetting(): void {
     this.settingIsOpen = !this.settingIsOpen;
   }
 
-  private toggleFilter() {
+  private toggleFilter(): void {
     this.filterIsOpen = !this.filterIsOpen;
   }
 
-  private toggleSort() {
+  private toggleSort(): void {
     this.sortIsOpen = !this.sortIsOpen;
   }
 
-  private toggleContext() {
+  private toggleContext(): void {
     this.contextIsOpen = !this.contextIsOpen;
   }
 
-  private toggleActionContext(id: number) {
+  private toggleActionContext(id: number): void {
     const state = this.actionContextIsOpen.get(id);
     if (state) {
       this.actionContextIsOpen.set(id, false);
@@ -310,12 +310,12 @@ export class ActionList extends ViewElement {
     this.requestUpdate();
   }
 
-  private handlePointerLongPress(e: PointerLongPressEvent) {
+  private handlePointerLongPress(e: PointerLongPressEvent): void {
     const listItem = e.target as ActionListItem;
     this.state.toggleActionSelection(listItem.actionId);
   }
 
-  private handlePointerUp(e: PointerUpEvent) {
+  private handlePointerUp(e: PointerUpEvent): void {
     const listItem = e.target as ActionListItem;
     if (!this.state.selectMode) {
       listItem.setMode(ActionListItemMode.EDIT);
@@ -324,7 +324,10 @@ export class ActionList extends ViewElement {
     this.state.toggleActionSelection(listItem.actionId);
   }
 
-  private renderContextActions(type: ListContextType, item: ActionItem) {
+  private renderContextActions(
+    type: ListContextType,
+    item: ActionItem,
+  ): TemplateResult | typeof nothing {
     return this.state.listContext.type === type &&
       this.state.contextListItems[item.id]?.length
       ? html`
@@ -357,7 +360,7 @@ export class ActionList extends ViewElement {
       : nothing;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <ss-collapsable
         title=${translate('settings')}

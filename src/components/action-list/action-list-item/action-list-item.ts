@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -83,16 +83,16 @@ export class ActionListItem extends LitElement {
     return { 'action-list-item': true, selected: this.selected };
   }
 
-  get readableTime() {
+  get readableTime(): string {
     const date = new Date(this.occurredAt);
     return Time.formatDateTime(date);
   }
 
-  setMode(mode: ActionListItemMode) {
+  setMode(mode: ActionListItemMode): void {
     this.mode = mode;
   }
 
-  private handleMouseDown(e: Event) {
+  private handleMouseDown(e: Event): false {
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -107,7 +107,8 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private handleMouseUp(e: Event) {
+  private handleMouseUp(e: Event): boolean {
+    return false;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -120,8 +121,8 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private handleTouchStart(e: TouchEvent) {
-    return;
+  private handleTouchStart(e: TouchEvent): boolean {
+    return false;
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -136,8 +137,8 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  private handleTouchEnd(e: Event) {
-    return;
+  private handleTouchEnd(e: Event): boolean {
+    return false;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -150,7 +151,7 @@ export class ActionListItem extends LitElement {
     return false;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         ${this.mode === ActionListItemMode.EDIT

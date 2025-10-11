@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { html, nothing, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
@@ -64,12 +64,12 @@ export class AppContainer extends MobxLitElement {
     this.restoreState();
   }
 
-  setAuthToken(authToken: string) {
+  setAuthToken(authToken: string): void {
     api.setAuthToken(authToken);
     this.state.setAuthToken(authToken);
   }
 
-  private async restoreState() {
+  private async restoreState(): Promise<void> {
     this.ready = false;
     try {
       if (this.state.authToken) {
@@ -110,25 +110,25 @@ export class AppContainer extends MobxLitElement {
     }
   }
 
-  private handleViewChanged(e: Event) {
+  private handleViewChanged(e: Event): void {
     const event = e as CustomEvent;
     this.view = event.detail;
     storage.saveView(this.view);
   }
 
-  private handleOperationPerformed(_e: OperationPerformedEvent) {
+  private handleOperationPerformed(_e: OperationPerformedEvent): void {
     this.viewComponent.sync(false);
   }
 
-  private handleListConfigChanged(_e: ListConfigChangedEvent) {
+  private handleListConfigChanged(_e: ListConfigChangedEvent): void {
     this.viewComponent.sync(true);
   }
 
-  private handleUserLoggedIn() {
+  private handleUserLoggedIn(): void {
     this.restoreState();
   }
 
-  private handleCollapsableToggled(e: CollapsableToggledEvent) {
+  private handleCollapsableToggled(e: CollapsableToggledEvent): void {
     const { isOpen, panelId } = e.detail;
     this.state.setCollapsablePanelState(panelId, isOpen);
     storage.setCollapsablePanelState(this.state.collapsablePanelState);
@@ -140,7 +140,7 @@ export class AppContainer extends MobxLitElement {
     storage.setTabState(this.state.tabState);
   }
 
-  activeView() {
+  activeView(): TemplateResult | typeof nothing {
     if (!this.state.listConfig) {
       return nothing;
     }
@@ -172,7 +172,7 @@ export class AppContainer extends MobxLitElement {
     return html`<action-list></action-list>`;
   }
 
-  renderContent() {
+  renderContent(): TemplateResult | typeof nothing {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
       return html`
         <forbidden-notice
@@ -200,7 +200,7 @@ export class AppContainer extends MobxLitElement {
       : html`<ss-loader></ss-loader>`;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div
         class="app-container"

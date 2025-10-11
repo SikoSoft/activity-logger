@@ -109,7 +109,7 @@ export class AccountForm extends LitElement {
               id=${fieldName}
               placeholder=${fieldName}
               @input-submitted=${this.handleFieldSubmitted}
-              @input-changed=${(e: InputChangedEvent) => {
+              @input-changed=${(e: InputChangedEvent): void => {
                 this.handleFieldChanged(fieldName, e);
               }}
               value=${this[fieldName]}

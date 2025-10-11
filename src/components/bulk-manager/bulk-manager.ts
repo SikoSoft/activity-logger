@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html, nothing } from 'lit';
+import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -81,12 +81,12 @@ export class BulkManager extends MobxLitElement {
     };
   }
 
-  private handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>): void {
     const type = e.detail.value as OperationType;
     this.operationType = type;
   }
 
-  private async handlePerformOperation() {
+  private async handlePerformOperation(): Promise<void> {
     await api.post<BulkOperationPayload, BulkOperation>('operation', {
       operation: { tags: this.tags, type: this.operationType },
       actions: this.state.selectedActions,
@@ -107,11 +107,13 @@ export class BulkManager extends MobxLitElement {
     );
   }
 
-  private handleTagsUpdated(e: TagsUpdatedEvent) {
+  private handleTagsUpdated(e: TagsUpdatedEvent): void {
     this.tags = e.detail.tags;
   }
 
-  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
     const value = e.detail.value;
     if (
       (!this.lastInput.hadResults && value.startsWith(this.lastInput.value)) ||
@@ -140,11 +142,11 @@ export class BulkManager extends MobxLitElement {
     this.tagSuggestions = tags;
   }
 
-  private handleSelectAll() {
+  private handleSelectAll(): void {
     this.state.toggleSelectAll();
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         <ss-select

@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import '@/components/data-manager/data-manager';
@@ -8,7 +8,7 @@ import { ViewElement } from '@/lib/ViewElement';
 
 @customElement('admin-dashboard')
 export class AdminDashboard extends ViewElement {
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="admin-dashboard">
         <data-manager></data-manager>
