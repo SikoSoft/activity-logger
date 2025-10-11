@@ -1,8 +1,11 @@
-import { EntityConfig } from 'api-spec/models/Entity';
+export const baseFileName = 'data-dump';
+
+export enum ExportDataType {
+  CONFIGS = 'configs',
+  ENTITIES = 'entities',
+}
 
 export enum FileName {
   CONFIGS = 'configs.json',
   ENTITIES = 'entities.json',
 }
-
-///export type EntityData = Omit<EntityConfig, 'id' | 'userId'>;

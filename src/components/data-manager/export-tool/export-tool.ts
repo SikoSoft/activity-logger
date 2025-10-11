@@ -9,8 +9,10 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-select';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import JSZip from 'jszip';
-import { FileName } from '../data-manager.models';
+import { baseFileName, ExportDataType, FileName } from '../data-manager.models';
 import { addToast } from '@/lib/Util';
+import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 @customElement('export-tool')
 export class ExportTool extends MobxLitElement {
@@ -45,27 +47,37 @@ export class ExportTool extends MobxLitElement {
   @state()
   entitiesJson: string = '';
 
+  @state()
+  fileName: string = `${baseFileName}.zip`;
+
+  @state()
+  selectedConfigIds: number[] = []; //this.state.entityConfigs.map(c => c.id);
+
   toggleConfigs() {
     this.includeConfigs = !this.includeConfigs;
+    this.resetFileName();
   }
 
   toggleEntities() {
     this.includeEntities = !this.includeEntities;
+    this.resetFileName();
   }
 
   mapConfigData(): string {
-    return JSON.stringify(
-      this.state.entityConfigs.map(config => {
-        const { id, userId, ...rest } = config;
-        return {
+    const configData = [];
+    for (const config of this.state.entityConfigs) {
+      const { id, userId, ...rest } = config;
+      if (this.selectedConfigIds.includes(id)) {
+        configData.push({
           ...rest,
           properties: rest.properties.map(prop => {
             const { id, entityConfigId, userId, ...propRest } = prop;
             return propRest;
           }),
-        };
-      }),
-    );
+        });
+      }
+    }
+    return JSON.stringify(configData);
   }
 
   async exportData(): Promise<void> {
@@ -78,7 +90,6 @@ export class ExportTool extends MobxLitElement {
       }
 
       if (this.includeEntities) {
-        //this.entitiesJson = JSON.stringify(this.state.entities, null, 2);
         zip.file(FileName.ENTITIES, this.entitiesJson);
       }
 
@@ -90,17 +101,59 @@ export class ExportTool extends MobxLitElement {
         },
       });
 
-      saveAs(content, `DataDump[].zip`);
+      saveAs(content, this.fileName);
       addToast(translate('fileDownloaded'), NotificationType.SUCCESS);
     } catch (error) {
       console.error('Error creating ZIP file:', error);
     }
   }
 
+  resetFileName(): void {
+    if (
+      this.selectedConfigIds.length === 0 ||
+      (!this.includeConfigs && !this.includeEntities)
+    ) {
+      this.fileName = `${baseFileName}.zip`;
+      return;
+    }
+
+    const configNames: string[] = [];
+    for (const configId of this.selectedConfigIds) {
+      const config = this.state.entityConfigs.find(c => c.id === configId);
+      if (config) {
+        configNames.push(config.name);
+      }
+    }
+
+    const dataTypes: string[] = [];
+    if (this.includeConfigs) {
+      dataTypes.push(ExportDataType.CONFIGS);
+    }
+    if (this.includeEntities) {
+      dataTypes.push(ExportDataType.ENTITIES);
+    }
+
+    this.fileName = `${baseFileName}[${configNames.join(',')}](${dataTypes.join(',')}).zip`;
+  }
+
+  updateFileName(e: InputChangedEvent) {
+    this.fileName = e.detail.value;
+  }
+
+  handleConfigsChanged(e: SelectChangedEvent<string[]>) {
+    const selectedValue = e.detail.value;
+
+    this.selectedConfigIds = selectedValue.map(v => parseInt(v, 10));
+    this.resetFileName();
+  }
+
   render() {
     return html`
       <div class="export-tool">
         <ss-select
+          multiple
+          .selected=${this.selectedConfigIds.map(id => id.toString())}
+          @select-changed=${this.handleConfigsChanged}
           .options=${this.state.entityConfigs.map(config => ({
             label: config.name,
             value: config.id,
@@ -126,6 +179,14 @@ export class ExportTool extends MobxLitElement {
             @change=${this.toggleEntities}
           />
           <label for="include-entities">${translate('includeEntities')}</label>
+        </div>
+
+        <div class="file-name">
+          <ss-input
+            value=${this.fileName}
+            label=${translate('fileName')}
+            @input-changed=${this.updateFileName}
+          ></ss-input>
         </div>
 
         <ss-button
