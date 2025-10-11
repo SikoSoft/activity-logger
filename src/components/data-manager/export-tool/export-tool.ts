@@ -104,6 +104,11 @@ export class ExportTool extends MobxLitElement {
   }
 
   resetFileName(): void {
+    if (!this.selectedDataSets.length) {
+      this.fileName = `${baseFileName}.zip`;
+      return;
+    }
+
     const configs = this.state.entityConfigs.filter(c =>
       this.selectedDataSets.some(ds => ds.entityConfigId === c.id),
     );
