@@ -79,7 +79,7 @@ export class ActionListItem extends LitElement {
   @state() downTimeout: number = 0;
   @state() downActivation: boolean = false;
 
-  @state() get classes() {
+  @state() get classes(): Record<string, boolean> {
     return { 'action-list-item': true, selected: this.selected };
   }
 
@@ -92,7 +92,7 @@ export class ActionListItem extends LitElement {
     this.mode = mode;
   }
 
-  private handleMouseDown(e: Event): false {
+  private handleMouseDown(e: Event): boolean {
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -100,7 +100,7 @@ export class ActionListItem extends LitElement {
       if (time.getTime() - this.pointerDown.getTime() > holdThreshold) {
         this.dispatchEvent(new PointerLongPressEvent({ time }));
         this.downActivation = true;
-        return;
+        return true;
       }
     }, holdThreshold);
     e.preventDefault();
@@ -108,7 +108,6 @@ export class ActionListItem extends LitElement {
   }
 
   private handleMouseUp(e: Event): boolean {
-    return false;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -122,7 +121,7 @@ export class ActionListItem extends LitElement {
   }
 
   private handleTouchStart(e: TouchEvent): boolean {
-    return false;
+    return true;
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -138,7 +137,7 @@ export class ActionListItem extends LitElement {
   }
 
   private handleTouchEnd(e: Event): boolean {
-    return false;
+    return true;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
