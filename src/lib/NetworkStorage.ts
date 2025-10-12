@@ -189,11 +189,11 @@ export class NetworkStorage implements StorageSchema {
   async export(entityConfigIds: number[]): Promise<Entity.Entity[]> {
     const result = await api.post<
       { entityConfigIds: number[] },
-      Entity.Entity[]
+      { entities: Entity.Entity[] }
     >('export', { entityConfigIds });
 
     if (result && result.isOk) {
-      return result.response;
+      return result.response.entities;
     }
     return [];
   }
