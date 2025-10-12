@@ -51,3 +51,19 @@ export class PropertyDeletedEvent extends CustomEvent<PropertyDeletedEventPayloa
     });
   }
 }
+
+export const propertySubmittedEventName = 'property-submitted';
+
+export interface PropertySubmittedEventPayload {
+  uiId: string;
+}
+
+export class PropertySubmittedEvent extends CustomEvent<PropertySubmittedEventPayload> {
+  constructor(payload: PropertySubmittedEventPayload) {
+    super(propertySubmittedEventName, {
+      bubbles: true,
+      composed: true,
+      detail: payload,
+    });
+  }
+}

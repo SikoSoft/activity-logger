@@ -1,11 +1,18 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import { DataType } from 'api-spec/models/Entity';
-import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
-import { PropertyChangedEvent } from '@/components/entity-form/property-field/property-field.events';
+import {
+  InputChangedEvent,
+  InputSubmittedEvent,
+} from '@ss/ui/components/ss-input.events';
+import {
+  PropertyChangedEvent,
+  PropertySubmittedEvent,
+} from '@/components/entity-form/property-field/property-field.events';
 import { IntFieldProp, intFieldProps, IntFieldProps } from './int-field.models';
+import { ShortTextFieldProp } from '../short-text-field/short-text-field.models';
 
 @customElement('int-field')
 export class IntField extends LitElement {
@@ -29,7 +36,7 @@ export class IntField extends LitElement {
   [IntFieldProp.UI_ID]: IntFieldProps[IntFieldProp.UI_ID] =
     intFieldProps[IntFieldProp.UI_ID].default;
 
-  protected handleInputChanged(e: InputChangedEvent) {
+  protected handleInputChanged(e: InputChangedEvent): void {
     const value = parseInt(e.detail.value);
 
     if (isNaN(value)) {
@@ -45,12 +52,19 @@ export class IntField extends LitElement {
     );
   }
 
-  render() {
+  handleInputSubmitted(_: InputSubmittedEvent): void {
+    this.dispatchEvent(
+      new PropertySubmittedEvent({ uiId: this[ShortTextFieldProp.UI_ID] }),
+    );
+  }
+
+  render(): TemplateResult {
     return html`
       <ss-input
         type="number"
         value=${this[IntFieldProp.VALUE]}
         @input-changed=${this.handleInputChanged}
+        @input-submitted=${this.handleInputSubmitted}
       ></ss-input>
     `;
   }

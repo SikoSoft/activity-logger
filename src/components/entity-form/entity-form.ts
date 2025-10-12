@@ -50,11 +50,13 @@ import {
   PropertyChangedEvent,
   PropertyClonedEvent,
   PropertyDeletedEvent,
+  PropertySubmittedEvent,
 } from './property-field/property-field.events';
 import { translate } from '@/lib/Localization';
 
 import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
+import { Prop } from '@ss/ui/models';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -351,7 +353,7 @@ export class EntityForm extends ViewElement {
     return { isValid: true };
   }
 
-  private async saveAction(): Promise<void> {
+  private async save(): Promise<void> {
     this.loading = true;
     const validationResult = this.validateConstraints();
 
@@ -457,7 +459,7 @@ export class EntityForm extends ViewElement {
   }
 
   private handleSaveClick(_e: CustomEvent): void {
-    this.saveAction();
+    this.save();
   }
 
   private handleDeleteClick(_e: CustomEvent): void {
@@ -564,6 +566,19 @@ export class EntityForm extends ViewElement {
     );
   }
 
+  handlePropertySubmitted(e: PropertySubmittedEvent): void {
+    const { uiId } = e.detail;
+    const propertyInstanceIndex = this.propertyInstances.findIndex(
+      property => property.uiId === uiId,
+    );
+
+    if (propertyInstanceIndex < 0) {
+      return;
+    }
+
+    this.save();
+  }
+
   sortUpdated(e: SortUpdatedEvent): void {
     this.sortedIds = e.detail.sortedIds;
   }
@@ -584,6 +599,7 @@ export class EntityForm extends ViewElement {
       @property-changed=${this.handlePropertyChanged}
       @property-cloned=${this.handlePropertyCloned}
       @property-deleted=${this.handlePropertyDeleted}
+      @property-submitted=${this.handlePropertySubmitted}
     ></property-field>`;
   }
 
