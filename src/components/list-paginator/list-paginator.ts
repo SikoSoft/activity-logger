@@ -1,5 +1,5 @@
 import { theme } from '@/styles/theme';
-import { css, html, LitElement, nothing } from 'lit';
+import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -120,7 +120,7 @@ export class ListPaginator extends LitElement {
     return pages;
   }
 
-  private prevPage() {
+  private prevPage(): void {
     if (this.page > 1) {
       const start = this.start - this.perPage;
       this.dispatchEvent(
@@ -129,7 +129,7 @@ export class ListPaginator extends LitElement {
     }
   }
 
-  private nextPage() {
+  private nextPage(): void {
     if (this.page + 1 <= this.pages) {
       this.dispatchEvent(
         new PageChangedEvent({ start: this.start + this.perPage }),
@@ -137,13 +137,13 @@ export class ListPaginator extends LitElement {
     }
   }
 
-  private goToPage(page: number) {
+  private goToPage(page: number): void {
     this.dispatchEvent(
       new PageChangedEvent({ start: (page - 1) * this.perPage }),
     );
   }
 
-  render() {
+  render(): TemplateResult | typeof nothing {
     return this.pages > 1
       ? html`
           <div class="paginator box">

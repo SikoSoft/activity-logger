@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -36,15 +36,17 @@ export class TagFilters extends MobxLitElement {
     );
   }
 
-  private handleIncludeUntaggedChanged() {
+  private handleIncludeUntaggedChanged(): void {
     this.dispatchEvent(new IncludeUntaggedUpdatedEvent({}));
   }
 
-  private handleTagsUpdated(type: ListFilterType, tags: string[]) {
+  private handleTagsUpdated(type: ListFilterType, tags: string[]): void {
     this.dispatchEvent(new FilterTagsUpdatedEvent({ type, tags }));
   }
 
-  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
     const value = e.detail.value;
     if (
       (!this.lastInput.hadResults && value.startsWith(this.lastInput.value)) ||
@@ -73,7 +75,7 @@ export class TagFilters extends MobxLitElement {
     this.tagSuggestions = tags;
   }
 
-  render() {
+  render(): TemplateResult | typeof nothing {
     return html`
       <fieldset>
         <legend>${translate('tagging')}</legend>

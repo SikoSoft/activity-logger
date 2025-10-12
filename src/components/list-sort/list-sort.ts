@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
@@ -26,7 +26,7 @@ export class ListSort extends MobxLitElement {
 
   private state = appState;
 
-  private handlePropertyChanged(e: SelectChangedEvent<string>) {
+  private handlePropertyChanged(e: SelectChangedEvent<string>): void {
     const property = e.detail.value as ListSortProperty;
     const sort = {
       property,
@@ -36,7 +36,7 @@ export class ListSort extends MobxLitElement {
     this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
-  private handleDirectionChanged(e: SelectChangedEvent<string>) {
+  private handleDirectionChanged(e: SelectChangedEvent<string>): void {
     const direction = e.detail.value as ListSortDirection;
     const sort = {
       property: this.state.listSort.property,
@@ -46,7 +46,7 @@ export class ListSort extends MobxLitElement {
     this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="box">
         <div>${translate('sortBy')}</div>

@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
@@ -102,7 +102,7 @@ export class PageNav extends MobxLitElement {
     }
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       ${this.state.debugMode
         ? html` <ss-select

@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { TextType } from 'api-spec/models/List';
@@ -37,7 +37,7 @@ export class TextFilter extends LitElement {
   [TextFilterProp.INDEX]: TextFilterProps[TextFilterProp.INDEX] =
     textFilterProps[TextFilterProp.INDEX].default;
 
-  private handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>): void {
     const type = e.detail.value as TextType;
     this.dispatchEvent(
       new TextFilterUpdatedEvent({
@@ -48,7 +48,7 @@ export class TextFilter extends LitElement {
     );
   }
 
-  private handleSubStrChanged(e: InputChangedEvent) {
+  private handleSubStrChanged(e: InputChangedEvent): void {
     const subStr = e.detail.value;
     this.dispatchEvent(
       new TextFilterUpdatedEvent({
@@ -59,15 +59,15 @@ export class TextFilter extends LitElement {
     );
   }
 
-  private handleSubStrSubmitted(_e: InputChangedEvent) {
+  private handleSubStrSubmitted(_e: InputChangedEvent): void {
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
-  private handleButtonClicked() {
+  private handleButtonClicked(): void {
     this.dispatchEvent(new TextFilterSaveEvent({ index: this.index }));
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <fieldset>
         <ss-select

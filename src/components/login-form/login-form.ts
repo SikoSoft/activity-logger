@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { appState } from '@/state';
@@ -80,7 +80,7 @@ export class LoginForm extends MobxLitElement {
     this.loading = false;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <form>
         <ss-input

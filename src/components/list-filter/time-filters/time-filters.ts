@@ -1,4 +1,4 @@
-import { html, LitElement, nothing } from 'lit';
+import { html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
@@ -110,7 +110,7 @@ export class TimeFilters extends LitElement {
     }
   }
 
-  render() {
+  render(): TemplateResult | typeof nothing {
     return html`
       <fieldset>
         <legend>${translate('time')}</legend>

@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
@@ -37,7 +37,7 @@ export class TextFilters extends LitElement {
     super.connectedCallback();
   }
 
-  private handleFilterUpdated(e: TextFilterUpdatedEvent) {
+  private handleFilterUpdated(e: TextFilterUpdatedEvent): void {
     const textFilter = e.detail;
     if (textFilter.index === -1) {
       this.newFilter = {
@@ -59,7 +59,7 @@ export class TextFilters extends LitElement {
     );
   }
 
-  private handleSave(e: TextFilterSaveEvent) {
+  private handleSave(e: TextFilterSaveEvent): void {
     const filters: TextContext[] =
       e.detail.index === -1
         ? [...this.filters, this.newFilter]
@@ -72,7 +72,7 @@ export class TextFilters extends LitElement {
     );
   }
 
-  render() {
+  render(): TemplateResult | typeof nothing {
     return html`
       <fieldset>
         <legend>${translate('text')}</legend>
