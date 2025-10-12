@@ -1,4 +1,4 @@
-import { html, css, nothing, PropertyValues } from 'lit';
+import { html, css, nothing, PropertyValues, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -127,7 +127,7 @@ export class EntityForm extends ViewElement {
   @state() instancesHash = '';
 
   @state()
-  get classes() {
+  get classes(): Record<string, boolean> {
     return { box: true, 'advanced-mode': this.state.advancedMode };
   }
 
@@ -211,7 +211,7 @@ export class EntityForm extends ViewElement {
     return await sha256(JSON.stringify(this.mapInstancesToProperties()));
   }
 
-  async setupProperties() {
+  async setupProperties(): Promise<void> {
     if (!this.entityConfig) {
       return;
     }
@@ -351,7 +351,7 @@ export class EntityForm extends ViewElement {
     return { isValid: true };
   }
 
-  private async saveAction() {
+  private async saveAction(): Promise<void> {
     this.loading = true;
     const validationResult = this.validateConstraints();
 
@@ -436,7 +436,7 @@ export class EntityForm extends ViewElement {
     }
   }
 
-  private async deleteAction() {
+  private async deleteAction(): Promise<void> {
     this.loading = true;
 
     try {
@@ -456,15 +456,15 @@ export class EntityForm extends ViewElement {
     this.loading = false;
   }
 
-  private handleSaveClick(_e: CustomEvent) {
+  private handleSaveClick(_e: CustomEvent): void {
     this.saveAction();
   }
 
-  private handleDeleteClick(_e: CustomEvent) {
+  private handleDeleteClick(_e: CustomEvent): void {
     this.confirmModalShown = true;
   }
 
-  private handleTagsUpdated(e: TagsUpdatedEvent) {
+  private handleTagsUpdated(e: TagsUpdatedEvent): void {
     this.tags = e.detail.tags;
 
     this.state.setTagSuggestions(
@@ -474,7 +474,9 @@ export class EntityForm extends ViewElement {
     );
   }
 
-  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
     const value = e.detail.value;
     if (
       (!this.lastInput.tag.hadResults &&
@@ -504,13 +506,13 @@ export class EntityForm extends ViewElement {
     this.tagSuggestions = tags;
   }
 
-  private handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>): void {
     this.type = parseInt(e.detail.value);
     this.propertiesSetup = false;
     this.propertyInstances = [];
   }
 
-  private async handlePropertyChanged(e: PropertyChangedEvent) {
+  private async handlePropertyChanged(e: PropertyChangedEvent): Promise<void> {
     const { value, uiId } = e.detail;
 
     const propertyInstance = this.propertyInstances.find(
@@ -526,7 +528,7 @@ export class EntityForm extends ViewElement {
     this.instancesHash = await this.getInstancesHash();
   }
 
-  private handlePropertyCloned(e: PropertyClonedEvent) {
+  private handlePropertyCloned(e: PropertyClonedEvent): void {
     const { uiId } = e.detail;
     const propertyInstanceIndex = this.propertyInstances.findIndex(
       property => property.uiId === uiId,
@@ -541,7 +543,7 @@ export class EntityForm extends ViewElement {
     this.propertyInstances = propertyInstances;
   }
 
-  private handlePropertyDeleted(e: PropertyDeletedEvent) {
+  private handlePropertyDeleted(e: PropertyDeletedEvent): void {
     const { uiId } = e.detail;
 
     const instanceToRemove = this.propertyInstances.find(
@@ -562,11 +564,13 @@ export class EntityForm extends ViewElement {
     );
   }
 
-  sortUpdated(e: SortUpdatedEvent) {
+  sortUpdated(e: SortUpdatedEvent): void {
     this.sortedIds = e.detail.sortedIds;
   }
 
-  renderPropertyField(propertyInstance: PropertyInstance) {
+  renderPropertyField(
+    propertyInstance: PropertyInstance,
+  ): TemplateResult | typeof nothing {
     const { propertyConfigId, uiId } = propertyInstance;
     if (!propertyConfigId || !this.entityConfig) {
       return nothing;
@@ -583,7 +587,7 @@ export class EntityForm extends ViewElement {
     ></property-field>`;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <form class=${classMap(this.classes)}>
         ${this.state.entityConfigs.length > 1
@@ -669,8 +673,9 @@ export class EntityForm extends ViewElement {
 
                 <confirmation-modal
                   @confirmation-accepted=${this.deleteAction}
-                  @confirmation-declined=${() =>
-                    (this.confirmModalShown = false)}
+                  @confirmation-declined=${(): void => {
+                    this.confirmModalShown = false;
+                  }}
                   ?open=${this.confirmModalShown}
                 ></confirmation-modal>
               `

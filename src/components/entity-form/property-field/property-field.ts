@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { html, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -118,7 +118,7 @@ export class PropertyField extends MobxLitElement {
     return false;
   }
 
-  delete() {
+  delete(): void {
     if (!this.canDelete) {
       return;
     }
@@ -130,7 +130,7 @@ export class PropertyField extends MobxLitElement {
     );
   }
 
-  clone() {
+  clone(): void {
     if (!this.canClone) {
       return;
     }
@@ -142,11 +142,11 @@ export class PropertyField extends MobxLitElement {
     );
   }
 
-  setConfirmationModalIsOpen(isOpen: boolean) {
+  setConfirmationModalIsOpen(isOpen: boolean): void {
     this.confirmationModalIsOpen = isOpen;
   }
 
-  renderField() {
+  renderField(): TemplateResult | typeof nothing {
     let value: PropertyDataValue;
     switch (this.propertyConfig.dataType) {
       case DataType.DATE:
@@ -197,7 +197,7 @@ export class PropertyField extends MobxLitElement {
     return nothing;
   }
 
-  render() {
+  render(): TemplateResult | typeof nothing {
     return html`
       <div class="property">
         <label for=${`property-${this.propertyConfig.id}`}
@@ -212,7 +212,7 @@ export class PropertyField extends MobxLitElement {
           ${this.canDelete
             ? html` <ss-button
                 negative
-                @click=${() => {
+                @click=${(): void => {
                   this.setConfirmationModalIsOpen(true);
                 }}
                 >${translate('delete')}</ss-button
@@ -228,7 +228,7 @@ export class PropertyField extends MobxLitElement {
         <confirmation-modal
           ?open=${this.confirmationModalIsOpen}
           @confirmation-accepted=${this.delete}
-          @confirmation-declined=${() => {
+          @confirmation-declined=${(): void => {
             this.setConfirmationModalIsOpen(false);
           }}
         ></confirmation-modal>
