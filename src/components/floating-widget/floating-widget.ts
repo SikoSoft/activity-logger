@@ -1,4 +1,4 @@
-import { css } from 'lit';
+import { css, TemplateResult } from 'lit';
 import { html } from 'lit/static-html.js';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -160,46 +160,46 @@ export class FloatingWidget extends MobxLitElement {
   @state() mouseIn: boolean = false;
 
   @state()
-  get classes() {
+  get classes(): Record<string, boolean> {
     return {
       widget: true,
       open: this.open,
     };
   }
 
-  private handleToggleAdvancedChanged(event: ToggleChangedEvent) {
+  private handleToggleAdvancedChanged(event: ToggleChangedEvent): void {
     this.state.setAdvancedMode(event.detail.on);
     storage.saveAdvancedMode(event.detail.on);
   }
 
-  private handleToggleDebugChanged(event: ToggleChangedEvent) {
+  private handleToggleDebugChanged(event: ToggleChangedEvent): void {
     this.state.setDebugMode(event.detail.on);
     storage.saveDebugMode(event.detail.on);
   }
 
-  private handleToggleOpen() {
+  private handleToggleOpen(): void {
     this.open = !this.open;
   }
 
-  private handleOpen() {
+  private handleOpen(): void {
     this.open = true;
   }
 
-  private handleMouseEnter() {
+  private handleMouseEnter(): void {
     this.mouseIn = true;
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
   }
 
-  private handleMouseLeave() {
+  private handleMouseLeave(): void {
     this.mouseIn = false;
     this.timeout = setTimeout(() => {
       this.open = false;
     }, 500);
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div
         class=${classMap(this.classes)}

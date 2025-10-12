@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -91,7 +91,7 @@ export class ListFilter extends MobxLitElement {
   @query('#filter-name') filterNameInput!: SSInput;
   @query('#saved-filters') savedFiltersInput!: HTMLSelectElement;
 
-  @state() get classes() {
+  @state() get classes(): Record<string, boolean> {
     return {
       box: true,
       'list-filter': true,
@@ -101,7 +101,7 @@ export class ListFilter extends MobxLitElement {
     };
   }
 
-  @state() get taggingClasses() {
+  @state() get taggingClasses(): Record<string, boolean> {
     return {
       tagging: true,
       all: this.includeAllTagging,
@@ -160,15 +160,15 @@ export class ListFilter extends MobxLitElement {
     }
   }
 
-  private handleIncludeUntaggedChanged() {
+  private handleIncludeUntaggedChanged(): void {
     this.includeUntagged = !this.includeUntagged;
   }
 
-  private handleIncludeAllChanged() {
+  private handleIncludeAllChanged(): void {
     this.includeAll = !this.includeAll;
   }
 
-  private handleIncludeAllTaggingChanged() {
+  private handleIncludeAllTaggingChanged(): void {
     this.includeAllTagging = !this.includeAllTagging;
   }
 
@@ -180,7 +180,7 @@ export class ListFilter extends MobxLitElement {
     addToast(translate('filterUpdated'), NotificationType.INFO);
   }
 
-  private async saveFilter() {
+  private async saveFilter(): Promise<void> {
     if (!this.saveMode) {
       this.saveMode = true;
       this.filterNameInput.focus();
@@ -208,7 +208,7 @@ export class ListFilter extends MobxLitElement {
     this.saveFilter();
   }
 
-  private handleSavedFilterChanged(_e: Event) {
+  private handleSavedFilterChanged(_e: Event): void {
     this.selectedSavedFilter = this.savedFiltersInput.value;
     const savedFilter = this.savedFilters.find(
       savedFilter => savedFilter.id === this.savedFiltersInput.value,
@@ -226,7 +226,7 @@ export class ListFilter extends MobxLitElement {
     }
   }
 
-  private handleDeleteSavedFilterClick(_e: Event) {
+  private handleDeleteSavedFilterClick(_e: Event): void {
     if (this.savedFiltersInput.value) {
       storage.deleteSavedFilter(this.savedFiltersInput.value);
       this.savedFiltersInput.value = '';
@@ -236,19 +236,21 @@ export class ListFilter extends MobxLitElement {
     addToast(translate('filterDeleted'), NotificationType.INFO);
   }
 
-  private handleTimeChanged(e: TimeFiltersUpdatedEvent) {
+  private handleTimeChanged(e: TimeFiltersUpdatedEvent): void {
     this.time = e.detail;
   }
 
-  private handleTextChanged(e: TextFiltersUpdatedEvent) {
+  private handleTextChanged(e: TextFiltersUpdatedEvent): void {
     this.text = e.detail.filters;
   }
 
-  private updateTags(type: ListFilterType, tags: string[]) {
+  private updateTags(type: ListFilterType, tags: string[]): void {
     this[type] = tags;
   }
 
-  private async handleTagSuggestionsRequested(e: TagSuggestionsRequestedEvent) {
+  private async handleTagSuggestionsRequested(
+    e: TagSuggestionsRequestedEvent,
+  ): Promise<void> {
     const value = e.detail.value;
     if (
       (!this.lastInput.hadResults && value.startsWith(this.lastInput.value)) ||
@@ -277,7 +279,7 @@ export class ListFilter extends MobxLitElement {
     this.tagSuggestions = tags;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         ${this.savedFilters.length
@@ -323,7 +325,7 @@ export class ListFilter extends MobxLitElement {
         <div class="filters">
           <text-filters
             .filters=${this.text}
-            @text-filters-updated=${(e: TextFiltersUpdatedEvent) =>
+            @text-filters-updated=${(e: TextFiltersUpdatedEvent): void =>
               this.handleTextChanged(e)}
           ></text-filters>
 
@@ -405,34 +407,26 @@ export class ListFilter extends MobxLitElement {
             end=${this.time.type === ListFilterTimeType.RANGE
               ? this.time.end
               : ''}
-            @time-filters-updated=${(e: TimeFiltersUpdatedEvent) =>
+            @time-filters-updated=${(e: TimeFiltersUpdatedEvent): void =>
               this.handleTimeChanged(e)}
           ></time-filters>
         </div>
 
         <ss-button
-          @click=${(e: CustomEvent) => {
-            this.handleUpdateClick(e);
-          }}
+          @click=${this.handleUpdateClick}
           text=${translate('useFilter')}
         ></ss-button>
 
         <div class="save">
           <ss-input
-            @input-changed=${(e: CustomEvent) => {
-              this.handleFilterNameChanged(e);
-            }}
-            @input-submitted=${(e: CustomEvent) => {
-              this.handleFilterNameSubmitted(e);
-            }}
+            @input-changed=${this.handleFilterNameChanged}
+            @input-submitted=${this.handleFilterNameSubmitted}
             id="filter-name"
             placeholder=${translate('filterName')}
           ></ss-input>
 
           <ss-button
-            @click=${(e: CustomEvent) => {
-              this.handleSaveClick(e);
-            }}
+            @click=${this.handleSaveClick}
             text=${translate('saveFilter')}
             ?disabled=${!this.saveButtonIsEnabled}
           ></ss-button>

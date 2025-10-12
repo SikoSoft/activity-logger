@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -59,57 +59,55 @@ export class ListContext extends MobxLitElement {
     return quantityMap[this.state.listContext.unit];
   }
 
-  private _handleToggleEnabled(_e: InputEvent) {
+  private handleToggleEnabled(_e: InputEvent): void {
     const mode = !this.state.listContextMode;
     this.state.setListContextMode(mode);
     storage.saveListContextMode(mode);
   }
 
-  private _handleTypeChanged(e: SelectChangedEvent<ListContextType>) {
+  private handleTypeChanged(e: SelectChangedEvent<ListContextType>): void {
     this.setListContext({
       ...this.state.listContext,
       type: e.detail.value,
     });
   }
 
-  private _handleQuantityChanged(e: SelectChangedEvent<number>) {
+  private handleQuantityChanged(e: SelectChangedEvent<number>): void {
     this.setListContext({
       ...this.state.listContext,
       quantity: e.detail.value,
     });
   }
 
-  private _handleUnitChanged(e: SelectChangedEvent<ListContextUnit>) {
+  private handleUnitChanged(e: SelectChangedEvent<ListContextUnit>): void {
     this.setListContext({
       ...this.state.listContext,
       unit: e.detail.value,
     });
   }
 
-  private setListContext(listContext: ListContextSpec) {
+  private setListContext(listContext: ListContextSpec): void {
     this.state.setListContext(listContext);
     storage.saveListContext(listContext);
   }
 
-  private _handleUpdateClick() {
+  private handleUpdateClick(): void {
     this.dispatchEvent(
       new ListContextUpdatedEvent({ listContext: this.state.listContext }),
     );
   }
 
-  @state() get classes() {
+  @state() get classes(): Record<string, boolean> {
     return { box: true, enabled: this.state.listContextMode };
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         <div>
           <input
             type="checkbox"
-            @change=${(e: InputEvent) => {
-              this._handleToggleEnabled(e);
-            }}
+            @change=${this.handleToggleEnabled}
             ?checked=${this.state.listContextMode}
           />
           ${translate('includeContext')}
@@ -118,9 +116,7 @@ export class ListContext extends MobxLitElement {
         <div class="input">
           <ss-select
             selected=${this.state.listContext.type}
-            @select-changed=${(e: SelectChangedEvent<ListContextType>) => {
-              this._handleTypeChanged(e);
-            }}
+            @select-changed=${this.handleTypeChanged}
             .options=${Object.values(ListContextType).map(type => ({
               value: type,
               label: translate(`contextType.${type}`),
@@ -130,9 +126,7 @@ export class ListContext extends MobxLitElement {
 
           <ss-select
             selected=${`${this.state.listContext.quantity}`}
-            @select-changed=${(e: SelectChangedEvent<number>) => {
-              this._handleQuantityChanged(e);
-            }}
+            @select-changed=${this.handleQuantityChanged}
             .options=${this.quantities.map(quantity => ({
               value: `${quantity}`,
               label: `${quantity}`,
@@ -142,9 +136,7 @@ export class ListContext extends MobxLitElement {
 
           <ss-select
             selected=${this.state.listContext.unit}
-            @select-changed=${(e: SelectChangedEvent<ListContextUnit>) => {
-              this._handleUnitChanged(e);
-            }}
+            @select-changed=${this.handleUnitChanged}
             .options=${Object.values(ListContextUnit).map(type => ({
               value: type,
               label: translate(`contextUnit.${type}`),
@@ -153,9 +145,7 @@ export class ListContext extends MobxLitElement {
           </ss-select>
 
           <ss-button
-            @click=${() => {
-              this._handleUpdateClick();
-            }}
+            @click=${this.handleUpdateClick}
             text=${translate('useContext')}
           ></ss-button>
         </div>

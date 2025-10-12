@@ -1,4 +1,4 @@
-import { css, html, nothing } from 'lit';
+import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
@@ -149,13 +149,13 @@ export class EntityList extends ViewElement {
     this.load();
   }
 
-  private handleItemDeleted(e: EntityItemDeletedEvent) {
+  private handleItemDeleted(e: EntityItemDeletedEvent): void {
     this.state.setListEntities(
       this.state.listEntities.filter(item => item.id !== e.detail.id),
     );
   }
 
-  private handleItemUpdated(e: EntityItemUpdatedEvent) {
+  private handleItemUpdated(e: EntityItemUpdatedEvent): void {
     const updatedList = this.state.listEntities.map(item =>
       item.id === e.detail.id
         ? {
@@ -168,7 +168,7 @@ export class EntityList extends ViewElement {
     this.state.setListEntities(updatedList);
   }
 
-  private handleScroll() {
+  private handleScroll(): void {
     if (this.paginationType === PaginationType.LAZY) {
       if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
         this.load(true);
@@ -249,45 +249,45 @@ export class EntityList extends ViewElement {
     }
   }
 
-  private handleFilterUpdated(_e: ListFilterUpdatedEvent) {
+  private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
     this.filterIsOpen = false;
     this.load();
   }
 
-  private handleSortUpdated(_e: ListSortUpdatedEvent) {
+  private handleSortUpdated(_e: ListSortUpdatedEvent): void {
     this.load();
   }
 
-  private handleSettingUpdated(_e: CustomEvent) {
+  private handleSettingUpdated(_e: CustomEvent): void {
     this.load();
   }
 
-  private handleContextUpdated(_e: ListContextUpdatedEvent) {
+  private handleContextUpdated(_e: ListContextUpdatedEvent): void {
     this.load();
   }
 
-  private handlePageChanged(e: PageChangedEvent) {
+  private handlePageChanged(e: PageChangedEvent): void {
     this.start = e.detail.start;
     this.load();
   }
 
-  private toggleSetting() {
+  private toggleSetting(): void {
     this.settingIsOpen = !this.settingIsOpen;
   }
 
-  private toggleFilter() {
+  private toggleFilter(): void {
     this.filterIsOpen = !this.filterIsOpen;
   }
 
-  private toggleSort() {
+  private toggleSort(): void {
     this.sortIsOpen = !this.sortIsOpen;
   }
 
-  private toggleContext() {
+  private toggleContext(): void {
     this.contextIsOpen = !this.contextIsOpen;
   }
 
-  private toggleActionContext(id: number) {
+  private toggleActionContext(id: number): void {
     const state = this.actionContextIsOpen.get(id);
     if (state) {
       this.actionContextIsOpen.set(id, false);
@@ -297,12 +297,12 @@ export class EntityList extends ViewElement {
     this.requestUpdate();
   }
 
-  private handlePointerLongPress(e: PointerLongPressEvent) {
+  private handlePointerLongPress(e: PointerLongPressEvent): void {
     const listItem = e.target as EntityListItem;
     this.state.toggleActionSelection(listItem.entityId);
   }
 
-  private handlePointerUp(e: PointerUpEvent) {
+  private handlePointerUp(e: PointerUpEvent): void {
     const listItem = e.target as EntityListItem;
     if (!this.state.selectMode) {
       listItem.setMode(EntityListItemMode.EDIT);
@@ -311,13 +311,16 @@ export class EntityList extends ViewElement {
     this.state.toggleActionSelection(listItem.entityId);
   }
 
-  private renderContextActions(type: ListContextType, item: Entity) {
+  private renderContextActions(
+    type: ListContextType,
+    item: Entity,
+  ): TemplateResult | typeof nothing {
     return this.state.listContext.type === type &&
       this.state.contextListEntities[item.id]?.length
       ? html`
           <ss-collapsable
             title=${translate('showContext')}
-            @toggled=${() => {
+            @toggled=${(): void => {
               this.toggleActionContext(item.id);
             }}
             ?open=${this.actionContextIsOpen.get(item.id)}
@@ -342,7 +345,7 @@ export class EntityList extends ViewElement {
       : nothing;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <ss-collapsable
         title=${translate('settings')}
@@ -432,7 +435,7 @@ export class EntityList extends ViewElement {
               <div class="more box">
                 <ss-button
                   text=${translate('loadMore')}
-                  @click=${() => this.load(true)}
+                  @click=${(): Promise<void> => this.load(true)}
                   ?loading=${this.loading}
                   ?disabled=${this.loading}
                 ></ss-button>

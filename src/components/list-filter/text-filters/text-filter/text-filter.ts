@@ -72,7 +72,7 @@ export class TextFilter extends LitElement {
       <fieldset>
         <ss-select
           selected=${this.type}
-          @select-changed=${(e: SelectChangedEvent<string>) => {
+          @select-changed=${(e: SelectChangedEvent<string>): void => {
             this.handleTypeChanged(e);
           }}
           .options=${Object.values(TextType).map(type => ({
@@ -83,10 +83,10 @@ export class TextFilter extends LitElement {
 
         <ss-input
           value=${this.subStr}
-          @input-changed=${(e: InputChangedEvent) => {
+          @input-changed=${(e: InputChangedEvent): void => {
             this.handleSubStrChanged(e);
           }}
-          @input-submitted=${(e: InputSubmittedEvent) => {
+          @input-submitted=${(e: InputSubmittedEvent): void => {
             this.handleSubStrSubmitted(e);
           }}
         ></ss-input>

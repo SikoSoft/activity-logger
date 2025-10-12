@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, CSSResult, html, nothing } from 'lit';
+import { css, CSSResult, html, nothing, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -136,7 +136,7 @@ export class ListConfig extends MobxLitElement {
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
 
-  @state() get classes() {
+  @state() get classes(): Record<string, boolean> {
     return {
       'list-config': true,
       'config-mode': this.state.selectListConfigMode,
@@ -161,7 +161,7 @@ export class ListConfig extends MobxLitElement {
     this.setup();
   }
 
-  async setup() {
+  async setup(): Promise<void> {
     const listConfigs = this.state.listConfigs;
     if (!listConfigs.length) {
       await this.addConfig();
@@ -171,25 +171,25 @@ export class ListConfig extends MobxLitElement {
     this.ready = true;
   }
 
-  handleConfigChanged(e: SelectChangedEvent<string>) {
+  handleConfigChanged(e: SelectChangedEvent<string>): void {
     this.state.setEditListConfigMode(false);
     this.setListConfigId(e.detail.value);
     this.sync();
   }
 
-  handleBoxClick() {
+  handleBoxClick(): void {
     this.state.setSelectListConfigMode(true);
   }
 
-  enableEditMode() {
+  enableEditMode(): void {
     this.state.setEditListConfigMode(true);
   }
 
-  handleNameChanged(e: InputChangedEvent) {
+  handleNameChanged(e: InputChangedEvent): void {
     this.name = e.detail.value;
   }
 
-  async saveConfig() {
+  async saveConfig(): Promise<void> {
     addToast(translate('configSaved'), NotificationType.SUCCESS);
     await storage.saveListConfig({
       id: this.id,
@@ -201,7 +201,7 @@ export class ListConfig extends MobxLitElement {
     this.state.setListConfigs(await storage.getListConfigs());
   }
 
-  async deleteConfig() {
+  async deleteConfig(): Promise<void> {
     await storage.deleteListConfig(this.id);
     addToast(translate('configDeleted'), NotificationType.INFO);
     const listConfigs = await storage.getListConfigs();
@@ -212,7 +212,7 @@ export class ListConfig extends MobxLitElement {
     this.sync();
   }
 
-  async addConfig() {
+  async addConfig(): Promise<void> {
     const id = await storage.addListConfig();
     addToast(translate('configAdded'), NotificationType.SUCCESS);
     const listConfigs = await storage.getListConfigs();
@@ -229,13 +229,13 @@ export class ListConfig extends MobxLitElement {
     );
   }
 
-  setListConfigId(listConfigId: string) {
+  setListConfigId(listConfigId: string): void {
     storage.saveActiveListConfigId(listConfigId);
     this.state.setListConfigId(listConfigId);
     this.dispatchEvent(new ListConfigChangedEvent({ listConfigId }));
   }
 
-  render() {
+  render(): TemplateResult {
     return html`<div
       class=${classMap(this.classes)}
       @click=${this.handleBoxClick}
@@ -247,7 +247,7 @@ export class ListConfig extends MobxLitElement {
         height="180"
         width="100%"
         navigationIndex=${this.navigationIndex}
-        @carousel-slide-changed=${(e: CarouselSlideChangedEvent) => {
+        @carousel-slide-changed=${(e: CarouselSlideChangedEvent): void => {
           this.state.setEditListConfigMode(false);
           this.state.setSelectListConfigMode(false);
           this.navigationIndex = e.detail.navigationIndex;
@@ -262,7 +262,7 @@ export class ListConfig extends MobxLitElement {
                 html`<div class="config-slide">
                   <div
                     class="close"
-                    @click=${(e: MouseEvent) => {
+                    @click=${(e: MouseEvent): void => {
                       this.state.setSelectListConfigMode(false);
                       this.state.setEditListConfigMode(false);
                       e.stopPropagation();

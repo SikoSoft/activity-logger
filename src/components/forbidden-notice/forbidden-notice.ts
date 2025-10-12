@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { translate } from '@/lib/Localization';
@@ -26,7 +26,7 @@ export class ForbiddenNotice extends LitElement {
     `,
   ];
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="box forbidden">
         <div class="message">${translate('forbiddenMessage')}</div>

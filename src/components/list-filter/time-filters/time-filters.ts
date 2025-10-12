@@ -66,22 +66,22 @@ export class TimeFilters extends LitElement {
     }
   }
 
-  private handleTypeChanged(e: SelectChangedEvent<string>) {
+  private handleTypeChanged(e: SelectChangedEvent<string>): void {
     this.type = e.detail.value as ListFilterTimeType;
     this.sendUpdatedEvent();
   }
 
-  private handleDateChanged(e: CustomEvent) {
+  private handleDateChanged(e: CustomEvent): void {
     this.date = e.detail.value;
     this.sendUpdatedEvent();
   }
 
-  private handleStartChanged(e: CustomEvent) {
+  private handleStartChanged(e: CustomEvent): void {
     this.start = e.detail.value;
     this.sendUpdatedEvent();
   }
 
-  private handleEndChanged(e: CustomEvent) {
+  private handleEndChanged(e: CustomEvent): void {
     this.end = e.detail.value;
     this.sendUpdatedEvent();
   }
@@ -117,7 +117,7 @@ export class TimeFilters extends LitElement {
 
         <ss-select
           selected=${this.type}
-          @select-changed=${(e: SelectChangedEvent<string>) => {
+          @select-changed=${(e: SelectChangedEvent<string>): void => {
             this.handleTypeChanged(e);
           }}
           .options=${Object.values(ListFilterTimeType).map(type => ({
