@@ -22,10 +22,10 @@ export interface SavedListFilter {
 
 const storageDelegates: StorageSchema[] = [networkStorage];
 
-function delegateSource() {
+function delegateSource(): MethodDecorator {
   return function (
     _target: unknown,
-    propertyKey: string,
+    propertyKey: string | symbol,
     descriptor: PropertyDescriptor,
   ) {
     for (let i = 0; i < storageDelegates.length; i++) {
@@ -33,14 +33,18 @@ function delegateSource() {
       const delegateMethods = Object.getOwnPropertyNames(
         Object.getPrototypeOf(storageDelegate),
       );
-      if (delegateMethods.includes(propertyKey)) {
+      const key =
+        typeof propertyKey === 'symbol' ? propertyKey.toString() : propertyKey;
+      if (delegateMethods.includes(key)) {
         const methodName = propertyKey as keyof StorageSchema;
         if (!storageDelegate || !storageDelegate[methodName]) {
-          return;
+          continue;
         }
         descriptor.value = storageDelegate[methodName];
+        return descriptor;
       }
     }
+    return;
   };
 }
 
@@ -85,14 +89,14 @@ export class Storage implements StorageSchema {
     );
   }
 
-  saveActiveFilter(filter: ListFilter) {
+  saveActiveFilter(filter: ListFilter): void {
     localStorage.setItem(
       StorageItemKey.ACTIVE_LIST_FILTER_KEY,
       JSON.stringify(filter),
     );
   }
 
-  saveView(view: PageView) {
+  saveView(view: PageView): void {
     localStorage.setItem(StorageItemKey.VIEW_KEY, view);
   }
 
@@ -114,11 +118,11 @@ export class Storage implements StorageSchema {
     return view;
   }
 
-  saveAdvancedMode(state: boolean) {
+  saveAdvancedMode(state: boolean): void {
     localStorage.setItem(StorageItemKey.ADVANCED_MODE_KEY, state ? '1' : '0');
   }
 
-  saveDebugMode(state: boolean) {
+  saveDebugMode(state: boolean): void {
     localStorage.setItem(StorageItemKey.DEBUG_MODE_KEY, state ? '1' : '0');
   }
 
@@ -160,7 +164,7 @@ export class Storage implements StorageSchema {
     return debugMode;
   }
 
-  async digestMessage(message: string) {
+  async digestMessage(message: string): Promise<string> {
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
       new TextEncoder().encode(message),
@@ -234,7 +238,7 @@ export class Storage implements StorageSchema {
     return Promise.resolve(true);
   }
 
-  saveListContextMode(mode: boolean) {
+  saveListContextMode(mode: boolean): void {
     localStorage.setItem(StorageItemKey.LIST_CONTEXT_MODE, mode ? '1' : '0');
   }
 
@@ -256,14 +260,14 @@ export class Storage implements StorageSchema {
     return mode;
   }
 
-  saveListContext(listContext: ListContext) {
+  saveListContext(listContext: ListContext): void {
     localStorage.setItem(
       StorageItemKey.LIST_CONTEXT,
       JSON.stringify(listContext),
     );
   }
 
-  getListContext() {
+  getListContext(): ListContext {
     let listContext: ListContext = defaultListContext;
     try {
       const storedListContext = localStorage.getItem(
@@ -283,7 +287,7 @@ export class Storage implements StorageSchema {
     return listContext;
   }
 
-  saveActiveListConfigId(id: string) {
+  saveActiveListConfigId(id: string): void {
     localStorage.setItem(StorageItemKey.ACTIVE_LIST_CONFIG_ID, id);
   }
 

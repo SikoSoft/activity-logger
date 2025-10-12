@@ -15,7 +15,7 @@ export class Localization {
     this.language = DEFAULT_LANGUAGE;
   }
 
-  setLanguage(language: Language) {
+  setLanguage(language: Language): void {
     this.language = language;
   }
 
@@ -43,10 +43,10 @@ export class Localization {
 }
 
 export const localization = new Localization();
-export const setLanguage = (language: Language) => {
+export const setLanguage = (language: Language): void => {
   localization.setLanguage(language);
 };
-export const getLanguage = () => {
+export const getLanguage = (): Language => {
   return localization.getLanguage();
 };
 export const translate = localization.translate.bind(localization);

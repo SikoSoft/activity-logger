@@ -136,64 +136,64 @@ export class AppState {
   public entityPropertyInstances: Record<number, number> = {};
 
   @action
-  public setActionSuggestions(suggestions: string[]) {
+  public setActionSuggestions(suggestions: string[]): void {
     this.actionSuggestions = suggestions;
   }
 
   @action
-  public setTagSuggestions(suggestions: string[]) {
+  public setTagSuggestions(suggestions: string[]): void {
     this.tagSuggestions = suggestions;
   }
 
   @action
-  public addTagSuggestions(suggestions: string[]) {
+  public addTagSuggestions(suggestions: string[]): void {
     this.tagSuggestions = [...this.tagSuggestions, ...suggestions];
   }
 
   @action
-  public removeTagSuggestions(suggestions: string[]) {
+  public removeTagSuggestions(suggestions: string[]): void {
     this.tagSuggestions = [
       ...this.tagSuggestions.filter(tag => !suggestions.includes(tag)),
     ];
   }
 
   @action
-  setLoading(state: boolean) {
+  setLoading(state: boolean): void {
     this.loading = state;
   }
 
   @action
-  setListFilterTagging(type: ListFilterType, tags: string[]) {
+  setListFilterTagging(type: ListFilterType, tags: string[]): void {
     this.listFilter.tagging[type] = tags;
   }
 
   @action
-  setListFilterIncludeUntagged(state: boolean) {
+  setListFilterIncludeUntagged(state: boolean): void {
     this.listFilter.includeUntagged = state;
   }
 
   @action
-  setListFilterIncludeAll(state: boolean) {
+  setListFilterIncludeAll(state: boolean): void {
     this.listFilter.includeAll = state;
   }
 
   @action
-  setListFilterTime(time: TimeContext) {
+  setListFilterTime(time: TimeContext): void {
     this.listFilter.time = time;
   }
 
   @action
-  setListFilter(filter: ListFilter) {
+  setListFilter(filter: ListFilter): void {
     this.listFilter = filter;
   }
 
   @action
-  setListSetting(setting: Settings) {
+  setListSetting(setting: Settings): void {
     this.listSetting = setting;
   }
 
   @action
-  setListConfigId(id: string) {
+  setListConfigId(id: string): void {
     if (this.listConfigId) {
       this.removeTagSuggestions(
         this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
@@ -208,47 +208,47 @@ export class AppState {
   }
 
   @action
-  setListConfigs(listConfigs: ListConfig[]) {
+  setListConfigs(listConfigs: ListConfig[]): void {
     this.listConfigs = listConfigs;
   }
 
   @action
-  setAdvancedMode(state: boolean) {
+  setAdvancedMode(state: boolean): void {
     this.advancedMode = state;
   }
 
   @action
-  setDebugMode(state: boolean) {
+  setDebugMode(state: boolean): void {
     this.debugMode = state;
   }
 
   @action
-  setEditListConfigMode(state: boolean) {
+  setEditListConfigMode(state: boolean): void {
     this.editListConfigMode = state;
   }
 
   @action
-  setSelectListConfigMode(state: boolean) {
+  setSelectListConfigMode(state: boolean): void {
     this.selectListConfigMode = state;
   }
 
   @action
-  setListSort(sort: ListSort) {
+  setListSort(sort: ListSort): void {
     this.listSort = sort;
   }
 
   @action
-  setSelectMode(state: boolean) {
+  setSelectMode(state: boolean): void {
     this.selectMode = state;
   }
 
   @action
-  setSelectedActions(actionIds: number[]) {
+  setSelectedActions(actionIds: number[]): void {
     this.selectedActions = actionIds;
   }
 
   @action
-  addActionToSelection(actionId: number) {
+  addActionToSelection(actionId: number): void {
     this.selectedActions = [
       ...this.selectedActions.filter(id => id !== actionId),
       actionId,
@@ -257,7 +257,7 @@ export class AppState {
   }
 
   @action
-  removeActionFromSelection(actionId: number) {
+  removeActionFromSelection(actionId: number): void {
     this.selectedActions = [
       ...this.selectedActions.filter(id => id !== actionId),
     ];
@@ -265,24 +265,24 @@ export class AppState {
   }
 
   @action
-  toggleActionSelection(actionId: number) {
+  toggleActionSelection(actionId: number): void {
     this.selectedActions.includes(actionId)
       ? this.removeActionFromSelection(actionId)
       : this.addActionToSelection(actionId);
   }
 
   @action
-  setListItems(items: ActionItem[]) {
+  setListItems(items: ActionItem[]): void {
     this.listItems = items;
   }
 
   @action
-  setContextListItems(items: Record<number, ActionItem[]>) {
+  setContextListItems(items: Record<number, ActionItem[]>): void {
     this.contextListItems = items;
   }
 
   @action
-  toggleSelectAll() {
+  toggleSelectAll(): void {
     this.selectedActions = this.listItems.reduce(
       (a, b) => (this.selectedActions.includes(b.id) ? [...a] : [...a, b.id]),
       [] as number[],
@@ -290,22 +290,22 @@ export class AppState {
   }
 
   @action
-  selectAll() {
+  selectAll(): void {
     this.selectedActions = this.listItems.map(item => item.id);
   }
 
   @action
-  setListContextMode(mode: boolean) {
+  setListContextMode(mode: boolean): void {
     this.listContextMode = mode;
   }
 
   @action
-  setListContext(context: ListContext) {
+  setListContext(context: ListContext): void {
     this.listContext = context;
   }
 
   @action
-  setSetting(setting: Setting) {
+  setSetting(setting: Setting): void {
     this.listSetting = {
       ...this.listSetting,
       [setting.name]: setting.value,
@@ -313,61 +313,64 @@ export class AppState {
   }
 
   @action
-  setForbidden(mode: boolean) {
+  setForbidden(mode: boolean): void {
     this.forbidden = mode;
   }
 
   @action
-  setAuthToken(authToken: string) {
+  setAuthToken(authToken: string): void {
     this.authToken = authToken;
   }
 
   @action
-  setLastListUrl(url: string) {
+  setLastListUrl(url: string): void {
     this.lastListUrl = url;
   }
 
   @action
-  setVersion(version: Version) {
+  setVersion(version: Version): void {
     this.version = version;
   }
 
   @action
-  setListEntities(entities: Entity[]) {
+  setListEntities(entities: Entity[]): void {
     this.listEntities = entities;
   }
 
   @action
-  setContextListEntities(entities: Record<number, Entity[]>) {
+  setContextListEntities(entities: Record<number, Entity[]>): void {
     this.contextListEntities = entities;
   }
 
   @action
-  setEntityConfigs(entityConfigs: EntityConfig[]) {
+  setEntityConfigs(entityConfigs: EntityConfig[]): void {
     this.entityConfigs = entityConfigs;
   }
 
   @action
-  setCollapsablePanelState(panelName: string, state: boolean) {
+  setCollapsablePanelState(panelName: string, state: boolean): void {
     this.collapsablePanelState[panelName] = state;
   }
 
   @action
-  setCollapsableState(state: Record<string, boolean>) {
+  setCollapsableState(state: Record<string, boolean>): void {
     this.collapsablePanelState = state;
   }
 
   @action
-  setTabPaneState(paneId: string, index: number) {
+  setTabPaneState(paneId: string, index: number): void {
     this.tabState[paneId] = index;
   }
 
-  setTabState(state: Record<string, number>) {
+  setTabState(state: Record<string, number>): void {
     this.tabState = state;
   }
 
   @action
-  setEntityPropertyInstance(propertyConfigId: number, instanceId: number) {
+  setEntityPropertyInstance(
+    propertyConfigId: number,
+    instanceId: number,
+  ): void {
     this.entityPropertyInstances[propertyConfigId] = instanceId;
   }
 

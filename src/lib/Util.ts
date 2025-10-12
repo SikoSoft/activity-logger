@@ -7,7 +7,7 @@ let notificationProvider: NotificationProvider | null = null;
 export function addToast(
   message: string,
   type: NotificationType = NotificationType.INFO,
-) {
+): void {
   if (!notificationProvider) {
     notificationProvider = document.createElement(
       'notification-provider',
