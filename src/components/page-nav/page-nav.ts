@@ -10,6 +10,7 @@ import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 
 import { theme } from '@/styles/theme';
+import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 
 export interface PageViewConfig {
   id: PageView;
@@ -53,6 +54,19 @@ export class PageNav extends MobxLitElement {
       nav span.active {
         background-color: #fff;
       }
+
+      tab-container::party(headers) {
+        display: flex;
+      }
+
+      tab-container::part(header) {
+        text-align: center;
+        flex: 1;
+      }
+
+      tab-container::part(content) {
+        display: none;
+      }
     `,
   ];
 
@@ -80,6 +94,14 @@ export class PageNav extends MobxLitElement {
     storage.saveVersion(version);
   }
 
+  handleTabChanged(e: TabIndexChangedEvent) {
+    const index = e.detail.index;
+    const view = this.displayViews[index];
+    if (view) {
+      this.setActiveView(view.id);
+    }
+  }
+
   render() {
     return html`
       ${this.state.debugMode
@@ -98,16 +120,17 @@ export class PageNav extends MobxLitElement {
         style="--num-views: ${this.displayViews.length}"
         data-debug=${this.state.debugMode}
       >
-        ${this.displayViews.map(
-          view =>
-            html`<span
-              @click="${() => {
-                this.setActiveView(view.id);
-              }}"
-              class=${this.active === view.id ? 'active' : ''}
-              >${view.label}</span
-            >`,
-        )}
+        <tab-container
+          paneId="page-nav"
+          @tab-index-changed=${this.handleTabChanged}
+          index=${this.displayViews.findIndex(
+            v => v.id === this[PageNavProp.ACTIVE],
+          )}
+        >
+          ${this.displayViews.map(
+            view => html`<tab-pane title=${view.label}></tab-pane>`,
+          )}
+        </tab-container>
       </nav>
     `;
   }
