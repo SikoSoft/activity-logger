@@ -64,6 +64,19 @@ export class ExportTool extends MobxLitElement {
   @state()
   dataSetsHash: string = '';
 
+  @state()
+  get everythingIsSelected(): boolean {
+    console.log(
+      'everythingIsSelected',
+      this.selectedDataSets.length,
+      this.state.entityConfigs.length * Object.values(ExportDataType).length,
+    );
+    return (
+      this.selectedDataSets.length ===
+      this.state.entityConfigs.length * Object.values(ExportDataType).length
+    );
+  }
+
   mapConfigData(): ExportConfigData {
     const configData: ExportConfigData = [];
     for (const config of this.state.entityConfigs) {
@@ -211,10 +224,49 @@ export class ExportTool extends MobxLitElement {
     );
   }
 
+  entityConfigIdIsSelected(entityConfigId: number): boolean {
+    return (
+      this.dataSetIsSelected(entityConfigId, ExportDataType.CONFIGS) &&
+      this.dataSetIsSelected(entityConfigId, ExportDataType.ENTITIES)
+    );
+  }
+
+  selectEntityConfig(entityConfigId: number): void {
+    this.handleDataSetChanged(entityConfigId, ExportDataType.CONFIGS);
+    this.handleDataSetChanged(entityConfigId, ExportDataType.ENTITIES);
+  }
+
+  selectEverything(): void {
+    if (this.everythingIsSelected) {
+      this.selectedDataSets = [];
+      this.syncDataSets();
+      return;
+    }
+
+    const allDataSets: ExportDataSet[] = [];
+    for (const config of this.state.entityConfigs) {
+      for (const dataType of Object.values(ExportDataType)) {
+        allDataSets.push({ entityConfigId: config.id, dataType });
+      }
+    }
+    this.selectedDataSets = allDataSets;
+    this.syncDataSets();
+  }
+
   render(): TemplateResult {
     return html`
       <div class="export-tool">
-        <div class="data-sets">
+        <div class="data-sets" data-hash=${this.dataSetsHash}>
+          <div class="include-type-header">
+            <input
+              type="checkbox"
+              id="everything"
+              ?checked=${this.everythingIsSelected}
+              @change=${(): void => this.selectEverything()}
+            />
+            <h3>${translate('everything')}</h3>
+          </div>
+
           ${repeat(
             this.state.entityConfigs,
             config => `${this.dataSetsHash}-${config.id}`,
@@ -224,21 +276,8 @@ export class ExportTool extends MobxLitElement {
                   <input
                     type="checkbox"
                     id="${config.id}-both"
-                    ?checked=${this.dataSetIsSelected(
-                      config.id,
-                      ExportDataType.CONFIGS,
-                    ) &&
-                    this.dataSetIsSelected(config.id, ExportDataType.ENTITIES)}
-                    @change=${(): void => {
-                      this.handleDataSetChanged(
-                        config.id,
-                        ExportDataType.CONFIGS,
-                      );
-                      this.handleDataSetChanged(
-                        config.id,
-                        ExportDataType.ENTITIES,
-                      );
-                    }}
+                    ?checked=${this.entityConfigIdIsSelected(config.id)}
+                    @change=${(): void => this.selectEntityConfig(config.id)}
                   />
                   <h3>${config.name}</h3>
                 </div>

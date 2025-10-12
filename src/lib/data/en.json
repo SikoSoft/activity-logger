@@ -145,5 +145,6 @@
   "exportData": "Export Data",
   "includeConfigs": "Include Configs",
   "includeEntities": "Include Entities",
-  "fileDownloaded": "File downloaded"
+  "fileDownloaded": "File downloaded",
+  "everything": "Everything"
 }
