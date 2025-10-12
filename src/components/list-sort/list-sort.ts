@@ -53,7 +53,7 @@ export class ListSort extends MobxLitElement {
         <div>
           <ss-select
             selected=${this.state.listSort.property}
-            @select-changed=${(e: SelectChangedEvent<string>) => {
+            @select-changed=${(e: SelectChangedEvent<string>): void => {
               this.handlePropertyChanged(e);
             }}
             .options=${Object.values(ListSortProperty).map(type => ({
@@ -65,7 +65,7 @@ export class ListSort extends MobxLitElement {
 
           <ss-select
             selected=${this.state.listSort.direction}
-            @select-changed=${(e: SelectChangedEvent<string>) => {
+            @select-changed=${(e: SelectChangedEvent<string>): void => {
               this.handleDirectionChanged(e);
             }}
             .options=${Object.values(ListSortDirection).map(type => ({

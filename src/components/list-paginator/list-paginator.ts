@@ -161,7 +161,7 @@ export class ListPaginator extends LitElement {
                           'quick-page': true,
                           active: page === this.page,
                         })}
-                        @click=${() => this.goToPage(page)}
+                        @click=${(): void => this.goToPage(page)}
                       >
                         ${page}
                       </button>`,

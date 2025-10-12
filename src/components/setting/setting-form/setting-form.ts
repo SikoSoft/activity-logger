@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -37,7 +37,7 @@ export class SettingForm extends MobxLitElement {
   [SettingFormProp.LIST_CONFIG_ID]: SettingFormProps[SettingFormProp.LIST_CONFIG_ID] =
     settingFormProps[SettingFormProp.LIST_CONFIG_ID].default;
 
-  renderSetting(setting: SettingConfig) {
+  renderSetting(setting: SettingConfig): TemplateResult {
     switch (setting.control.type) {
       /*
       case ControlType.BOOLEAN:
@@ -76,7 +76,7 @@ export class SettingForm extends MobxLitElement {
 
   private async handleSettingUpdated<SettingType>(
     event: SettingUpdatedEvent<SettingType>,
-  ) {
+  ): Promise<void> {
     this.saveDebouncer.cancel();
     this.saveDebouncer.debounce(async () => {
       const setting = event.detail as Setting;
@@ -94,7 +94,7 @@ export class SettingForm extends MobxLitElement {
     });
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <form>
         ${Object.values(settingsConfig).map(setting =>

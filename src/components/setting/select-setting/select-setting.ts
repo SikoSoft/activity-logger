@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import {
@@ -37,7 +37,7 @@ export class SelectSetting extends LitElement {
     `,
   ];
 
-  private handleSelectChanged(e: SelectChangedEvent<string>) {
+  private handleSelectChanged(e: SelectChangedEvent<string>): void {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -46,7 +46,7 @@ export class SelectSetting extends LitElement {
     );
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="select-setting">
         <label>${this.name}</label>

@@ -1,4 +1,4 @@
-import { LitElement, html, css, PropertyValues } from 'lit';
+import { LitElement, html, css, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   BooleanDataValue,
@@ -13,7 +13,7 @@ import {
   PropertyDataValue,
   ShortTextDataValue,
 } from 'api-spec/models/Entity';
-import { produce } from 'immer';
+import { nothing, produce } from 'immer';
 
 import { ControlType, SelectControl } from '@/models/Control';
 import { storage } from '@/lib/Storage';
@@ -160,7 +160,7 @@ export class PropertyConfigForm extends LitElement {
     }) as PropertyConfigFormProp[];
   }
 
-  handleDataTypeChange(dataType: DataType = this.dataType as DataType) {
+  handleDataTypeChange(dataType: DataType = this.dataType as DataType): void {
     let typedValue: DataTypedValue;
 
     switch (dataType) {
@@ -193,7 +193,10 @@ export class PropertyConfigForm extends LitElement {
     this.propertyConfig = propertyConfig;
   }
 
-  updateField(field: PropertyConfigFormProp, rawValue: PropertyDataValue) {
+  updateField(
+    field: PropertyConfigFormProp,
+    rawValue: PropertyDataValue,
+  ): void {
     let value = rawValue;
     if (propertyConfigFormProps[field].control.type === ControlType.NUMBER) {
       value = Number(value) || 0;
@@ -319,7 +322,7 @@ export class PropertyConfigForm extends LitElement {
     return true;
   }
 
-  async save() {
+  async save(): Promise<void> {
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       const isValid = this.validate();
       if (!isValid) {
@@ -344,7 +347,7 @@ export class PropertyConfigForm extends LitElement {
     }
   }
 
-  async delete() {
+  async delete(): Promise<void> {
     this.confirmationModalIsOpen = false;
 
     const deleteResult = await storage.deletePropertyConfig(
@@ -373,12 +376,12 @@ export class PropertyConfigForm extends LitElement {
     return updatedJson === currentJson;
   }
 
-  renderDefaultValueField() {
+  renderDefaultValueField(): TemplateResult {
     switch (this.propertyConfig[PropertyConfigFormProp.DATA_TYPE]) {
       case DataType.DATE:
         return html` <date-field
           .value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
-          @property-changed=${(e: PropertyChangedEvent) => {
+          @property-changed=${(e: PropertyChangedEvent): void => {
             this.updateField(
               PropertyConfigFormProp.DEFAULT_VALUE,
               e.detail.value,
@@ -388,7 +391,7 @@ export class PropertyConfigForm extends LitElement {
       case DataType.BOOLEAN:
         return html` <ss-toggle
           ?on=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
-          @toggle-changed=${(e: ToggleChangedEvent) => {
+          @toggle-changed=${(e: ToggleChangedEvent): void => {
             this.updateField(PropertyConfigFormProp.DEFAULT_VALUE, e.detail.on);
           }}
         ></ss-toggle>`;
@@ -397,7 +400,7 @@ export class PropertyConfigForm extends LitElement {
         return html` <image-field
           src=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE].src}
           alt=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE].alt}
-          @property-changed=${(e: PropertyChangedEvent) => {
+          @property-changed=${(e: PropertyChangedEvent): void => {
             this.updateField(
               PropertyConfigFormProp.DEFAULT_VALUE,
               e.detail.value,
@@ -410,7 +413,7 @@ export class PropertyConfigForm extends LitElement {
           <ss-input
             type="number"
             value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
-            @input-changed=${(e: InputChangedEvent) => {
+            @input-changed=${(e: InputChangedEvent): void => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
                 parseInt(e.detail.value),
@@ -424,7 +427,7 @@ export class PropertyConfigForm extends LitElement {
           <ss-input
             type="text"
             value=${this.propertyConfig[PropertyConfigFormProp.DEFAULT_VALUE]}
-            @input-changed=${(e: InputChangedEvent) => {
+            @input-changed=${(e: InputChangedEvent): void => {
               this.updateField(
                 PropertyConfigFormProp.DEFAULT_VALUE,
                 e.detail.value,
@@ -435,7 +438,7 @@ export class PropertyConfigForm extends LitElement {
     }
   }
 
-  renderField(field: PropertyConfigFormProp) {
+  renderField(field: PropertyConfigFormProp): TemplateResult | typeof nothing {
     if (field === PropertyConfigFormProp.DEFAULT_VALUE) {
       return this.renderDefaultValueField();
     }
@@ -451,7 +454,7 @@ export class PropertyConfigForm extends LitElement {
               value: option,
             }))}
             selected=${this[field]}
-            @select-changed=${(e: InputChangedEvent) => {
+            @select-changed=${(e: InputChangedEvent): void => {
               if (field === PropertyConfigFormProp.DATA_TYPE) {
                 this.handleDataTypeChange(e.detail.value as DataType);
               } else {
@@ -464,7 +467,7 @@ export class PropertyConfigForm extends LitElement {
         return html`
           <ss-toggle
             ?on=${this[field]}
-            @toggle-changed=${(e: ToggleChangedEvent) => {
+            @toggle-changed=${(e: ToggleChangedEvent): void => {
               this.updateField(field, e.detail.on);
             }}
           ></ss-toggle>
@@ -475,15 +478,17 @@ export class PropertyConfigForm extends LitElement {
           <ss-input
             type=${propertyConfigFormProps[field].control.type}
             value=${this[field]}
-            @input-changed=${(e: InputChangedEvent) => {
+            @input-changed=${(e: InputChangedEvent): void => {
               this.updateField(field, e.detail.value);
             }}
           ></ss-input>
         `;
     }
+
+    return nothing;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <ss-collapsable
         title=${this.propertyConfig.name || translate('propertyConfiguration')}
@@ -506,19 +511,13 @@ export class PropertyConfigForm extends LitElement {
           )}
         </fieldset>
         <div class="buttons">
-          <ss-button
-            positive
-            ?disabled=${this.inSync}
-            @click=${() => {
-              this.save();
-            }}
-          >
+          <ss-button positive ?disabled=${this.inSync} @click=${this.save}>
             ${translate('save')}
           </ss-button>
           <ss-button
             negative
             ?disabled=${!this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]}
-            @click=${() => {
+            @click=${(): void => {
               this.confirmationModalIsOpen = true;
             }}
           >
@@ -530,7 +529,7 @@ export class PropertyConfigForm extends LitElement {
       <confirmation-modal
         ?open=${this.confirmationModalIsOpen}
         @confirmation-accepted=${this.delete}
-        @confirmation-declined=${() => {
+        @confirmation-declined=${(): void => {
           this.confirmationModalIsOpen = false;
         }}
       ></confirmation-modal>

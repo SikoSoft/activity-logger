@@ -1,5 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import { translate } from '@/lib/Localization';
@@ -46,7 +46,7 @@ export class UserPane extends MobxLitElement {
     }
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div>
         <button @click=${this.logout}>${translate('logout')}</button>

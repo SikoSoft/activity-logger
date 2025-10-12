@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import {
@@ -46,7 +46,7 @@ export class NumberSetting extends LitElement {
     `,
   ];
 
-  private handleInputChanged(e: InputChangedEvent) {
+  private handleInputChanged(e: InputChangedEvent): void {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -55,7 +55,7 @@ export class NumberSetting extends LitElement {
     );
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="number-setting">
         <label>${this.name}</label>

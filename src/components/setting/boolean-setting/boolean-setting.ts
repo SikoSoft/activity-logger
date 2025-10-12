@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import {
@@ -33,7 +33,7 @@ export class BooleanSetting extends LitElement {
     `,
   ];
 
-  private handleToggleChanged(e: ToggleChangedEvent) {
+  private handleToggleChanged(e: ToggleChangedEvent): void {
     this.dispatchEvent(
       new SettingUpdatedEvent<typeof this.value>({
         name: this.name,
@@ -42,7 +42,7 @@ export class BooleanSetting extends LitElement {
     );
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="boolean-setting">
         <label>${this.name}</label>

@@ -78,7 +78,7 @@ export class PageNav extends MobxLitElement {
     return this.state.debugMode ? debugViews : views;
   }
 
-  setActiveView(view: PageView) {
+  setActiveView(view: PageView): void {
     this.dispatchEvent(
       new CustomEvent('view-changed', {
         bubbles: true,
@@ -88,13 +88,13 @@ export class PageNav extends MobxLitElement {
     );
   }
 
-  setVersion(e: CustomEvent) {
+  setVersion(e: CustomEvent): void {
     const version = e.detail.value as Version;
     this.state.setVersion(version);
     storage.saveVersion(version);
   }
 
-  handleTabChanged(e: TabIndexChangedEvent) {
+  handleTabChanged(e: TabIndexChangedEvent): void {
     const index = e.detail.index;
     const view = this.displayViews[index];
     if (view) {
@@ -106,7 +106,7 @@ export class PageNav extends MobxLitElement {
     return html`
       ${this.state.debugMode
         ? html` <ss-select
-            @select-changed=${(e: CustomEvent) => this.setVersion(e)}
+            @select-changed=${this.setVersion}
             selected=${this.state.version}
             .options=${[
               { value: Version.V1, label: translate('v1Classic') },
