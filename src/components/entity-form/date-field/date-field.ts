@@ -1,4 +1,4 @@
-import { css, html, LitElement, PropertyValues } from 'lit';
+import { css, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -72,7 +72,7 @@ export class DateField extends LitElement {
     }
   }
 
-  protected handleInputChanged(e: InputChangedEvent) {
+  protected handleInputChanged(e: InputChangedEvent): void {
     const value = e.detail.value;
 
     this.dispatchEvent(
@@ -84,11 +84,11 @@ export class DateField extends LitElement {
     );
   }
 
-  get formattedValue() {
+  get formattedValue(): string {
     return Time.formatDateTime(new Date(this[DateFieldProp.VALUE]));
   }
 
-  resetTime() {
+  resetTime(): void {
     if (!this[DateFieldProp.VALUE]) {
       const now = new Date();
       this.inputElement.value = Time.formatDateTime(now);
@@ -98,7 +98,7 @@ export class DateField extends LitElement {
     this.inputElement.value = this.formattedValue;
   }
 
-  async toggleUseNow() {
+  async toggleUseNow(): Promise<void> {
     this.useNow = !this.useNow;
 
     await this.updateComplete;
@@ -110,7 +110,7 @@ export class DateField extends LitElement {
     this.syncValue();
   }
 
-  syncValue() {
+  syncValue(): void {
     if (this.useNow) {
       this.sendUpdatedEvent(null);
       return;
@@ -119,7 +119,7 @@ export class DateField extends LitElement {
     this.sendUpdatedEvent(this.inputElement?.value || '');
   }
 
-  sendUpdatedEvent(value: DateDataValue | string) {
+  sendUpdatedEvent(value: DateDataValue | string): void {
     this.dispatchEvent(
       new PropertyChangedEvent({
         uiId: this[DateFieldProp.UI_ID],
@@ -129,14 +129,14 @@ export class DateField extends LitElement {
     );
   }
 
-  renderUseNow() {
+  renderUseNow(): TemplateResult {
     return html`<span>${translate('dateField.useNow')}</span
       ><ss-button @click=${this.toggleUseNow}
         >${translate('dateField.useCustom')}</ss-button
       >`;
   }
 
-  renderUseCustom() {
+  renderUseCustom(): TemplateResult {
     return html`
       <ss-icon
         color="#000000"
@@ -153,7 +153,7 @@ export class DateField extends LitElement {
     `;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="date-field-wrapper">
         ${this.useNow ? this.renderUseNow() : this.renderUseCustom()}

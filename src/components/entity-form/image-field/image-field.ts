@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -52,11 +52,11 @@ export class ImageField extends MobxLitElement {
   [ImageFieldProp.UI_ID]: ImageFieldProps[ImageFieldProp.UI_ID] =
     imageFieldProps[ImageFieldProp.UI_ID].default;
 
-  get uploadUrl() {
+  get uploadUrl(): string {
     return new URL('file', import.meta.env.APP_BASE_API_URL).toString();
   }
 
-  protected handleValueChanged(value: ImageDataValue) {
+  protected handleValueChanged(value: ImageDataValue): void {
     this.dispatchEvent(
       new PropertyChangedEvent({
         uiId: this[ImageFieldProp.UI_ID],
@@ -66,25 +66,25 @@ export class ImageField extends MobxLitElement {
     );
   }
 
-  protected handleSrcChanged(e: InputChangedEvent) {
+  protected handleSrcChanged(e: InputChangedEvent): void {
     this.handleValueChanged({ src: e.detail.value, alt: this.alt });
   }
 
-  protected handleAltChanged(e: InputChangedEvent) {
+  protected handleAltChanged(e: InputChangedEvent): void {
     this.handleValueChanged({ src: this.src, alt: e.detail.value });
   }
 
-  fileUploadSuccess(e: FileUploadSuccessEvent) {
+  fileUploadSuccess(e: FileUploadSuccessEvent): void {
     this.handleValueChanged({ src: e.detail.url, alt: this.alt });
     this.src = e.detail.url;
     addToast(translate('fileUploadSuccess'), NotificationType.SUCCESS);
   }
 
-  fileUploadFailed() {
+  fileUploadFailed(): void {
     addToast(translate('fileUploadFailed'), NotificationType.ERROR);
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <file-upload
         preview

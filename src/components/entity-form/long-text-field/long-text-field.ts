@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
@@ -61,7 +61,7 @@ export class LongTextField extends LitElement {
   @query('textarea')
   textareaElement: HTMLTextAreaElement | undefined;
 
-  protected handleInputChanged() {
+  protected handleInputChanged(): void {
     if (!this.textareaElement) {
       return;
     }
@@ -78,7 +78,7 @@ export class LongTextField extends LitElement {
     this.dispatchEvent(changedEvent);
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <textarea
         @input=${this.handleInputChanged}

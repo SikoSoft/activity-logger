@@ -56,7 +56,6 @@ import { translate } from '@/lib/Localization';
 
 import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
-import { Prop } from '@ss/ui/models';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
