@@ -1,5 +1,5 @@
 import { translate } from '@/lib/Localization';
-import { css, html } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
@@ -44,7 +44,7 @@ export class DataManager extends MobxLitElement {
     super.connectedCallback();
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <ss-collapsable
         title=${translate('dataManager')}

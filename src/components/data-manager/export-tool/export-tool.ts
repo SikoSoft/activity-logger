@@ -66,11 +66,6 @@ export class ExportTool extends MobxLitElement {
 
   @state()
   get everythingIsSelected(): boolean {
-    console.log(
-      'everythingIsSelected',
-      this.selectedDataSets.length,
-      this.state.entityConfigs.length * Object.values(ExportDataType).length,
-    );
     return (
       this.selectedDataSets.length ===
       this.state.entityConfigs.length * Object.values(ExportDataType).length
@@ -80,12 +75,12 @@ export class ExportTool extends MobxLitElement {
   mapConfigData(): ExportConfigData {
     const configData: ExportConfigData = [];
     for (const config of this.state.entityConfigs) {
-      const { userId, properties, ...rest } = config;
+      const { userId: _, properties, ...rest } = config;
       if (this.dataSetIsSelected(config.id, ExportDataType.CONFIGS)) {
         configData.push({
           ...rest,
           properties: properties.map(prop => {
-            const { userId, ...propRest } = prop;
+            const { userId: __, ...propRest } = prop;
             return propRest;
           }),
         });

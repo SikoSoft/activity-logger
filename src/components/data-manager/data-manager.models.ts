@@ -38,8 +38,3 @@ export type ExportDataSet = {
   entityConfigId: number;
   dataType: ExportDataType;
 };
-
-export enum FileName {
-  CONFIGS = 'configs.json',
-  ENTITIES = 'entities.json',
-}
