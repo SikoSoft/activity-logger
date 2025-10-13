@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { produce } from 'immer';
@@ -161,15 +161,15 @@ export class EntityConfigForm extends MobxLitElement {
     };
   }
 
-  updateName(name: string) {
+  updateName(name: string): void {
     this.entityConfig = { ...this.entityConfig, name };
   }
 
-  updateDescription(description: string) {
+  updateDescription(description: string): void {
     this.entityConfig = { ...this.entityConfig, description };
   }
 
-  validate() {
+  validate(): string[] {
     const errors: string[] = [];
     if (!this.entityConfig.name) {
       errors.push(translate('entityConfigNameRequired'));
@@ -177,7 +177,7 @@ export class EntityConfigForm extends MobxLitElement {
     return errors;
   }
 
-  async save() {
+  async save(): Promise<void> {
     const validationErrors = this.validate();
     if (validationErrors.length > 0) {
       addToast(
@@ -215,7 +215,7 @@ export class EntityConfigForm extends MobxLitElement {
     addToast(translate('entityConfigSaved'), NotificationType.SUCCESS);
   }
 
-  async delete() {
+  async delete(): Promise<void> {
     const result = await storage.deleteEntityConfig(this.entityConfig.id);
 
     if (!result) {
@@ -230,7 +230,7 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
-  addPropertyToTop() {
+  addPropertyToTop(): void {
     const entityPropertyConfig = produce(
       defaultEntityPropertyConfig,
       draft => draft,
@@ -242,21 +242,21 @@ export class EntityConfigForm extends MobxLitElement {
     this.entityConfig = entityConfig;
   }
 
-  addPropertyToBottom() {
+  addPropertyToBottom(): void {
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties.push(defaultEntityPropertyConfig);
     });
     this.entityConfig = entityConfig;
   }
 
-  updateProperty(index: number, updatedProperty: EntityPropertyConfig) {
+  updateProperty(index: number, updatedProperty: EntityPropertyConfig): void {
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties[index] = updatedProperty;
     });
     this.entityConfig = entityConfig;
   }
 
-  deleteProperty(index: number) {
+  deleteProperty(index: number): void {
     const entityConfig = produce(this.entityConfig, draft => {
       draft.properties.splice(index, 1);
     });
@@ -273,7 +273,7 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
-  sortUpdated(e: SortUpdatedEvent) {
+  sortUpdated(e: SortUpdatedEvent): void {
     const newOrder = e.detail;
 
     storage.setEntityPropertyOrder(
@@ -285,7 +285,7 @@ export class EntityConfigForm extends MobxLitElement {
   breakingChangeDetected(
     index: number,
     e: PropertyConfigBreakingChangeDetectedEvent,
-  ) {
+  ): void {
     const { problems } = e.detail;
     this.propertyConfigProblems = produce(
       this.propertyConfigProblems,
@@ -299,7 +299,7 @@ export class EntityConfigForm extends MobxLitElement {
     }
   }
 
-  breakingChangesResolved(index: number) {
+  breakingChangesResolved(index: number): void {
     this.propertyConfigProblems = produce(
       this.propertyConfigProblems,
       draft => {
@@ -308,13 +308,13 @@ export class EntityConfigForm extends MobxLitElement {
     );
   }
 
-  updateAllowPropertyOrdering(allow: boolean) {
+  updateAllowPropertyOrdering(allow: boolean): void {
     this.entityConfig = produce(this.entityConfig, draft => {
       draft.allowPropertyOrdering = allow;
     });
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <ss-collapsable
         title=${this.entityConfig.name || translate('entityConfiguration')}
@@ -328,7 +328,7 @@ export class EntityConfigForm extends MobxLitElement {
             <ss-input
               id="entity-name"
               .value=${this.entityConfig.name}
-              @input-changed=${(e: InputChangedEvent) =>
+              @input-changed=${(e: InputChangedEvent): void =>
                 this.updateName(e.detail.value)}
             ></ss-input>
           </div>
@@ -341,7 +341,7 @@ export class EntityConfigForm extends MobxLitElement {
             <ss-input
               id="entity-description"
               .value=${this.entityConfig.description}
-              @input-changed=${(e: InputChangedEvent) =>
+              @input-changed=${(e: InputChangedEvent): void =>
                 this.updateDescription(e.detail.value)}
             ></ss-input>
           </div>
@@ -353,7 +353,7 @@ export class EntityConfigForm extends MobxLitElement {
 
             <ss-toggle
               ?on=${this[EntityConfigFormProp.ALLOW_PROPERTY_ORDERING]}
-              @toggle-changed=${(e: ToggleChangedEvent) => {
+              @toggle-changed=${(e: ToggleChangedEvent): void => {
                 this.updateAllowPropertyOrdering(e.detail.on);
               }}
             ></ss-toggle>
@@ -369,7 +369,7 @@ export class EntityConfigForm extends MobxLitElement {
                   type="checkbox"
                   id="new-revision"
                   ?checked=${this.saveNewRevision}
-                  @click=${() => {
+                  @click=${(): void => {
                     this.saveNewRevision = !this.saveNewRevision;
                   }}
                 />
@@ -396,7 +396,7 @@ export class EntityConfigForm extends MobxLitElement {
 
             <ss-button
               negative
-              @click=${() => {
+              @click=${(): void => {
                 this.confirmationModalIsOpen = true;
               }}
               >${translate('delete')}</ss-button
@@ -432,19 +432,19 @@ export class EntityConfigForm extends MobxLitElement {
                             .defaultValue=${property.defaultValue}
                             @property-config-updated=${(
                               e: PropertyConfigUpdatedEvent,
-                            ) => this.updateProperty(index, e.detail)}
+                            ): void => this.updateProperty(index, e.detail)}
                             @property-config-added=${(
                               e: PropertyConfigAddedEvent,
-                            ) => this.updateProperty(index, e.detail)}
-                            @property-config-deleted=${() => {
+                            ): void => this.updateProperty(index, e.detail)}
+                            @property-config-deleted=${(): void => {
                               this.deleteProperty(index);
                             }}
                             @property-config-breaking-change-detected=${(
                               e: PropertyConfigBreakingChangeDetectedEvent,
-                            ) => {
+                            ): void => {
                               this.breakingChangeDetected(index, e);
                             }}
-                            @property-config-breaking-changes-resolved=${() => {
+                            @property-config-breaking-changes-resolved=${(): void => {
                               this.breakingChangesResolved(index);
                             }}
                           ></property-config-form>
@@ -467,7 +467,7 @@ export class EntityConfigForm extends MobxLitElement {
       <confirmation-modal
         ?open=${this.confirmationModalIsOpen}
         @confirmation-accepted=${this.delete}
-        @confirmation-declined=${() => {
+        @confirmation-declined=${(): void => {
           this.confirmationModalIsOpen = false;
         }}
       ></confirmation-modal>

@@ -73,7 +73,7 @@ export class BulkManager extends MobxLitElement {
   }
 
   @state()
-  get classes() {
+  get classes(): Record<string, boolean> {
     return {
       box: true,
       'bulk-manager': true,

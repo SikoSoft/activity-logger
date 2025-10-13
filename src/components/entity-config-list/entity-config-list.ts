@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { toJS } from 'mobx';
 
@@ -38,7 +38,7 @@ export class EntityConfigList extends ViewElement {
     this.loadEntityConfigs();
   }
 
-  async loadEntityConfigs() {
+  async loadEntityConfigs(): Promise<void> {
     const entityConfigs = await storage.getEntityConfigs();
     if (entityConfigs) {
       this.state.setEntityConfigs(entityConfigs);
@@ -46,19 +46,19 @@ export class EntityConfigList extends ViewElement {
     this.ready = true;
   }
 
-  addEntityConfig() {
+  addEntityConfig(): void {
     const entityConfig = produce(defaultEntityConfig, draft => draft);
 
     this.state.setEntityConfigs([...this.state.entityConfigs, entityConfig]);
   }
 
-  handleEntityConfigDeleted(e: EntityConfigDeletedEvent) {
+  handleEntityConfigDeleted(e: EntityConfigDeletedEvent): void {
     this.state.setEntityConfigs(
       this.state.entityConfigs.filter(config => config.id !== e.detail.id),
     );
   }
 
-  handleEntityConfigUpdated(e: EntityConfigUpdatedEvent, index: number) {
+  handleEntityConfigUpdated(e: EntityConfigUpdatedEvent, index: number): void {
     const updatedConfigs = produce(toJS(this.state.entityConfigs), draft => {
       draft[index] = e.detail;
     });
@@ -80,7 +80,7 @@ export class EntityConfigList extends ViewElement {
     return this.state.collapsablePanelState[`entityConfigForm-${id}`] || false;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class="admin-dashboard box">
         ${repeat(
@@ -95,7 +95,7 @@ export class EntityConfigList extends ViewElement {
               ?allowPropertyOrdering=${config.allowPropertyOrdering}
               ?open=${this.isPanelOpen(config.id)}
               @entity-config-deleted=${this.handleEntityConfigDeleted}
-              @entity-config-updated=${(e: EntityConfigUpdatedEvent) =>
+              @entity-config-updated=${(e: EntityConfigUpdatedEvent): void =>
                 this.handleEntityConfigUpdated(e, index)}
             ></entity-config-form>
           `,
