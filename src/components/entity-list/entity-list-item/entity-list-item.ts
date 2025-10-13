@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -91,7 +91,7 @@ export class EntityListItem extends MobxLitElement {
   @state() downTimeout: number = 0;
   @state() downActivation: boolean = false;
 
-  @state() get classes() {
+  @state() get classes(): Record<string, boolean> {
     return { 'action-list-item': true, selected: this.selected };
   }
 
@@ -121,11 +121,11 @@ export class EntityListItem extends MobxLitElement {
     return Time.formatDateTime(date);
   }
 
-  setMode(mode: EntityListItemMode) {
+  setMode(mode: EntityListItemMode): void {
     this.mode = mode;
   }
 
-  private handleMouseDown(e: Event) {
+  private handleMouseDown(e: Event): boolean {
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -140,7 +140,7 @@ export class EntityListItem extends MobxLitElement {
     return false;
   }
 
-  private handleMouseUp(e: Event) {
+  private handleMouseUp(e: Event): boolean {
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -153,8 +153,8 @@ export class EntityListItem extends MobxLitElement {
     return false;
   }
 
-  private handleTouchStart(e: TouchEvent) {
-    return;
+  private handleTouchStart(e: TouchEvent): boolean {
+    return true;
     this.pointerDown = new Date();
     this.dispatchEvent(new PointerDownEvent({ time: this.pointerDown }));
     this.downTimeout = setTimeout(() => {
@@ -169,8 +169,8 @@ export class EntityListItem extends MobxLitElement {
     return false;
   }
 
-  private handleTouchEnd(e: Event) {
-    return;
+  private handleTouchEnd(e: Event): boolean {
+    return true;
     if (!this.downActivation) {
       this.dispatchEvent(new PointerUpEvent({ time: new Date() }));
     }
@@ -183,7 +183,7 @@ export class EntityListItem extends MobxLitElement {
     return false;
   }
 
-  private renderProperties() {
+  private renderProperties(): (TemplateResult | typeof nothing)[] {
     return this.properties.map(property => {
       const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
       if (!propertyConfig || propertyConfig.hidden) {
@@ -226,7 +226,9 @@ export class EntityListItem extends MobxLitElement {
     });
   }
 
-  renderImageProperty(property: EntityProperty) {
+  renderImageProperty(
+    property: EntityProperty,
+  ): TemplateResult | typeof nothing {
     const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
     if (!propertyConfig || propertyConfig.dataType !== DataType.IMAGE) {
       return nothing;
@@ -249,16 +251,16 @@ export class EntityListItem extends MobxLitElement {
     return this.propertyConfigs.find(config => config.id === propertyConfigId);
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         ${this.mode === EntityListItemMode.EDIT
           ? html`
               <entity-form
-                @entity-item-updated=${() => {
+                @entity-item-updated=${(): void => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
-                @entity-item-canceled=${() => {
+                @entity-item-canceled=${(): void => {
                   this.mode = EntityListItemMode.VIEW;
                 }}
                 entityId=${this.entityId}
