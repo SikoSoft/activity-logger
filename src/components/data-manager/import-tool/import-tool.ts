@@ -41,11 +41,9 @@ export class ImportTool extends LitElement {
           return;
         }
 
-        const filePromise = zipEntry
-          .async('string')
-          .then((content: string): void => {
-            const filename = zipEntry.name.toLowerCase();
-          });
+        const filePromise = zipEntry.async('string').then((_: string): void => {
+          //const filename = zipEntry.name.toLowerCase();
+        });
 
         filePromises.push(filePromise);
       });
@@ -59,7 +57,7 @@ export class ImportTool extends LitElement {
   }
 
   handleFileSelected(event: Event): void {
-    console.log('handleFileSelected');
+    //console.log('handleFileSelected');
     const fileInput = event.target as HTMLInputElement;
     const file = fileInput.files?.[0];
 
@@ -68,7 +66,7 @@ export class ImportTool extends LitElement {
 
       const reader = new FileReader();
       reader.onload = (): void => {
-        const content = reader.result as string;
+        //const content = reader.result as string;
 
         if (this.fileName.endsWith('.zip')) {
           this.handleZipFile(file);

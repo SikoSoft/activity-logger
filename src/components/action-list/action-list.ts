@@ -333,7 +333,7 @@ export class ActionList extends ViewElement {
       ? html`
           <ss-collapsable
             title=${translate('showContext')}
-            @toggled=${() => {
+            @toggled=${(): void => {
               this.toggleActionContext(item.id);
             }}
             ?open=${this.actionContextIsOpen.get(item.id)}
@@ -452,7 +452,9 @@ export class ActionList extends ViewElement {
               <div class="more box">
                 <ss-button
                   text=${translate('loadMore')}
-                  @click=${() => this.load(true)}
+                  @click=${(): void => {
+                    this.load(true);
+                  }}
                   ?loading=${this.loading}
                   ?disabled=${this.loading}
                 ></ss-button>

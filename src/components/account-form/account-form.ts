@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { translate } from '@/lib/Localization';
 
@@ -97,7 +97,7 @@ export class AccountForm extends LitElement {
     this.loading = false;
   }
 
-  render() {
+  render(): TemplateResult {
     return html`
       <form class="box">
         ${Object.values(AccountFormField).map(

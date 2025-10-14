@@ -134,7 +134,7 @@ export class AppContainer extends MobxLitElement {
     storage.setCollapsablePanelState(this.state.collapsablePanelState);
   }
 
-  private handleTabChanged(e: TabIndexChangedEvent) {
+  private handleTabChanged(e: TabIndexChangedEvent): void {
     const { index, paneId } = e.detail;
     this.state.setTabPaneState(paneId, index);
     storage.setTabState(this.state.tabState);

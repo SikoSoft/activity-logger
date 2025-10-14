@@ -156,10 +156,10 @@ export class ActionListItem extends LitElement {
         ${this.mode === ActionListItemMode.EDIT
           ? html`
               <action-form
-                @action-item-updated=${() => {
+                @action-item-updated=${(): void => {
                   this.mode = ActionListItemMode.VIEW;
                 }}
-                @action-item-canceled=${() => {
+                @action-item-canceled=${(): void => {
                   this.mode = ActionListItemMode.VIEW;
                 }}
                 actionId=${this.actionId}

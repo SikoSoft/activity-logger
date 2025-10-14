@@ -113,7 +113,7 @@ export class ActionForm extends ViewElement {
   @state() tagSuggestions: string[] = [];
 
   @state()
-  get classes() {
+  get classes(): Record<string, boolean> {
     return { box: true, 'advanced-mode': this.state.advancedMode };
   }
 
@@ -488,8 +488,9 @@ export class ActionForm extends ViewElement {
 
                 <confirmation-modal
                   @confirmation-accepted=${this.deleteAction}
-                  @confirmation-declined=${() =>
-                    (this.confirmModalShown = false)}
+                  @confirmation-declined=${(): void => {
+                    this.confirmModalShown = false;
+                  }}
                   ?open=${this.confirmModalShown}
                 ></confirmation-modal>
               `
