@@ -3,6 +3,8 @@ import { customElement, query, state } from 'lit/decorators.js';
 
 import { translate } from '@/lib/Localization';
 import JSZip from 'jszip';
+import { repeat } from 'lit/directives/repeat.js';
+import { ImportResult, ImportResultType } from './import-tool.models';
 
 @customElement('import-tool')
 export class ImportTool extends LitElement {
@@ -21,6 +23,9 @@ export class ImportTool extends LitElement {
 
   @state()
   private fileName = '';
+
+  @state()
+  importResults: ImportResultType[] = [];
 
   protected firstUpdated(): void {
     this.fileUpload.addEventListener(
@@ -51,6 +56,8 @@ export class ImportTool extends LitElement {
       await Promise.all(filePromises);
 
       this.requestUpdate();
+
+      this.importResults = [ImportResultType.ZIP_IMPORTED];
     } catch (error) {
       console.error('Error processing ZIP file:', error);
     }
@@ -66,10 +73,15 @@ export class ImportTool extends LitElement {
 
       const reader = new FileReader();
       reader.onload = (): void => {
-        //const content = reader.result as string;
+        const content = reader.result as string;
 
         if (this.fileName.endsWith('.zip')) {
           this.handleZipFile(file);
+        }
+
+        if (this.fileName.endsWith('.json')) {
+          this.handleJsonContents(content);
+          this.importResults = [ImportResultType.JSON_IMPORTED];
         }
 
         fileInput.value = '';
@@ -84,9 +96,26 @@ export class ImportTool extends LitElement {
     }
   }
 
+  handleJsonContents(content: string): void {
+    try {
+      const data = JSON.parse(content);
+      console.log('Parsed JSON data:', data);
+    } catch (error) {
+      console.error('Error parsing JSON file:', error);
+    }
+  }
+
   render(): TemplateResult {
     return html` <div class="import">
       <input type="file" id="file-upload" accept=".zip,.json" />
+
+      <div class="results">
+        ${repeat(
+          this.importResults,
+          result => result,
+          result => html`<div>${result}</div>`,
+        )}
+      </div>
 
       <div class="buttons">
         <ss-button>${translate('importData')}</ss-button>
