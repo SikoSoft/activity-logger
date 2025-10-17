@@ -23,6 +23,7 @@ export const defaultListFilter: ListFilter = {
     [ListFilterType.CONTAINS_ALL_OF]: [],
     [ListFilterType.CONTAINS_ONE_OF]: [],
   },
+  includeTypes: [],
   includeUntagged: true,
   includeAll: true,
   includeAllTagging: true,
