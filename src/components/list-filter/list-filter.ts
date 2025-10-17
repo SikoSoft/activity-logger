@@ -33,6 +33,7 @@ import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
 import { theme } from '@/styles/theme';
+import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
@@ -75,6 +76,7 @@ export class ListFilter extends MobxLitElement {
 
   @state() [ListFilterType.CONTAINS_ONE_OF]: string[] = [];
   @state() [ListFilterType.CONTAINS_ALL_OF]: string[] = [];
+  @state() includeTypes: number[] = [];
   @state() includeUntagged: boolean = false;
   @state() includeAll: boolean = true;
   @state() includeAllTagging: boolean = false;
@@ -128,6 +130,7 @@ export class ListFilter extends MobxLitElement {
   get filter(): ListFilterModel {
     return {
       includeAll: this.includeAll,
+      includeTypes: this.includeTypes,
       includeUntagged: this.includeUntagged,
       includeAllTagging: this.includeAllTagging,
       tagging: {
@@ -149,6 +152,8 @@ export class ListFilter extends MobxLitElement {
     Object.values(ListFilterType).forEach(type => {
       this[type] = this.state.listFilter.tagging[type];
     });
+    this.includeTypes = this.state.listFilter.includeTypes;
+    this.includeTypes = this.state.listFilter.includeTypes;
     this.includeUntagged = this.state.listFilter.includeUntagged;
     this.includeAll = this.state.listFilter.includeAll;
     this.includeAllTagging = this.state.listFilter.includeAllTagging;
@@ -218,6 +223,7 @@ export class ListFilter extends MobxLitElement {
         savedFilter.filter.tagging[ListFilterType.CONTAINS_ONE_OF];
       this[ListFilterType.CONTAINS_ALL_OF] =
         savedFilter.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
+      this.includeTypes = savedFilter.filter.includeTypes;
       this.includeAllTagging = savedFilter.filter.includeAllTagging;
       this.includeUntagged = savedFilter.filter.includeUntagged;
       this.includeAll = savedFilter.filter.includeAll;
@@ -279,6 +285,13 @@ export class ListFilter extends MobxLitElement {
     this.tagSuggestions = tags;
   }
 
+  private handleTypesChanged(e: SelectChangedEvent<string[]>): void {
+    //this.state.selectedTypes = e.detail.value;
+    console.log('Selected types changed:', e.detail.value);
+    this.includeTypes = e.detail.value.map(v => Number(v));
+    console.log('includeTypes:', this.filter);
+  }
+
   render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
@@ -323,6 +336,20 @@ export class ListFilter extends MobxLitElement {
         </div>
 
         <div class="filters">
+          <fieldset>
+            <legend>${translate('includedTypes')}</legend>
+            <div class="types">
+              <ss-select
+                multiple
+                @select-changed=${this.handleTypesChanged}
+                .options=${this.state.entityConfigs.map(config => ({
+                  label: config.name,
+                  value: config.id,
+                }))}
+              ></ss-select>
+            </div>
+          </fieldset>
+
           <text-filters
             .filters=${this.text}
             @text-filters-updated=${(e: TextFiltersUpdatedEvent): void =>

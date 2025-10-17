@@ -146,5 +146,7 @@
   "includeConfigs": "Include Configs",
   "includeEntities": "Include Entities",
   "fileDownloaded": "File downloaded",
-  "everything": "Everything"
+  "everything": "Everything",
+  "includedTypes": "Included Types",
+  "anyType": "Any Type"
 }
