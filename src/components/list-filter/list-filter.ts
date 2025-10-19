@@ -181,6 +181,7 @@ export class ListFilter extends MobxLitElement {
     this.state.setListFilter(this.filter);
 
     storage.saveActiveFilter(this.state.listFilter);
+
     this.dispatchEvent(new ListFilterUpdatedEvent({}));
     addToast(translate('filterUpdated'), NotificationType.INFO);
   }
@@ -286,10 +287,7 @@ export class ListFilter extends MobxLitElement {
   }
 
   private handleTypesChanged(e: SelectChangedEvent<string[]>): void {
-    //this.state.selectedTypes = e.detail.value;
-    console.log('Selected types changed:', e.detail.value);
     this.includeTypes = e.detail.value.map(v => Number(v));
-    console.log('includeTypes:', this.filter);
   }
 
   render(): TemplateResult {
@@ -342,6 +340,7 @@ export class ListFilter extends MobxLitElement {
               <ss-select
                 multiple
                 @select-changed=${this.handleTypesChanged}
+                .selected=${this.includeTypes.map(String)}
                 .options=${this.state.entityConfigs.map(config => ({
                   label: config.name,
                   value: config.id,
