@@ -122,7 +122,7 @@ export class ActionList extends ViewElement {
     );
   }
 
-  connectedCallback(): void {
+  async connectedCallback(): Promise<void> {
     super.connectedCallback();
 
     window.addEventListener('scroll', this.scrollHandler);
@@ -134,7 +134,11 @@ export class ActionList extends ViewElement {
       this.state.setContextListItems([]);
     }
 
-    this.load();
+    await this.load();
+
+    while (this.lazyLoaderIsVisible && !this.reachedEnd) {
+      await this.handleScroll();
+    }
   }
 
   disconnectedCallback(): void {
@@ -181,10 +185,10 @@ export class ActionList extends ViewElement {
     this.state.setListItems(updatedList);
   }
 
-  private handleScroll(): void {
+  private async handleScroll(): Promise<void> {
     if (this.paginationType === PaginationType.LAZY) {
       if (this.lazyLoaderIsVisible && !this.loading && !this.reachedEnd) {
-        this.load(true);
+        await this.load(true);
       }
     }
   }
