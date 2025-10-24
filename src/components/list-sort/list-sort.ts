@@ -1,6 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html, TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 
 import {
   ListSortCustomProperty,
@@ -31,6 +31,20 @@ export class ListSort extends MobxLitElement {
   ];
 
   private state = appState;
+
+  isCustomSort(property: ListSortProperty): property is ListSortCustomProperty {
+    return (property as ListSortCustomProperty).propertyId !== undefined;
+  }
+
+  @state()
+  get selectedProperty(): string {
+    const property = this.state.listSort.property;
+    if (this.isCustomSort(property)) {
+      return `custom.${property.propertyId}`;
+    }
+
+    return `native.${property}`;
+  }
 
   get availableSortProperties(): ListSortCustomProperty[] {
     return this.state.entityConfigs
@@ -94,9 +108,10 @@ export class ListSort extends MobxLitElement {
     return html`
       <div class="box">
         <div>${translate('sortBy')}</div>
+
         <div>
           <ss-select
-            selected=${this.state.listSort.property}
+            selected=${this.selectedProperty}
             @select-changed=${(e: SelectChangedEvent<string>): void => {
               this.handlePropertyChanged(e);
             }}
