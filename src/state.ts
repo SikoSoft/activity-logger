@@ -13,7 +13,6 @@ import {
   TimeContext,
   ListSort,
   ListSortDirection,
-  ListSortProperty,
   ListConfig,
   ListContext,
   ListContextType,

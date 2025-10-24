@@ -7,7 +7,6 @@ import {
   ListContextType,
   ListSortDirection,
   ListSortNativeProperty,
-  ListSortProperty,
 } from 'api-spec/models/List';
 import { Entity } from 'api-spec/models/Entity';
 import { theme } from '@/styles/theme';
