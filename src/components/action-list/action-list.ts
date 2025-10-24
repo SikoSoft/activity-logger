@@ -5,7 +5,9 @@ import { translate } from '@/lib/Localization';
 
 import {
   ListContextType,
+  ListSortCustomProperty,
   ListSortDirection,
+  ListSortNativeProperty,
   ListSortProperty,
 } from 'api-spec/models/List';
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
@@ -104,7 +106,7 @@ export class ActionList extends ViewElement {
   get sortIsDefault(): boolean {
     return (
       this.state.listSort.direction === ListSortDirection.DESC &&
-      this.state.listSort.property === ListSortProperty.OCCURRED_AT
+      this.state.listSort.property === ListSortNativeProperty.OCCURRED_AT
     );
   }
 
@@ -161,7 +163,21 @@ export class ActionList extends ViewElement {
     );
   }
 
+  sortPropertyIsCustom(
+    property: ListSortProperty,
+  ): property is ListSortCustomProperty {
+    return !Object.values(ListSortNativeProperty).includes(
+      property as ListSortNativeProperty,
+    );
+  }
+
   private handleItemUpdated(e: ActionItemUpdatedEvent): void {
+    if (this.sortPropertyIsCustom(this.state.listSort.property)) {
+      return;
+    }
+
+    const nativeProperty = this.state.listSort
+      .property as ListSortNativeProperty;
     const updatedList = this.state.listItems
       .map(item =>
         item.id === e.detail.id
@@ -175,12 +191,8 @@ export class ActionList extends ViewElement {
       )
       .sort((a, b) =>
         this.state.listSort.direction === ListSortDirection.DESC
-          ? b[this.state.listSort.property].localeCompare(
-              a[this.state.listSort.property],
-            )
-          : a[this.state.listSort.property].localeCompare(
-              b[this.state.listSort.property],
-            ),
+          ? b[nativeProperty].localeCompare(a[nativeProperty])
+          : a[nativeProperty].localeCompare(b[nativeProperty]),
       );
     this.state.setListItems(updatedList);
   }

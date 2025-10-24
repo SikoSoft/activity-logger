@@ -209,7 +209,7 @@ export class EntityListItem extends MobxLitElement {
       }
 
       return html`
-        <div class="property">
+        <div class="property" slot=${propertyConfig.name}>
           <span>${propertyConfig.name}</span>
           ${propertyConfig.prefix
             ? html`<span class="property-prefix"

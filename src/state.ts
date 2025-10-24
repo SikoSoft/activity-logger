@@ -1,7 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { defaultSettings, Setting, Settings } from 'api-spec/models/Setting';
-import { EntityConfig, Entity } from 'api-spec/models/Entity';
+import {
+  EntityConfig,
+  Entity,
+  EntityPropertyConfig,
+} from 'api-spec/models/Entity';
 import {
   ListFilter,
   ListFilterType,
@@ -14,6 +18,7 @@ import {
   ListContext,
   ListContextType,
   ListContextUnit,
+  ListSortNativeProperty,
 } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
 import { Version } from '@/models/Version';
@@ -32,7 +37,7 @@ export const defaultListFilter: ListFilter = {
 };
 
 export const defaultListSort: ListSort = {
-  property: ListSortProperty.OCCURRED_AT,
+  property: ListSortNativeProperty.OCCURRED_AT,
   direction: ListSortDirection.DESC,
 };
 
@@ -45,6 +50,9 @@ export const defaultListContext: ListContext = {
 export class AppState {
   @observable
   public entityConfigs: EntityConfig[] = [];
+
+  @observable
+  public propertyConfigs: EntityPropertyConfig[] = [];
 
   @observable
   public listItems: ActionItem[] = [];
@@ -346,6 +354,7 @@ export class AppState {
   @action
   setEntityConfigs(entityConfigs: EntityConfig[]): void {
     this.entityConfigs = entityConfigs;
+    this.propertyConfigs = entityConfigs.flatMap(config => config.properties);
   }
 
   @action

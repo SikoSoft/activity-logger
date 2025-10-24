@@ -59,6 +59,7 @@ export class EntityConfigList extends ViewElement {
   }
 
   handleEntityConfigUpdated(e: EntityConfigUpdatedEvent, index: number): void {
+    console.log('Entity config updated:', index, e.detail);
     const updatedConfigs = produce(toJS(this.state.entityConfigs), draft => {
       draft[index] = e.detail;
     });

@@ -6,6 +6,7 @@ import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import {
   ListContextType,
   ListSortDirection,
+  ListSortNativeProperty,
   ListSortProperty,
 } from 'api-spec/models/List';
 import { Entity } from 'api-spec/models/Entity';
@@ -102,7 +103,7 @@ export class EntityList extends ViewElement {
   get sortIsDefault(): boolean {
     return (
       this.state.listSort.direction === ListSortDirection.DESC &&
-      this.state.listSort.property === ListSortProperty.OCCURRED_AT
+      this.state.listSort.property === ListSortNativeProperty.OCCURRED_AT
     );
   }
 

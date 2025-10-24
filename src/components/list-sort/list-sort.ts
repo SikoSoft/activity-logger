@@ -2,7 +2,12 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { css, html, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { ListSortDirection, ListSortProperty } from 'api-spec/models/List';
+import {
+  ListSortCustomProperty,
+  ListSortDirection,
+  ListSortNativeProperty,
+  ListSortProperty,
+} from 'api-spec/models/List';
 import { appState } from '@/state';
 import { translate } from '@/lib/Localization';
 
@@ -12,6 +17,7 @@ import { ListSortUpdatedEvent } from './list-sort.events';
 import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
+import { EntityConfig } from 'api-spec/models/Entity';
 
 @customElement('list-sort')
 export class ListSort extends MobxLitElement {
@@ -26,8 +32,39 @@ export class ListSort extends MobxLitElement {
 
   private state = appState;
 
+  get availableSortProperties(): ListSortCustomProperty[] {
+    return this.state.entityConfigs
+      .filter(config => this.state.listFilter.includeTypes.includes(config.id))
+      .reduce((acc: ListSortCustomProperty[], config: EntityConfig) => {
+        const customProps = config.properties.map(prop => ({
+          propertyId: prop.id,
+          dataType: prop.dataType,
+        }));
+        return [...acc, ...customProps];
+      }, [] as ListSortCustomProperty[]);
+  }
+
   private handlePropertyChanged(e: SelectChangedEvent<string>): void {
-    const property = e.detail.value as ListSortProperty;
+    let property: ListSortProperty;
+
+    if (e.detail.value.startsWith('native.')) {
+      property = e.detail.value.replace(
+        'native.',
+        '',
+      ) as ListSortNativeProperty;
+    } else {
+      const propertyId = parseInt(e.detail.value.replace('custom.', ''), 10);
+      const propertyConfig = this.state.propertyConfigs.find(
+        prop => prop.id === propertyId,
+      );
+      if (!propertyConfig) {
+        console.warn(`Property config not found for id ${propertyId}`);
+        return;
+      }
+      const dataType = propertyConfig.dataType;
+      property = { propertyId, dataType } as ListSortCustomProperty;
+    }
+
     const sort = {
       property,
       direction: this.state.listSort.direction,
@@ -46,6 +83,13 @@ export class ListSort extends MobxLitElement {
     this.dispatchEvent(new ListSortUpdatedEvent({ sort }));
   }
 
+  getPropertyLabel(propertyId: number): string {
+    const propertyConfig = this.state.propertyConfigs.find(
+      prop => prop.id === propertyId,
+    );
+    return propertyConfig ? propertyConfig.name : `Property ${propertyId}`;
+  }
+
   render(): TemplateResult {
     return html`
       <div class="box">
@@ -56,10 +100,16 @@ export class ListSort extends MobxLitElement {
             @select-changed=${(e: SelectChangedEvent<string>): void => {
               this.handlePropertyChanged(e);
             }}
-            .options=${Object.values(ListSortProperty).map(type => ({
-              value: type,
-              label: translate(`sortProperty.${type}`),
-            }))}
+            .options=${[
+              ...Object.values(ListSortNativeProperty).map(type => ({
+                value: `native.${type}`,
+                label: translate(`sortProperty.${type}`),
+              })),
+              ...this.availableSortProperties.map(customProp => ({
+                value: `custom.${customProp.propertyId}`,
+                label: this.getPropertyLabel(customProp.propertyId),
+              })),
+            ]}
           >
           </ss-select>
 
