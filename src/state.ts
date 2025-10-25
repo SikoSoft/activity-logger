@@ -36,7 +36,7 @@ export const defaultListFilter: ListFilter = {
 };
 
 export const defaultListSort: ListSort = {
-  property: ListSortNativeProperty.OCCURRED_AT,
+  property: ListSortNativeProperty.CREATED_AT,
   direction: ListSortDirection.DESC,
 };
 
