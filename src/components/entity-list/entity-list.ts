@@ -102,7 +102,7 @@ export class EntityList extends ViewElement {
   get sortIsDefault(): boolean {
     return (
       this.state.listSort.direction === ListSortDirection.DESC &&
-      this.state.listSort.property === ListSortNativeProperty.OCCURRED_AT
+      this.state.listSort.property === ListSortNativeProperty.CREATED_AT
     );
   }
 
