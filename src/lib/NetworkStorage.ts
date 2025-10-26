@@ -190,7 +190,7 @@ export class NetworkStorage implements StorageSchema {
     const result = await api.post<
       { entityConfigIds: number[] },
       { entities: Entity.Entity[] }
-    >('export', { entityConfigIds });
+    >('data', { entityConfigIds });
 
     if (result && result.isOk) {
       return result.response.entities;
