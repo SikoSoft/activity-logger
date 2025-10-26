@@ -6,6 +6,7 @@ import { customElement, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-select';
+import '@ss/ui/components/confirmation-modal';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { addToast } from '@/lib/Util';
@@ -39,8 +40,15 @@ export class TacticalNuke extends MobxLitElement {
   @state()
   nukeInProgress: boolean = false;
 
+  @state()
+  confirmModalShown: boolean = false;
+
   get isPermitted(): boolean {
     return true;
+  }
+
+  showConfirmationModal(): void {
+    this.confirmModalShown = true;
   }
 
   async nukeIt(): Promise<void> {
@@ -49,6 +57,7 @@ export class TacticalNuke extends MobxLitElement {
     }
 
     this.nukeInProgress = true;
+    this.confirmModalShown = false;
 
     try {
       await storage.clearAllData();
@@ -66,9 +75,18 @@ export class TacticalNuke extends MobxLitElement {
       <div class="tactical-nuke">
         <ss-button
           ?disabled=${!this.isPermitted || this.nukeInProgress}
-          @click=${this.nukeIt}
+          @click=${this.showConfirmationModal}
           >${translate('nukeIt')}</ss-button
         >
+
+        <confirmation-modal
+          @confirmation-accepted=${this.nukeIt}
+          @confirmation-declined=${(): void => {
+            this.confirmModalShown = false;
+          }}
+          message=${translate('nukeConfirmation')}
+          ?open=${this.confirmModalShown}
+        ></confirmation-modal>
       </div>
     `;
   }

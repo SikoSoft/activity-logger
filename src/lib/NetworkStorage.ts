@@ -199,7 +199,13 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async clearAllData(): Promise<void> {
-    await api.delete('data');
+    const result = await api.delete('data');
+
+    if (result && result.isOk) {
+      return;
+    }
+
+    return Promise.reject();
   }
 }
 

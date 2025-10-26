@@ -10,6 +10,7 @@ import '@ss/ui/components/tab-container';
 import '@ss/ui/components/tab-pane';
 import '@/components/data-manager/export-tool/export-tool';
 import '@/components/data-manager/import-tool/import-tool';
+import '@/components/data-manager/tactical-nuke/tactical-nuke';
 
 import { theme } from '@/styles/theme';
 
