@@ -1,5 +1,5 @@
 import { translate } from '@/lib/Localization';
-import { css, html, TemplateResult } from 'lit';
+import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
@@ -61,6 +61,13 @@ export class DataManager extends MobxLitElement {
           <tab-pane title=${translate('importData')}>
             <import-tool></import-tool>
           </tab-pane>
+          ${this.state.debugMode
+            ? html`
+                <tab-pane title=${translate('tacticalNuke')}>
+                  <tactical-nuke></tactical-nuke>
+                </tab-pane>
+              `
+            : nothing}
         </tab-container>
       </ss-collapsable>
     `;

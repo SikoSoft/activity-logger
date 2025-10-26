@@ -54,4 +54,5 @@ export interface StorageSchema {
     propertyConfigOrder: { id: number; order: number }[],
   ): Promise<boolean>;
   export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
+  clearAllData?(): Promise<void>;
 }

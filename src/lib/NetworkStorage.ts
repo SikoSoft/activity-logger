@@ -197,6 +197,10 @@ export class NetworkStorage implements StorageSchema {
     }
     return [];
   }
+
+  async clearAllData(): Promise<void> {
+    await api.delete('data');
+  }
 }
 
 export const networkStorage = new NetworkStorage();

@@ -499,6 +499,11 @@ export class Storage implements StorageSchema {
   async export(_entityConfigIds: number[]): Promise<Entity.Entity[]> {
     return Promise.resolve([]);
   }
+
+  @delegateSource()
+  async clearAllData(): Promise<void> {
+    return Promise.resolve();
+  }
 }
 
 export const storage = new Storage();
