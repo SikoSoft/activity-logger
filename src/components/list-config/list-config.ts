@@ -216,14 +216,21 @@ export class ListConfig extends MobxLitElement {
   }
 
   sync(_reset = false): void {
+    if (!this.state.listConfig) {
+      return;
+    }
+
     this.id = this.state.listConfig.id;
     this.name = this.state.listConfig.name;
     this.navigationIndex = this.state.listConfigs.findIndex(
-      config => config.id === this.state.listConfig.id,
+      config => config.id === this.id,
     );
   }
 
   setListConfigId(listConfigId: string): void {
+    if (!this.state.listConfig) {
+      return;
+    }
     storage.saveActiveListConfigId(listConfigId);
     this.state.setListConfigId(listConfigId);
     this.id = this.state.listConfig.id;

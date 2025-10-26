@@ -46,6 +46,14 @@ export const defaultListContext: ListContext = {
   unit: ListContextUnit.DAY,
 };
 
+export const defaultListConfig: ListConfig = {
+  id: 'default',
+  name: 'Default',
+  filter: structuredClone(defaultListFilter),
+  sort: structuredClone(defaultListSort),
+  setting: structuredClone(defaultSettings),
+};
+
 export class AppState {
   @observable
   public entityConfigs: EntityConfig[] = [];
@@ -111,9 +119,10 @@ export class AppState {
   public lastListUrl: string = '';
 
   get listConfig(): ListConfig {
-    return this.listConfigs.filter(
-      config => this.listConfigId === config.id,
-    )[0];
+    return (
+      this.listConfigs.find(config => this.listConfigId === config.id) ||
+      structuredClone(defaultListConfig)
+    );
   }
 
   @observable
@@ -202,13 +211,14 @@ export class AppState {
 
   @action
   setListConfigId(id: string): void {
-    if (this.listConfigId) {
+    console.log('Setting list config id to', id);
+    if (this.listConfigId && this.listConfig) {
       this.removeTagSuggestions(
         this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],
       );
     }
     this.listConfigId = id;
-    if (this.listConfigId) {
+    if (this.listConfigId && this.listConfig) {
       this.setListFilter(this.listConfig.filter);
       this.setListSort(this.listConfig.sort);
       this.setListSetting(this.listConfig.setting);

@@ -61,6 +61,10 @@ export class BulkManager extends MobxLitElement {
   @state() tagSuggestions: string[] = [];
 
   get tagSuggestionsEnabled(): boolean {
+    if (!this.state.listConfig) {
+      return false;
+    }
+
     return (
       this.state.listConfig.setting[SettingName.TAG_SUGGESTIONS] !==
       TagSuggestions.DISABLED

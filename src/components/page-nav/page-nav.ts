@@ -1,5 +1,5 @@
 import { html, css, nothing, TemplateResult } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { property, customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { translate } from '@/lib/Localization';
@@ -11,6 +11,7 @@ import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 
 import { theme } from '@/styles/theme';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
+import { repeat } from 'lit/directives/repeat.js';
 
 export interface PageViewConfig {
   id: PageView;
@@ -74,7 +75,9 @@ export class PageNav extends MobxLitElement {
   [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =
     pageNavProps[PageNavProp.ACTIVE].default;
 
+  @state()
   get displayViews(): PageViewConfig[] {
+    console.log('Debug mode:', this.state.debugMode);
     return this.state.debugMode ? debugViews : views;
   }
 
@@ -118,7 +121,8 @@ export class PageNav extends MobxLitElement {
       <nav
         class="box"
         style="--num-views: ${this.displayViews.length}"
-        data-debug=${this.state.debugMode}
+        data-debug=${this.state.debugMode ? 'true' : 'false'}
+        data-view-count=${this.displayViews.length}
       >
         <tab-container
           paneId="page-nav"
@@ -127,7 +131,9 @@ export class PageNav extends MobxLitElement {
             v => v.id === this[PageNavProp.ACTIVE],
           )}
         >
-          ${this.displayViews.map(
+          ${repeat(
+            this.displayViews,
+            view => view.id,
             view => html`<tab-pane title=${view.label}></tab-pane>`,
           )}
         </tab-container>
