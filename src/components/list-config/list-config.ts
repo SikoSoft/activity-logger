@@ -171,12 +171,6 @@ export class ListConfig extends MobxLitElement {
     this.ready = true;
   }
 
-  handleConfigChanged(e: SelectChangedEvent<string>): void {
-    this.state.setEditListConfigMode(false);
-    this.setListConfigId(e.detail.value);
-    this.sync();
-  }
-
   handleBoxClick(): void {
     this.state.setSelectListConfigMode(true);
   }
@@ -232,7 +226,17 @@ export class ListConfig extends MobxLitElement {
   setListConfigId(listConfigId: string): void {
     storage.saveActiveListConfigId(listConfigId);
     this.state.setListConfigId(listConfigId);
+    this.id = this.state.listConfig.id;
+    this.name = this.state.listConfig.name;
     this.dispatchEvent(new ListConfigChangedEvent({ listConfigId }));
+  }
+
+  carouselSlideChanged(e: CarouselSlideChangedEvent): void {
+    this.state.setEditListConfigMode(false);
+    this.state.setSelectListConfigMode(false);
+    this.navigationIndex = e.detail.navigationIndex;
+    const listConfigId = this.state.listConfigs[e.detail.slideIndex].id;
+    this.setListConfigId(listConfigId);
   }
 
   render(): TemplateResult {
@@ -247,12 +251,7 @@ export class ListConfig extends MobxLitElement {
         height="180"
         width="100%"
         navigationIndex=${this.navigationIndex}
-        @carousel-slide-changed=${(e: CarouselSlideChangedEvent): void => {
-          this.state.setEditListConfigMode(false);
-          this.state.setSelectListConfigMode(false);
-          this.navigationIndex = e.detail.navigationIndex;
-          this.setListConfigId(this.state.listConfigs[e.detail.slideIndex].id);
-        }}
+        @carousel-slide-changed=${this.carouselSlideChanged}
       >
         ${this.ready
           ? repeat(
