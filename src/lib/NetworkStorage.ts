@@ -5,6 +5,7 @@ import { Setting } from 'api-spec/models/Setting';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
+import { ExportDataContents } from 'api-spec/models/Data';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -206,6 +207,15 @@ export class NetworkStorage implements StorageSchema {
     }
 
     return Promise.reject();
+  }
+
+  async import(data: ExportDataContents): Promise<boolean> {
+    const result = await api.post<ExportDataContents, null>('data', data);
+
+    if (result && result.isOk) {
+      return true;
+    }
+    return false;
   }
 }
 

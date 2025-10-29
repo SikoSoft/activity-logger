@@ -152,5 +152,7 @@
   "nukeIt": "Nuke It",
   "nukeConfirmation": "Are you sure you want to permanently delete all your data? This action cannot be undone.",
   "nukeInProgress": "Nuke in progress...",
-  "nukeCompleted": "All data has been permanently deleted."
+  "nukeCompleted": "All data has been permanently deleted.",
+  "importSuccess": "Data imported successfully.",
+  "importFailure": "Data import failed. Please try again."
 }

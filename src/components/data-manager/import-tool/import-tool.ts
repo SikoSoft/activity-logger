@@ -4,7 +4,11 @@ import { customElement, query, state } from 'lit/decorators.js';
 import { translate } from '@/lib/Localization';
 import JSZip from 'jszip';
 import { repeat } from 'lit/directives/repeat.js';
-import { ImportResult, ImportResultType } from './import-tool.models';
+import { ImportResultType } from './import-tool.models';
+import { ExportDataContents } from 'api-spec/models/Data';
+import { storage } from '@/lib/Storage';
+import { addToast } from '@/lib/Util';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('import-tool')
 export class ImportTool extends LitElement {
@@ -27,6 +31,9 @@ export class ImportTool extends LitElement {
   @state()
   importResults: ImportResultType[] = [];
 
+  @state()
+  private importData: ExportDataContents | undefined;
+
   protected firstUpdated(): void {
     this.fileUpload.addEventListener(
       'change',
@@ -46,9 +53,19 @@ export class ImportTool extends LitElement {
           return;
         }
 
-        const filePromise = zipEntry.async('string').then((_: string): void => {
-          //const filename = zipEntry.name.toLowerCase();
-        });
+        const filePromise = zipEntry
+          .async('string')
+          .then((content: string): void => {
+            //const filename = zipEntry.name.toLowerCase();
+
+            try {
+              this.importData = this.parseContent(content);
+            } catch (error) {
+              console.error('Error parsing content:', error);
+            }
+
+            console.log(this.importData);
+          });
 
         filePromises.push(filePromise);
       });
@@ -57,10 +74,38 @@ export class ImportTool extends LitElement {
 
       this.requestUpdate();
 
+      //this.importData = zipContents;
+
       this.importResults = [ImportResultType.ZIP_IMPORTED];
     } catch (error) {
       console.error('Error processing ZIP file:', error);
     }
+  }
+
+  parseContent(content: string): ExportDataContents {
+    try {
+      const data = JSON.parse(content) as ExportDataContents;
+      return data;
+    } catch (error) {
+      console.error('Error parsing content:', error);
+      throw error;
+    }
+  }
+
+  async import(): Promise<void> {
+    if (!this.importData) {
+      console.error('No import data available');
+      return;
+    }
+
+    const result = await storage.import(this.importData);
+
+    if (result) {
+      addToast(translate('importSuccess'), NotificationType.SUCCESS);
+      return;
+    }
+
+    addToast(translate('importFailure'), NotificationType.ERROR);
   }
 
   handleFileSelected(event: Event): void {
@@ -118,7 +163,7 @@ export class ImportTool extends LitElement {
       </div>
 
       <div class="buttons">
-        <ss-button>${translate('importData')}</ss-button>
+        <ss-button @click=${this.import}>${translate('importData')}</ss-button>
       </div>
     </div>`;
   }

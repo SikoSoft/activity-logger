@@ -13,6 +13,7 @@ import { Version } from '@/models/Version';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
+import { ExportDataContents } from 'api-spec/models/Data';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -503,6 +504,11 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async clearAllData(): Promise<void> {
     return Promise.resolve();
+  }
+
+  @delegateSource()
+  async import(_data: ExportDataContents): Promise<boolean> {
+    return Promise.resolve(true);
   }
 }
 

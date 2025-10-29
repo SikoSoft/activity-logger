@@ -211,7 +211,7 @@ export class AppState {
 
   @action
   setListConfigId(id: string): void {
-    console.log('Setting list config id to', id);
+    //console.log('Setting list config id to', id);
     if (this.listConfigId && this.listConfig) {
       this.removeTagSuggestions(
         this.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF],

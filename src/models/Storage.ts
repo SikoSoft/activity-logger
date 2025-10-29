@@ -2,6 +2,7 @@ import { Setting } from 'api-spec/models/Setting';
 import { ListConfig } from 'api-spec/models/List';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
+import { ExportDataContents } from 'api-spec/models/Data';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -54,5 +55,6 @@ export interface StorageSchema {
     propertyConfigOrder: { id: number; order: number }[],
   ): Promise<boolean>;
   export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
+  import?(data: ExportDataContents): Promise<boolean>;
   clearAllData?(): Promise<void>;
 }

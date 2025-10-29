@@ -10,16 +10,16 @@ import '@ss/ui/components/ss-select';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import JSZip from 'jszip';
 import {
-  baseFileName,
   ExportConfigData,
   ExportDataContents,
   ExportDataSet,
   ExportDataType,
-} from '../data-manager.models';
+} from 'api-spec/models/Data';
 import { addToast, sha256 } from '@/lib/Util';
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { repeat } from 'lit/directives/repeat.js';
 import { storage } from '@/lib/Storage';
+import { baseFileName } from '../data-manager.models';
 
 @customElement('export-tool')
 export class ExportTool extends MobxLitElement {
