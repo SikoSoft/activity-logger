@@ -210,10 +210,10 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async import(data: ExportDataContents): Promise<boolean> {
-    const result = await api.post<ExportDataContents, null>(
-      'data/import',
-      data,
-    );
+    const result = await api.post<
+      ExportDataContents & { timeZone: number },
+      null
+    >('data/import', { ...data, timeZone: new Date().getTimezoneOffset() });
 
     if (result && result.isOk) {
       return true;
