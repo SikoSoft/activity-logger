@@ -20,6 +20,13 @@ export class TacticalNuke extends MobxLitElement {
   private state = appState;
 
   static styles = css`
+    ss-button::part(button) {
+      font-size: 1.5rem;
+      padding: 1rem 2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
     .export-tool {
       display: flex;
       flex-direction: column;
@@ -58,6 +65,13 @@ export class TacticalNuke extends MobxLitElement {
       transition: opacity 0.3s ease-in-out;
     }
 
+    .nuke-in-progress {
+      .nuke-countdown {
+        display: flex;
+        animation: pulse 1000ms linear forwards infinite;
+      }
+    }
+
     .nuke-launched {
       display: none;
     }
@@ -74,9 +88,12 @@ export class TacticalNuke extends MobxLitElement {
       display: block;
     }
 
-    .nuke-in-progress {
-      .nuke-countdown {
-        display: flex;
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(3);
       }
     }
   `;
@@ -127,6 +144,8 @@ export class TacticalNuke extends MobxLitElement {
       return;
     }
 
+    addToast(translate('nukeInitiated'), NotificationType.ERROR);
+
     new Audio('tactical-nuke.mp3').play();
     await new Promise(resolve => setTimeout(resolve, 2500));
 
@@ -167,6 +186,7 @@ export class TacticalNuke extends MobxLitElement {
         <div class="nuke-launched"></div>
 
         <ss-button
+          negative
           ?disabled=${!this.isPermitted || this.nukeInProgress}
           @click=${this.showConfirmationModal}
           >${translate('nukeIt')}</ss-button
@@ -175,6 +195,7 @@ export class TacticalNuke extends MobxLitElement {
         <confirmation-modal
           @confirmation-accepted=${this.nukeIt}
           @confirmation-declined=${(): void => {
+            addToast(translate('wiseMove'), NotificationType.INFO);
             this.confirmModalShown = false;
           }}
           message=${translate('nukeConfirmation')}
