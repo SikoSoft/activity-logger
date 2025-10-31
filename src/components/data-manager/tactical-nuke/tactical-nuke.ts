@@ -12,7 +12,6 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { addToast } from '@/lib/Util';
 import { storage } from '@/lib/Storage';
 import { classMap } from 'lit/directives/class-map.js';
-import { set } from 'mobx';
 
 const countdownDuration = 3000;
 
@@ -59,6 +58,22 @@ export class TacticalNuke extends MobxLitElement {
       transition: opacity 0.3s ease-in-out;
     }
 
+    .nuke-launched {
+      display: none;
+    }
+
+    .nuke-complete .nuke-launched {
+      background-image: url('img/nuclear-explosion.gif');
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+    }
+
     .nuke-in-progress {
       .nuke-countdown {
         display: flex;
@@ -68,6 +83,9 @@ export class TacticalNuke extends MobxLitElement {
 
   @state()
   nukeInProgress: boolean = false;
+
+  @state()
+  nukeComplete: boolean = false;
 
   @state()
   confirmModalShown: boolean = false;
@@ -96,6 +114,7 @@ export class TacticalNuke extends MobxLitElement {
     return {
       'tactical-nuke': true,
       'nuke-in-progress': this.nukeInProgress,
+      'nuke-complete': this.nukeComplete,
     };
   }
 
@@ -108,18 +127,21 @@ export class TacticalNuke extends MobxLitElement {
       return;
     }
 
+    new Audio('tactical-nuke.mp3').play();
+    await new Promise(resolve => setTimeout(resolve, 2500));
+
     this.initiation = new Date();
     this.nukeInProgress = true;
     this.confirmModalShown = false;
 
-    console.log('starting countdown');
     const intervalId = setInterval(() => {
-      console.log('updating time remaining');
       this.timeRemaining = this.getTimeRemaining();
     }, 100);
     await new Promise(resolve => setTimeout(resolve, countdownDuration));
     clearInterval(intervalId);
-    console.log('countdown complete, importing data');
+    this.timeRemaining = 0;
+
+    this.nukeComplete = true;
 
     try {
       await storage.clearAllData();
@@ -130,15 +152,19 @@ export class TacticalNuke extends MobxLitElement {
     } finally {
       this.nukeInProgress = false;
     }
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   }
 
   render(): TemplateResult {
-    console.log('Rendering tactical-nuke component');
     return html`
       <div class=${classMap(this.classes)}>
         <div class="nuke-countdown">
           <div class="countdown-timer">${this.timeRemaining}</div>
         </div>
+        <div class="nuke-launched"></div>
 
         <ss-button
           ?disabled=${!this.isPermitted || this.nukeInProgress}
