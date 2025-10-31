@@ -210,7 +210,10 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async import(data: ExportDataContents): Promise<boolean> {
-    const result = await api.post<ExportDataContents, null>('data', data);
+    const result = await api.post<ExportDataContents, null>(
+      'data/import',
+      data,
+    );
 
     if (result && result.isOk) {
       return true;
