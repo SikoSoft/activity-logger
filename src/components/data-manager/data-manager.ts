@@ -41,8 +41,16 @@ export class DataManager extends MobxLitElement {
   @state()
   open: boolean = this.state.collapsablePanelState['data-manager'] ?? true;
 
+  get nukeEnabled(): boolean {
+    return import.meta.env.APP_ENABLE_NUKE
+      ? parseInt(import.meta.env.APP_ENABLE_NUKE) === 1
+      : false;
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
+
+    console.log(import.meta.env.APP_ENABLE_NUKE);
   }
 
   render(): TemplateResult {
@@ -62,7 +70,7 @@ export class DataManager extends MobxLitElement {
           <tab-pane title=${translate('importData')}>
             <import-tool></import-tool>
           </tab-pane>
-          ${this.state.debugMode
+          ${this.state.debugMode && this.nukeEnabled
             ? html`
                 <tab-pane title=${translate('tacticalNuke')}>
                   <tactical-nuke></tactical-nuke>
