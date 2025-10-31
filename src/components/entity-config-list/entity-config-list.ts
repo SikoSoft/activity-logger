@@ -27,6 +27,12 @@ export class EntityConfigList extends ViewElement {
   static styles = [
     theme,
     css`
+      .no-entity-configs {
+        font-style: italic;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
       .buttons {
         padding: 1rem;
       }
@@ -59,7 +65,6 @@ export class EntityConfigList extends ViewElement {
   }
 
   handleEntityConfigUpdated(e: EntityConfigUpdatedEvent, index: number): void {
-    console.log('Entity config updated:', index, e.detail);
     const updatedConfigs = produce(toJS(this.state.entityConfigs), draft => {
       draft[index] = e.detail;
     });
@@ -84,23 +89,30 @@ export class EntityConfigList extends ViewElement {
   render(): TemplateResult {
     return html`
       <div class="admin-dashboard box">
-        ${repeat(
-          this.state.entityConfigs,
-          config => config.id,
-          (config, index) => html`
-            <entity-config-form
-              entityConfigId=${config.id}
-              name=${config.name}
-              description=${config.description}
-              .properties=${toJS(config.properties)}
-              ?allowPropertyOrdering=${config.allowPropertyOrdering}
-              ?open=${this.isPanelOpen(config.id)}
-              @entity-config-deleted=${this.handleEntityConfigDeleted}
-              @entity-config-updated=${(e: EntityConfigUpdatedEvent): void =>
-                this.handleEntityConfigUpdated(e, index)}
-            ></entity-config-form>
-          `,
-        )}
+        ${this.state.entityConfigs.length > 0
+          ? repeat(
+              this.state.entityConfigs,
+              config => config.id,
+              (config, index) => html`
+                <entity-config-form
+                  entityConfigId=${config.id}
+                  name=${config.name}
+                  description=${config.description}
+                  .properties=${toJS(config.properties)}
+                  ?allowPropertyOrdering=${config.allowPropertyOrdering}
+                  ?open=${this.isPanelOpen(config.id)}
+                  @entity-config-deleted=${this.handleEntityConfigDeleted}
+                  @entity-config-updated=${(
+                    e: EntityConfigUpdatedEvent,
+                  ): void => this.handleEntityConfigUpdated(e, index)}
+                ></entity-config-form>
+              `,
+            )
+          : html`
+              <div class="no-entity-configs">
+                ${translate('noEntityConfigs')}
+              </div>
+            `}
 
         <div class="buttons">
           <ss-button @click=${this.addEntityConfig}>

@@ -153,6 +153,9 @@
   "nukeConfirmation": "Are you sure you want to permanently delete all your data? This action cannot be undone.",
   "nukeInProgress": "Nuke in progress...",
   "nukeCompleted": "All data has been permanently deleted.",
+  "nukeInitiated": "Tactical nuke initiated! Brace yourself...",
   "importSuccess": "Data imported successfully.",
-  "importFailure": "Data import failed. Please try again."
+  "importFailure": "Data import failed. Please try again.",
+  "wiseMove": "A wise move...",
+  "noEntityConfigs": "No entity configurations found. :( Please add an entity configuration to get started."
 }
