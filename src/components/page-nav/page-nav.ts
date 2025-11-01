@@ -77,7 +77,6 @@ export class PageNav extends MobxLitElement {
 
   @state()
   get displayViews(): PageViewConfig[] {
-    console.log('Debug mode:', this.state.debugMode);
     return this.state.debugMode ? debugViews : views;
   }
 

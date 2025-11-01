@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 
 import { translate } from '@/lib/Localization';
@@ -9,9 +9,13 @@ import { ExportDataContents } from 'api-spec/models/Data';
 import { storage } from '@/lib/Storage';
 import { addToast } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { appState } from '@/state';
 
 @customElement('import-tool')
-export class ImportTool extends LitElement {
+export class ImportTool extends MobxLitElement {
+  private state = appState;
+
   static styles = css`
     textarea {
       width: 100%;
@@ -100,12 +104,15 @@ export class ImportTool extends LitElement {
 
     const result = await storage.import(this.importData);
 
-    if (result) {
-      addToast(translate('importSuccess'), NotificationType.SUCCESS);
+    if (!result) {
+      addToast(translate('importFailure'), NotificationType.ERROR);
       return;
     }
 
-    addToast(translate('importFailure'), NotificationType.ERROR);
+    addToast(translate('importSuccess'), NotificationType.SUCCESS);
+
+    const entityConfigs = await storage.getEntityConfigs();
+    this.state.setEntityConfigs(entityConfigs);
   }
 
   handleFileSelected(event: Event): void {

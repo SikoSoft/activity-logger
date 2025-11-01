@@ -47,12 +47,6 @@ export class DataManager extends MobxLitElement {
       : false;
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    console.log(import.meta.env.APP_ENABLE_NUKE);
-  }
-
   render(): TemplateResult {
     return html`
       <ss-collapsable
