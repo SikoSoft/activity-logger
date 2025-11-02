@@ -169,6 +169,15 @@ export class EntityForm extends ViewElement {
     );
   }
 
+  @state()
+  get availableEntityConfigs(): EntityConfig[] {
+    return this.state.entityConfigs.filter(
+      config =>
+        this.state.listConfig.filter.includeTypes.length === 0 ||
+        this.state.listConfig.filter.includeTypes.includes(config.id),
+    );
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -605,14 +614,14 @@ export class EntityForm extends ViewElement {
   render(): TemplateResult {
     return html`
       <form class=${classMap(this.classes)}>
-        ${this.state.entityConfigs.length > 1
+        ${this.availableEntityConfigs.length > 1
           ? html` <div class="type">
               <ss-select
                 selected=${this.type}
                 @select-changed=${this.handleTypeChanged}
                 .options=${[
                   { label: 'Select an entity', value: '0' },
-                  ...this.state.entityConfigs.map(entity => ({
+                  ...this.availableEntityConfigs.map(entity => ({
                     label: entity.name,
                     value: entity.id,
                   })),
