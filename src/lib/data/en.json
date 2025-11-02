@@ -157,5 +157,6 @@
   "importSuccess": "Data imported successfully.",
   "importFailure": "Data import failed. Please try again.",
   "wiseMove": "A wise move...",
-  "noEntityConfigs": "No entity configurations found. :( Please add an entity configuration to get started."
+  "noEntityConfigs": "No entity configurations found. :( Please add an entity configuration to get started.",
+  "allListConfigs": "All list configurations"
 }

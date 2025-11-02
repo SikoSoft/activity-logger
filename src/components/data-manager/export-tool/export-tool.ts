@@ -10,7 +10,7 @@ import '@ss/ui/components/ss-select';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import JSZip from 'jszip';
 import {
-  ExportConfigData,
+  ExportEntityConfigData,
   ExportDataContents,
   ExportDataSet,
   ExportDataType,
@@ -62,7 +62,13 @@ export class ExportTool extends MobxLitElement {
   selectedDataSets: ExportDataSet[] = [];
 
   @state()
+  selectedListConfigs: string[] = [];
+
+  @state()
   dataSetsHash: string = '';
+
+  @state()
+  listConfigsHash: string = '';
 
   @state()
   get everythingIsSelected(): boolean {
@@ -72,11 +78,16 @@ export class ExportTool extends MobxLitElement {
     );
   }
 
-  mapConfigData(): ExportConfigData {
-    const configData: ExportConfigData = [];
+  @state()
+  get allListConfigsAreSelected(): boolean {
+    return this.selectedListConfigs.length === this.state.listConfigs.length;
+  }
+
+  mapConfigData(): ExportEntityConfigData {
+    const configData: ExportEntityConfigData = [];
     for (const config of this.state.entityConfigs) {
       const { userId: _, properties, ...rest } = config;
-      if (this.dataSetIsSelected(config.id, ExportDataType.CONFIGS)) {
+      if (this.dataSetIsSelected(config.id, ExportDataType.ENTITY_CONFIGS)) {
         configData.push({
           ...rest,
           properties: properties.map(prop => {
@@ -110,14 +121,17 @@ export class ExportTool extends MobxLitElement {
           version: '0.0.0',
           date: new Date().toISOString(),
         },
-        configs: [],
+        entityConfigs: [],
         entities: [],
+        listConfigs: [],
       };
 
       if (
-        this.selectedDataSets.some(ds => ds.dataType === ExportDataType.CONFIGS)
+        this.selectedDataSets.some(
+          ds => ds.dataType === ExportDataType.ENTITY_CONFIGS,
+        )
       ) {
-        dataFile.configs = this.mapConfigData();
+        dataFile.entityConfigs = this.mapConfigData();
       }
 
       if (
@@ -127,6 +141,12 @@ export class ExportTool extends MobxLitElement {
       ) {
         dataFile.entities = await storage.export(
           this.getEntityConfigIdsForData(),
+        );
+      }
+
+      if (this.selectedListConfigs.length > 0) {
+        dataFile.listConfigs = this.state.listConfigs.filter(config =>
+          this.selectedListConfigs.includes(config.id),
         );
       }
 
@@ -148,7 +168,10 @@ export class ExportTool extends MobxLitElement {
   }
 
   resetFileName(): void {
-    if (!this.selectedDataSets.length) {
+    this.fileName = `${baseFileName}.zip`;
+    return;
+
+    if (!this.selectedDataSets.length && !this.selectedListConfigs.length) {
       this.fileName = `${baseFileName}.zip`;
       return;
     }
@@ -162,8 +185,8 @@ export class ExportTool extends MobxLitElement {
     for (const config of configs) {
       let entityStr = `${config.name.replace(/\s+/g, '-')}(`;
       const dataTypes: string[] = [];
-      if (this.dataSetIsSelected(config.id, ExportDataType.CONFIGS)) {
-        dataTypes.push(ExportDataType.CONFIGS);
+      if (this.dataSetIsSelected(config.id, ExportDataType.ENTITY_CONFIGS)) {
+        dataTypes.push(ExportDataType.ENTITY_CONFIGS);
       }
       if (this.dataSetIsSelected(config.id, ExportDataType.ENTITIES)) {
         dataTypes.push(ExportDataType.ENTITIES);
@@ -172,7 +195,12 @@ export class ExportTool extends MobxLitElement {
       entityStrs.push(entityStr);
     }
 
-    this.fileName = `${baseFileName}[${entityStrs.join(',')}].zip`;
+    let listConfigsStr = '';
+    if (this.selectedListConfigs.length > 0) {
+      listConfigsStr = `ListConfigs(${this.selectedListConfigs.join(',')})`;
+    }
+
+    this.fileName = `${baseFileName}[${entityStrs.join(',')}][${listConfigsStr}].zip`;
   }
 
   updateFileName(e: InputChangedEvent): void {
@@ -213,6 +241,11 @@ export class ExportTool extends MobxLitElement {
     this.resetFileName();
   }
 
+  async syncListConfigs(): Promise<void> {
+    this.listConfigsHash = await sha256(this.selectedListConfigs.join(','));
+    this.resetFileName();
+  }
+
   dataSetIsSelected(entityConfigId: number, dataType: ExportDataType): boolean {
     return this.selectedDataSets.some(
       ds => ds.entityConfigId === entityConfigId && ds.dataType === dataType,
@@ -221,13 +254,13 @@ export class ExportTool extends MobxLitElement {
 
   entityConfigIdIsSelected(entityConfigId: number): boolean {
     return (
-      this.dataSetIsSelected(entityConfigId, ExportDataType.CONFIGS) &&
+      this.dataSetIsSelected(entityConfigId, ExportDataType.ENTITY_CONFIGS) &&
       this.dataSetIsSelected(entityConfigId, ExportDataType.ENTITIES)
     );
   }
 
   selectEntityConfig(entityConfigId: number): void {
-    this.handleDataSetChanged(entityConfigId, ExportDataType.CONFIGS);
+    this.handleDataSetChanged(entityConfigId, ExportDataType.ENTITY_CONFIGS);
     this.handleDataSetChanged(entityConfigId, ExportDataType.ENTITIES);
   }
 
@@ -246,6 +279,32 @@ export class ExportTool extends MobxLitElement {
     }
     this.selectedDataSets = allDataSets;
     this.syncDataSets();
+  }
+
+  selectAllListConfigs(): void {
+    this.selectedListConfigs = this.allListConfigsAreSelected
+      ? []
+      : this.state.listConfigs.map(config => config.id);
+
+    this.syncListConfigs();
+  }
+
+  listConfigIsSelected(listConfigId: string): boolean {
+    return this.selectedListConfigs.includes(listConfigId);
+  }
+
+  async handleListConfigChanged(listConfigId: string): Promise<void> {
+    const isSelected = this.selectedListConfigs.includes(listConfigId);
+
+    if (isSelected) {
+      this.selectedListConfigs = this.selectedListConfigs.filter(
+        id => id !== String(listConfigId),
+      );
+      return;
+    }
+
+    this.selectedListConfigs = [...this.selectedListConfigs, listConfigId];
+    this.syncListConfigs();
   }
 
   render(): TemplateResult {
@@ -289,13 +348,42 @@ export class ExportTool extends MobxLitElement {
                           this.handleDataSetChanged(config.id, dataType)}
                       />
                       <label for="${config.id}-${dataType}">
-                        ${dataType === ExportDataType.CONFIGS
+                        ${dataType === ExportDataType.ENTITY_CONFIGS
                           ? translate('includeConfigs')
                           : translate('includeEntities')}
                       </label>
                     </div>
                   `,
                 )}
+              </div>
+            `,
+          )}
+        </div>
+
+        <div class="list-configs">
+          <div class="include-type-header">
+            <input
+              type="checkbox"
+              id="all-list-configs"
+              ?checked=${this.allListConfigsAreSelected}
+              @change=${(): void => this.selectAllListConfigs()}
+            />
+            <h3>${translate('allListConfigs')}</h3>
+          </div>
+
+          ${repeat(
+            this.state.listConfigs,
+            config => `${this.dataSetsHash}-${config.id}`,
+            config => html`
+              <div class="include-type">
+                <input
+                  type="checkbox"
+                  id="listConfig-${config.id}"
+                  ?checked=${this.listConfigIsSelected(config.id)}
+                  @change=${(): Promise<void> =>
+                    this.handleListConfigChanged(config.id)}
+                />
+                <label for="listConfig-${config.id}"> ${config.name} </label>
               </div>
             `,
           )}
@@ -310,7 +398,9 @@ export class ExportTool extends MobxLitElement {
         </div>
 
         <ss-button
-          ?disabled=${!this.selectedDataSets.length || this.exporting}
+          ?disabled=${(!this.selectedDataSets.length &&
+            !this.selectedListConfigs.length) ||
+          this.exporting}
           @click=${this.exportData}
           >${translate('exportData')}</ss-button
         >
