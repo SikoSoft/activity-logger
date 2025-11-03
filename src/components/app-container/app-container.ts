@@ -152,6 +152,7 @@ export class AppContainer extends MobxLitElement {
     if (this.state.version === Version.V2) {
       if (this.view === PageView.INPUT) {
         return html`<entity-form
+          type=${this.state.listConfig.filter.includeTypes[0] || 0}
           .tags=${this.state.listConfig.filter.tagging[
             ListFilterType.CONTAINS_ALL_OF
           ]}

@@ -56,6 +56,7 @@ import { translate } from '@/lib/Localization';
 
 import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
+import { IReactionDisposer, reaction } from 'mobx';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -64,6 +65,8 @@ export class EntityForm extends ViewElement {
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
   private abortController: AbortController | null = null;
   private sortedIds: string[] = [];
+  private disposer: IReactionDisposer | null = null;
+  private prevEntityConfigId: number | undefined = undefined;
 
   static styles = [
     theme,
@@ -90,7 +93,7 @@ export class EntityForm extends ViewElement {
     `,
   ];
 
-  @property({ type: Number })
+  @property({ type: Number, reflect: true })
   [EntityFormProp.ENTITY_ID]: EntityFormProps[EntityFormProp.ENTITY_ID] =
     entityFormProps[EntityFormProp.ENTITY_ID].default;
 
@@ -147,7 +150,7 @@ export class EntityForm extends ViewElement {
 
   @state()
   get entityConfig(): EntityConfig | undefined {
-    return this.state.entityConfigs.find(entity => entity.id === this.type);
+    return this.availableEntityConfigs.find(entity => entity.id === this.type);
   }
 
   @state()
@@ -182,6 +185,18 @@ export class EntityForm extends ViewElement {
     super.connectedCallback();
 
     this.initialTags = JSON.stringify(this.tags);
+
+    this.disposer = reaction(
+      () => appState.listConfig,
+      () => {
+        this.propertiesSetup = false;
+        this.propertyInstances = [];
+        this.setupProperties();
+      },
+      {
+        fireImmediately: false,
+      },
+    );
   }
 
   disconnectedCallback(): void {
@@ -201,8 +216,8 @@ export class EntityForm extends ViewElement {
   protected firstUpdated(changedProperties: PropertyValues): void {
     super.firstUpdated(changedProperties);
 
-    if (this.state.entityConfigs.length === 1) {
-      this.type = this.state.entityConfigs[0].id;
+    if (this.availableEntityConfigs.length === 1) {
+      this.type = this.availableEntityConfigs[0].id;
       this.setupProperties();
     }
   }
@@ -230,11 +245,6 @@ export class EntityForm extends ViewElement {
       const existingProperties: PropertyInstance[] = this.properties.map(
         property => ({
           propertyConfigId: property.propertyConfigId,
-
-          /*this.entityConfig!.properties.find(
-            config => config.id === property.propertyConfigId,
-          )!,
-          */
           instanceId: property.id,
           uiId: uuidv4(),
           value: property.value,
@@ -427,6 +437,7 @@ export class EntityForm extends ViewElement {
   }
 
   private reset(): void {
+    console.log('resetting entity form');
     this.propertiesSetup = false;
     this.propertyInstances = [];
     this.initialHash = '';
