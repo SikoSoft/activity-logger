@@ -67,8 +67,6 @@ export class ImportTool extends MobxLitElement {
             } catch (error) {
               console.error('Error parsing content:', error);
             }
-
-            console.log(this.importData);
           });
 
         filePromises.push(filePromise);
@@ -132,7 +130,7 @@ export class ImportTool extends MobxLitElement {
         }
 
         if (this.fileName.endsWith('.json')) {
-          this.handleJsonContents(content);
+          this.importData = this.parseContent(content);
           this.importResults = [ImportResultType.JSON_IMPORTED];
         }
 
@@ -145,15 +143,6 @@ export class ImportTool extends MobxLitElement {
       reader.readAsText(file);
     } else {
       this.fileName = '';
-    }
-  }
-
-  handleJsonContents(content: string): void {
-    try {
-      const data = JSON.parse(content);
-      console.log('Parsed JSON data:', data);
-    } catch (error) {
-      console.error('Error parsing JSON file:', error);
     }
   }
 

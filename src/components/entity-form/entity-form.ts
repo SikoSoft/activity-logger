@@ -437,7 +437,6 @@ export class EntityForm extends ViewElement {
   }
 
   private reset(): void {
-    console.log('resetting entity form');
     this.propertiesSetup = false;
     this.propertyInstances = [];
     this.initialHash = '';
