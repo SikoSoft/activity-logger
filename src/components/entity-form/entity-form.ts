@@ -572,7 +572,7 @@ export class EntityForm extends ViewElement {
     this.instancesHash = await this.getInstancesHash();
   }
 
-  private handlePropertyCloned(e: PropertyClonedEvent): void {
+  private async handlePropertyCloned(e: PropertyClonedEvent): Promise<void> {
     const { uiId } = e.detail;
     const propertyInstanceIndex = this.propertyInstances.findIndex(
       property => property.uiId === uiId,
@@ -585,9 +585,11 @@ export class EntityForm extends ViewElement {
     ];
 
     this.propertyInstances = propertyInstances;
+
+    this.instancesHash = await this.getInstancesHash();
   }
 
-  private handlePropertyDeleted(e: PropertyDeletedEvent): void {
+  private async handlePropertyDeleted(e: PropertyDeletedEvent): Promise<void> {
     const { uiId } = e.detail;
 
     const instanceToRemove = this.propertyInstances.find(
@@ -606,6 +608,8 @@ export class EntityForm extends ViewElement {
       instanceToRemove.propertyConfigId,
       this.state.entityPropertyInstances[instanceToRemove.propertyConfigId] - 1,
     );
+
+    this.instancesHash = await this.getInstancesHash();
   }
 
   handlePropertySubmitted(e: PropertySubmittedEvent): void {
