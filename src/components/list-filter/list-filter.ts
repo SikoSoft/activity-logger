@@ -330,7 +330,7 @@ export class ListFilter extends MobxLitElement {
             @change=${this.handleIncludeAllChanged}
           />
 
-          <label for="include-all">${translate('includeAllActions')}</label>
+          <label for="include-all">${translate('includeAllTypes')}</label>
         </div>
 
         <div class="filters">

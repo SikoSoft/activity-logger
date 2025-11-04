@@ -25,6 +25,7 @@ import { PointerUpEvent } from '@/events/pointer-up';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 
 import '@/components/entity-form/entity-form';
+import { translate } from '@/lib/Localization';
 
 const holdThreshold = 500;
 
@@ -33,7 +34,7 @@ export class EntityListItem extends MobxLitElement {
   private state = appState;
 
   static styles = css`
-    .action-list-item {
+    .entity-list-item {
       padding: 0.5rem;
       text-align: center;
       transition: all 0.2s;
@@ -46,6 +47,17 @@ export class EntityListItem extends MobxLitElement {
     .time {
       color: #888;
       font-size: 0.9rem;
+    }
+
+    .show-full,
+    .show-edit {
+      display: none;
+    }
+
+    .preview {
+      .show-full {
+        //display: block;
+      }
     }
 
     .property.image {
@@ -86,13 +98,19 @@ export class EntityListItem extends MobxLitElement {
   [EntityListItemProp.DEBUG]: EntityListItemProps[EntityListItemProp.DEBUG] =
     entityListItemProps[EntityListItemProp.DEBUG].default;
 
-  @state() mode: EntityListItemMode = EntityListItemMode.VIEW;
+  @state() mode: EntityListItemMode = EntityListItemMode.PREVIEW;
   @state() pointerDown: Date = new Date();
   @state() downTimeout: number = 0;
   @state() downActivation: boolean = false;
 
   @state() get classes(): Record<string, boolean> {
-    return { 'action-list-item': true, selected: this.selected };
+    return {
+      'entity-list-item': true,
+      selected: this.selected,
+      preview: this.mode === EntityListItemMode.PREVIEW,
+      full: this.mode === EntityListItemMode.FULL,
+      edit: this.mode === EntityListItemMode.EDIT,
+    };
   }
 
   @state()
@@ -256,6 +274,14 @@ export class EntityListItem extends MobxLitElement {
     return this.propertyConfigs.find(config => config.id === propertyConfigId);
   }
 
+  showFull(): void {
+    this.mode = EntityListItemMode.FULL;
+  }
+
+  showEdit(): void {
+    this.mode = EntityListItemMode.EDIT;
+  }
+
   render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
@@ -263,10 +289,10 @@ export class EntityListItem extends MobxLitElement {
           ? html`
               <entity-form
                 @entity-item-updated=${(): void => {
-                  this.mode = EntityListItemMode.VIEW;
+                  this.mode = EntityListItemMode.PREVIEW;
                 }}
                 @entity-item-canceled=${(): void => {
-                  this.mode = EntityListItemMode.VIEW;
+                  this.mode = EntityListItemMode.PREVIEW;
                 }}
                 entityId=${this.entityId}
                 type=${this.type}
@@ -281,6 +307,16 @@ export class EntityListItem extends MobxLitElement {
                 @touchstart=${this.handleTouchStart}
                 @touchend=${this.handleTouchEnd}
               >
+                <div class="show-full">
+                  <ss-button @click=${this.showFull}
+                    >${translate('showFull')}</ss-button
+                  >
+                </div>
+                <div class="show-edit">
+                  <ss-button @click=${this.showEdit}
+                    >${translate('showEdit')}</ss-button
+                  >
+                </div>
                 <div class="properties">${this.renderProperties()}</div>
                 <div class="time">${this.readableTime}</div>
               </div>

@@ -3,7 +3,8 @@ import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { EntityProperty } from 'api-spec/models/Entity';
 
 export enum EntityListItemMode {
-  VIEW = 'view',
+  PREVIEW = 'preview',
+  FULL = 'full',
   EDIT = 'edit',
 }
 
