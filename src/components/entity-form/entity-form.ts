@@ -21,6 +21,7 @@ import {
   entityFormProps,
   EntityFormProps,
   PropertyInstance,
+  PropertyReference,
   RequestBody,
   SuggestionInputType,
   SuggestionLastInput,
@@ -130,6 +131,8 @@ export class EntityForm extends ViewElement {
   @state() initialHash = '';
   @state() instancesHash = '';
 
+  @state() propertyReferences: PropertyReference[] = [];
+
   @state()
   get classes(): Record<string, boolean> {
     return { box: true, 'advanced-mode': this.state.advancedMode };
@@ -218,14 +221,34 @@ export class EntityForm extends ViewElement {
 
     if (this.availableEntityConfigs.length === 1) {
       this.type = this.availableEntityConfigs[0].id;
-      this.setupProperties();
     }
   }
 
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
 
-    this.setupProperties();
+    if (!this.propertiesSetup) {
+      this.setupProperties();
+    }
+
+    if (changedProperties.has(EntityFormProp.PROPERTIES) && this.entityConfig) {
+      console.log('properties changed');
+      this.propertyReferences = [];
+      for (const property of this[EntityFormProp.PROPERTIES]) {
+        const dataType = this.entityConfig.properties.find(
+          prop => prop.id === property.propertyConfigId,
+        )?.dataType;
+
+        if (!dataType) {
+          continue;
+        }
+
+        this.propertyReferences.push({
+          dataType,
+          propertyValueId: property.id,
+        });
+      }
+    }
   }
 
   get apiUrl(): string {
@@ -396,6 +419,7 @@ export class EntityForm extends ViewElement {
           timeZone,
           tags: this.tagsAndSuggestions,
           properties,
+          propertyReferences: this.propertyReferences,
         };
 
         const result = this.entityId

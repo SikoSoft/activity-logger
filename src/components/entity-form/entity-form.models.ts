@@ -1,4 +1,8 @@
-import { EntityProperty, PropertyDataValue } from 'api-spec/models/Entity';
+import {
+  DataType,
+  EntityProperty,
+  PropertyDataValue,
+} from 'api-spec/models/Entity';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 import { ControlType } from '@/models/Control';
 
@@ -90,11 +94,17 @@ export const entityFormProps: PropConfigMap<EntityFormProps> = {
   },
 };
 
+export type PropertyReference = {
+  dataType: DataType;
+  propertyValueId: number;
+};
+
 export interface RequestBody {
   entityConfigId: number;
   timeZone: number;
   tags: string[];
   properties: EntityProperty[];
+  propertyReferences: PropertyReference[];
 }
 
 export enum SuggestionInputType {
