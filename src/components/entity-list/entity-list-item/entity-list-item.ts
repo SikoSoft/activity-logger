@@ -26,6 +26,7 @@ import { PointerLongPressEvent } from '@/events/pointer-long-press';
 
 import '@/components/entity-form/entity-form';
 import { translate } from '@/lib/Localization';
+import { repeat } from 'lit/directives/repeat.js';
 
 const holdThreshold = 500;
 
@@ -201,52 +202,48 @@ export class EntityListItem extends MobxLitElement {
     return false;
   }
 
-  private renderProperties(): (TemplateResult | typeof nothing)[] {
-    return this.properties.map(property => {
-      const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
-      if (!propertyConfig || propertyConfig.hidden) {
-        return nothing;
-      }
+  private renderProperty(
+    property: EntityProperty,
+  ): TemplateResult | typeof nothing {
+    const propertyConfig = this.getPropertyConfig(property.propertyConfigId);
+    if (!propertyConfig || propertyConfig.hidden) {
+      return nothing;
+    }
 
-      let value: PropertyDataValue = propertyConfig.defaultValue;
+    let value: PropertyDataValue = propertyConfig.defaultValue;
 
-      switch (propertyConfig.dataType) {
-        case DataType.DATE:
-          value = this.getReadableTime(property.value as string);
-          break;
-        case DataType.INT:
-          value = property.value as number;
-          break;
-        default:
-          value = property.value as string;
-          break;
-      }
+    switch (propertyConfig.dataType) {
+      case DataType.DATE:
+        value = this.getReadableTime(property.value as string);
+        break;
+      case DataType.INT:
+        value = property.value as number;
+        break;
+      default:
+        value = property.value as string;
+        break;
+    }
 
-      if (propertyConfig.dataType === DataType.IMAGE) {
-        return this.renderImageProperty(property);
-      }
+    if (propertyConfig.dataType === DataType.IMAGE) {
+      return this.renderImageProperty(property);
+    }
 
-      return html`
-        <div
-          class="property property-${propertyConfig.name.toLowerCase()}"
-          data-name=${propertyConfig.name}
-          data-value=${value}
-          slot=${propertyConfig.name}
-        >
-          <span>${propertyConfig.name}</span>
-          ${propertyConfig.prefix
-            ? html`<span class="property-prefix"
-                >${propertyConfig.prefix}</span
-              >`
-            : nothing}<span class="property-value">${value}</span
-          >${propertyConfig.suffix
-            ? html`<span class="property-suffix"
-                >${propertyConfig.suffix}</span
-              >`
-            : nothing}
-        </div>
-      `;
-    });
+    return html`
+      <div
+        class="property property-${propertyConfig.name.toLowerCase()}"
+        data-name=${propertyConfig.name}
+        data-value=${value}
+        slot=${propertyConfig.name}
+      >
+        <span>${propertyConfig.name}</span>
+        ${propertyConfig.prefix
+          ? html`<span class="property-prefix">${propertyConfig.prefix}</span>`
+          : nothing}<span class="property-value">${value}</span
+        >${propertyConfig.suffix
+          ? html`<span class="property-suffix">${propertyConfig.suffix}</span>`
+          : nothing}
+      </div>
+    `;
   }
 
   renderImageProperty(
@@ -317,7 +314,13 @@ export class EntityListItem extends MobxLitElement {
                     >${translate('showEdit')}</ss-button
                   >
                 </div>
-                <div class="properties">${this.renderProperties()}</div>
+                <div class="properties">
+                  ${repeat(
+                    this.properties,
+                    property => property.id,
+                    property => this.renderProperty(property),
+                  )}
+                </div>
                 <div class="time">${this.readableTime}</div>
               </div>
             `}

@@ -10,6 +10,7 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "clone": "Clone",
+  "imageDestPath": "Image Destination Path",
   "imageUrl": "Image URL",
   "imageAltText": "Image Alt Text",
   "propertyName": "Property Name",

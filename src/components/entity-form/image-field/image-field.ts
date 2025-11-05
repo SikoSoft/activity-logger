@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import { DataType, ImageDataValue } from 'api-spec/models/Entity';
@@ -52,8 +52,14 @@ export class ImageField extends MobxLitElement {
   [ImageFieldProp.UI_ID]: ImageFieldProps[ImageFieldProp.UI_ID] =
     imageFieldProps[ImageFieldProp.UI_ID].default;
 
+  @state()
+  private destImgPath: string = '';
+
   get uploadUrl(): string {
-    return new URL('file', import.meta.env.APP_BASE_API_URL).toString();
+    return new URL(
+      `file${this.destImgPath ? `/${this.destImgPath.replace(/^\/+|\/+$/g, '')}/` : ''}`,
+      import.meta.env.APP_BASE_API_URL,
+    ).toString();
   }
 
   protected handleValueChanged(value: ImageDataValue): void {
@@ -74,6 +80,10 @@ export class ImageField extends MobxLitElement {
     this.handleValueChanged({ src: this.src, alt: e.detail.value });
   }
 
+  protected handleDestChanged(e: InputChangedEvent): void {
+    this.destImgPath = e.detail.value;
+  }
+
   fileUploadSuccess(e: FileUploadSuccessEvent): void {
     this.handleValueChanged({ src: e.detail.url, alt: this.alt });
     this.src = e.detail.url;
@@ -86,6 +96,13 @@ export class ImageField extends MobxLitElement {
 
   render(): TemplateResult {
     return html`
+      <ss-input
+        type="text"
+        value=${this.destImgPath}
+        placeholder=${translate('imageDestPath')}
+        @input-changed=${this.handleDestChanged}
+      ></ss-input>
+
       <file-upload
         preview
         endpointUrl=${this.uploadUrl}
