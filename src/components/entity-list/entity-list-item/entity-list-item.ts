@@ -66,6 +66,26 @@ export class EntityListItem extends MobxLitElement {
         max-width: 100%;
       }
     }
+
+    .property {
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+
+      & > * {
+        //flex-grow: 1;
+      }
+
+      .property-name {
+        font-weight: lighter;
+        margin-right: 0.5rem;
+        opacity: 0.8;
+      }
+
+      .property-value {
+        font-weight: normal;
+      }
+    }
   `;
   @property({ type: Number })
   [EntityListItemProp.TYPE]: EntityListItemProps[EntityListItemProp.TYPE] =
@@ -230,18 +250,23 @@ export class EntityListItem extends MobxLitElement {
 
     return html`
       <div
-        class="property property-${propertyConfig.name.toLowerCase()}"
+        class="property property--${propertyConfig.name.toLowerCase()}"
         data-name=${propertyConfig.name}
         data-value=${value}
         slot=${propertyConfig.name}
       >
-        <span>${propertyConfig.name}</span>
-        ${propertyConfig.prefix
-          ? html`<span class="property-prefix">${propertyConfig.prefix}</span>`
-          : nothing}<span class="property-value">${value}</span
-        >${propertyConfig.suffix
-          ? html`<span class="property-suffix">${propertyConfig.suffix}</span>`
-          : nothing}
+        <span class="property-name">${propertyConfig.name}</span>
+        <span class="property-value">
+          ${propertyConfig.prefix
+            ? html`<span class="property-prefix"
+                >${propertyConfig.prefix}</span
+              >`
+            : nothing}${value}${propertyConfig.suffix
+            ? html`<span class="property-suffix"
+                >${propertyConfig.suffix}</span
+              >`
+            : nothing}
+        </span>
       </div>
     `;
   }

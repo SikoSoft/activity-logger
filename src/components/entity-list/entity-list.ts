@@ -57,6 +57,11 @@ export class EntityList extends ViewElement {
         overflow: hidden;
       }
 
+      entity-list-item:not(:last-of-type) {
+        display: block;
+        border-bottom: 1px solid #ccc;
+      }
+
       .no-actions {
         padding: 1rem;
       }
