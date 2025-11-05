@@ -1,8 +1,11 @@
+import { EntityProperty } from 'api-spec/models/Entity';
+
 export const entityItemUpdatedEventName = 'entity-item-updated';
 
 export interface EntityItemUpdatedEventPayload {
   id: number;
   tags: string[];
+  properties: EntityProperty[];
 }
 
 export class EntityItemUpdatedEvent extends CustomEvent<EntityItemUpdatedEventPayload> {
