@@ -7,3 +7,9 @@ export enum PageView {
 }
 
 export const defaultPageView: PageView = PageView.INPUT;
+
+export enum Theme {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
+export const defaultTheme: Theme = Theme.LIGHT;

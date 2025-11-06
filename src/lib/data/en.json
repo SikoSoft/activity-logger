@@ -161,5 +161,6 @@
   "noEntityConfigs": "No entity configurations found. :( Please add an entity configuration to get started.",
   "allListConfigs": "All list configurations",
   "showFull": "Show Full",
-  "showEdit": "Show Edit"
+  "showEdit": "Show Edit",
+  "theme": "Theme"
 }

@@ -6,7 +6,7 @@ import {
   defaultListFilter,
   defaultListSort,
 } from '@/state';
-import { PageView, defaultPageView } from '@/models/Page';
+import { PageView, Theme, defaultPageView, defaultTheme } from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
@@ -509,6 +509,33 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async import(_data: ExportDataContents): Promise<boolean> {
     return Promise.resolve(true);
+  }
+
+  setTheme(theme: Theme): void {
+    if (!Object.values(Theme).includes(theme)) {
+      localStorage.setItem(StorageItemKey.THEME, defaultTheme);
+      return;
+    }
+
+    localStorage.setItem(StorageItemKey.THEME, theme);
+  }
+
+  getTheme(): Theme {
+    let theme: Theme = defaultTheme;
+    try {
+      const storedTheme = localStorage.getItem(StorageItemKey.THEME);
+      if (storedTheme && Object.values(Theme).includes(storedTheme as Theme)) {
+        theme = storedTheme as Theme;
+      }
+    } catch (error) {
+      console.error(
+        `Encountered an error while trying to load theme from storage: ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+
+    return theme;
   }
 }
 

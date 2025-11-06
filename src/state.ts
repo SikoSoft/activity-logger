@@ -21,6 +21,7 @@ import {
 } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
 import { Version } from '@/models/Version';
+import { defaultTheme, Theme } from './models/Page';
 
 export const defaultListFilter: ListFilter = {
   tagging: {
@@ -117,6 +118,9 @@ export class AppState {
 
   @observable
   public lastListUrl: string = '';
+
+  @observable
+  public theme: Theme = defaultTheme;
 
   get listConfig(): ListConfig {
     return (
@@ -391,6 +395,16 @@ export class AppState {
     instanceId: number,
   ): void {
     this.entityPropertyInstances[propertyConfigId] = instanceId;
+  }
+
+  @action
+  setTheme(theme: Theme): void {
+    if (!Object.values(Theme).includes(theme)) {
+      this.theme = defaultTheme;
+      return;
+    }
+
+    this.theme = theme;
   }
 
   constructor() {

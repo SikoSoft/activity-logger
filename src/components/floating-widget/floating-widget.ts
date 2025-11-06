@@ -14,6 +14,8 @@ import '@ss/ui/components/ss-toggle';
 import '@/components/user-pane/user-pane';
 
 import { theme } from '@/styles/theme';
+import { Theme } from '@/models/Page';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
@@ -167,6 +169,12 @@ export class FloatingWidget extends MobxLitElement {
     };
   }
 
+  private handleThemeChanged(event: CustomEvent): void {
+    const theme = event.detail.value as Theme;
+    this.state.setTheme(theme);
+    storage.setTheme(theme);
+  }
+
   private handleToggleAdvancedChanged(event: ToggleChangedEvent): void {
     this.state.setAdvancedMode(event.detail.on);
     storage.saveAdvancedMode(event.detail.on);
@@ -219,6 +227,18 @@ export class FloatingWidget extends MobxLitElement {
         <div class="body" @mouseenter=${this.handleOpen}>
           <div class="user">
             <user-pane></user-pane>
+          </div>
+
+          <div class="option">
+            <h4>${translate('theme')}</h4>
+            <ss-select
+              @select-changed=${this.handleThemeChanged}
+              .options=${Object.values(Theme).map(theme => ({
+                label: translate(theme),
+                value: theme,
+              }))}
+              selected=${this.state.theme}
+            ></ss-select>
           </div>
 
           <div class="option">

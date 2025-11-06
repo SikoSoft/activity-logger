@@ -3,6 +3,7 @@ import { ListConfig } from 'api-spec/models/List';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { ExportDataContents } from 'api-spec/models/Data';
+import { Theme } from './Page';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -19,6 +20,7 @@ export enum StorageItemKey {
   WINDOW_SCROLL_POSITION = 'windowScrollPosition',
   COLLAPSABLE_PANEL_STATE = 'collapsablePanelState',
   TAB_INDEX_STATE = 'tabIndexState',
+  THEME = 'theme',
 }
 
 export interface StorageSchema {
@@ -57,4 +59,6 @@ export interface StorageSchema {
   export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
   import?(data: ExportDataContents): Promise<boolean>;
   clearAllData?(): Promise<void>;
+  setTheme?(theme: Theme): void;
+  getTheme?(): Theme;
 }

@@ -98,6 +98,8 @@ export class AppContainer extends MobxLitElement {
 
       this.state.setVersion(storage.getVersion());
 
+      this.state.setTheme(storage.getTheme());
+
       const view = storage.getSavedView();
 
       if (view) {
