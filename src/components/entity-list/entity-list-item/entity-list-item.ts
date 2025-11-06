@@ -35,6 +35,10 @@ export class EntityListItem extends MobxLitElement {
   private state = appState;
 
   static styles = css`
+    :host {
+      --padding: 1rem;
+    }
+
     .entity-list-item {
       padding: 0.5rem;
       text-align: center;
@@ -68,6 +72,7 @@ export class EntityListItem extends MobxLitElement {
     }
 
     .property {
+      padding: var(--padding);
       text-align: left;
       display: flex;
       justify-content: space-between;
@@ -78,7 +83,6 @@ export class EntityListItem extends MobxLitElement {
 
       .property-name {
         font-weight: lighter;
-        margin-right: 0.5rem;
         opacity: 0.8;
       }
 
