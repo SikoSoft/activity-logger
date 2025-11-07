@@ -44,6 +44,8 @@ export class AppContainer extends MobxLitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
+    //document.body.classList.add('app-loaded');
+
     this.setAuthToken(storage.getAuthToken());
 
     this.addEventListener('view-changed', (e: Event) => {
