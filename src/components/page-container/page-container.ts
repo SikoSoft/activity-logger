@@ -1,4 +1,4 @@
-import { css, html, LitElement, TemplateResult } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@/components/app-container/app-container';
@@ -11,6 +11,7 @@ import {
   PageContainerProps,
   pageContainerProps,
 } from './page-container.models';
+import { reaction } from 'mobx';
 
 @customElement('page-container')
 export class PageContainer extends MobxLitElement {
@@ -39,16 +40,24 @@ export class PageContainer extends MobxLitElement {
     pageContainerProps[PageContainerProp.THEME].default;
 
   get classes(): Record<string, boolean> {
-    console.log('classes', this.state.theme);
     return {
       'page-container': true,
-      [this.state.theme]: true,
     };
   }
 
   connectedCallback(): void {
     super.connectedCallback();
     this.theme = this.state.theme;
+
+    reaction(
+      () => appState.theme,
+      () => {
+        this.theme = this.state.theme;
+      },
+      {
+        fireImmediately: false,
+      },
+    );
   }
 
   render(): TemplateResult {
