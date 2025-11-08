@@ -23,8 +23,9 @@ export class PageContainer extends MobxLitElement {
       :host {
         display: block;
         margin-top: 0rem;
-        padding: 1rem;
+        padding: 2rem;
         background-color: var(--background-color);
+        min-height: 100vh;
       }
 
       .page-container {
