@@ -20,6 +20,12 @@ export const theme = css`
     --text-color: #000;
     --overlay-color-top: rgba(0, 0, 0, 0.25);
     --overlay-color-bottom: rgba(0, 0, 0, 0.75);
+
+    --tabs-border-color: #ccc;
+    --tabs-header-bg-color: #f9f9f9;
+    --tabs-header-hover-bg-color: #eee;
+    --tabs-border-color: #ccc;
+    --tabs-active-header-bg-color: #fff;
   }
 
   :host([theme='dark']) {
@@ -41,6 +47,11 @@ export const theme = css`
     --text-color: #cff5f4;
     --overlay-color-top: rgba(0, 0, 0, 0.25);
     --overlay-color-bottom: rgba(0, 0, 0, 0.75);
+
+    --tabs-border-color: #3f6f6a;
+    --tabs-header-bg-color: #1a2e2c;
+    --tabs-header-hover-bg-color: #4d857e;
+    --tabs-active-header-bg-color: #38635e;
   }
 
   :host {
