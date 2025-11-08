@@ -27,7 +27,7 @@ export const theme = css`
     --tabs-border-color: #ccc;
     --tabs-active-header-bg-color: #fff;
 
-    --input-background-color: #fff;
+    --input-background-color: #efefef;
     --input-border-color: #ccc;
     --input-text-color: #000;
   }
