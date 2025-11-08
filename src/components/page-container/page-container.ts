@@ -1,5 +1,5 @@
 import { css, html, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '@/components/app-container/app-container';
 import { theme } from '@/styles/theme';
@@ -27,6 +27,28 @@ export class PageContainer extends MobxLitElement {
         background-color: var(--background-color);
       }
 
+      .page-container {
+        &.overlay-is-open .overlay {
+          opacity: 1;
+        }
+      }
+
+      .overlay {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          var(--overlay-color-top),
+          var(--overlay-color-bottom)
+        );
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+
       app-container {
         display: block;
         margin: auto;
@@ -39,9 +61,11 @@ export class PageContainer extends MobxLitElement {
   [PageContainerProp.THEME]: PageContainerProps[PageContainerProp.THEME] =
     pageContainerProps[PageContainerProp.THEME].default;
 
+  @state()
   get classes(): Record<string, boolean> {
     return {
       'page-container': true,
+      'overlay-is-open': this.state.widgetIsOpen,
     };
   }
 
@@ -63,6 +87,7 @@ export class PageContainer extends MobxLitElement {
   render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
+        <div class="overlay"></div>
         <app-container></app-container>
       </div>
     `;

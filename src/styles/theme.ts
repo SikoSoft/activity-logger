@@ -18,6 +18,8 @@ export const theme = css`
     --box-background-color: #fff;
     --box-border-color: #aaa;
     --text-color: #000;
+    --overlay-color-top: rgba(0, 0, 0, 0.25);
+    --overlay-color-bottom: rgba(0, 0, 0, 0.75);
   }
 
   :host([theme='dark']) {
@@ -37,6 +39,8 @@ export const theme = css`
     --box-background-color: #0a1911;
     --box-border-color: #38635e;
     --text-color: #cff5f4;
+    --overlay-color-top: rgba(0, 0, 0, 0.25);
+    --overlay-color-bottom: rgba(0, 0, 0, 0.75);
   }
 
   :host {

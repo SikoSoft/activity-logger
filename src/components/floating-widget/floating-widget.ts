@@ -15,7 +15,6 @@ import '@/components/user-pane/user-pane';
 
 import { theme } from '@/styles/theme';
 import { Theme } from '@/models/Page';
-import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
@@ -25,8 +24,8 @@ export class FloatingWidget extends MobxLitElement {
     theme,
     css`
       :host {
-        --background-color: #ccc;
-        --border-color: #999;
+        --background-color: var(--box-background-color);
+        --border-color: var(--box-border-color);
         --head-height: 2rem;
       }
 
@@ -158,19 +157,19 @@ export class FloatingWidget extends MobxLitElement {
     `,
   ];
 
-  @state() open: boolean = false;
   @state() mouseIn: boolean = false;
 
   @state()
   get classes(): Record<string, boolean> {
     return {
       widget: true,
-      open: this.open,
+      open: this.state.widgetIsOpen,
     };
   }
 
   private handleThemeChanged(event: CustomEvent): void {
     const theme = event.detail.value as Theme;
+
     this.state.setTheme(theme);
     storage.setTheme(theme);
   }
@@ -186,11 +185,11 @@ export class FloatingWidget extends MobxLitElement {
   }
 
   private handleToggleOpen(): void {
-    this.open = !this.open;
+    this.state.setWidgetIsOpen(!this.state.widgetIsOpen);
   }
 
   private handleOpen(): void {
-    this.open = true;
+    this.state.setWidgetIsOpen(true);
   }
 
   private handleMouseEnter(): void {
@@ -203,7 +202,7 @@ export class FloatingWidget extends MobxLitElement {
   private handleMouseLeave(): void {
     this.mouseIn = false;
     this.timeout = setTimeout(() => {
-      this.open = false;
+      this.state.setWidgetIsOpen(false);
     }, 500);
   }
 

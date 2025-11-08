@@ -156,6 +156,9 @@ export class AppState {
   @observable
   public entityPropertyInstances: Record<number, number> = {};
 
+  @observable
+  public widgetIsOpen: boolean = false;
+
   @action
   public setActionSuggestions(suggestions: string[]): void {
     this.actionSuggestions = suggestions;
@@ -405,6 +408,11 @@ export class AppState {
     }
 
     this.theme = theme;
+  }
+
+  @action
+  setWidgetIsOpen(isOpen: boolean): void {
+    this.widgetIsOpen = isOpen;
   }
 
   constructor() {
