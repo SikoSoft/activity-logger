@@ -256,6 +256,7 @@ export class ListConfig extends MobxLitElement {
         showButtons
         height="180"
         width="100%"
+        iconColor="var(--text-color, #000)"
         navigationIndex=${this.navigationIndex}
         @carousel-slide-changed=${this.carouselSlideChanged}
       >
