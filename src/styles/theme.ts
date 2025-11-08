@@ -26,6 +26,10 @@ export const theme = css`
     --tabs-header-hover-bg-color: #eee;
     --tabs-border-color: #ccc;
     --tabs-active-header-bg-color: #fff;
+
+    --input-background-color: #fff;
+    --input-border-color: #ccc;
+    --input-text-color: #000;
   }
 
   :host([theme='dark']) {
@@ -52,6 +56,10 @@ export const theme = css`
     --tabs-header-bg-color: #1a2e2c;
     --tabs-header-hover-bg-color: #4d857e;
     --tabs-active-header-bg-color: #38635e;
+
+    --input-background-color: #0a1911;
+    --input-border-color: #38635e;
+    --input-text-color: #cff5f4;
   }
 
   :host {
