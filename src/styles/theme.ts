@@ -1,4 +1,10 @@
-import { css } from 'lit';
+import { Theme } from '@/models/Page';
+import { css, CSSResult } from 'lit';
+
+export const backgroundColorMap: Record<Theme, CSSResult> = {
+  [Theme.LIGHT]: css`#ededed`,
+  [Theme.DARK]: css`#12221a`,
+};
 
 export const theme = css`
   :host([theme='light']) {
@@ -14,7 +20,7 @@ export const theme = css`
     --padding: 0.5rem;
     --font-size: 1rem;
     --text-color: #000;
-    --background-color: #ededed;
+    --background-color: ${backgroundColorMap[Theme.LIGHT]};
     --box-background-color: #fff;
     --box-border-color: #aaa;
     --overlay-color-top: rgba(0, 0, 0, 0.25);
@@ -51,7 +57,7 @@ export const theme = css`
     --padding: 0.5rem;
     --font-size: 1rem;
     --text-color: #cff5f4;
-    --background-color: #12221a;
+    --background-color: ${backgroundColorMap[Theme.DARK]};
     --box-background-color: #0a1911;
     --box-border-color: #38635e;
     --overlay-color-top: rgba(0, 0, 0, 0.25);

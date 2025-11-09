@@ -2,7 +2,7 @@ import { css, html, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@/components/app-container/app-container';
-import { theme } from '@/styles/theme';
+import { backgroundColorMap, theme } from '@/styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { classMap } from 'lit/directives/class-map.js';
@@ -73,12 +73,13 @@ export class PageContainer extends MobxLitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.theme = this.state.theme;
 
     reaction(
       () => appState.theme,
       () => {
         this.theme = this.state.theme;
+        const backgroundColor = backgroundColorMap[this.state.theme];
+        document.body.style.backgroundColor = backgroundColor.cssText;
       },
       {
         fireImmediately: false,
