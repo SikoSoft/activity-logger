@@ -232,7 +232,6 @@ export class EntityForm extends ViewElement {
     }
 
     if (changedProperties.has(EntityFormProp.PROPERTIES) && this.entityConfig) {
-      console.log('properties changed');
       this.propertyReferences = [];
       for (const property of this[EntityFormProp.PROPERTIES]) {
         const dataType = this.entityConfig.properties.find(

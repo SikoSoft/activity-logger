@@ -59,12 +59,6 @@ export class EntityListItem extends MobxLitElement {
       display: none;
     }
 
-    .preview {
-      .show-full {
-        //display: block;
-      }
-    }
-
     .property.image {
       img {
         max-width: 100%;
@@ -76,10 +70,6 @@ export class EntityListItem extends MobxLitElement {
       text-align: left;
       display: flex;
       justify-content: space-between;
-
-      & > * {
-        //flex-grow: 1;
-      }
 
       .property-name {
         font-weight: lighter;

@@ -1,10 +1,5 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
-import {
-  BooleanSettingProp,
-  BooleanSettingProps,
-  booleanSettingProps,
-} from '../setting/boolean-setting/boolean-setting.models';
 import { Theme } from '@/models/Page';
 
 export enum PageContainerProp {
