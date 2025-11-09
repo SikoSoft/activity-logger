@@ -17,7 +17,6 @@ export const theme = css`
     --background-color: #ededed;
     --box-background-color: #fff;
     --box-border-color: #aaa;
-    --text-color: #000;
     --overlay-color-top: rgba(0, 0, 0, 0.25);
     --overlay-color-bottom: rgba(0, 0, 0, 0.75);
 
@@ -30,6 +29,9 @@ export const theme = css`
     --input-background-color: #efefef;
     --input-border-color: #ccc;
     --input-text-color: #000;
+
+    --loader-color1: #000;
+    --loader-color2: #0002;
   }
 
   :host([theme='dark']) {
@@ -44,11 +46,10 @@ export const theme = css`
     --border-radius: 0.5rem;
     --padding: 0.5rem;
     --font-size: 1rem;
-    --text-color: #000;
+    --text-color: #cff5f4;
     --background-color: #12221a;
     --box-background-color: #0a1911;
     --box-border-color: #38635e;
-    --text-color: #cff5f4;
     --overlay-color-top: rgba(0, 0, 0, 0.25);
     --overlay-color-bottom: rgba(0, 0, 0, 0.75);
 
@@ -60,6 +61,9 @@ export const theme = css`
     --input-background-color: #0a1911;
     --input-border-color: #38635e;
     --input-text-color: #cff5f4;
+
+    --loader-color1: #cff5f4;
+    --loader-color2: #cff5f422;
   }
 
   :host {

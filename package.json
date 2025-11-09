@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@adobe/lit-mobx": "^2.2.2",
-    "@ss/ui": "github:SikoSoft/ui#2.11.4",
+    "@ss/ui": "github:SikoSoft/ui#2.12.0",
     "api-spec": "github:SikoSoft/api-spec#1.38.0",
     "file-saver": "^2.0.5",
     "immer": "^10.1.1",
