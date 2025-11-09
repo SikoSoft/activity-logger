@@ -1,4 +1,4 @@
-import { html, LitElement, nothing, TemplateResult } from 'lit';
+import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { ListFilterTimeType, TimeContext } from 'api-spec/models/List';
@@ -20,7 +20,14 @@ import { theme } from '@/styles/theme';
 
 @customElement('time-filters')
 export class TimeFilters extends LitElement {
-  static styles = [theme];
+  static styles = [
+    theme,
+    css`
+      fieldset {
+        border-color: var(--border-color);
+      }
+    `,
+  ];
 
   @property()
   [TimeFiltersProp.TIME_STR]: TimeFiltersProps[TimeFiltersProp.TIME_STR] =

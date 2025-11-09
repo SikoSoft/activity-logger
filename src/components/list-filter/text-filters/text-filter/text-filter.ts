@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { TextType } from 'api-spec/models/List';
@@ -23,7 +23,14 @@ import { theme } from '@/styles/theme';
 
 @customElement('text-filter')
 export class TextFilter extends LitElement {
-  static styles = [theme];
+  static styles = [
+    theme,
+    css`
+      fieldset {
+        border-color: var(--border-color);
+      }
+    `,
+  ];
 
   @property()
   [TextFilterProp.TYPE]: TextFilterProps[TextFilterProp.TYPE] =

@@ -52,7 +52,7 @@ export const theme = css`
     --unsynced-color: #666;
     --unsynced-background-color: #c4c4c4;
     --primary-color: #0066ff;
-    --border-color: #ccc;
+    --border-color: #38635e;
     --border-radius: 0.5rem;
     --padding: 0.5rem;
     --font-size: 1rem;
