@@ -148,7 +148,7 @@ export class ListPaginator extends LitElement {
       ? html`
           <div class="paginator box">
             <div class="left">
-              <button text="" @click=${this.prevPage}>&#x21e6;</button>
+              <ss-button text="" @click=${this.prevPage}>&#x21e6;</ss-button>
             </div>
 
             <div class="center">
@@ -156,7 +156,7 @@ export class ListPaginator extends LitElement {
                 ${this.quickPages.map(page =>
                   page === 0
                     ? html`<span>...</span>`
-                    : html`<button
+                    : html`<ss-button
                         class=${classMap({
                           'quick-page': true,
                           active: page === this.page,
@@ -164,13 +164,13 @@ export class ListPaginator extends LitElement {
                         @click=${(): void => this.goToPage(page)}
                       >
                         ${page}
-                      </button>`,
+                      </ss-button>`,
                 )}
               </div>
             </div>
 
             <div class="right">
-              <button text="" @click=${this.nextPage}>&#x21e8;</button>
+              <ss-button text="" @click=${this.nextPage}>&#x21e8;</ss-button>
             </div>
           </div>
         `

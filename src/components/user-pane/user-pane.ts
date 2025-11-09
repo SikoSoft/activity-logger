@@ -49,7 +49,7 @@ export class UserPane extends MobxLitElement {
   render(): TemplateResult {
     return html`
       <div>
-        <button @click=${this.logout}>${translate('logout')}</button>
+        <ss-button @click=${this.logout}>${translate('logout')}</ss-button>
       </div>
     `;
   }
