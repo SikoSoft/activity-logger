@@ -139,7 +139,7 @@ export class DateField extends LitElement {
   renderUseCustom(): TemplateResult {
     return html`
       <ss-icon
-        color="#000000"
+        color="var(--text-color, #000)"
         name="validCircle"
         @click=${this.toggleUseNow}
         size="20"
