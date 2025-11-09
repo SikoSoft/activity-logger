@@ -29,6 +29,10 @@ export const theme = css`
     --input-background-color: #efefef;
     --input-border-color: #ccc;
     --input-text-color: #000;
+    --input-suggestion-background-color: #fff;
+    --input-suggestion-text-color: #888;
+    --input-suggestion-selected-background-color: #ddd;
+    --input-suggestion-selected-text-color: #000;
 
     --loader-color1: #000;
     --loader-color2: #0002;
@@ -61,6 +65,10 @@ export const theme = css`
     --input-background-color: #0a1911;
     --input-border-color: #38635e;
     --input-text-color: #cff5f4;
+    --input-suggestion-background-color: #000;
+    --input-suggestion-text-color: #ccc;
+    --input-suggestion-selected-background-color: #587;
+    --input-suggestion-selected-text-color: #fff;
 
     --loader-color1: #cff5f4;
     --loader-color2: #cff5f422;
