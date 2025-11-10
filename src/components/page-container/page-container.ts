@@ -12,6 +12,8 @@ import {
   pageContainerProps,
 } from './page-container.models';
 import { reaction } from 'mobx';
+import { Theme, defaultTheme } from '@/models/Page';
+import { StorageItemKey } from '@/models/Storage';
 
 @customElement('page-container')
 export class PageContainer extends MobxLitElement {
@@ -71,15 +73,28 @@ export class PageContainer extends MobxLitElement {
     };
   }
 
+  setTheme(theme: Theme): void {
+    this.theme = theme;
+    const backgroundColor = backgroundColorMap[this.state.theme];
+    document.body.style.backgroundColor = backgroundColor.cssText;
+  }
+
+  getThemeFromStorage(): Theme {
+    const storedTheme = localStorage.getItem(StorageItemKey.THEME);
+    if (storedTheme && Object.values(Theme).includes(storedTheme as Theme)) {
+      return storedTheme as Theme;
+    }
+
+    return defaultTheme;
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
-
+    this.setTheme(this.getThemeFromStorage());
     reaction(
       () => appState.theme,
       () => {
-        this.theme = this.state.theme;
-        const backgroundColor = backgroundColorMap[this.state.theme];
-        document.body.style.backgroundColor = backgroundColor.cssText;
+        this.setTheme(this.state.theme);
       },
       {
         fireImmediately: false,
