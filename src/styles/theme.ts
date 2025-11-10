@@ -70,7 +70,7 @@ export const theme = css`
     --tabs-header-hover-bg-color: #4d857e;
     --tabs-active-header-bg-color: #38635e;
 
-    --input-background-color: #0a1911;
+    --input-background-color: #08100b;
     --input-border-color: #38635e;
     --input-text-color: #cff5f4;
     --input-suggestion-background-color: #000;
