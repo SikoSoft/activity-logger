@@ -38,6 +38,9 @@ export class ImportTool extends MobxLitElement {
   @state()
   private importData: ExportDataContents | undefined;
 
+  @state()
+  isLoading: boolean = false;
+
   protected firstUpdated(): void {
     this.fileUpload.addEventListener(
       'change',
@@ -100,17 +103,25 @@ export class ImportTool extends MobxLitElement {
       return;
     }
 
-    const result = await storage.import(this.importData);
+    this.isLoading = true;
+    try {
+      const result = await storage.import(this.importData);
 
-    if (!result) {
+      if (!result) {
+        addToast(translate('importFailure'), NotificationType.ERROR);
+        return;
+      }
+
+      addToast(translate('importSuccess'), NotificationType.SUCCESS);
+
+      const entityConfigs = await storage.getEntityConfigs();
+      this.state.setEntityConfigs(entityConfigs);
+    } catch (error) {
+      console.error('Error during import:', error);
       addToast(translate('importFailure'), NotificationType.ERROR);
-      return;
+    } finally {
+      this.isLoading = false;
     }
-
-    addToast(translate('importSuccess'), NotificationType.SUCCESS);
-
-    const entityConfigs = await storage.getEntityConfigs();
-    this.state.setEntityConfigs(entityConfigs);
   }
 
   handleFileSelected(event: Event): void {
@@ -159,7 +170,12 @@ export class ImportTool extends MobxLitElement {
       </div>
 
       <div class="buttons">
-        <ss-button @click=${this.import}>${translate('importData')}</ss-button>
+        <ss-button
+          ?loading=${this.isLoading}
+          ?disabled=${this.isLoading}
+          @click=${this.import}
+          >${translate('importData')}</ss-button
+        >
       </div>
     </div>`;
   }
