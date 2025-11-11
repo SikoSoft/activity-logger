@@ -12,6 +12,8 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import { addToast } from '@/lib/Util';
 import { storage } from '@/lib/Storage';
 import { classMap } from 'lit/directives/class-map.js';
+import { repeat } from 'lit/directives/repeat.js';
+import { NukedDataType } from 'api-spec/models/Data';
 
 const countdownDuration = 3000;
 
@@ -113,6 +115,9 @@ export class TacticalNuke extends MobxLitElement {
   @state()
   timeRemaining: number = 0;
 
+  @state()
+  selectedTypes: NukedDataType[] = [];
+
   getTimeRemaining(): number {
     if (!this.initiation) {
       return 0;
@@ -163,7 +168,7 @@ export class TacticalNuke extends MobxLitElement {
     this.nukeComplete = true;
 
     try {
-      await storage.clearAllData();
+      //await storage.clearAllData();
       addToast(translate('nukeSuccess'), NotificationType.SUCCESS);
     } catch (error) {
       console.error('Error during tactical nuke:', error);
@@ -177,6 +182,13 @@ export class TacticalNuke extends MobxLitElement {
     }, 3000);
   }
 
+  handleCheckboxChange(type: NukedDataType): void {
+    // Handle checkbox state changes if needed
+    this.selectedTypes = this.selectedTypes.includes(type)
+      ? this.selectedTypes.filter(t => t !== type)
+      : [...this.selectedTypes, type];
+  }
+
   render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
@@ -184,6 +196,23 @@ export class TacticalNuke extends MobxLitElement {
           <div class="countdown-timer">${this.timeRemaining}</div>
         </div>
         <div class="nuke-launched"></div>
+
+        ${repeat(
+          Object.values(NukedDataType),
+          type => type,
+          type => html`
+            <div class="include-type">
+              <input
+                type="checkbox"
+                id="include-${type}"
+                @change=${() => this.handleCheckboxChange(type)}
+              />
+              <label for="include-${type}"
+                >${translate(`nukedDataType.${type}`)}</label
+              >
+            </div>
+          `,
+        )}
 
         <ss-button
           negative

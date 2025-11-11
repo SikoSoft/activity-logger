@@ -162,5 +162,8 @@
   "allListConfigs": "All list configurations",
   "showFull": "Show Full",
   "showEdit": "Show Edit",
-  "theme": "Theme"
+  "theme": "Theme",
+  "nukedDataType.entities": "Entities",
+  "nukedDataType.entityConfigs": "Entity/Property Configurations",
+  "nukedDataType.listConfigs": "List Configurations"
 }
