@@ -404,6 +404,16 @@ export class EntityList extends ViewElement {
             </ss-collapsable>
           `
         : nothing}
+      ${this.paginationType === PaginationType.NAVIGATION
+        ? html`
+            <list-paginator
+              @page-changed=${this.handlePageChanged}
+              start=${this.start}
+              total=${this.total}
+              perPage=${this.perPage}
+            ></list-paginator>
+          `
+        : nothing}
 
       <div class="box list-items">
         ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
@@ -443,18 +453,19 @@ export class EntityList extends ViewElement {
               perPage=${this.perPage}
             ></list-paginator>
           `
-        : this.paginationType === PaginationType.MORE_BUTTON && !this.reachedEnd
-          ? html`
-              <div class="more box">
-                <ss-button
-                  text=${translate('loadMore')}
-                  @click=${(): Promise<void> => this.load(true)}
-                  ?loading=${this.loading}
-                  ?disabled=${this.loading}
-                ></ss-button>
-              </div>
-            `
-          : nothing}
+        : nothing}
+      ${this.paginationType === PaginationType.MORE_BUTTON && !this.reachedEnd
+        ? html`
+            <div class="more box">
+              <ss-button
+                text=${translate('loadMore')}
+                @click=${(): Promise<void> => this.load(true)}
+                ?loading=${this.loading}
+                ?disabled=${this.loading}
+              ></ss-button>
+            </div>
+          `
+        : nothing}
     `;
   }
 }
