@@ -57,7 +57,7 @@ import { translate } from '@/lib/Localization';
 
 import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
-import { IReactionDisposer, reaction } from 'mobx';
+import { reaction } from 'mobx';
 
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
@@ -66,8 +66,6 @@ export class EntityForm extends ViewElement {
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
   private abortController: AbortController | null = null;
   private sortedIds: string[] = [];
-  private disposer: IReactionDisposer | null = null;
-  private prevEntityConfigId: number | undefined = undefined;
 
   static styles = [
     theme,
@@ -189,7 +187,7 @@ export class EntityForm extends ViewElement {
 
     this.initialTags = JSON.stringify(this.tags);
 
-    this.disposer = reaction(
+    reaction(
       () => appState.listConfig,
       () => {
         this.propertiesSetup = false;
@@ -454,7 +452,7 @@ export class EntityForm extends ViewElement {
         }),
       );
     } catch (error) {
-      console.error(`Error encountered in when saving action: ${error}`);
+      console.error(`Error encountered in when saving entity: ${error}`);
     }
 
     this.loading = false;
@@ -480,7 +478,7 @@ export class EntityForm extends ViewElement {
     }
   }
 
-  private async deleteAction(): Promise<void> {
+  private async deleteEntity(): Promise<void> {
     this.loading = true;
 
     try {
@@ -488,7 +486,7 @@ export class EntityForm extends ViewElement {
 
       addToast(translate('removed'), NotificationType.INFO);
     } catch (error) {
-      console.error(`Error encountered when deleting action: ${error}`);
+      console.error(`Error encountered when deleting entity: ${error}`);
     }
 
     this.dispatchEvent(
@@ -734,7 +732,7 @@ export class EntityForm extends ViewElement {
                 ></ss-button>
 
                 <confirmation-modal
-                  @confirmation-accepted=${this.deleteAction}
+                  @confirmation-accepted=${this.deleteEntity}
                   @confirmation-declined=${(): void => {
                     this.confirmModalShown = false;
                   }}
