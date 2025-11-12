@@ -1,5 +1,5 @@
 import { html, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
 import { DataType } from 'api-spec/models/Entity';
@@ -16,7 +16,11 @@ import {
   ShortTextFieldProp,
   ShortTextFieldProps,
   shortTextFieldProps,
+  ShortTextLastInput,
 } from './short-text-field.models';
+import { api } from '@/lib/Api';
+
+const minLengthForSuggestion = 1;
 
 @customElement('short-text-field')
 export class ShortTextField extends LitElement {
@@ -40,8 +44,18 @@ export class ShortTextField extends LitElement {
   [ShortTextFieldProp.UI_ID]: ShortTextFieldProps[ShortTextFieldProp.UI_ID] =
     shortTextFieldProps[ShortTextFieldProp.UI_ID].default;
 
+  @state()
+  lastInput: ShortTextLastInput = { hadResults: true, value: '' };
+
+  @state()
+  suggestions: string[] = [];
+
+  @state()
+  _value: string = '';
+
   protected handleInputChanged(e: InputChangedEvent): void {
     const value = e.detail.value;
+    this._value = value;
 
     const changedPayload: PropertyChangedEventPayload = {
       uiId: this[ShortTextFieldProp.UI_ID],
@@ -51,6 +65,46 @@ export class ShortTextField extends LitElement {
 
     const changedEvent = new PropertyChangedEvent(changedPayload);
     this.dispatchEvent(changedEvent);
+
+    this.requestPropertySuggestions();
+  }
+
+  private async requestPropertySuggestions(): Promise<void> {
+    console.log(`Requesting suggestions for value: ${this._value}`);
+    if (
+      !this.lastInput.hadResults &&
+      this._value.startsWith(this.lastInput.value)
+    ) {
+      //console.log('bail');
+      this.suggestions = [];
+      return;
+    }
+
+    try {
+      this.lastInput.hadResults = false;
+      let suggestions: string[] = [];
+
+      if (this._value.length >= minLengthForSuggestion) {
+        const result = await api.get<{ suggestions: string[] }>(
+          `propertySuggestion/${this.propertyConfigId}/${this._value}`,
+        );
+        if (result) {
+          suggestions = result.response.suggestions;
+        }
+      }
+
+      if (suggestions.length || this._value === '') {
+        this.lastInput.hadResults = true;
+      }
+
+      this.suggestions = suggestions;
+    } catch (error) {
+      console.error(
+        `Failed to get action suggestions: ${JSON.stringify(error)}`,
+      );
+    }
+
+    this.lastInput.value = this._value;
   }
 
   handleInputSubmitted(_: InputSubmittedEvent): void {
@@ -65,6 +119,8 @@ export class ShortTextField extends LitElement {
         value=${this[ShortTextFieldProp.VALUE]}
         @input-changed=${this.handleInputChanged}
         @input-submitted=${this.handleInputSubmitted}
+        .suggestions=${this.suggestions}
+        autoComplete
       ></ss-input>
     `;
   }

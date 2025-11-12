@@ -1,6 +1,8 @@
 import { ControlType } from '@/models/Control';
 import { PropConfigMap } from '@/models/Prop';
 
+export type ShortTextLastInput = { hadResults: boolean; value: string };
+
 export enum ShortTextFieldProp {
   INSTANCE_ID = 'instanceId',
   VALUE = 'value',
