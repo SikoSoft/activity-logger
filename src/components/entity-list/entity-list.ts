@@ -267,6 +267,7 @@ export class EntityList extends ViewElement {
   }
 
   private handleSortUpdated(_e: ListSortUpdatedEvent): void {
+    this.start = 0;
     this.load();
   }
 
