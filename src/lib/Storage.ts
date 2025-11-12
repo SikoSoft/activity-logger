@@ -13,7 +13,7 @@ import { Version } from '@/models/Version';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
-import { ExportDataContents } from 'api-spec/models/Data';
+import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -502,7 +502,7 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async clearAllData(): Promise<void> {
+  async clearData(_nukedDataTypes: NukedDataType[]): Promise<void> {
     return Promise.resolve();
   }
 

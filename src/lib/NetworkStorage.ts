@@ -5,7 +5,7 @@ import { Setting } from 'api-spec/models/Setting';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
-import { ExportDataContents } from 'api-spec/models/Data';
+import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -199,14 +199,16 @@ export class NetworkStorage implements StorageSchema {
     return [];
   }
 
-  async clearAllData(): Promise<void> {
-    const result = await api.delete('data');
+  async clearData(nukedDataTypes: NukedDataType[]): Promise<void> {
+    for (const type of nukedDataTypes) {
+      const result = await api.delete(`data/${type}`);
 
-    if (result && result.isOk) {
-      return;
+      if (!result || !result.isOk) {
+        return Promise.reject();
+      }
     }
 
-    return Promise.reject();
+    return Promise.resolve();
   }
 
   async import(data: ExportDataContents): Promise<boolean> {

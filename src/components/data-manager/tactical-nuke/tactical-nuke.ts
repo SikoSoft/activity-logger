@@ -168,7 +168,7 @@ export class TacticalNuke extends MobxLitElement {
     this.nukeComplete = true;
 
     try {
-      //await storage.clearAllData();
+      await storage.clearData(this.selectedTypes);
       addToast(translate('nukeSuccess'), NotificationType.SUCCESS);
     } catch (error) {
       console.error('Error during tactical nuke:', error);
@@ -183,7 +183,6 @@ export class TacticalNuke extends MobxLitElement {
   }
 
   handleCheckboxChange(type: NukedDataType): void {
-    // Handle checkbox state changes if needed
     this.selectedTypes = this.selectedTypes.includes(type)
       ? this.selectedTypes.filter(t => t !== type)
       : [...this.selectedTypes, type];

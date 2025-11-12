@@ -2,7 +2,7 @@ import { Setting } from 'api-spec/models/Setting';
 import { ListConfig } from 'api-spec/models/List';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
-import { ExportDataContents } from 'api-spec/models/Data';
+import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { Theme } from './Page';
 
 export enum StorageItemKey {
@@ -58,7 +58,7 @@ export interface StorageSchema {
   ): Promise<boolean>;
   export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
   import?(data: ExportDataContents): Promise<boolean>;
-  clearAllData?(): Promise<void>;
+  clearData?(nukedDataTypes: NukedDataType[]): Promise<void>;
   setTheme?(theme: Theme): void;
   getTheme?(): Theme;
 }
