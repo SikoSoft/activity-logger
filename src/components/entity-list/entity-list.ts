@@ -442,7 +442,10 @@ export class EntityList extends ViewElement {
           : !this.loading
             ? html` <div class="no-actions">${translate('noItemsFound')}</div>`
             : nothing}
+
         <div id="lazy-loader"></div>
+
+        ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
       </div>
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
