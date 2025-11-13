@@ -225,11 +225,28 @@ export class ExportTool extends MobxLitElement {
       return;
     }
 
+    if (dataType === ExportDataType.ENTITIES) {
+      this.selectEntityConfig(entityConfigId);
+    }
+
     this.selectedDataSets = [
       ...this.selectedDataSets,
       { entityConfigId, dataType },
     ];
     this.syncDataSets();
+  }
+
+  selectEntityConfig(entityConfigId: number): void {
+    this.selectedDataSets = this.selectedDataSets.filter(
+      ds =>
+        ds.entityConfigId !== entityConfigId ||
+        ds.dataType !== ExportDataType.ENTITY_CONFIGS,
+    );
+
+    this.selectedDataSets = [
+      ...this.selectedDataSets,
+      { entityConfigId, dataType: ExportDataType.ENTITY_CONFIGS },
+    ];
   }
 
   async syncDataSets(): Promise<void> {
@@ -259,7 +276,7 @@ export class ExportTool extends MobxLitElement {
     );
   }
 
-  selectEntityConfig(entityConfigId: number): void {
+  selectEntityConfigGroup(entityConfigId: number): void {
     this.handleDataSetChanged(entityConfigId, ExportDataType.ENTITY_CONFIGS);
     this.handleDataSetChanged(entityConfigId, ExportDataType.ENTITIES);
   }
@@ -331,7 +348,8 @@ export class ExportTool extends MobxLitElement {
                     type="checkbox"
                     id="${config.id}-both"
                     ?checked=${this.entityConfigIdIsSelected(config.id)}
-                    @change=${(): void => this.selectEntityConfig(config.id)}
+                    @change=${(): void =>
+                      this.selectEntityConfigGroup(config.id)}
                   />
                   <h3>${config.name}</h3>
                 </div>
@@ -344,6 +362,12 @@ export class ExportTool extends MobxLitElement {
                         type="checkbox"
                         id="${config.id}-${dataType}"
                         ?checked=${this.dataSetIsSelected(config.id, dataType)}
+                        ?disabled=${dataType ===
+                          ExportDataType.ENTITY_CONFIGS &&
+                        this.dataSetIsSelected(
+                          config.id,
+                          ExportDataType.ENTITIES,
+                        )}
                         @change=${(): Promise<void> =>
                           this.handleDataSetChanged(config.id, dataType)}
                       />
