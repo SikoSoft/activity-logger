@@ -56,20 +56,29 @@ export class ImportTool extends MobxLitElement {
       const filePromises: Promise<void>[] = [];
 
       zipContents.forEach((relativePath, zipEntry) => {
-        if (zipEntry.dir) {
-          return;
-        }
+        if (zipEntry.dir) return;
+        const name = (zipEntry.name || relativePath || '').toLowerCase();
+        if (!name.endsWith('.json')) return;
 
         const filePromise = zipEntry
-          .async('string')
-          .then((content: string): void => {
-            //const filename = zipEntry.name.toLowerCase();
-
+          .async('uint8array')
+          .then((bytes: Uint8Array): void => {
             try {
+              const decoded = new TextDecoder('utf-8').decode(bytes);
+              const content = decoded.replace(/^\uFEFF/, '').trimStart();
+              const firstChar = content[0];
+
+              if (firstChar !== '{' && firstChar !== '[') {
+                return;
+              }
+
               this.importData = this.parseContent(content);
             } catch (error) {
-              console.error('Error parsing content:', error);
+              console.error(`Error reading/parsing ${name} from ZIP:`, error);
             }
+          })
+          .catch(err => {
+            console.error(`Error reading ${name} from ZIP:`, err);
           });
 
         filePromises.push(filePromise);
@@ -78,8 +87,6 @@ export class ImportTool extends MobxLitElement {
       await Promise.all(filePromises);
 
       this.requestUpdate();
-
-      //this.importData = zipContents;
 
       this.importResults = [ImportResultType.ZIP_IMPORTED];
     } catch (error) {
@@ -137,10 +144,12 @@ export class ImportTool extends MobxLitElement {
         const content = reader.result as string;
 
         if (this.fileName.endsWith('.zip')) {
+          console.log('doing zip import');
           this.handleZipFile(file);
         }
 
         if (this.fileName.endsWith('.json')) {
+          console.log('doing json import');
           this.importData = this.parseContent(content);
           this.importResults = [ImportResultType.JSON_IMPORTED];
         }
