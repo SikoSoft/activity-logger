@@ -258,6 +258,8 @@ export class ExportTool extends MobxLitElement {
     }
     this.selectedDataSets = allDataSets;
     this.syncDataSets();
+
+    this.selectAllListConfigs();
   }
 
   selectAllListConfigs(): void {
