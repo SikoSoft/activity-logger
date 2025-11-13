@@ -337,7 +337,7 @@ export class ExportTool extends MobxLitElement {
                 </div>
 
                 ${repeat(
-                  Object.values(ExportDataType),
+                  [ExportDataType.ENTITY_CONFIGS, ExportDataType.ENTITIES],
                   dataType => html`
                     <div class="include-type">
                       <input
