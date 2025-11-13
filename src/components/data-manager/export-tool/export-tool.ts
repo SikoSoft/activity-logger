@@ -167,42 +167,6 @@ export class ExportTool extends MobxLitElement {
     }
   }
 
-  resetFileName(): void {
-    this.fileName = `${baseFileName}.zip`;
-    return;
-
-    if (!this.selectedDataSets.length && !this.selectedListConfigs.length) {
-      this.fileName = `${baseFileName}.zip`;
-      return;
-    }
-
-    const configs = this.state.entityConfigs.filter(c =>
-      this.selectedDataSets.some(ds => ds.entityConfigId === c.id),
-    );
-
-    const entityStrs: string[] = [];
-
-    for (const config of configs) {
-      let entityStr = `${config.name.replace(/\s+/g, '-')}(`;
-      const dataTypes: string[] = [];
-      if (this.dataSetIsSelected(config.id, ExportDataType.ENTITY_CONFIGS)) {
-        dataTypes.push(ExportDataType.ENTITY_CONFIGS);
-      }
-      if (this.dataSetIsSelected(config.id, ExportDataType.ENTITIES)) {
-        dataTypes.push(ExportDataType.ENTITIES);
-      }
-      entityStr += `${dataTypes.join(',')})`;
-      entityStrs.push(entityStr);
-    }
-
-    let listConfigsStr = '';
-    if (this.selectedListConfigs.length > 0) {
-      listConfigsStr = `ListConfigs(${this.selectedListConfigs.join(',')})`;
-    }
-
-    this.fileName = `${baseFileName}[${entityStrs.join(',')}][${listConfigsStr}].zip`;
-  }
-
   updateFileName(e: InputChangedEvent): void {
     this.fileName = e.detail.value;
   }
@@ -255,12 +219,10 @@ export class ExportTool extends MobxLitElement {
         .map(ds => `${ds.entityConfigId}-${ds.dataType}`)
         .join(','),
     );
-    this.resetFileName();
   }
 
   async syncListConfigs(): Promise<void> {
     this.listConfigsHash = await sha256(this.selectedListConfigs.join(','));
-    this.resetFileName();
   }
 
   dataSetIsSelected(entityConfigId: number, dataType: ExportDataType): boolean {
