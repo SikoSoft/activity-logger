@@ -418,7 +418,7 @@ export class EntityList extends ViewElement {
       <div class="box list-items">
         ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
         ${this.state.listEntities.length
-          ? repeat(
+          ? html`${repeat(
               this.state.listEntities,
               item => item.id,
               item => html`
@@ -438,14 +438,13 @@ export class EntityList extends ViewElement {
                 ></entity-list-item>
                 ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
-            )
+            )}
+            ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing} `
           : !this.loading
             ? html` <div class="no-actions">${translate('noItemsFound')}</div>`
             : nothing}
 
         <div id="lazy-loader"></div>
-
-        ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing}
       </div>
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
