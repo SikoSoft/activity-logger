@@ -144,12 +144,10 @@ export class ImportTool extends MobxLitElement {
         const content = reader.result as string;
 
         if (this.fileName.endsWith('.zip')) {
-          console.log('doing zip import');
           this.handleZipFile(file);
         }
 
         if (this.fileName.endsWith('.json')) {
-          console.log('doing json import');
           this.importData = this.parseContent(content);
           this.importResults = [ImportResultType.JSON_IMPORTED];
         }
