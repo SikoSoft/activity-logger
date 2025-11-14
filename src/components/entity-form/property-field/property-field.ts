@@ -1,7 +1,8 @@
-import { html, nothing, TemplateResult } from 'lit';
+import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/ss-input';
+import '@ss/ui/components/confirmation-modal';
 import {
   DataType,
   DateDataValue,
@@ -29,9 +30,28 @@ import '@/components/entity-form/long-text-field/long-text-field';
 import '@/components/entity-form/short-text-field/short-text-field';
 import '@/components/entity-form/image-field/image-field';
 import { translate } from '@/lib/Localization';
+import { theme } from '@/styles/theme';
 
 @customElement('property-field')
 export class PropertyField extends MobxLitElement {
+  static styles = [
+    theme,
+    css`
+      :host {
+        display: block;
+      }
+
+      label {
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+        display: block;
+        opacity: 0.9;
+      }
+
+      .property {
+      }
+    `,
+  ];
   private state = appState;
 
   @property({ type: Number })
@@ -211,7 +231,6 @@ export class PropertyField extends MobxLitElement {
         >
           ${this.canDelete
             ? html` <ss-button
-                negative
                 @click=${(): void => {
                   this.setConfirmationModalIsOpen(true);
                 }}
@@ -219,7 +238,7 @@ export class PropertyField extends MobxLitElement {
               >`
             : nothing}
           ${this.canClone
-            ? html` <ss-button positive @click=${this.clone}
+            ? html` <ss-button @click=${this.clone}
                 >${translate('clone')}</ss-button
               >`
             : nothing}
@@ -227,6 +246,11 @@ export class PropertyField extends MobxLitElement {
 
         <confirmation-modal
           ?open=${this.confirmationModalIsOpen}
+          message=${translate('confirmDeleteProperty', {
+            propertyName: this.propertyConfig.name,
+          })}
+          acceptText=${translate('delete')}
+          declineText=${translate('cancel')}
           @confirmation-accepted=${this.delete}
           @confirmation-declined=${(): void => {
             this.setConfirmationModalIsOpen(false);

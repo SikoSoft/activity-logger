@@ -165,5 +165,6 @@
   "theme": "Theme",
   "nukedDataType.entities": "Entities",
   "nukedDataType.entityConfigs": "Entity/Property Configurations",
-  "nukedDataType.listConfigs": "List Configurations"
+  "nukedDataType.listConfigs": "List Configurations",
+  "confirmDeleteProperty": "Are you sure you want to delete the property '{propertyName}'?"
 }
