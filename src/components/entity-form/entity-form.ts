@@ -12,6 +12,7 @@ import {
   Entity,
   EntityProperty,
   PropertyDataValue,
+  EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { appState } from '@/state';
 import { api } from '@/lib/Api';
@@ -30,6 +31,7 @@ import {
 import { addToast, sha256 } from '@/lib/Util';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
+import '@ss/ui/components/pop-up';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
@@ -89,6 +91,14 @@ export class EntityForm extends ViewElement {
       div:last-child {
         margin-top: 1rem;
       }
+
+      property-field {
+        margin-bottom: 1rem;
+      }
+
+      .save-button::part(button) {
+        font-weight: bold;
+      }
     `,
   ];
 
@@ -130,6 +140,7 @@ export class EntityForm extends ViewElement {
   @state() instancesHash = '';
 
   @state() propertyReferences: PropertyReference[] = [];
+  @state() propertyPopUpIsOpen = false;
 
   @state()
   get classes(): Record<string, boolean> {
@@ -179,6 +190,17 @@ export class EntityForm extends ViewElement {
       config =>
         this.state.listConfig.filter.includeTypes.length === 0 ||
         this.state.listConfig.filter.includeTypes.includes(config.id),
+    );
+  }
+
+  @state()
+  get allowedPropertiesToAdd(): EntityPropertyConfig[] {
+    if (!this.entityConfig) {
+      return [];
+    }
+
+    return this.entityConfig.properties.filter(propertyConfig =>
+      this.propertyAtMax(propertyConfig.id),
     );
   }
 
@@ -627,6 +649,26 @@ export class EntityForm extends ViewElement {
     this.sortedIds = e.detail.sortedIds;
   }
 
+  addProperty(propertyConfig: EntityPropertyConfig): void {
+    if (!propertyConfig) {
+      return;
+    }
+
+    this.propertyInstances = [
+      ...this.propertyInstances,
+      {
+        uiId: uuidv4(),
+        instanceId: 0,
+        propertyConfigId: propertyConfig.id,
+        value: propertyConfig.defaultValue,
+      },
+    ];
+  }
+
+  showAddPropertyPopUp(): void {
+    this.propertyPopUpIsOpen = true;
+  }
+
   renderPropertyField(
     propertyInstance: PropertyInstance,
   ): TemplateResult | typeof nothing {
@@ -686,6 +728,40 @@ export class EntityForm extends ViewElement {
                 )
               : nothing}
           </sortable-list>
+
+          <div class="buttons">
+            ${this.canAddProperty
+              ? html` <ss-button @click=${this.showAddPropertyPopUp}
+                  >${translate('addProperty')}</ss-button
+                >`
+              : nothing}
+          </div>
+
+          <pop-up
+            closeOnOutsideClick
+            closeOnEsc
+            closeButton
+            ?open=${this.propertyPopUpIsOpen}
+            @pop-up-closed=${(): void => {
+              this.propertyPopUpIsOpen = false;
+            }}
+          >
+            ${repeat(
+              this.allowedPropertiesToAdd,
+              propertyConfig => propertyConfig.id,
+              propertyConfig =>
+                html`<div class="property-option">
+                  <div
+                    @click=${(): void => {
+                      this.addProperty(propertyConfig);
+                      this.propertyPopUpIsOpen = false;
+                    }}
+                  >
+                    ${propertyConfig.name}
+                  </div>
+                </div>`,
+            )}
+          </pop-up>
         </div>
 
         <tag-manager
@@ -713,6 +789,7 @@ export class EntityForm extends ViewElement {
 
         <div class="buttons">
           <ss-button
+            class="save-button"
             ?positive=${!this.entityId || this.hasChanged}
             @click=${this.handleSaveClick}
             text=${this.entityId
