@@ -171,9 +171,9 @@ export class EntityForm extends ViewElement {
       return false;
     }
 
-    return this.entityConfig.properties.some(propertyConfig =>
-      this.propertyAtMax(propertyConfig.id),
-    );
+    return this.entityConfig.properties.some(propertyConfig => {
+      return !this.propertyAtMax(propertyConfig.id);
+    });
   }
 
   @state()
@@ -199,8 +199,8 @@ export class EntityForm extends ViewElement {
       return [];
     }
 
-    return this.entityConfig.properties.filter(propertyConfig =>
-      this.propertyAtMax(propertyConfig.id),
+    return this.entityConfig.properties.filter(
+      propertyConfig => !this.propertyAtMax(propertyConfig.id),
     );
   }
 
@@ -323,13 +323,25 @@ export class EntityForm extends ViewElement {
     const propertyConfig = this.entityConfig.properties.find(
       prop => prop.id === propertyId,
     );
-    return propertyConfig
-      ? this.numberOfPropertiesWithType(propertyConfig.dataType, propertyId) >=
-          propertyConfig.repeat
-      : true;
+
+    if (!propertyConfig) {
+      return true;
+    }
+
+    const numberOfPropertiesWithType = this.numberOfPropertiesWithType(
+      propertyConfig.dataType,
+      propertyId,
+      false,
+    );
+
+    return numberOfPropertiesWithType >= propertyConfig.allowed;
   }
 
-  private numberOfPropertiesWithType(dataType: DataType, type: number): number {
+  private numberOfPropertiesWithType(
+    dataType: DataType,
+    type: number,
+    onlyValidated = true,
+  ): number {
     if (!this.entityConfig) {
       return 0;
     }
@@ -337,7 +349,7 @@ export class EntityForm extends ViewElement {
     return this.propertyInstances.filter(
       prop =>
         prop.propertyConfigId === type &&
-        this.validateTypedData(dataType, prop.value),
+        (this.validateTypedData(dataType, prop.value) || !onlyValidated),
     ).length;
   }
 
