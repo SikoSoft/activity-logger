@@ -44,6 +44,14 @@ export const theme = css`
 
     --loader-color1: #000;
     --loader-color2: #0002;
+
+    --toggle-outer-background-color1: #777;
+    --toggle-outer-background-color2: #999;
+    --toggle-inner-background-color1: #ccc;
+    --toggle-inner-background-color2: #aaa;
+    --toggle-ball-background-color1: #555;
+    --toggle-ball-background-color2: #777;
+    --toggle-ball-border-color: #222;
   }
 
   :host([theme='dark']) {
@@ -82,6 +90,14 @@ export const theme = css`
 
     --loader-color1: #cff5f4;
     --loader-color2: #cff5f422;
+
+    --toggle-outer-background-color1: #354;
+    --toggle-outer-background-color2: #132;
+    --toggle-inner-background-color1: #477;
+    --toggle-inner-background-color2: #799;
+    --toggle-ball-background-color1: #243;
+    --toggle-ball-background-color2: #132;
+    --toggle-ball-border-color: #222;
   }
 
   :host {
