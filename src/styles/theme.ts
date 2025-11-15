@@ -21,6 +21,7 @@ export const theme = css`
     --font-size: 1rem;
     --text-color: #000;
     --background-color: ${backgroundColorMap[Theme.LIGHT]};
+    --background-hover-color: #e0e0e0;
     --box-background-color: #fff;
     --box-border-color: #aaa;
     --box-text-color: #000;
@@ -59,6 +60,7 @@ export const theme = css`
     --font-size: 1rem;
     --text-color: #cff5f4;
     --background-color: ${backgroundColorMap[Theme.DARK]};
+    --background-hover-color: #1a2e2c;
     --box-background-color: #0a1911;
     --box-text-color: #cff5f4;
     --box-border-color: #38635e;

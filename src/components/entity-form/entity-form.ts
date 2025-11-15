@@ -88,7 +88,7 @@ export class EntityForm extends ViewElement {
         display: initial;
       }
 
-      div:last-child {
+      .buttons {
         margin-top: 1rem;
       }
 
@@ -98,6 +98,15 @@ export class EntityForm extends ViewElement {
 
       .save-button::part(button) {
         font-weight: bold;
+      }
+
+      .property-option {
+        cursor: pointer;
+        padding: 0.5rem;
+
+        &:hover {
+          background-color: var(--background-hover-color);
+        }
       }
     `,
   ];
