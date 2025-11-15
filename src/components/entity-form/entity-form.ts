@@ -645,11 +645,6 @@ export class EntityForm extends ViewElement {
       property => property.uiId !== uiId,
     );
 
-    this.state.setEntityPropertyInstance(
-      instanceToRemove.propertyConfigId,
-      this.state.entityPropertyInstances[instanceToRemove.propertyConfigId] - 1,
-    );
-
     this.instancesHash = await this.getInstancesHash();
   }
 
@@ -703,6 +698,8 @@ export class EntityForm extends ViewElement {
       uiId=${uiId}
       entityConfigId=${this.entityConfig.id}
       propertyConfigId=${propertyConfigId}
+      usedOfThisType=${this.state.entityPropertyInstances[propertyConfigId] ||
+      0}
       @property-changed=${this.handlePropertyChanged}
       @property-cloned=${this.handlePropertyCloned}
       @property-deleted=${this.handlePropertyDeleted}
@@ -737,7 +734,7 @@ export class EntityForm extends ViewElement {
             ${this.propertyInstances.length && this.entityConfig
               ? repeat(
                   this.propertyInstances,
-                  propertyInstance => propertyInstance.propertyConfigId,
+                  propertyInstance => propertyInstance.uiId,
                   propertyInstance =>
                     html`<sortable-item
                       id=${propertyInstance.uiId}

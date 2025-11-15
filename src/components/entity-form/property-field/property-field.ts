@@ -47,9 +47,6 @@ export class PropertyField extends MobxLitElement {
         display: block;
         opacity: 0.9;
       }
-
-      .property {
-      }
     `,
   ];
   private state = appState;
