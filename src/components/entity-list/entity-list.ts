@@ -428,6 +428,7 @@ export class EntityList extends ViewElement {
                   entityId=${item.id}
                   type=${item.type}
                   createdAt=${item.createdAt}
+                  updatedAt=${item.updatedAt}
                   .tags=${item.tags}
                   ?selected=${this.state.selectedActions.includes(item.id)}
                   .properties=${item.properties}

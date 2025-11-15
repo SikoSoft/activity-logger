@@ -52,6 +52,16 @@ export class EntityListItem extends MobxLitElement {
     .time {
       color: #888;
       font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+      padding: var(--padding);
+      gap: 2rem;
+
+      label {
+        font-weight: lighter;
+        opacity: 0.8;
+        margin-right: 0.25rem;
+      }
     }
 
     .show-full,
@@ -70,6 +80,7 @@ export class EntityListItem extends MobxLitElement {
       text-align: left;
       display: flex;
       justify-content: space-between;
+      gap: 1rem;
 
       .property-name {
         font-weight: lighter;
@@ -144,8 +155,13 @@ export class EntityListItem extends MobxLitElement {
     return this.entityConfig.properties;
   }
 
-  get readableTime(): string {
+  get readableCreatedAt(): string {
     const date = new Date(this.createdAt);
+    return Time.formatDateTime(date);
+  }
+
+  get readableUpdatedAt(): string {
+    const date = new Date(this.updatedAt);
     return Time.formatDateTime(date);
   }
 
@@ -340,7 +356,21 @@ export class EntityListItem extends MobxLitElement {
                     property => this.renderProperty(property),
                   )}
                 </div>
-                <div class="time">${this.readableTime}</div>
+
+                <div class="time">
+                  <span class="created-at">
+                    <label>${translate('createdAt')}</label>:
+                    ${this.readableCreatedAt}
+                  </span>
+                  ${this.createdAt !== this.updatedAt
+                    ? html`
+                        <span class="updated-at"
+                          ><label>${translate('updatedAt')}</label>:
+                          ${this.readableUpdatedAt}</span
+                        >
+                      `
+                    : nothing}
+                </div>
               </div>
             `}
       </div>
