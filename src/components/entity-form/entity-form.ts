@@ -296,6 +296,7 @@ export class EntityForm extends ViewElement {
           instanceId: property.id,
           uiId: uuidv4(),
           value: property.value,
+          valueIsSet: true,
         }),
       );
 
@@ -312,6 +313,7 @@ export class EntityForm extends ViewElement {
             instanceId: 0,
             uiId: uuidv4(),
             value: propertyConfig.defaultValue,
+            valueIsSet: false,
           }));
 
       this.propertyInstances = [...existingProperties, ...availableProperties];
@@ -381,14 +383,16 @@ export class EntityForm extends ViewElement {
   }
 
   private mapInstancesToProperties(): EntityProperty[] {
-    return this.propertyInstances.map(propertyInstance => ({
-      id: propertyInstance.instanceId,
-      propertyConfigId: propertyInstance.propertyConfigId,
-      value: propertyInstance.value,
-      order:
-        this.sortedIds.indexOf(propertyInstance.uiId) ??
-        this.propertyInstances.length,
-    }));
+    return this.propertyInstances
+      .filter(prop => prop.valueIsSet)
+      .map(propertyInstance => ({
+        id: propertyInstance.instanceId,
+        propertyConfigId: propertyInstance.propertyConfigId,
+        value: propertyInstance.value,
+        order:
+          this.sortedIds.indexOf(propertyInstance.uiId) ??
+          this.propertyInstances.length,
+      }));
   }
 
   private validateConstraints(): ValidateionResult {
@@ -605,6 +609,7 @@ export class EntityForm extends ViewElement {
       return;
     }
 
+    propertyInstance.valueIsSet = true;
     propertyInstance.value = value;
 
     this.instancesHash = await this.getInstancesHash();
@@ -674,6 +679,7 @@ export class EntityForm extends ViewElement {
         instanceId: 0,
         propertyConfigId: propertyConfig.id,
         value: propertyConfig.defaultValue,
+        valueIsSet: false,
       },
     ];
   }

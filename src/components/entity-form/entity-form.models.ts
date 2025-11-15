@@ -11,6 +11,7 @@ export interface PropertyInstance {
   instanceId: number;
   uiId: string;
   value: PropertyDataValue;
+  valueIsSet: boolean;
 }
 
 export type ValidateionResult =
