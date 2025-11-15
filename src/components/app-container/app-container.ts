@@ -39,12 +39,11 @@ export class AppContainer extends MobxLitElement {
 
   @state() view: PageView = defaultPageView;
   @state() ready: boolean = false;
+
   @query('main > *') viewComponent!: ViewElement;
 
   connectedCallback(): void {
     super.connectedCallback();
-
-    //document.body.classList.add('app-loaded');
 
     this.setAuthToken(storage.getAuthToken());
 

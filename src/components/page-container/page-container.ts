@@ -65,11 +65,13 @@ export class PageContainer extends MobxLitElement {
   [PageContainerProp.THEME]: PageContainerProps[PageContainerProp.THEME] =
     pageContainerProps[PageContainerProp.THEME].default;
 
+  @state() popUpIsOpen: boolean = false;
+
   @state()
   get classes(): Record<string, boolean> {
     return {
       'page-container': true,
-      'overlay-is-open': this.state.widgetIsOpen,
+      'overlay-is-open': this.state.widgetIsOpen || this.popUpIsOpen,
     };
   }
 
@@ -102,11 +104,22 @@ export class PageContainer extends MobxLitElement {
     );
   }
 
+  private handlePopUpOpened(): void {
+    this.popUpIsOpen = true;
+  }
+
+  private handlePopUpClosed(): void {
+    this.popUpIsOpen = false;
+  }
+
   render(): TemplateResult {
     return html`
       <div class=${classMap(this.classes)}>
         <div class="overlay"></div>
-        <app-container></app-container>
+        <app-container
+          @pop-up-opened=${this.handlePopUpOpened}
+          @pop-up-closed=${this.handlePopUpClosed}
+        ></app-container>
       </div>
     `;
   }
