@@ -76,16 +76,13 @@ export class EntityForm extends ViewElement {
         padding: 1rem;
       }
 
-      tag-manager,
-      .time,
-      .type {
-        display: none;
+      tag-manager {
+        display: block;
+        margin-top: 1rem;
       }
 
-      form.advanced-mode tag-manager,
-      form.advanced-mode .time,
-      form.advanced-mode .type {
-        display: initial;
+      tag-manager:part(legend) {
+        font-weight: bold;
       }
 
       .buttons {
