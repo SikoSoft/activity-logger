@@ -72,6 +72,11 @@ export class EntityForm extends ViewElement {
   static styles = [
     theme,
     css`
+      :host {
+        display: block;
+        text-align: left;
+      }
+
       form {
         padding: 1rem;
       }
