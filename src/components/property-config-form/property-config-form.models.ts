@@ -16,6 +16,7 @@ export enum PropertyConfigFormProp {
   SUFFIX = 'suffix',
   HIDDEN = 'hidden',
   DEFAULT_VALUE = 'defaultValue',
+  PERFORM_DRIFT_CHECK = 'performDriftCheck',
 }
 
 export interface PropertyConfigFormProps extends PropTypes {
@@ -32,6 +33,7 @@ export interface PropertyConfigFormProps extends PropTypes {
   [PropertyConfigFormProp.SUFFIX]: string;
   [PropertyConfigFormProp.HIDDEN]: boolean;
   [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyDataValue;
+  [PropertyConfigFormProp.PERFORM_DRIFT_CHECK]: boolean;
 }
 
 export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
@@ -99,5 +101,10 @@ export const propertyConfigFormProps: PropConfigMap<PropertyConfigFormProps> = {
     default: '',
     control: { type: ControlType.TEXT },
     description: 'The default value of the property',
+  },
+  [PropertyConfigFormProp.PERFORM_DRIFT_CHECK]: {
+    default: false,
+    control: { type: ControlType.HIDDEN },
+    description: 'Whether to perform a drift check on the property',
   },
 };

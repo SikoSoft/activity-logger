@@ -154,15 +154,21 @@ export class NetworkStorage implements StorageSchema {
 
   async updatePropertyConfig(
     propertyConfig: EntityPropertyConfig,
+    performDriftCheck: boolean = true,
   ): Promise<Entity.EntityPropertyConfig | null> {
     const { id, entityConfigId, ...payload } = propertyConfig;
     const timeZone = new Date().getTimezoneOffset();
     const result = await api.put<
       Omit<EntityPropertyConfig, 'id' | 'entityConfigId'> & {
         timeZone: number;
+        performDriftCheck: boolean;
       },
       EntityPropertyConfig
-    >(`propertyConfig/${entityConfigId}/${id}`, { ...payload, timeZone });
+    >(`propertyConfig/${entityConfigId}/${id}`, {
+      ...payload,
+      timeZone,
+      performDriftCheck,
+    });
 
     if (result && result.isOk) {
       return result.response;

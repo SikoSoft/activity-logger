@@ -45,6 +45,7 @@ export interface StorageSchema {
   ): Promise<Entity.EntityPropertyConfig | null>;
   updatePropertyConfig?(
     propertyConfig: EntityPropertyConfig,
+    performDriftCheck: boolean,
   ): Promise<Entity.EntityPropertyConfig | null>;
   setWindowScrollPosition?(x: number, y: number): void;
   getWindowScrollPosition?(): { x: number; y: number };

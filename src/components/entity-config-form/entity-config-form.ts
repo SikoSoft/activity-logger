@@ -98,6 +98,9 @@ export class EntityConfigForm extends MobxLitElement {
   isSaving = false;
 
   @state()
+  performDriftCheck: boolean = false;
+
+  @state()
   propertyConfigInstances: PropertyConfigInstance[] = [];
 
   @state()
@@ -131,7 +134,10 @@ export class EntityConfigForm extends MobxLitElement {
 
   @state()
   get hasBreakingChanges(): boolean {
-    return this.propertyConfigProblems.some(problems => problems !== undefined);
+    return (
+      this.performDriftCheck &&
+      this.propertyConfigProblems.some(problems => problems !== undefined)
+    );
   }
 
   @state()
@@ -292,6 +298,15 @@ export class EntityConfigForm extends MobxLitElement {
     index: number,
     e: PropertyConfigBreakingChangeDetectedEvent,
   ): void {
+    if (!this.performDriftCheck) {
+      return;
+    }
+
+    addToast(
+      translate('propertyConfig.breakingChangeDetected'),
+      NotificationType.ERROR,
+    );
+
     const { problems } = e.detail;
     this.propertyConfigProblems = produce(
       this.propertyConfigProblems,
@@ -435,6 +450,7 @@ export class EntityConfigForm extends MobxLitElement {
                             prefix=${property.prefix}
                             suffix=${property.suffix}
                             ?hidden=${property.hidden}
+                            ?performDriftCheck=${this.performDriftCheck}
                             .defaultValue=${property.defaultValue}
                             @property-config-updated=${(
                               e: PropertyConfigUpdatedEvent,

@@ -129,6 +129,10 @@ export class PropertyConfigForm extends LitElement {
   [PropertyConfigFormProp.DEFAULT_VALUE]: PropertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE] =
     propertyConfigFormProps[PropertyConfigFormProp.DEFAULT_VALUE].default;
 
+  @property({ type: Boolean })
+  [PropertyConfigFormProp.PERFORM_DRIFT_CHECK]: PropertyConfigFormProps[PropertyConfigFormProp.PERFORM_DRIFT_CHECK] =
+    propertyConfigFormProps[PropertyConfigFormProp.PERFORM_DRIFT_CHECK].default;
+
   @state()
   confirmationModalIsOpen = false;
 
@@ -305,10 +309,6 @@ export class PropertyConfigForm extends LitElement {
         }),
       );
 
-      addToast(
-        translate('propertyConfig.breakingChangeDetected'),
-        NotificationType.ERROR,
-      );
       return false;
     }
 
@@ -325,12 +325,13 @@ export class PropertyConfigForm extends LitElement {
   async save(): Promise<void> {
     if (this[PropertyConfigFormProp.PROPERTY_CONFIG_ID]) {
       const isValid = this.validate();
-      if (!isValid) {
+      if (this.performDriftCheck && !isValid) {
         return;
       }
 
       const propertyConfig = await storage.updatePropertyConfig(
         this.propertyConfig,
+        this.performDriftCheck,
       );
 
       if (propertyConfig) {

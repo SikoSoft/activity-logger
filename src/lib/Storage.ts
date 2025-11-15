@@ -484,6 +484,7 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async updatePropertyConfig(
     _propertyConfig: EntityPropertyConfig,
+    _performDriftCheck: boolean,
   ): Promise<Entity.EntityPropertyConfig | null> {
     return Promise.resolve(null);
   }
