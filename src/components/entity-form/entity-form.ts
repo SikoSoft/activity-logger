@@ -725,7 +725,7 @@ export class EntityForm extends ViewElement {
                 selected=${this.type}
                 @select-changed=${this.handleTypeChanged}
                 .options=${[
-                  { label: 'Select an entity', value: '0' },
+                  { label: translate('selectItemType'), value: '0' },
                   ...this.availableEntityConfigs.map(entity => ({
                     label: entity.name,
                     value: entity.id,
