@@ -103,6 +103,7 @@ export const theme = css`
   }
 
   fieldset {
+    border-color: var(--border-color);
     border-radius: 0.5rem;
   }
 

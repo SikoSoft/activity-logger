@@ -47,10 +47,6 @@ export class ListFilter extends MobxLitElement {
         padding: 1rem;
       }
 
-      fieldset {
-        border-color: var(--border-color);
-      }
-
       .list-filter.all .filters,
       .tagging.all .tag-rules {
         opacity: 0.3;

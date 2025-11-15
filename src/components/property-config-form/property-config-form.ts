@@ -56,6 +56,7 @@ export class PropertyConfigForm extends LitElement {
     }
 
     fieldset {
+      border-color: var(--border-color);
       border-radius: 0.5rem;
     }
 
