@@ -12,7 +12,7 @@ import { Version } from '@/models/Version';
 
 import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
-import { setupRouter, RouteDef } from '@/router';
+import { setupRouter } from '@/lib/Router';
 
 import '@/components/page-nav/page-nav';
 import '@/components/action-form/action-form';
@@ -28,6 +28,8 @@ import '@/components/list-config/list-config';
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
+import { Route, Router } from '@/models/Router';
+import { routes } from '@/routes';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -43,7 +45,7 @@ export class AppContainer extends MobxLitElement {
 
   @query('main > *') viewComponent!: ViewElement;
 
-  private appRouter?: ReturnType<typeof setupRouter>;
+  private appRouter?: Router;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -208,46 +210,14 @@ export class AppContainer extends MobxLitElement {
   }
 
   protected firstUpdated(): void {
-    // If you prefer to keep the existing non-router flow, skip mounting.
     const outlet = this.renderRoot.querySelector(
       '#router-outlet',
     ) as Element | null;
-    if (!outlet) return;
 
-    const routes: RouteDef[] = [
-      {
-        path: '/',
-        redirect: undefined,
-        component: 'action-list',
-        action: async () =>
-          await import('@/components/action-list/action-list'),
-      },
-      {
-        path: '/entities',
-        component: 'entity-list',
-        action: async () =>
-          await import('@/components/entity-list/entity-list'),
-      },
-      {
-        path: '/entity/:id',
-        component: 'entity-form',
-        action: async () =>
-          await import('@/components/entity-form/entity-form'),
-      },
-      {
-        path: '/login',
-        component: 'login-form',
-        action: async () => await import('@/components/login-form/login-form'),
-      },
-      {
-        path: '/account',
-        component: 'account-form',
-        action: async () =>
-          await import('@/components/account-form/account-form'),
-      },
-    ];
+    if (!outlet) {
+      return;
+    }
 
-    // adapt to the router API: our router expects RouteDef[]; if you included redirect keys remove them
     this.appRouter = setupRouter(
       outlet,
       routes,
