@@ -232,10 +232,6 @@ export class AppContainer extends MobxLitElement {
         @tab-index-changed=${this.handleTabChanged}
         @collapsable-toggled=${this.handleCollapsableToggled}
       >
-        <!-- optional: keep existing renderContent() for non-routed parts -->
-        ${this.renderContent()}
-
-        <!-- router outlet (router will render components here) -->
         <div id="router-outlet"></div>
       </div>
     `;
