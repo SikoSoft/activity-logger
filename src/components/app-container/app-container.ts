@@ -24,6 +24,8 @@ import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
+import '@/components/logged-in/logged-in';
+import '@/components/logged-out/logged-out';
 
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
@@ -232,6 +234,10 @@ export class AppContainer extends MobxLitElement {
         @tab-index-changed=${this.handleTabChanged}
         @collapsable-toggled=${this.handleCollapsableToggled}
       >
+        <logged-in
+          ><template> <page-nav></page-nav> </template
+        ></logged-in>
+
         <div id="router-outlet"></div>
       </div>
     `;

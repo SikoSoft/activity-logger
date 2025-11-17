@@ -4,8 +4,15 @@ export const routes: Route[] = [
   {
     path: '/',
     redirect: undefined,
-    component: 'action-list',
-    action: async () => await import('@/components/action-list/action-list'),
+    component: 'entity-form-view',
+    action: async () =>
+      await import('@/views/entity-form-view/entity-form-view'),
+  },
+  {
+    path: '/admin',
+    component: 'admin-dashboard-view',
+    action: async () =>
+      await import('@/views/admin-dashboard-view/admin-dashboard-view'),
   },
   {
     path: '/entities',

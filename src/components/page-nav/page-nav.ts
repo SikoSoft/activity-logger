@@ -8,6 +8,7 @@ import { appState } from '@/state';
 import { Version } from '@/models/Version';
 import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
+import { navigate } from '@/lib/Router';
 
 import { theme } from '@/styles/theme';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
@@ -16,19 +17,21 @@ import { repeat } from 'lit/directives/repeat.js';
 export interface PageViewConfig {
   id: PageView;
   label: string;
+  url: string;
 }
 
 const views: PageViewConfig[] = [
   {
     id: PageView.INPUT,
     label: translate('new'),
+    url: '/',
   },
-  { id: PageView.LIST, label: translate('list') },
+  { id: PageView.LIST, label: translate('list'), url: '/entities' },
 ];
 
 const debugViews: PageViewConfig[] = [
   ...views,
-  { id: PageView.ADMIN, label: translate('admin') },
+  { id: PageView.ADMIN, label: translate('admin'), url: '/admin' },
 ];
 
 @customElement('page-nav')
@@ -81,6 +84,9 @@ export class PageNav extends MobxLitElement {
   }
 
   setActiveView(view: PageView): void {
+    const url = this.displayViews.find(v => v.id === view)?.url || '';
+    navigate(url);
+    /*
     this.dispatchEvent(
       new CustomEvent('view-changed', {
         bubbles: true,
@@ -88,6 +94,7 @@ export class PageNav extends MobxLitElement {
         detail: view,
       }),
     );
+    */
   }
 
   setVersion(e: CustomEvent): void {
