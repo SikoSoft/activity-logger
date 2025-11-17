@@ -131,6 +131,7 @@ export class NetworkStorage implements StorageSchema {
 
   async addPropertyConfig(
     propertyConfig: EntityPropertyConfig,
+    performDriftCheck: boolean = true,
   ): Promise<Entity.EntityPropertyConfig | null> {
     const {
       id: _id,
@@ -141,9 +142,14 @@ export class NetworkStorage implements StorageSchema {
     const result = await api.post<
       Omit<EntityPropertyConfig, 'id' | 'entityConfigId'> & {
         timeZone: number;
+        performDriftCheck: boolean;
       },
       EntityPropertyConfig
-    >(`propertyConfig/${entityConfigId}`, { ...payload, timeZone });
+    >(`propertyConfig/${entityConfigId}`, {
+      ...payload,
+      timeZone,
+      performDriftCheck,
+    });
 
     if (result && result.isOk) {
       return result.response;
