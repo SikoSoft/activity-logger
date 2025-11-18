@@ -197,6 +197,13 @@ export class EntityForm extends ViewElement {
 
   @state()
   get availableEntityConfigs(): EntityConfig[] {
+    /*
+    console.log(
+      'availableEntityConfigs called',
+      this.state.listConfig,
+      JSON.stringify(this.state.entityConfigs),
+    );
+    */
     return this.state.entityConfigs.filter(
       config =>
         this.state.listConfig.filter.includeTypes.length === 0 ||
@@ -223,12 +230,15 @@ export class EntityForm extends ViewElement {
     reaction(
       () => appState.listConfig,
       () => {
+        if (this.availableEntityConfigs.length === 1) {
+          this.type = this.availableEntityConfigs[0].id;
+        }
         this.propertiesSetup = false;
         this.propertyInstances = [];
         this.setupProperties();
       },
       {
-        fireImmediately: false,
+        fireImmediately: true,
       },
     );
   }
@@ -247,13 +257,17 @@ export class EntityForm extends ViewElement {
     }
   }
 
+  /*
   protected firstUpdated(changedProperties: PropertyValues): void {
     super.firstUpdated(changedProperties);
+
+    console.log('EntityForm firstUpdated', this.availableEntityConfigs.length);
 
     if (this.availableEntityConfigs.length === 1) {
       this.type = this.availableEntityConfigs[0].id;
     }
   }
+    */
 
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
@@ -290,6 +304,7 @@ export class EntityForm extends ViewElement {
   }
 
   async setupProperties(): Promise<void> {
+    console.log('EntityForm setupProperties called', this.entityConfig);
     if (!this.entityConfig) {
       return;
     }
