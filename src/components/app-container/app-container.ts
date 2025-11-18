@@ -45,7 +45,7 @@ export class AppContainer extends MobxLitElement {
   @state() view: PageView = defaultPageView;
   @state() ready: boolean = false;
 
-  @query('main > *') viewComponent!: ViewElement;
+  @query('#router-outlet > *') viewComponent!: ViewElement;
 
   private appRouter?: Router;
 
@@ -131,6 +131,7 @@ export class AppContainer extends MobxLitElement {
   }
 
   private handleListConfigChanged(_e: ListConfigChangedEvent): void {
+    console.log('AppContainer detected list config change');
     this.viewComponent.sync(true);
   }
 
