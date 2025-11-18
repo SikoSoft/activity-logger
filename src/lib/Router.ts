@@ -1,3 +1,5 @@
+import { Router } from '@/models/Router';
+
 export type RouteDef = {
   path: string; // e.g. '/entity/:id' or '/login' or '(.*)'
   component?: string; // tag name, e.g. 'entity-form' (optional for redirect-only routes)
@@ -5,7 +7,7 @@ export type RouteDef = {
   redirect?: string; // optional redirect target
 };
 
-function pathToRegex(path: string) {
+function pathToRegex(path: string): { regex: RegExp; keys: string[] } {
   const keys: string[] = [];
   const pattern = path
     .replace(/\/+$/g, '') // strip trailing slash
@@ -35,12 +37,15 @@ export function setupRouter(
   outlet: Element,
   routes: RouteDef[],
   base = import.meta.env.BASE_URL || '/',
-) {
-  const normalize = (p: string) => {
+): Router {
+  const normalize = (p: string): string => {
     try {
       const url = new URL(p, location.origin);
       let path = url.pathname;
-      if (base !== '/' && path.startsWith(base)) path = path.slice(base.length);
+      if (base !== '/' && path.startsWith(base)) {
+        path = path.slice(base.length);
+        path = path.slice(base.length);
+      }
       return path || '/';
     } catch {
       return p.replace(base, '') || '/';
@@ -49,8 +54,10 @@ export function setupRouter(
 
   let mounted = true;
 
-  async function renderPath(p: string) {
-    if (!mounted) return;
+  async function renderPath(p: string): Promise<void> {
+    if (!mounted) {
+      return;
+    }
     const path = normalize(p);
 
     // check for explicit redirect routes first
@@ -64,14 +71,25 @@ export function setupRouter(
 
     // normal route matching
     for (const r of routes) {
-      if (r.path === '(.*)') continue; // wildcard -> handled later
+      if (r.path === '(.*)') {
+        continue; // wildcard -> handled later
+      }
       const { regex, keys } = pathToRegex(r.path);
+
       const m = path.match(regex);
+
       if (m) {
-        if (r.action) await r.action();
-        if (!r.component) return;
+        if (r.action) {
+          await r.action();
+        }
+
+        if (!r.component) {
+          return;
+        }
+
         outlet.innerHTML = '';
         const el = document.createElement(r.component);
+
         keys.forEach((k, i) => {
           const val = decodeURIComponent(m[i + 1] || '');
           el.setAttribute(k, val);
@@ -91,15 +109,21 @@ export function setupRouter(
     // fallback to wildcard
     const fallback = routes.find(rr => rr.path === '(.*)');
     if (fallback) {
-      if (fallback.action) await fallback.action();
-      if (!fallback.component) return;
+      if (fallback.action) {
+        await fallback.action();
+      }
+
+      if (!fallback.component) {
+        return;
+      }
+
       outlet.innerHTML = '';
       const el = document.createElement(fallback.component);
       outlet.appendChild(el);
     }
   }
 
-  function navigateImpl(to: string) {
+  function navigateImpl(to: string): void {
     const href = to.startsWith('/') ? to : '/' + to;
     history.pushState(
       {},
@@ -113,20 +137,26 @@ export function setupRouter(
   // bind exported proxy to the instance implementation
   _navigate = navigateImpl;
 
-  const onClick = (e: MouseEvent) => {
+  const onClick = (e: MouseEvent): void => {
     const a = (e.target as HTMLElement).closest(
       'a[href]',
     ) as HTMLAnchorElement | null;
-    if (!a) return;
+    if (!a) {
+      return;
+    }
     const url = new URL(a.href, location.href);
     if (url.origin === location.origin) {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        return;
+      }
       e.preventDefault();
       navigateImpl(url.pathname + url.search + url.hash);
     }
   };
 
-  const onPop = () => renderPath(location.pathname);
+  const onPop = (): void => {
+    void renderPath(location.pathname);
+  };
 
   window.addEventListener('popstate', onPop);
   document.addEventListener('click', onClick);
@@ -137,7 +167,7 @@ export function setupRouter(
   return {
     navigate: navigateImpl,
     renderPath,
-    destroy() {
+    destroy(): void {
       mounted = false;
       window.removeEventListener('popstate', onPop);
       document.removeEventListener('click', onClick);
