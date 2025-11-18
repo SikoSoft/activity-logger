@@ -233,10 +233,24 @@ export class AppContainer extends MobxLitElement {
         class="app-container"
         @tab-index-changed=${this.handleTabChanged}
         @collapsable-toggled=${this.handleCollapsableToggled}
+        @list-config-changed=${this.handleListConfigChanged}
+        @operation-performed=${this.handleOperationPerformed}
       >
-        <logged-in
-          ><template> <page-nav></page-nav> </template
-        ></logged-in>
+        ${this.ready
+          ? html`
+              <logged-in>
+                <template>
+                  <list-config></list-config>
+
+                  <page-nav></page-nav>
+
+                  <bulk-manager></bulk-manager>
+
+                  <floating-widget></floating-widget>
+                </template>
+              </logged-in>
+            `
+          : nothing}
 
         <div id="router-outlet"></div>
       </div>
