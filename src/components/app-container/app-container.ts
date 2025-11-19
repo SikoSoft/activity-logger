@@ -209,11 +209,7 @@ export class AppContainer extends MobxLitElement {
 
   renderContent(): TemplateResult | typeof nothing {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
-      return html`
-        <forbidden-notice
-          @user-logged-in=${this.handleUserLoggedIn}
-        ></forbidden-notice>
-      `;
+      return html` <forbidden-notice></forbidden-notice> `;
     }
 
     return this.ready
@@ -255,6 +251,7 @@ export class AppContainer extends MobxLitElement {
         @collapsable-toggled=${this.handleCollapsableToggled}
         @list-config-changed=${this.handleListConfigChanged}
         @operation-performed=${this.handleOperationPerformed}
+        @user-logged-in=${this.handleUserLoggedIn}
       >
         ${this.ready
           ? html`
