@@ -1,60 +1,71 @@
-import { html, LitElement, nothing, PropertyValues, TemplateResult } from 'lit';
+// ...existing code...
+import { LitElement, nothing, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { storage } from '@/lib/Storage';
 
 @customElement('logged-out')
 export class LoggedOut extends LitElement {
-  private _stamped = false;
-  private _authListener = () => {
-    if (this.isLoggedOut()) {
-      this._ensureStamped();
-    }
+  private stamped = false;
+  private contentContainer: HTMLElement | null = null;
+
+  protected createRenderRoot(): HTMLElement {
+    return this;
+  }
+
+  private authListener = (): void => {
+    this.updateVisibility();
   };
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    // If already logged in, stamp immediately.
-    if (this.isLoggedOut()) {
-      this._ensureStamped();
-      return;
-    }
+    window.addEventListener('user-logged-in', this.authListener);
+    window.addEventListener('user-logged-out', this.authListener);
 
-    // Otherwise wait for an explicit auth change signal.
-    // The app should dispatch window.dispatchEvent(new CustomEvent('auth-changed'))
-    // after login (or we can wire this to your appState/MobX reaction instead).
-    window.addEventListener('auth-changed', this._authListener);
+    this.updateVisibility();
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    window.removeEventListener('auth-changed', this._authListener);
+    window.removeEventListener('user-logged-in', this.authListener);
+    window.removeEventListener('user-logged-out', this.authListener);
   }
 
-  private _ensureStamped(): void {
-    if (this._stamped) return;
+  private ensureStamped(): void {
+    if (this.stamped) {
+      return;
+    }
 
     const tpl = this.querySelector('template');
     if (!tpl) {
-      this._stamped = true;
+      this.stamped = true;
+
       return;
     }
 
     const fragment = tpl.content.cloneNode(true) as DocumentFragment;
 
-    // Insert the stamped content where this element lives, then remove this host.
-    const parent = this.parentNode;
-    if (parent) {
-      parent.insertBefore(fragment, this);
-      // remove the host so the stamped children occupy the same place in DOM
-      this.remove();
-    } else {
-      // fallback to appending into this element if no parent found
-      this.appendChild(fragment);
+    const container = document.createElement('div');
+    container.className = 'stamped-content';
+    container.appendChild(fragment);
+
+    this.appendChild(container);
+
+    this.contentContainer = container;
+    this.stamped = true;
+  }
+
+  private updateVisibility(): void {
+    const visible = this.isLoggedOut();
+
+    if (visible && !this.stamped) {
+      this.ensureStamped();
     }
 
-    this._stamped = true;
-    window.removeEventListener('auth-changed', this._authListener);
+    if (!this.contentContainer) {
+      return;
+    }
+    this.contentContainer.style.display = visible ? '' : 'none';
   }
 
   isLoggedOut(): boolean {
@@ -62,8 +73,6 @@ export class LoggedOut extends LitElement {
   }
 
   render(): TemplateResult | typeof nothing {
-    // We don't render a slot, because slot children would be parsed/upgraded immediately.
-    // Users must wrap guarded content in <template> inside <logged-in>.
     return nothing;
   }
 }
