@@ -8,32 +8,37 @@ import { appState } from '@/state';
 import { Version } from '@/models/Version';
 import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
+import { navigate, routerState } from '@/lib/Router';
 
 import { theme } from '@/styles/theme';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 import { repeat } from 'lit/directives/repeat.js';
+import { MobxReactionsController } from '@/lib/MobxReactionController';
 
 export interface PageViewConfig {
   id: PageView;
   label: string;
+  url: string;
 }
 
 const views: PageViewConfig[] = [
   {
     id: PageView.INPUT,
     label: translate('new'),
+    url: '/',
   },
-  { id: PageView.LIST, label: translate('list') },
+  { id: PageView.LIST, label: translate('list'), url: '/entities' },
 ];
 
 const debugViews: PageViewConfig[] = [
   ...views,
-  { id: PageView.ADMIN, label: translate('admin') },
+  { id: PageView.ADMIN, label: translate('admin'), url: '/admin' },
 ];
 
 @customElement('page-nav')
 export class PageNav extends MobxLitElement {
   private state = appState;
+  private rx = new MobxReactionsController(this);
 
   static styles = [
     theme,
@@ -76,18 +81,27 @@ export class PageNav extends MobxLitElement {
     pageNavProps[PageNavProp.ACTIVE].default;
 
   @state()
+  activePath: string = '/';
+
+  @state()
   get displayViews(): PageViewConfig[] {
     return this.state.debugMode ? debugViews : views;
   }
 
+  constructor() {
+    super();
+    this.rx.add({
+      expr: () => routerState.currentPath,
+      effect: newPath => {
+        this.activePath = newPath;
+      },
+      opts: { fireImmediately: true },
+    });
+  }
+
   setActiveView(view: PageView): void {
-    this.dispatchEvent(
-      new CustomEvent('view-changed', {
-        bubbles: true,
-        composed: true,
-        detail: view,
-      }),
-    );
+    const url = this.displayViews.find(v => v.id === view)?.url || '';
+    navigate(url);
   }
 
   setVersion(e: CustomEvent): void {
@@ -126,9 +140,7 @@ export class PageNav extends MobxLitElement {
         <tab-container
           paneId="page-nav"
           @tab-index-changed=${this.handleTabChanged}
-          index=${this.displayViews.findIndex(
-            v => v.id === this[PageNavProp.ACTIVE],
-          )}
+          index=${this.displayViews.findIndex(v => v.url === this.activePath)}
         >
           ${repeat(
             this.displayViews,

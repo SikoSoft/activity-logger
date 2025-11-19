@@ -12,6 +12,7 @@ import { Version } from '@/models/Version';
 
 import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
+import { setupRouter } from '@/lib/Router';
 
 import '@/components/page-nav/page-nav';
 import '@/components/action-form/action-form';
@@ -23,10 +24,14 @@ import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
+import '@/components/logged-in/logged-in';
+import '@/components/logged-out/logged-out';
 
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
+import { Router } from '@/models/Router';
+import { routes } from '@/routes';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -36,11 +41,25 @@ export interface ViewChangedEvent extends CustomEvent {
 export class AppContainer extends MobxLitElement {
   public state = appState;
   static styles = [theme];
+  private appRouter?: Router;
+  private routerView: HTMLDivElement | null = null;
 
   @state() view: PageView = defaultPageView;
   @state() ready: boolean = false;
 
-  @query('main > *') viewComponent!: ViewElement;
+  @state()
+  get viewComponent(): ViewElement | null {
+    if (!this.routerView) {
+      return null;
+    }
+    return this.routerView.querySelector<ViewElement>('*');
+  }
+
+  constructor() {
+    super();
+
+    this.routerView = document.createElement('div');
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -120,10 +139,22 @@ export class AppContainer extends MobxLitElement {
   }
 
   private handleOperationPerformed(_e: OperationPerformedEvent): void {
+    if (!this.viewComponent) {
+      return;
+    }
+
     this.viewComponent.sync(false);
   }
 
   private handleListConfigChanged(_e: ListConfigChangedEvent): void {
+    console.log(
+      'app-container detected list-config-changed',
+      this.viewComponent,
+    );
+    if (!this.viewComponent) {
+      return;
+    }
+
     this.viewComponent.sync(true);
   }
 
@@ -178,11 +209,7 @@ export class AppContainer extends MobxLitElement {
 
   renderContent(): TemplateResult | typeof nothing {
     if (this.ready && (this.state.forbidden || !this.state.authToken)) {
-      return html`
-        <forbidden-notice
-          @user-logged-in=${this.handleUserLoggedIn}
-        ></forbidden-notice>
-      `;
+      return html` <forbidden-notice></forbidden-notice> `;
     }
 
     return this.ready
@@ -204,14 +231,45 @@ export class AppContainer extends MobxLitElement {
       : html`<ss-loader></ss-loader>`;
   }
 
+  protected firstUpdated(): void {
+    if (!this.routerView) {
+      return;
+    }
+
+    this.appRouter = setupRouter(
+      this.routerView,
+      routes,
+      import.meta.env.BASE_URL || '/',
+    );
+  }
+
   render(): TemplateResult {
     return html`
       <div
         class="app-container"
         @tab-index-changed=${this.handleTabChanged}
         @collapsable-toggled=${this.handleCollapsableToggled}
+        @list-config-changed=${this.handleListConfigChanged}
+        @operation-performed=${this.handleOperationPerformed}
+        @user-logged-in=${this.handleUserLoggedIn}
       >
-        ${this.renderContent()}
+        ${this.ready
+          ? html`
+              <logged-in>
+                <template>
+                  <list-config></list-config>
+
+                  <page-nav></page-nav>
+
+                  <bulk-manager></bulk-manager>
+
+                  <floating-widget></floating-widget>
+                </template>
+              </logged-in>
+
+              ${this.routerView}
+            `
+          : nothing}
       </div>
     `;
   }

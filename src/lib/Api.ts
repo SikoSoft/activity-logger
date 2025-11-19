@@ -127,6 +127,6 @@ export const api = new Api({
   authToken: '',
   baseUrl: config.apiUrl,
   errorHandler: (): void => {
-    appState.setForbidden(true);
+    //appState.setForbidden(true);
   },
 });

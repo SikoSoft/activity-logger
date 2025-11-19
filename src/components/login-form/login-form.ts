@@ -1,6 +1,6 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, html, TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { css, html, PropertyValues, TemplateResult } from 'lit';
+import { customElement, query, state } from 'lit/decorators.js';
 
 import { appState } from '@/state';
 import { api } from '@/lib/Api';
@@ -21,6 +21,7 @@ import {
 import { UserLoggedInEvent } from '@/events/user-logged-in';
 
 import { theme } from '@/styles/theme';
+import { SSInput } from '@ss/ui/components/ss-input';
 
 @customElement('login-form')
 export class LoginForm extends MobxLitElement {
@@ -40,6 +41,16 @@ export class LoginForm extends MobxLitElement {
   @state() password: string = '';
   @state() loading: boolean = false;
 
+  @query('#username') private usernameField!: SSInput;
+
+  protected firstUpdated(changedProperties: PropertyValues): void {
+    super.firstUpdated(changedProperties);
+
+    if (this.usernameField) {
+      setTimeout(() => this.usernameField.focus(), 100);
+    }
+  }
+
   private handleUsernameChanged(e: InputChangedEvent): void {
     this.username = e.detail.value;
   }
@@ -58,26 +69,37 @@ export class LoginForm extends MobxLitElement {
 
   private async login(): Promise<void> {
     this.loading = true;
-    const result = await api.post<LoginRequestBody, LoginResponseBody>(
-      'login',
-      { username: this.username, password: this.password },
-    );
 
-    if (result && result.status !== 401) {
-      storage.setAuthToken(result.response.authToken);
-      api.setAuthToken(result.response.authToken);
-      this.state.setAuthToken(result.response.authToken);
-      this.state.setForbidden(false);
-      addToast(translate('youAreNowLoggedIn'), NotificationType.SUCCESS);
-      this.dispatchEvent(new UserLoggedInEvent({}));
-      return;
+    try {
+      const result = await api.post<LoginRequestBody, LoginResponseBody>(
+        'login',
+        { username: this.username, password: this.password },
+      );
+
+      if (result && result.status !== 401) {
+        storage.setAuthToken(result.response.authToken);
+        api.setAuthToken(result.response.authToken);
+        this.state.setAuthToken(result.response.authToken);
+        this.state.setForbidden(false);
+        addToast(translate('youAreNowLoggedIn'), NotificationType.SUCCESS);
+        this.dispatchEvent(new UserLoggedInEvent({}));
+        this.username = '';
+        this.password = '';
+        return;
+      }
+
+      addToast(
+        translate('incorrectUsernameAndPasswordCombination'),
+        NotificationType.ERROR,
+      );
+    } catch (error) {
+      addToast(
+        translate('anErrorOccurredWhileLoggingIn'),
+        NotificationType.ERROR,
+      );
+    } finally {
+      this.loading = false;
     }
-
-    addToast(
-      translate('incorrectUsernameAndPasswordCombination'),
-      NotificationType.ERROR,
-    );
-    this.loading = false;
   }
 
   render(): TemplateResult {
