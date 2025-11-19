@@ -10,3 +10,7 @@ export type Router = {
   renderPath: (path: string) => Promise<void>;
   destroy: () => void;
 };
+
+export type RouterState = {
+  currentPath: string;
+};

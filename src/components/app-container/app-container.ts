@@ -30,7 +30,7 @@ import '@/components/logged-out/logged-out';
 import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
-import { Route, Router } from '@/models/Router';
+import { Router } from '@/models/Router';
 import { routes } from '@/routes';
 
 export interface ViewChangedEvent extends CustomEvent {
@@ -41,13 +41,25 @@ export interface ViewChangedEvent extends CustomEvent {
 export class AppContainer extends MobxLitElement {
   public state = appState;
   static styles = [theme];
+  private appRouter?: Router;
+  private routerView: HTMLDivElement | null = null;
 
   @state() view: PageView = defaultPageView;
   @state() ready: boolean = false;
 
-  @query('#router-outlet > *') viewComponent!: ViewElement;
+  @state()
+  get viewComponent(): ViewElement | null {
+    if (!this.routerView) {
+      return null;
+    }
+    return this.routerView.querySelector<ViewElement>('*');
+  }
 
-  private appRouter?: Router;
+  constructor() {
+    super();
+
+    this.routerView = document.createElement('div');
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -127,11 +139,22 @@ export class AppContainer extends MobxLitElement {
   }
 
   private handleOperationPerformed(_e: OperationPerformedEvent): void {
+    if (!this.viewComponent) {
+      return;
+    }
+
     this.viewComponent.sync(false);
   }
 
   private handleListConfigChanged(_e: ListConfigChangedEvent): void {
-    console.log('AppContainer detected list config change');
+    console.log(
+      'app-container detected list-config-changed',
+      this.viewComponent,
+    );
+    if (!this.viewComponent) {
+      return;
+    }
+
     this.viewComponent.sync(true);
   }
 
@@ -213,16 +236,12 @@ export class AppContainer extends MobxLitElement {
   }
 
   protected firstUpdated(): void {
-    const outlet = this.renderRoot.querySelector(
-      '#router-outlet',
-    ) as Element | null;
-
-    if (!outlet) {
+    if (!this.routerView) {
       return;
     }
 
     this.appRouter = setupRouter(
-      outlet,
+      this.routerView,
       routes,
       import.meta.env.BASE_URL || '/',
     );
@@ -250,10 +269,10 @@ export class AppContainer extends MobxLitElement {
                   <floating-widget></floating-widget>
                 </template>
               </logged-in>
+
+              ${this.routerView}
             `
           : nothing}
-
-        <div id="router-outlet"></div>
       </div>
     `;
   }

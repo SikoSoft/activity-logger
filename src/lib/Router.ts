@@ -1,11 +1,10 @@
-import { Router } from '@/models/Router';
+import { Route, Router, RouterState } from '@/models/Router';
+import { observable, action } from 'mobx';
 
-export type RouteDef = {
-  path: string; // e.g. '/entity/:id' or '/login' or '(.*)'
-  component?: string; // tag name, e.g. 'entity-form' (optional for redirect-only routes)
-  action?: () => Promise<any>; // dynamic import or async setup; returns any
-  redirect?: string; // optional redirect target
-};
+export const routerState: RouterState = observable({ currentPath: '/' });
+const setCurrentPath = action((path: string) => {
+  routerState.currentPath = path;
+});
 
 function pathToRegex(path: string): { regex: RegExp; keys: string[] } {
   const keys: string[] = [];
@@ -19,23 +18,17 @@ function pathToRegex(path: string): { regex: RegExp; keys: string[] } {
   return { regex: new RegExp('^' + (pattern || '/') + '/?$'), keys };
 }
 
-// exported navigate proxy; bound to the active router instance by setupRouter()
-// before setupRouter runs this will warn if used.
 let _navigate: (to: string) => void = (to: string) => {
   console.warn('[router] navigate() called before router initialized:', to);
 };
 
-/**
- * Call this from other modules to navigate the app.
- * After setupRouter runs this will be bound to the instance implementation.
- */
 export function navigate(to: string): void {
   _navigate(to);
 }
 
 export function setupRouter(
   outlet: Element,
-  routes: RouteDef[],
+  routes: Route[],
   base = import.meta.env.BASE_URL || '/',
 ): Router {
   const normalize = (p: string): string => {
@@ -59,6 +52,9 @@ export function setupRouter(
       return;
     }
     const path = normalize(p);
+
+    //console.log('[router] renderPath:', path);
+    setCurrentPath(path);
 
     // check for explicit redirect routes first
     for (const r of routes) {
@@ -155,6 +151,7 @@ export function setupRouter(
   };
 
   const onPop = (): void => {
+    console.log('[router] popstate:', location.pathname);
     void renderPath(location.pathname);
   };
 
