@@ -9,7 +9,7 @@ const setCurrentPath = action((path: string) => {
 function pathToRegex(path: string): { regex: RegExp; keys: string[] } {
   const keys: string[] = [];
   const pattern = path
-    .replace(/\/+$/g, '') // strip trailing slash
+    .replace(/\/+$/g, '')
     .replace(/:[^/]+/g, m => {
       keys.push(m.slice(1));
       return '([^/]+)';
@@ -67,19 +67,16 @@ export function setupRouter(
 
     setCurrentPath(path);
 
-    // check for explicit redirect routes first
     for (const r of routes) {
       if (r.redirect && (r.path === path || (r.path === '/' && path === '/'))) {
-        // push the redirect target and render it
         history.replaceState({}, '', r.redirect);
-        return renderPath(r.redirect!);
+        return renderPath(r.redirect);
       }
     }
 
-    // normal route matching
     for (const route of routes) {
       if (route.path === '(.*)') {
-        continue; // wildcard -> handled later
+        continue;
       }
       const { regex, keys } = pathToRegex(route.path);
       const routeMatch = path.match(regex);
@@ -112,7 +109,6 @@ export function setupRouter(
       }
     }
 
-    // fallback to wildcard
     const fallback = routes.find(route => route.path === '(.*)');
     if (fallback) {
       if (fallback.action) {
@@ -136,7 +132,7 @@ export function setupRouter(
       '',
       (base === '/' ? '' : base.replace(/\/$/, '')) + href,
     );
-    // fire-and-forget; renderPath is async
+
     void renderPath(location.pathname);
   }
 
@@ -146,28 +142,30 @@ export function setupRouter(
     const a = (e.target as HTMLElement).closest(
       'a[href]',
     ) as HTMLAnchorElement | null;
+
     if (!a) {
       return;
     }
+
     const url = new URL(a.href, location.href);
+
     if (url.origin === location.origin) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
         return;
       }
+
       e.preventDefault();
       navigateImpl(url.pathname + url.search + url.hash);
     }
   };
 
   const onPop = (): void => {
-    console.log('[router] popstate:', location.pathname);
     void renderPath(location.pathname);
   };
 
   window.addEventListener('popstate', onPop);
   document.addEventListener('click', onClick);
 
-  // initial render
   void renderPath(location.pathname);
 
   return {
@@ -177,7 +175,6 @@ export function setupRouter(
       mounted = false;
       window.removeEventListener('popstate', onPop);
       document.removeEventListener('click', onClick);
-      // restore proxy to noop to catch accidental post-destroy calls
       _navigate = (t: string) =>
         console.warn('[router] navigate() called after destroy:', t);
     },
