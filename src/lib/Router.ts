@@ -32,16 +32,27 @@ export function setupRouter(
   base = import.meta.env.BASE_URL || '/',
 ): Router {
   const normalize = (p: string): string => {
+    const baseNormalized = (base || '/').replace(/\/$/, '') || '/';
     try {
       const url = new URL(p, location.origin);
-      let path = url.pathname;
-      if (base !== '/' && path.startsWith(base)) {
-        path = path.slice(base.length);
-        path = path.slice(base.length);
+      let path = url.pathname || '/';
+
+      if (baseNormalized !== '/' && path.startsWith(baseNormalized)) {
+        path = path.slice(baseNormalized.length) || '/';
       }
+
+      if (!path.startsWith('/')) {
+        path = '/' + path;
+      }
+
       return path || '/';
     } catch {
-      return p.replace(base, '') || '/';
+      const escapedBase =
+        baseNormalized === '/'
+          ? '/'
+          : baseNormalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const stripped = p.replace(new RegExp('^' + escapedBase), '') || '/';
+      return stripped.startsWith('/') ? stripped : '/' + stripped;
     }
   };
 
@@ -51,9 +62,9 @@ export function setupRouter(
     if (!mounted) {
       return;
     }
+
     const path = normalize(p);
 
-    //console.log('[router] renderPath:', path);
     setCurrentPath(path);
 
     // check for explicit redirect routes first
@@ -66,34 +77,33 @@ export function setupRouter(
     }
 
     // normal route matching
-    for (const r of routes) {
-      if (r.path === '(.*)') {
+    for (const route of routes) {
+      if (route.path === '(.*)') {
         continue; // wildcard -> handled later
       }
-      const { regex, keys } = pathToRegex(r.path);
+      const { regex, keys } = pathToRegex(route.path);
+      const routeMatch = path.match(regex);
 
-      const m = path.match(regex);
-
-      if (m) {
-        if (r.action) {
-          await r.action();
+      if (routeMatch) {
+        if (route.action) {
+          await route.action();
         }
 
-        if (!r.component) {
+        if (!route.component) {
           return;
         }
 
         outlet.innerHTML = '';
-        const el = document.createElement(r.component);
+        const el = document.createElement(route.component);
 
         keys.forEach((k, i) => {
-          const val = decodeURIComponent(m[i + 1] || '');
+          const val = decodeURIComponent(routeMatch[i + 1] || '');
           el.setAttribute(k, val);
           try {
             (el as any)[k] = val;
           } catch {
             console.log(
-              `Could not set property ${k} on component ${r.component}`,
+              `Could not set property ${k} on component ${route.component}`,
             );
           }
         });
@@ -103,7 +113,7 @@ export function setupRouter(
     }
 
     // fallback to wildcard
-    const fallback = routes.find(rr => rr.path === '(.*)');
+    const fallback = routes.find(route => route.path === '(.*)');
     if (fallback) {
       if (fallback.action) {
         await fallback.action();
@@ -130,7 +140,6 @@ export function setupRouter(
     void renderPath(location.pathname);
   }
 
-  // bind exported proxy to the instance implementation
   _navigate = navigateImpl;
 
   const onClick = (e: MouseEvent): void => {
