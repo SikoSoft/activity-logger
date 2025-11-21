@@ -14,6 +14,7 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-carousel';
 import '@ss/ui/components/ss-select';
+import '@/components/theme-manager/theme-manager';
 
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { ListConfigChangedEvent } from './list-config.events';
@@ -55,46 +56,38 @@ export class ListConfig extends MobxLitElement {
           opacity: 0;
         }
 
-        .config-name {
+        .name {
           transition: all 0.3s;
           opacity: 1;
           font-size: 2rem;
           text-align: center;
           height: 3rem;
           line-height: 3rem;
-        }
 
-        .edit {
-          display: none;
-        }
-
-        .edit-button {
-          display: block;
-        }
-
-        &.config-mode {
-          .close {
-            opacity: 1;
-            pointer-events: initial;
-            cursor: pointer;
+          ss-input {
+            margin: auto;
           }
 
-          .config {
-            opacity: 1;
-          }
-
-          .config-name {
-            font-size: 1rem;
+          ss-input::part(input) {
+            width: 50%;
+            text-align: center;
+            font-size: 2rem;
+            height: 3rem;
+            line-height: 3rem;
+            background-color: transparent;
+            border-color: transparent;
           }
         }
 
-        &.edit-mode {
-          .edit {
-            display: block;
+        &.edit-mode .name,
+        .name:hover {
+          ss-input::part(input) {
+            font-size: 2.2rem;
+            border-color: var(--input-border-color);
+            background-color: var(--input-background-color);
           }
-
-          .edit-button {
-            display: none;
+          ss-input[unsaved]::part(input) {
+            border-color: var(--input-unsaved-border-color);
           }
         }
       }
@@ -127,6 +120,7 @@ export class ListConfig extends MobxLitElement {
   `;
 
   private state = appState;
+  private isSaving: boolean = false;
 
   @state() id: string = '';
   @state() name: string = '';
@@ -134,6 +128,15 @@ export class ListConfig extends MobxLitElement {
   @state() navigationIndex: number = 0;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
+
+  @state()
+  get inSync(): boolean {
+    if (!this.state.listConfig) {
+      return true;
+    }
+
+    return this.name === this.state.listConfig.name;
+  }
 
   @state() get classes(): Record<string, boolean> {
     return {
@@ -171,7 +174,8 @@ export class ListConfig extends MobxLitElement {
   }
 
   handleBoxClick(): void {
-    this.state.setSelectListConfigMode(true);
+    //this.state.setSelectListConfigMode(true);
+    this.state.setEditListConfigMode(true);
   }
 
   enableEditMode(): void {
@@ -182,7 +186,25 @@ export class ListConfig extends MobxLitElement {
     this.name = e.detail.value;
   }
 
+  handleNameSubmitted(): void {
+    this.blur();
+    this.saveConfig();
+    this.state.setEditListConfigMode(false);
+  }
+
+  handleNameBlurred(): void {
+    this.blur();
+    this.saveConfig();
+    this.state.setEditListConfigMode(false);
+  }
+
   async saveConfig(): Promise<void> {
+    if (this.inSync || this.isSaving) {
+      return;
+    }
+
+    this.isSaving = true;
+
     addToast(translate('configSaved'), NotificationType.SUCCESS);
     await storage.saveListConfig({
       id: this.id,
@@ -192,6 +214,7 @@ export class ListConfig extends MobxLitElement {
       setting: this.state.listSetting,
     });
     this.state.setListConfigs(await storage.getListConfigs());
+    this.isSaving = false;
   }
 
   async deleteConfig(): Promise<void> {
@@ -275,43 +298,15 @@ export class ListConfig extends MobxLitElement {
                     }}
                   ></div>
 
-                  <div class="config-name">${config.name}</div>
-
-                  <div class="config">
-                    <div class="edit">
-                      <div class="name">
-                        <ss-input
-                          id="date"
-                          @input-changed=${this.handleNameChanged}
-                          type=${InputType.TEXT}
-                          value=${config.name}
-                        ></ss-input>
-                      </div>
-
-                      <div class="buttons">
-                        <ss-button
-                          text=${translate('saveConfiguration')}
-                          @click=${this.saveConfig}
-                        ></ss-button>
-
-                        <ss-button
-                          text=${translate('deleteConfiguration')}
-                          @click=${this.deleteConfig}
-                        ></ss-button>
-                      </div>
-                    </div>
-
-                    <div class="edit-button">
-                      <ss-button
-                        @click=${this.enableEditMode}
-                        text=${translate('editConfiguration')}
-                      ></ss-button>
-
-                      <ss-button
-                        text=${translate('addConfiguration')}
-                        @click=${this.addConfig}
-                      ></ss-button>
-                    </div>
+                  <div class="name">
+                    <ss-input
+                      ?unsaved=${!this.inSync}
+                      @input-changed=${this.handleNameChanged}
+                      @input-blurred=${this.handleNameBlurred}
+                      @input-submitted=${this.handleNameSubmitted}
+                      type=${InputType.TEXT}
+                      value=${config.name}
+                    ></ss-input>
                   </div>
                 </div>`,
             )

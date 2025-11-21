@@ -11,5 +11,6 @@ export const defaultPageView: PageView = PageView.INPUT;
 export enum Theme {
   LIGHT = 'light',
   DARK = 'dark',
+  TODO = 'todo',
 }
 export const defaultTheme: Theme = Theme.LIGHT;

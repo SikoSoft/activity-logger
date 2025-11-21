@@ -4,6 +4,7 @@ import { css, CSSResult } from 'lit';
 export const backgroundColorMap: Record<Theme, CSSResult> = {
   [Theme.LIGHT]: css`#ededed`,
   [Theme.DARK]: css`#12221a`,
+  [Theme.TODO]: css`#ffffff`,
 };
 
 export const theme = css`
@@ -20,7 +21,7 @@ export const theme = css`
     --padding: 0.5rem;
     --font-size: 1rem;
     --text-color: #000;
-    --background-color: ${backgroundColorMap[Theme.LIGHT]};
+    --background-color: ${backgroundColorMap[Theme.LIGHT] ?? css`#ededed`};
     --background-hover-color: #e0e0e0;
     --box-background-color: #fff;
     --box-border-color: #aaa;
@@ -82,6 +83,7 @@ export const theme = css`
 
     --input-background-color: #08100b;
     --input-border-color: #38635e;
+    --input-unsaved-border-color: #b60;
     --input-text-color: #cff5f4;
     --input-suggestion-background-color: #000;
     --input-suggestion-text-color: #ccc;
