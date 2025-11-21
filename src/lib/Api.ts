@@ -1,5 +1,5 @@
-import { appState } from '@/state';
 import { config } from '../models/Config';
+import { ForbiddenApiRequestEvent } from '@/events/forbidden-api-request';
 
 export interface ApiResponse<ResponseBodyType> {
   status: number;
@@ -21,7 +21,7 @@ export interface RequestConfig {
 export interface ApiConfig {
   authToken: string;
   baseUrl: string;
-  errorHandler: () => void;
+  errorHandler: (url: string) => void;
 }
 
 export class Api {
@@ -57,7 +57,7 @@ export class Api {
       }
 
       if (response.status === 403) {
-        this.config.errorHandler();
+        this.config.errorHandler(url.href);
       }
 
       return {
@@ -126,7 +126,7 @@ export class Api {
 export const api = new Api({
   authToken: '',
   baseUrl: config.apiUrl,
-  errorHandler: (): void => {
-    //appState.setForbidden(true);
+  errorHandler: (url: string): void => {
+    window.dispatchEvent(new ForbiddenApiRequestEvent({ url }));
   },
 });

@@ -1,5 +1,5 @@
 import { html, nothing, TemplateResult } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ListFilterType } from 'api-spec/models/List';
@@ -32,6 +32,7 @@ import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 import { Router } from '@/models/Router';
 import { routes } from '@/routes';
+import { UserLoggedOutEvent } from '@/events/user-logged-out';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
@@ -147,10 +148,6 @@ export class AppContainer extends MobxLitElement {
   }
 
   private handleListConfigChanged(_e: ListConfigChangedEvent): void {
-    console.log(
-      'app-container detected list-config-changed',
-      this.viewComponent,
-    );
     if (!this.viewComponent) {
       return;
     }
@@ -243,6 +240,12 @@ export class AppContainer extends MobxLitElement {
     );
   }
 
+  clearSession = (): void => {
+    this.dispatchEvent(new UserLoggedOutEvent({}));
+    this.setAuthToken('');
+    storage.setAuthToken('');
+  };
+
   render(): TemplateResult {
     return html`
       <div
@@ -252,6 +255,7 @@ export class AppContainer extends MobxLitElement {
         @list-config-changed=${this.handleListConfigChanged}
         @operation-performed=${this.handleOperationPerformed}
         @user-logged-in=${this.handleUserLoggedIn}
+        @invalid-session=${this.clearSession}
       >
         ${this.ready
           ? html`

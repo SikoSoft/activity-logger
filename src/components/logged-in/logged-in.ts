@@ -1,6 +1,7 @@
 import { LitElement, nothing, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { storage } from '@/lib/Storage';
+import { InvalidSessionEvent } from '../app-container/app-container.events';
 
 @customElement('logged-in')
 export class LoggedIn extends LitElement {
@@ -15,11 +16,19 @@ export class LoggedIn extends LitElement {
     this.updateVisibility();
   };
 
+  private dispatchInvalidSession = (): void => {
+    this.dispatchEvent(new InvalidSessionEvent({}));
+  };
+
   connectedCallback(): void {
     super.connectedCallback();
 
     window.addEventListener('user-logged-in', this.authListener);
     window.addEventListener('user-logged-out', this.authListener);
+    window.addEventListener(
+      'forbidden-api-request',
+      this.dispatchInvalidSession,
+    );
 
     this.updateVisibility();
   }
@@ -28,6 +37,10 @@ export class LoggedIn extends LitElement {
     super.disconnectedCallback();
     window.removeEventListener('user-logged-in', this.authListener);
     window.removeEventListener('user-logged-out', this.authListener);
+    window.removeEventListener(
+      'forbidden-api-request',
+      this.dispatchInvalidSession,
+    );
   }
 
   private ensureStamped(): void {

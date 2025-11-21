@@ -11,3 +11,17 @@ export class ViewReadyEvent extends CustomEvent<ViewReadyPayload> {
     });
   }
 }
+
+export const invalidSession = 'invalid-session';
+
+export type InvalidSessionPayload = Record<string, never>;
+
+export class InvalidSessionEvent extends CustomEvent<InvalidSessionPayload> {
+  constructor(detail: InvalidSessionPayload) {
+    super(invalidSession, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
