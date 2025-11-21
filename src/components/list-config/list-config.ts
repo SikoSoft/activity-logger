@@ -173,11 +173,6 @@ export class ListConfig extends MobxLitElement {
     this.ready = true;
   }
 
-  handleBoxClick(): void {
-    //this.state.setSelectListConfigMode(true);
-    this.state.setEditListConfigMode(true);
-  }
-
   enableEditMode(): void {
     this.state.setEditListConfigMode(true);
   }
@@ -269,10 +264,7 @@ export class ListConfig extends MobxLitElement {
   }
 
   render(): TemplateResult {
-    return html`<div
-      class=${classMap(this.classes)}
-      @click=${this.handleBoxClick}
-    >
+    return html`<div class=${classMap(this.classes)}>
       <ss-carousel
         infinite
         discrete
@@ -306,6 +298,7 @@ export class ListConfig extends MobxLitElement {
                       @input-submitted=${this.handleNameSubmitted}
                       type=${InputType.TEXT}
                       value=${config.name}
+                      @click=${this.enableEditMode}
                     ></ss-input>
                   </div>
                 </div>`,
