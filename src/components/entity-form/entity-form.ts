@@ -232,6 +232,8 @@ export class EntityForm extends ViewElement {
       () => {
         if (this.availableEntityConfigs.length === 1) {
           this.type = this.availableEntityConfigs[0].id;
+        } else {
+          this.type = 0;
         }
         this.propertiesSetup = false;
         this.propertyInstances = [];
