@@ -1,5 +1,5 @@
 import { Setting } from 'api-spec/models/Setting';
-import { ListConfig } from 'api-spec/models/List';
+import { ListConfig, ListSort } from 'api-spec/models/List';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
@@ -30,6 +30,7 @@ export interface StorageSchema {
   addListConfig?(): Promise<string>;
   deleteListConfig?(id: string): Promise<boolean>;
   saveListConfig?(listConfig: ListConfig): Promise<void>;
+  updateListSort?(listConfigId: string, sort: ListSort): Promise<void>;
   saveSetting?(listConfigId: string, setting: Setting): Promise<boolean>;
   updateEntityConfig?(
     entityConfig: EntityConfig,

@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ListConfig, ListContext, ListFilter } from 'api-spec/models/List';
+import {
+  ListConfig,
+  ListContext,
+  ListFilter,
+  ListSort,
+} from 'api-spec/models/List';
 import { networkStorage } from './NetworkStorage';
 import {
   defaultListContext,
@@ -195,6 +200,12 @@ export class Storage implements StorageSchema {
     }
 
     return Promise.resolve(listConfigs);
+  }
+
+  @delegateSource()
+  async updateListSort(_listConfigId: string, _sort: ListSort): Promise<void> {
+    Promise.resolve(null);
+    return;
   }
 
   @delegateSource()

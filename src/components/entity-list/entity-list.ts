@@ -39,6 +39,7 @@ import {
   EntityItemDeletedEvent,
   EntityItemUpdatedEvent,
 } from '../entity-form/entity-form.events';
+import { storage } from '@/lib/Storage';
 
 @customElement('entity-list')
 export class EntityList extends ViewElement {
@@ -267,6 +268,8 @@ export class EntityList extends ViewElement {
   }
 
   private handleSortUpdated(_e: ListSortUpdatedEvent): void {
+    storage.updateListSort(this.state.listConfigId, this.state.listSort);
+    this.sortIsOpen = false;
     this.start = 0;
     this.load();
   }
