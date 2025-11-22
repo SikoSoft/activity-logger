@@ -168,5 +168,6 @@
   "nukedDataType.entityConfigs": "Entity/Property Configurations",
   "nukedDataType.listConfigs": "List Configurations",
   "confirmDeleteProperty": "Are you sure you want to delete the property '{propertyName}'?",
-  "anErrorOccurredWhileLoggingIn": "An error occurred while logging in. Please try again."
+  "anErrorOccurredWhileLoggingIn": "An error occurred while logging in. Please try again.",
+  "confirmDeleteListConfig": "Are you sure you want to delete this list configuration? This action cannot be undone."
 }

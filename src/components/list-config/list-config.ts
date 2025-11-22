@@ -389,8 +389,7 @@ export class ListConfig extends MobxLitElement {
 
       <confirmation-modal
         ?open=${this.confirmDeleteIsOpen}
-        title=${translate('confirmDeleteConfigTitle')}
-        message=${translate('confirmDeleteConfigMessage')}
+        message=${translate('confirmDeleteListConfig')}
         confirmText=${translate('delete')}
         cancelText=${translate('cancel')}
         @confirmation-accepted=${(): void => {
