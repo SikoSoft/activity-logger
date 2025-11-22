@@ -14,6 +14,7 @@ import { NotificationType } from '@ss/ui/components/notification-provider.models
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-carousel';
 import '@ss/ui/components/ss-select';
+import '@ss/ui/components/confirmation-modal';
 import '@/components/theme-manager/theme-manager';
 
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
@@ -38,19 +39,6 @@ export class ListConfig extends MobxLitElement {
         margin-bottom: 1rem;
         position: relative;
 
-        .close {
-          pointer-events: none;
-          opacity: 0;
-          position: absolute;
-          right: 0;
-          top: 0;
-          z-index: 100;
-
-          &::before {
-            content: 'X';
-          }
-        }
-
         .config {
           transition: all 0.3s;
           opacity: 0;
@@ -69,7 +57,8 @@ export class ListConfig extends MobxLitElement {
           }
 
           ss-input::part(input) {
-            width: 50%;
+            transition: all 0.2s;
+            width: 80%;
             text-align: center;
             font-size: 2rem;
             height: 3rem;
@@ -90,6 +79,43 @@ export class ListConfig extends MobxLitElement {
             border-color: var(--input-unsaved-border-color);
           }
         }
+
+        .buttons {
+          position: relative;
+          width: 100%;
+          top: -1.5rem;
+
+          .buttons-inner {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 2rem;
+          }
+
+          button {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            box-sizing: content-box;
+            border-radius: 50%;
+            background-color: var(--input-background-color);
+            border: 1px solid var(--input-border-color);
+            cursor: pointer;
+            color: var(--input-text-color);
+            transition: all 0.1s;
+            opacity: 0;
+            pointer-events: none;
+            padding: 0.5rem;
+
+            &:hover {
+              scale: 1.5;
+            }
+          }
+        }
       }
     `,
   ];
@@ -97,7 +123,7 @@ export class ListConfig extends MobxLitElement {
     .config-slide {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
+      justify-content: center;
 
       .config {
         display: none;
@@ -108,6 +134,13 @@ export class ListConfig extends MobxLitElement {
     .config-slide {
       .config {
         display: block;
+      }
+
+      &.active {
+        .buttons button {
+          opacity: 1;
+          pointer-events: auto;
+        }
       }
     }
   `;
@@ -126,6 +159,8 @@ export class ListConfig extends MobxLitElement {
   @state() name: string = '';
   @state() ready: boolean = false;
   @state() navigationIndex: number = 0;
+  @state() themeManagerIsOpen: boolean = false;
+  @state() confirmDeleteIsOpen: boolean = false;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
 
@@ -190,7 +225,9 @@ export class ListConfig extends MobxLitElement {
   handleNameBlurred(): void {
     this.blur();
     this.saveConfig();
-    this.state.setEditListConfigMode(false);
+    setTimeout((): void => {
+      this.state.setEditListConfigMode(false);
+    }, 200);
   }
 
   async saveConfig(): Promise<void> {
@@ -263,6 +300,18 @@ export class ListConfig extends MobxLitElement {
     this.setListConfigId(listConfigId);
   }
 
+  showThemeManager(): void {
+    this.themeManagerIsOpen = true;
+  }
+
+  hideThemeManager(): void {
+    this.themeManagerIsOpen = false;
+  }
+
+  showConfigDeleteConfirm(): void {
+    this.confirmDeleteIsOpen = true;
+  }
+
   render(): TemplateResult {
     return html`<div class=${classMap(this.classes)}>
       <ss-carousel
@@ -301,6 +350,34 @@ export class ListConfig extends MobxLitElement {
                       @click=${this.enableEditMode}
                     ></ss-input>
                   </div>
+
+                  <div class="buttons">
+                    <div class="buttons-inner">
+                      <button @click=${this.addConfig}>
+                        <ss-icon
+                          name="add"
+                          color="var(--input-text-color)"
+                          size="16"
+                        ></ss-icon>
+                      </button>
+
+                      <button @click=${this.showThemeManager}>
+                        <ss-icon
+                          name="theme"
+                          color="var(--input-text-color)"
+                          size="16"
+                        ></ss-icon>
+                      </button>
+
+                      <button @click=${this.showConfigDeleteConfirm}>
+                        <ss-icon
+                          name="trash"
+                          color="var(--input-text-color)"
+                          size="16"
+                        ></ss-icon>
+                      </button>
+                    </div>
+                  </div>
                 </div>`,
             )
           : nothing}
@@ -309,6 +386,36 @@ export class ListConfig extends MobxLitElement {
           ${this.carouselStyles}
         </style>
       </ss-carousel>
+
+      <confirmation-modal
+        ?open=${this.confirmDeleteIsOpen}
+        title=${translate('confirmDeleteConfigTitle')}
+        message=${translate('confirmDeleteConfigMessage')}
+        confirmText=${translate('delete')}
+        cancelText=${translate('cancel')}
+        @confirmation-accepted=${(): void => {
+          this.deleteConfig();
+          this.confirmDeleteIsOpen = false;
+        }}
+        @confirmation-declined=${(): void => {
+          this.confirmDeleteIsOpen = false;
+        }}
+      ></confirmation-modal>
+
+      <pop-up
+        ?open=${this.themeManagerIsOpen}
+        closeOnOutsideClick
+        closeOnEsc
+        closeButton
+        @pop-up-closed=${this.hideThemeManager}
+      >
+        <theme-manager
+          .open=${this.themeManagerIsOpen}
+          @close=${(): void => {
+            this.themeManagerIsOpen = false;
+          }}
+        ></theme-manager>
+      </pop-up>
     </div>`;
   }
 }
