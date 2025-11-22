@@ -1,4 +1,4 @@
-import { ListConfig, ListSort } from 'api-spec/models/List';
+import { ListConfig, ListSort, ListFilter } from 'api-spec/models/List';
 import { api } from './Api';
 import { StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
@@ -29,6 +29,17 @@ export class NetworkStorage implements StorageSchema {
     const result = await api.put<ListSort, null>(
       `listSort/${listConfigId}`,
       sort,
+    );
+    //return;
+  }
+
+  async updateListFilter(
+    listConfigId: string,
+    filter: ListFilter,
+  ): Promise<void> {
+    const result = await api.put<ListFilter, null>(
+      `listFilter/${listConfigId}`,
+      filter,
     );
     //return;
   }

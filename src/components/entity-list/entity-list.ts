@@ -263,6 +263,8 @@ export class EntityList extends ViewElement {
   }
 
   private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
+    console.log('handleFilterUpdated');
+    storage.updateListFilter(this.state.listConfigId, this.state.listFilter);
     this.filterIsOpen = false;
     this.load();
   }
@@ -381,7 +383,7 @@ export class EntityList extends ViewElement {
       >
         <div class="filter-body">
           <list-filter
-            @filter-updated=${this.handleFilterUpdated}
+            @list-filter-updated=${this.handleFilterUpdated}
           ></list-filter>
         </div>
       </ss-collapsable>
