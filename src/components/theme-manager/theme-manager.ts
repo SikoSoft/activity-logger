@@ -1,29 +1,134 @@
-import { html, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import {
+  css,
+  html,
+  LitElement,
+  nothing,
+  PropertyValues,
+  TemplateResult,
+} from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import {
   ThemeManagerProp,
   themeManagerProps,
   ThemeManagerProps,
 } from './theme-manager.models';
 import { translate } from '@/lib/Localization';
+import { Theme } from '@/models/Page';
+import { repeat } from 'lit/directives/repeat.js';
+
+import '@ss/ui/components/sortable-list';
+import '@ss/ui/components/sortable-item';
+import '@ss/ui/components/ss-icon';
+import { ThemeAddedEvent, ThemesSavedEvent } from './theme-manager.events';
+import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('theme-manager')
 export class ThemeManager extends LitElement {
+  static styles = css`
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5;
+      }
+    }
+
+    .available-themes li.active {
+      opacity: 0.5;
+      pointer-events: none;
+
+      ss-icon {
+        display: none;
+      }
+    }
+
+    ss-icon {
+      cursor: pointer;
+    }
+  `;
+
   @property({ type: Array })
-  [ThemeManagerProp.THEMES]: ThemeManagerProps[ThemeManagerProp.THEMES] =
-    themeManagerProps[ThemeManagerProp.THEMES].default;
+  [ThemeManagerProp.ACTIVE]: ThemeManagerProps[ThemeManagerProp.ACTIVE] =
+    themeManagerProps[ThemeManagerProp.ACTIVE].default;
+
+  @state()
+  initialActive: string[] = [];
+
+  @state()
+  get available(): string[] {
+    return Object.values(Theme);
+  }
+
+  @state()
+  get enableSave(): boolean {
+    return (
+      JSON.stringify(this.initialActive) !==
+      JSON.stringify(this[ThemeManagerProp.ACTIVE])
+    );
+  }
+
+  protected firstUpdated(changedProperties: PropertyValues): void {
+    super.firstUpdated(changedProperties);
+
+    this.initialActive = [...this[ThemeManagerProp.ACTIVE]];
+  }
+
+  addTheme(theme: string): void {
+    this.dispatchEvent(new ThemeAddedEvent({ theme }));
+  }
+
+  saveThemes(): void {
+    this.dispatchEvent(
+      new ThemesSavedEvent({ themes: this[ThemeManagerProp.ACTIVE] }),
+    );
+  }
 
   render(): TemplateResult {
     return html`
       <div>
-        ${translate('themes')}
-        ${this[ThemeManagerProp.THEMES].length > 0
-          ? html`<ul>
-              ${this[ThemeManagerProp.THEMES].map(
+        <h3>${translate('availableThemes')}</h3>
+
+        <ul class="available-themes">
+          ${repeat(
+            this.available,
+            theme => theme,
+            theme =>
+              html`<li
+                class=${classMap({
+                  active: this[ThemeManagerProp.ACTIVE].includes(theme),
+                })}
+              >
+                <span>${theme}</span
+                ><ss-icon
+                  name="add"
+                  size="16"
+                  @click=${(): void => this.addTheme(theme)}
+                ></ss-icon>
+              </li>`,
+          )}
+        </ul>
+
+        <h3>${translate('activeThemes')}</h3>
+        ${this[ThemeManagerProp.ACTIVE].length > 0
+          ? html`<ul class="active-themes">
+              ${this[ThemeManagerProp.ACTIVE].map(
                 theme => html`<li>${theme}</li>`,
               )}
             </ul>`
           : translate('noThemesActive')}
+
+        <div class="buttons">
+          <ss-button
+            ?disabled=${!this.enableSave}
+            positive
+            @click=${this.saveThemes}
+            >${translate('save')}</ss-button
+          >
+        </div>
       </div>
     `;
   }

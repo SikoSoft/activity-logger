@@ -48,11 +48,13 @@ export const defaultListContext: ListContext = {
 };
 
 export const defaultListConfig: ListConfig = {
+  userId: '',
   id: 'default',
   name: 'Default',
   filter: structuredClone(defaultListFilter),
   sort: structuredClone(defaultListSort),
   setting: structuredClone(defaultSettings),
+  themes: [],
 };
 
 export class AppState {
@@ -413,6 +415,20 @@ export class AppState {
   @action
   setWidgetIsOpen(isOpen: boolean): void {
     this.widgetIsOpen = isOpen;
+  }
+
+  @action
+  addTheme(theme: string): void {
+    if (this.listConfig.themes.includes(theme)) {
+      return;
+    }
+    const updatedConfig = {
+      ...this.listConfig,
+      themes: [...this.listConfig.themes, theme],
+    };
+    this.listConfigs = this.listConfigs.map(config =>
+      config.id === updatedConfig.id ? updatedConfig : config,
+    );
   }
 
   constructor() {

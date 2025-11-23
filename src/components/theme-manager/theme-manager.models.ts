@@ -2,19 +2,19 @@ import { ControlType } from '@/models/Control';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
 export enum ThemeManagerProp {
-  THEMES = 'themes',
+  ACTIVE = 'active',
 }
 
 export interface ThemeManagerProps extends PropTypes {
-  [ThemeManagerProp.THEMES]: string[];
+  [ThemeManagerProp.ACTIVE]: string[];
 }
 
 export const themeManagerProps: PropConfigMap<ThemeManagerProps> = {
-  [ThemeManagerProp.THEMES]: {
+  [ThemeManagerProp.ACTIVE]: {
     default: [],
     control: {
       type: ControlType.TEXT,
     },
-    description: 'The available themes',
+    description: 'The active themes',
   },
 };

@@ -32,6 +32,7 @@ export interface StorageSchema {
   saveListConfig?(listConfig: ListConfig): Promise<void>;
   updateListSort?(listConfigId: string, sort: ListSort): Promise<void>;
   updateListFilter?(listConfigId: string, filter: ListFilter): Promise<void>;
+  updateListThemes?(listConfigId: string, themes: string[]): Promise<void>;
   saveSetting?(listConfigId: string, setting: Setting): Promise<boolean>;
   updateEntityConfig?(
     entityConfig: EntityConfig,

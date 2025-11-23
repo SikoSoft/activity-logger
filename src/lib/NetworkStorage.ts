@@ -44,6 +44,17 @@ export class NetworkStorage implements StorageSchema {
     //return;
   }
 
+  async updateListThemes(
+    listConfigId: string,
+    themes: string[],
+  ): Promise<void> {
+    const result = await api.put<string[], null>(
+      `listThemes/${listConfigId}`,
+      themes,
+    );
+    //return;
+  }
+
   async addListConfig(): Promise<string> {
     const result = await api.post<{ name: string }, { id: string }>(
       'listConfig',

@@ -218,6 +218,15 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
+  async updateListThemes(
+    _listConfigId: string,
+    _themes: string[],
+  ): Promise<void> {
+    Promise.resolve(null);
+    return;
+  }
+
+  @delegateSource()
   async saveListConfig(listConfig: ListConfig): Promise<void> {
     const listConfigs = await this.getListConfigs();
 

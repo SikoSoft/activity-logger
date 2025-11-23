@@ -22,6 +22,10 @@ import { ListConfigChangedEvent } from './list-config.events';
 import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
 
 import { theme } from '@/styles/theme';
+import {
+  ThemeAddedEvent,
+  ThemesSavedEvent,
+} from '../theme-manager/theme-manager.events';
 
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
@@ -239,11 +243,13 @@ export class ListConfig extends MobxLitElement {
 
     addToast(translate('configSaved'), NotificationType.SUCCESS);
     await storage.saveListConfig({
+      userId: '',
       id: this.id,
       name: this.name,
       filter: this.state.listFilter,
       sort: this.state.listSort,
       setting: this.state.listSetting,
+      themes: this.state.listConfig.themes,
     });
     this.state.setListConfigs(await storage.getListConfigs());
     this.isSaving = false;
@@ -311,6 +317,20 @@ export class ListConfig extends MobxLitElement {
   showConfigDeleteConfirm(): void {
     this.confirmDeleteIsOpen = true;
   }
+
+  addThemeToConfig(e: ThemeAddedEvent): void {
+    const theme = e.detail.theme;
+    if (this.state.listConfig.themes.includes(theme)) {
+      return;
+    }
+    this.state.addTheme(theme);
+  }
+
+  saveThemes = (e: ThemesSavedEvent): void => {
+    const themes = e.detail.themes;
+    storage.updateListThemes(this.state.listConfig.id, themes);
+    addToast(translate('themesSaved'), NotificationType.SUCCESS);
+  };
 
   render(): TemplateResult {
     return html`<div class=${classMap(this.classes)}>
@@ -410,6 +430,9 @@ export class ListConfig extends MobxLitElement {
       >
         <theme-manager
           .open=${this.themeManagerIsOpen}
+          .active=${this.state.listConfig.themes}
+          @themes-saved=${this.saveThemes}
+          @theme-added=${this.addThemeToConfig}
           @close=${(): void => {
             this.themeManagerIsOpen = false;
           }}
