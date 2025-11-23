@@ -1,11 +1,11 @@
-export const themeAddedEventName = 'theme-added';
+export const themeAddedEventName = 'themes-updated';
 
-export interface ThemeAddedPayload {
-  theme: string;
+export interface ThemesUpdatedPayload {
+  themes: string[];
 }
 
-export class ThemeAddedEvent extends CustomEvent<ThemeAddedPayload> {
-  constructor(detail: ThemeAddedPayload) {
+export class ThemesUpdatedEvent extends CustomEvent<ThemesUpdatedPayload> {
+  constructor(detail: ThemesUpdatedPayload) {
     super(themeAddedEventName, {
       detail,
       bubbles: true,

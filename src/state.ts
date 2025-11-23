@@ -418,13 +418,10 @@ export class AppState {
   }
 
   @action
-  addTheme(theme: string): void {
-    if (this.listConfig.themes.includes(theme)) {
-      return;
-    }
+  setThemes(themes: string[]): void {
     const updatedConfig = {
       ...this.listConfig,
-      themes: [...this.listConfig.themes, theme],
+      themes,
     };
     this.listConfigs = this.listConfigs.map(config =>
       config.id === updatedConfig.id ? updatedConfig : config,

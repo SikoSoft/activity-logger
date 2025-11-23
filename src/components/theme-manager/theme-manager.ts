@@ -19,8 +19,9 @@ import { repeat } from 'lit/directives/repeat.js';
 import '@ss/ui/components/sortable-list';
 import '@ss/ui/components/sortable-item';
 import '@ss/ui/components/ss-icon';
-import { ThemeAddedEvent, ThemesSavedEvent } from './theme-manager.events';
+import { ThemesUpdatedEvent, ThemesSavedEvent } from './theme-manager.events';
 import { classMap } from 'lit/directives/class-map.js';
+import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 
 @customElement('theme-manager')
 export class ThemeManager extends LitElement {
@@ -78,12 +79,34 @@ export class ThemeManager extends LitElement {
   }
 
   addTheme(theme: string): void {
-    this.dispatchEvent(new ThemeAddedEvent({ theme }));
+    this.dispatchEvent(
+      new ThemesUpdatedEvent({
+        themes: [...this[ThemeManagerProp.ACTIVE], theme],
+      }),
+    );
+  }
+
+  removeTheme(theme: string): void {
+    this.dispatchEvent(
+      new ThemesUpdatedEvent({
+        themes: this[ThemeManagerProp.ACTIVE].filter(t => t !== theme),
+      }),
+    );
   }
 
   saveThemes(): void {
     this.dispatchEvent(
       new ThemesSavedEvent({ themes: this[ThemeManagerProp.ACTIVE] }),
+    );
+  }
+
+  handleSortUpdated(e: SortUpdatedEvent): void {
+    const themes = e.detail.sortedIds;
+
+    this.dispatchEvent(
+      new ThemesUpdatedEvent({
+        themes,
+      }),
     );
   }
 
@@ -114,11 +137,22 @@ export class ThemeManager extends LitElement {
 
         <h3>${translate('activeThemes')}</h3>
         ${this[ThemeManagerProp.ACTIVE].length > 0
-          ? html`<ul class="active-themes">
+          ? html`<sortable-list
+              class="active-themes"
+              @sort-updated=${this.handleSortUpdated}
+            >
               ${this[ThemeManagerProp.ACTIVE].map(
-                theme => html`<li>${theme}</li>`,
+                theme =>
+                  html`<sortable-item id=${theme}>
+                    <span>${theme}</span>
+                    <ss-icon
+                      name="trash"
+                      size="16"
+                      @click=${(): void => this.removeTheme(theme)}
+                    ></ss-icon>
+                  </sortable-item>`,
               )}
-            </ul>`
+            </sortable-list>`
           : translate('noThemesActive')}
 
         <div class="buttons">

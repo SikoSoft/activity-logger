@@ -23,7 +23,7 @@ import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events'
 
 import { theme } from '@/styles/theme';
 import {
-  ThemeAddedEvent,
+  ThemesUpdatedEvent,
   ThemesSavedEvent,
 } from '../theme-manager/theme-manager.events';
 
@@ -318,12 +318,10 @@ export class ListConfig extends MobxLitElement {
     this.confirmDeleteIsOpen = true;
   }
 
-  addThemeToConfig(e: ThemeAddedEvent): void {
-    const theme = e.detail.theme;
-    if (this.state.listConfig.themes.includes(theme)) {
-      return;
-    }
-    this.state.addTheme(theme);
+  updateThemes(e: ThemesUpdatedEvent): void {
+    const themes = e.detail.themes;
+
+    this.state.setThemes(themes);
   }
 
   saveThemes = (e: ThemesSavedEvent): void => {
@@ -432,7 +430,7 @@ export class ListConfig extends MobxLitElement {
           .open=${this.themeManagerIsOpen}
           .active=${this.state.listConfig.themes}
           @themes-saved=${this.saveThemes}
-          @theme-added=${this.addThemeToConfig}
+          @themes-updated=${this.updateThemes}
           @close=${(): void => {
             this.themeManagerIsOpen = false;
           }}
