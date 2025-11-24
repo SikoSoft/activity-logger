@@ -230,6 +230,10 @@ export class EntityForm extends ViewElement {
     reaction(
       () => appState.listConfig,
       () => {
+        if (this.entityId) {
+          return;
+        }
+
         if (this.availableEntityConfigs.length === 1) {
           this.type = this.availableEntityConfigs[0].id;
         } else {
