@@ -7,7 +7,7 @@ export enum PageContainerProp {
 }
 
 export interface PageContainerProps extends PropTypes {
-  [PageContainerProp.THEME]: ThemeName;
+  [PageContainerProp.THEME]: string;
 }
 export const pageContainerProps: PropConfigMap<PageContainerProps> = {
   [PageContainerProp.THEME]: {

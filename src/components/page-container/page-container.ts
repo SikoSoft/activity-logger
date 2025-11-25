@@ -67,6 +67,13 @@ export class PageContainer extends MobxLitElement {
 
   @state() popUpIsOpen: boolean = false;
 
+  @state() listConfigThemes: string[] = [];
+
+  @state()
+  get themes(): string[] {
+    return this.listConfigThemes.length ? this.listConfigThemes : [this.theme];
+  }
+
   @state()
   get classes(): Record<string, boolean> {
     return {
@@ -77,7 +84,13 @@ export class PageContainer extends MobxLitElement {
 
   setTheme(theme: ThemeName): void {
     this.theme = theme;
-    const backgroundColor = themes[this.state.theme].backgroundColor;
+    this.syncThemes();
+  }
+
+  syncThemes(): void {
+    this.className = this.themes.join(' ');
+    const theme = this.themes[0];
+    const backgroundColor = themes[theme as ThemeName].backgroundColor;
     document.body.style.backgroundColor = backgroundColor.cssText;
   }
 
@@ -105,6 +118,22 @@ export class PageContainer extends MobxLitElement {
         fireImmediately: false,
       },
     );
+
+    reaction(
+      () => this.state.listConfig,
+      () => {
+        console.log('listconfig changed');
+        this.setListConfigThemes(this.state.listConfig.themes);
+      },
+      {
+        fireImmediately: true,
+      },
+    );
+  }
+
+  setListConfigThemes(themes: string[]): void {
+    this.listConfigThemes = themes;
+    this.syncThemes();
   }
 
   private handlePopUpOpened(): void {

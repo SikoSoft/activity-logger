@@ -27,9 +27,11 @@ import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import '@/components/entity-form/entity-form';
 import { translate } from '@/lib/Localization';
 import { repeat } from 'lit/directives/repeat.js';
+import { themed } from '@/lib/Theme';
 
 const holdThreshold = 500;
 
+@themed()
 @customElement('entity-list-item')
 export class EntityListItem extends MobxLitElement {
   private state = appState;

@@ -166,3 +166,14 @@ export const darkStyles = [
 themes[ThemeName.DARK].sheet.replaceSync(darkStyles.join('\n'));
 
 export const theme = darkStyles;
+
+export const todoStyles = [
+  commonStyles,
+  css`
+    .time {
+      display: none;
+    }
+  `,
+];
+
+themes[ThemeName.TODO].sheet.replaceSync(todoStyles.join('\n'));
