@@ -21,7 +21,7 @@ import {
 } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
 import { Version } from '@/models/Version';
-import { defaultTheme, Theme } from './models/Page';
+import { defaultTheme, ThemeName } from './models/Page';
 
 export const defaultListFilter: ListFilter = {
   tagging: {
@@ -122,7 +122,7 @@ export class AppState {
   public lastListUrl: string = '';
 
   @observable
-  public theme: Theme = defaultTheme;
+  public theme: ThemeName = defaultTheme;
 
   get listConfig(): ListConfig {
     return (
@@ -403,8 +403,8 @@ export class AppState {
   }
 
   @action
-  setTheme(theme: Theme): void {
-    if (!Object.values(Theme).includes(theme)) {
+  setTheme(theme: ThemeName): void {
+    if (!Object.values(ThemeName).includes(theme)) {
       this.theme = defaultTheme;
       return;
     }

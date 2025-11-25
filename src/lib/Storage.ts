@@ -11,7 +11,12 @@ import {
   defaultListFilter,
   defaultListSort,
 } from '@/state';
-import { PageView, Theme, defaultPageView, defaultTheme } from '@/models/Page';
+import {
+  PageView,
+  ThemeName,
+  defaultPageView,
+  defaultTheme,
+} from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { Version } from '@/models/Version';
@@ -541,8 +546,8 @@ export class Storage implements StorageSchema {
     return Promise.resolve(true);
   }
 
-  setTheme(theme: Theme): void {
-    if (!Object.values(Theme).includes(theme)) {
+  setTheme(theme: ThemeName): void {
+    if (!Object.values(ThemeName).includes(theme)) {
       localStorage.setItem(StorageItemKey.THEME, defaultTheme);
       return;
     }
@@ -550,12 +555,15 @@ export class Storage implements StorageSchema {
     localStorage.setItem(StorageItemKey.THEME, theme);
   }
 
-  getTheme(): Theme {
-    let theme: Theme = defaultTheme;
+  getTheme(): ThemeName {
+    let theme: ThemeName = defaultTheme;
     try {
       const storedTheme = localStorage.getItem(StorageItemKey.THEME);
-      if (storedTheme && Object.values(Theme).includes(storedTheme as Theme)) {
-        theme = storedTheme as Theme;
+      if (
+        storedTheme &&
+        Object.values(ThemeName).includes(storedTheme as ThemeName)
+      ) {
+        theme = storedTheme as ThemeName;
       }
     } catch (error) {
       console.error(

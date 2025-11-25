@@ -3,7 +3,7 @@ import { ListConfig, ListSort, ListFilter } from 'api-spec/models/List';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
-import { Theme } from './Page';
+import { ThemeName } from './Page';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -63,6 +63,6 @@ export interface StorageSchema {
   export?(entityConfigIds: number[]): Promise<Entity.Entity[]>;
   import?(data: ExportDataContents): Promise<boolean>;
   clearData?(nukedDataTypes: NukedDataType[]): Promise<void>;
-  setTheme?(theme: Theme): void;
-  getTheme?(): Theme;
+  setTheme?(theme: ThemeName): void;
+  getTheme?(): ThemeName;
 }

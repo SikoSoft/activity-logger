@@ -14,7 +14,7 @@ import '@ss/ui/components/ss-toggle';
 import '@/components/user-pane/user-pane';
 
 import { theme } from '@/styles/theme';
-import { Theme } from '@/models/Page';
+import { Theme, ThemeName } from '@/models/Page';
 
 @customElement('floating-widget')
 export class FloatingWidget extends MobxLitElement {
@@ -168,7 +168,7 @@ export class FloatingWidget extends MobxLitElement {
   }
 
   private handleThemeChanged(event: CustomEvent): void {
-    const theme = event.detail.value as Theme;
+    const theme = event.detail.value as ThemeName;
 
     this.state.setTheme(theme);
     storage.setTheme(theme);
@@ -232,7 +232,7 @@ export class FloatingWidget extends MobxLitElement {
             <h4>${translate('theme')}</h4>
             <ss-select
               @select-changed=${this.handleThemeChanged}
-              .options=${Object.values(Theme).map(theme => ({
+              .options=${Object.values(ThemeName).map(theme => ({
                 label: translate(theme),
                 value: theme,
               }))}

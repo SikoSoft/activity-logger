@@ -13,7 +13,7 @@ import {
   ThemeManagerProps,
 } from './theme-manager.models';
 import { translate } from '@/lib/Localization';
-import { Theme } from '@/models/Page';
+import { ThemeName } from '@/models/Page';
 import { repeat } from 'lit/directives/repeat.js';
 
 import '@ss/ui/components/sortable-list';
@@ -61,7 +61,7 @@ export class ThemeManager extends LitElement {
 
   @state()
   get available(): string[] {
-    return Object.values(Theme);
+    return Object.values(ThemeName);
   }
 
   @state()

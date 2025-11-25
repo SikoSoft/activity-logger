@@ -1,3 +1,5 @@
+import { CSSResult } from 'lit';
+
 export enum PageView {
   INPUT = 'input',
   LIST = 'list',
@@ -8,9 +10,15 @@ export enum PageView {
 
 export const defaultPageView: PageView = PageView.INPUT;
 
-export enum Theme {
+export enum ThemeName {
   LIGHT = 'light',
   DARK = 'dark',
   TODO = 'todo',
 }
-export const defaultTheme: Theme = Theme.LIGHT;
+export const defaultTheme: ThemeName = ThemeName.LIGHT;
+
+export interface Theme {
+  name: ThemeName;
+  backgroundColor: CSSResult;
+  sheet: CSSStyleSheet;
+}

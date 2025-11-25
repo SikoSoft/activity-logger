@@ -2,7 +2,7 @@ import { css, html, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@/components/app-container/app-container';
-import { backgroundColorMap, theme } from '@/styles/theme';
+import { theme, themes } from '@/styles/theme';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { appState } from '@/state';
 import { classMap } from 'lit/directives/class-map.js';
@@ -12,7 +12,7 @@ import {
   pageContainerProps,
 } from './page-container.models';
 import { reaction } from 'mobx';
-import { Theme, defaultTheme } from '@/models/Page';
+import { ThemeName, defaultTheme } from '@/models/Page';
 import { StorageItemKey } from '@/models/Storage';
 
 @customElement('page-container')
@@ -75,16 +75,19 @@ export class PageContainer extends MobxLitElement {
     };
   }
 
-  setTheme(theme: Theme): void {
+  setTheme(theme: ThemeName): void {
     this.theme = theme;
-    const backgroundColor = backgroundColorMap[this.state.theme];
+    const backgroundColor = themes[this.state.theme].backgroundColor;
     document.body.style.backgroundColor = backgroundColor.cssText;
   }
 
-  getThemeFromStorage(): Theme {
+  getThemeFromStorage(): ThemeName {
     const storedTheme = localStorage.getItem(StorageItemKey.THEME);
-    if (storedTheme && Object.values(Theme).includes(storedTheme as Theme)) {
-      return storedTheme as Theme;
+    if (
+      storedTheme &&
+      Object.values(ThemeName).includes(storedTheme as ThemeName)
+    ) {
+      return storedTheme as ThemeName;
     }
 
     return defaultTheme;
