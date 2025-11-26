@@ -1,4 +1,3 @@
-import { theme } from '@/styles/theme';
 import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -12,7 +11,9 @@ import {
 import { PageChangedEvent } from './list-paginator.events';
 
 import '@ss/ui/components/ss-button';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('list-paginator')
 export class ListPaginator extends LitElement {
   @property({ type: Number })
@@ -39,50 +40,47 @@ export class ListPaginator extends LitElement {
     return Math.ceil(this.start / this.perPage) + 1;
   }
 
-  static styles = [
-    theme,
-    css`
-      :host {
-        display: block;
-      }
-      .paginator {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.25rem;
-      }
+  static styles = css`
+    :host {
+      display: block;
+    }
+    .paginator {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.25rem;
+    }
 
-      .pages {
-        display: flex;
-        gap: 0.25rem;
-      }
+    .pages {
+      display: flex;
+      gap: 0.25rem;
+    }
 
-      .quick-page {
-        color: #777;
+    .quick-page {
+      color: #777;
 
-        &.active {
-          color: #000;
-          font-weight: bold;
-        }
+      &.active {
+        color: #000;
+        font-weight: bold;
       }
+    }
 
-      button {
-        cursor: pointer;
-        border-radius: 8px;
-        border: 1px #aaa solid;
-        transition: all 0.2s;
+    button {
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px #aaa solid;
+      transition: all 0.2s;
 
-        &:hover {
-          background-color: #ccc;
-        }
+      &:hover {
+        background-color: #ccc;
       }
-      button:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
-    `,
-  ];
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  `;
 
   @state()
   get quickPages(): number[] {

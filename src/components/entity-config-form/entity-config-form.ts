@@ -43,7 +43,9 @@ import {
 } from './entity-config-form.events';
 import { Entity } from 'api-spec/models';
 import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('entity-config-form')
 export class EntityConfigForm extends MobxLitElement {
   public state = appState;

@@ -30,25 +30,24 @@ import '@/components/entity-form/long-text-field/long-text-field';
 import '@/components/entity-form/short-text-field/short-text-field';
 import '@/components/entity-form/image-field/image-field';
 import { translate } from '@/lib/Localization';
-import { theme } from '@/styles/theme';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('property-field')
 export class PropertyField extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      :host {
-        display: block;
-      }
+  static styles = css`
+    :host {
+      display: block;
+    }
 
-      label {
-        font-weight: bold;
-        margin-bottom: 0.25rem;
-        display: block;
-        opacity: 0.9;
-      }
-    `,
-  ];
+    label {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      display: block;
+      opacity: 0.9;
+    }
+  `;
+
   private state = appState;
 
   @property({ type: Number })

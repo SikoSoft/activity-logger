@@ -9,7 +9,6 @@ import { appState } from '@/state';
 import '@ss/ui/components/ss-button';
 import '@/components/entity-config-form/entity-config-form';
 
-import { theme } from '@/styles/theme';
 import { produce } from 'immer';
 import { defaultEntityConfig } from 'api-spec/models/Entity';
 import { ViewElement } from '@/lib/ViewElement';
@@ -19,25 +18,24 @@ import {
 } from '../entity-config-form/entity-config-form.events';
 import { repeat } from 'lit/directives/repeat.js';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('entity-config-list')
 export class EntityConfigList extends ViewElement {
   private state = appState;
 
-  static styles = [
-    theme,
-    css`
-      .no-entity-configs {
-        font-style: italic;
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
+  static styles = css`
+    .no-entity-configs {
+      font-style: italic;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
 
-      .buttons {
-        padding: 1rem;
-      }
-    `,
-  ];
+    .buttons {
+      padding: 1rem;
+    }
+  `;
 
   connectedCallback(): void {
     super.connectedCallback();

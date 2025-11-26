@@ -16,19 +16,17 @@ import { ListSortUpdatedEvent } from './list-sort.events';
 
 import '@ss/ui/components/ss-select';
 
-import { theme } from '@/styles/theme';
 import { EntityConfig } from 'api-spec/models/Entity';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('list-sort')
 export class ListSort extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      .box {
-        padding: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .box {
+      padding: 1rem;
+    }
+  `;
 
   private state = appState;
 

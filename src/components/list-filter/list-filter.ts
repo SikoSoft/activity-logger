@@ -32,47 +32,45 @@ import '@ss/ui/components/tag-manager';
 import '@/components/list-filter/time-filters/time-filters';
 import '@/components/list-filter/text-filters/text-filters';
 
-import { theme } from '@/styles/theme';
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('list-filter')
 export class ListFilter extends MobxLitElement {
   private minLengthForSuggestion = 1;
   public state = appState;
 
-  static styles = [
-    theme,
-    css`
-      .list-filter {
-        padding: 1rem;
-      }
+  static styles = css`
+    .list-filter {
+      padding: 1rem;
+    }
 
-      .list-filter.all .filters,
-      .tagging.all .tag-rules {
-        opacity: 0.3;
-        pointer-events: none;
-      }
+    .list-filter.all .filters,
+    .tagging.all .tag-rules {
+      opacity: 0.3;
+      pointer-events: none;
+    }
 
-      .save {
-        position: relative;
-      }
+    .save {
+      position: relative;
+    }
 
-      .save ss-input {
-        position: absolute;
-        bottom: 0%;
-        width: 100%;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.3s;
-      }
+    .save ss-input {
+      position: absolute;
+      bottom: 0%;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s;
+    }
 
-      .list-filter.save-mode .save ss-input {
-        bottom: 100%;
-        opacity: 1;
-        pointer-events: initial;
-      }
-    `,
-  ];
+    .list-filter.save-mode .save ss-input {
+      bottom: 100%;
+      opacity: 1;
+      pointer-events: initial;
+    }
+  `;
 
   @state() [ListFilterType.CONTAINS_ONE_OF]: string[] = [];
   @state() [ListFilterType.CONTAINS_ALL_OF]: string[] = [];

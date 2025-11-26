@@ -21,108 +21,106 @@ import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { ListConfigChangedEvent } from './list-config.events';
 import { CarouselSlideChangedEvent } from '@ss/ui/components/ss-carousel.events';
 
-import { theme } from '@/styles/theme';
 import {
   ThemesUpdatedEvent,
   ThemesSavedEvent,
 } from '../theme-manager/theme-manager.events';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('list-config')
 export class ListConfig extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      :host {
-        display: block;
-        width: 100%;
-        touch-action: none;
+  static styles = css`
+    :host {
+      display: block;
+      width: 100%;
+      touch-action: none;
+    }
+
+    .list-config {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+
+      .config {
+        transition: all 0.3s;
+        opacity: 0;
       }
 
-      .list-config {
-        padding: 1rem;
-        margin-bottom: 1rem;
-        position: relative;
+      .name {
+        transition: all 0.3s;
+        opacity: 1;
+        font-size: 2rem;
+        text-align: center;
+        height: 3rem;
+        line-height: 3rem;
 
-        .config {
-          transition: all 0.3s;
-          opacity: 0;
+        ss-input {
+          margin: auto;
         }
 
-        .name {
-          transition: all 0.3s;
-          opacity: 1;
-          font-size: 2rem;
+        ss-input::part(input) {
+          transition: all 0.2s;
+          width: 80%;
           text-align: center;
+          font-size: 2rem;
           height: 3rem;
           line-height: 3rem;
+          background-color: transparent;
+          border-color: transparent;
+        }
+      }
 
-          ss-input {
-            margin: auto;
-          }
+      &.edit-mode .name,
+      .name:hover {
+        ss-input::part(input) {
+          font-size: 2.2rem;
+          border-color: var(--input-border-color);
+          background-color: var(--input-background-color);
+        }
+        ss-input[unsaved]::part(input) {
+          border-color: var(--input-unsaved-border-color);
+        }
+      }
 
-          ss-input::part(input) {
-            transition: all 0.2s;
-            width: 80%;
-            text-align: center;
-            font-size: 2rem;
-            height: 3rem;
-            line-height: 3rem;
-            background-color: transparent;
-            border-color: transparent;
-          }
+      .buttons {
+        position: relative;
+        width: 100%;
+        top: -1.5rem;
+
+        .buttons-inner {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: 2rem;
         }
 
-        &.edit-mode .name,
-        .name:hover {
-          ss-input::part(input) {
-            font-size: 2.2rem;
-            border-color: var(--input-border-color);
-            background-color: var(--input-background-color);
-          }
-          ss-input[unsaved]::part(input) {
-            border-color: var(--input-unsaved-border-color);
-          }
-        }
+        button {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          line-height: 16px;
+          box-sizing: content-box;
+          border-radius: 50%;
+          background-color: var(--input-background-color);
+          border: 1px solid var(--input-border-color);
+          cursor: pointer;
+          color: var(--input-text-color);
+          transition: all 0.1s;
+          opacity: 0;
+          pointer-events: none;
+          padding: 0.5rem;
 
-        .buttons {
-          position: relative;
-          width: 100%;
-          top: -1.5rem;
-
-          .buttons-inner {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 2rem;
-          }
-
-          button {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            line-height: 16px;
-            box-sizing: content-box;
-            border-radius: 50%;
-            background-color: var(--input-background-color);
-            border: 1px solid var(--input-border-color);
-            cursor: pointer;
-            color: var(--input-text-color);
-            transition: all 0.1s;
-            opacity: 0;
-            pointer-events: none;
-            padding: 0.5rem;
-
-            &:hover {
-              scale: 1.5;
-            }
+          &:hover {
+            scale: 1.5;
           }
         }
       }
-    `,
-  ];
+    }
+  `;
   private defaultModeStyles = css`
     .config-slide {
       display: flex;

@@ -11,9 +11,9 @@ import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-select';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('select-setting')
 export class SelectSetting extends LitElement {
   @property()
@@ -28,14 +28,11 @@ export class SelectSetting extends LitElement {
   [SelectSettingProp.OPTIONS]: SelectSettingProps[SelectSettingProp.OPTIONS] =
     selectSettingProps[SelectSettingProp.OPTIONS].default;
 
-  static styles = [
-    theme,
-    css`
-      .select-setting {
-        padding: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .select-setting {
+      padding: 1rem;
+    }
+  `;
 
   private handleSelectChanged(e: SelectChangedEvent<string>): void {
     this.dispatchEvent(

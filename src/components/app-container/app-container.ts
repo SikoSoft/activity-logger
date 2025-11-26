@@ -27,21 +27,21 @@ import '@/components/list-config/list-config';
 import '@/components/logged-in/logged-in';
 import '@/components/logged-out/logged-out';
 
-import { theme } from '@/styles/theme';
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 import { Router } from '@/models/Router';
 import { routes } from '@/routes';
 import { UserLoggedOutEvent } from '@/events/user-logged-out';
+import { themed } from '@/lib/Theme';
 
 export interface ViewChangedEvent extends CustomEvent {
   detail: PageView;
 }
 
+@themed()
 @customElement('app-container')
 export class AppContainer extends MobxLitElement {
   public state = appState;
-  static styles = [theme];
   private appRouter?: Router;
   private routerView: HTMLDivElement | null = null;
 

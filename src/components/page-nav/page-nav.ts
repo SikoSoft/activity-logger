@@ -10,10 +10,10 @@ import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 import { navigate, routerState } from '@/lib/Router';
 
-import { theme } from '@/styles/theme';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
 import { repeat } from 'lit/directives/repeat.js';
 import { MobxReactionsController } from '@/lib/MobxReactionController';
+import { themed } from '@/lib/Theme';
 
 export interface PageViewConfig {
   id: PageView;
@@ -35,46 +35,44 @@ const debugViews: PageViewConfig[] = [
   { id: PageView.ADMIN, label: translate('admin'), url: '/admin' },
 ];
 
+@themed()
 @customElement('page-nav')
 export class PageNav extends MobxLitElement {
   private state = appState;
   private rx = new MobxReactionsController(this);
 
-  static styles = [
-    theme,
-    css`
-      .box {
-        overflow: hidden;
-      }
+  static styles = css`
+    .box {
+      overflow: hidden;
+    }
 
-      nav span {
-        display: inline-block;
-        height: 32px;
-        line-height: 32px;
-        width: calc(100% / var(--num-views));
-        text-align: center;
-        background-color: #ececec;
-        cursor: pointer;
-      }
+    nav span {
+      display: inline-block;
+      height: 32px;
+      line-height: 32px;
+      width: calc(100% / var(--num-views));
+      text-align: center;
+      background-color: #ececec;
+      cursor: pointer;
+    }
 
-      nav span.active {
-        background-color: #fff;
-      }
+    nav span.active {
+      background-color: #fff;
+    }
 
-      tab-container::party(headers) {
-        display: flex;
-      }
+    tab-container::party(headers) {
+      display: flex;
+    }
 
-      tab-container::part(header) {
-        text-align: center;
-        flex: 1;
-      }
+    tab-container::part(header) {
+      text-align: center;
+      flex: 1;
+    }
 
-      tab-container::part(content) {
-        display: none;
-      }
-    `,
-  ];
+    tab-container::part(content) {
+      display: none;
+    }
+  `;
 
   @property()
   [PageNavProp.ACTIVE]: PageNavProps[PageNavProp.ACTIVE] =

@@ -11,9 +11,9 @@ import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-toggle';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('boolean-setting')
 export class BooleanSetting extends LitElement {
   @property()
@@ -24,14 +24,11 @@ export class BooleanSetting extends LitElement {
   [BooleanSettingProp.VALUE]: BooleanSettingProps[BooleanSettingProp.VALUE] =
     booleanSettingProps[BooleanSettingProp.VALUE].default;
 
-  static styles = [
-    theme,
-    css`
-      .boolean-setting {
-        padding: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .boolean-setting {
+      padding: 1rem;
+    }
+  `;
 
   private handleToggleChanged(e: ToggleChangedEvent): void {
     this.dispatchEvent(

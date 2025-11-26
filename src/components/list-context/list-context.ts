@@ -16,8 +16,7 @@ import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 import { ListContextUpdatedEvent } from './list-context.events';
 
 import '@ss/ui/components/ss-select';
-
-import { theme } from '@/styles/theme';
+import { themed } from '@/lib/Theme';
 
 const quantityMap: Record<ListContextUnit, number[]> = {
   [ListContextUnit.MINUTE]: [
@@ -30,28 +29,26 @@ const quantityMap: Record<ListContextUnit, number[]> = {
   [ListContextUnit.DAY]: [1, 2, 3, 4, 5, 6, 7],
 };
 
+@themed()
 @customElement('list-context')
 export class ListContext extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      .box {
-        padding: 1rem;
+  static styles = css`
+    .box {
+      padding: 1rem;
 
+      .input {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      &.enabled {
         .input {
-          opacity: 0.3;
-          pointer-events: none;
-        }
-
-        &.enabled {
-          .input {
-            opacity: 1;
-            pointer-events: initial;
-          }
+          opacity: 1;
+          pointer-events: initial;
         }
       }
-    `,
-  ];
+    }
+  `;
 
   private state = appState;
 

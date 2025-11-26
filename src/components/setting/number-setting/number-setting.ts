@@ -12,9 +12,9 @@ import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-toggle';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('number-setting')
 export class NumberSetting extends LitElement {
   @property()
@@ -37,14 +37,11 @@ export class NumberSetting extends LitElement {
   [NumberSettingProp.STEP]: NumberSettingProps[NumberSettingProp.STEP] =
     numberSettingProps[NumberSettingProp.STEP].default;
 
-  static styles = [
-    theme,
-    css`
-      .number-setting {
-        padding: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .number-setting {
+      padding: 1rem;
+    }
+  `;
 
   private handleInputChanged(e: InputChangedEvent): void {
     this.dispatchEvent(

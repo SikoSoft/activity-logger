@@ -9,7 +9,6 @@ import {
   ListSortNativeProperty,
 } from 'api-spec/models/List';
 import { Entity } from 'api-spec/models/Entity';
-import { theme } from '@/styles/theme';
 import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
@@ -40,38 +39,38 @@ import {
   EntityItemUpdatedEvent,
 } from '../entity-form/entity-form.events';
 import { storage } from '@/lib/Storage';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('entity-list')
 export class EntityList extends ViewElement {
   public state = appState;
 
-  static styles = [
-    theme,
-    css`
-      ss-collapsable {
-        display: block;
-        margin-top: 1rem;
-      }
+  static styles = css`
+    ss-collapsable {
+      display: block;
+      margin-top: 1rem;
+    }
 
-      .list-items {
-        margin-top: 1rem;
-        overflow: hidden;
-      }
+    .list-items {
+      margin-top: 1rem;
+      overflow: hidden;
+    }
 
-      entity-list-item:not(:last-of-type) {
-        display: block;
-        border-bottom: 1px solid #ccc;
-      }
+    entity-list-item:not(:last-of-type) {
+      display: block;
+      border-bottom: 1px solid #ccc;
+    }
 
-      .no-actions {
-        padding: 1rem;
-      }
+    .no-actions {
+      padding: 1rem;
+    }
 
-      .more {
-        margin-top: 1rem;
-      }
-    `,
-  ];
+    .more {
+      margin-top: 1rem;
+    }
+  `;
+
   private scrollHandler: EventListener = () => this.handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @query('list-filter') listFilter!: ListFilter;

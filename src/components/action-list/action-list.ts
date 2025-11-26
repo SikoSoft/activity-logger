@@ -41,35 +41,33 @@ import {
   ActionListItem,
   ActionListItemMode,
 } from './action-list-item/action-list-item';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('action-list')
 export class ActionList extends ViewElement {
   public state = appState;
 
-  static styles = [
-    theme,
-    css`
-      ss-collapsable {
-        display: block;
-        margin-top: 1rem;
-      }
+  static styles = css`
+    ss-collapsable {
+      display: block;
+      margin-top: 1rem;
+    }
 
-      .list-items {
-        margin-top: 1rem;
-        overflow: hidden;
-      }
+    .list-items {
+      margin-top: 1rem;
+      overflow: hidden;
+    }
 
-      .no-actions {
-        padding: 1rem;
-      }
+    .no-actions {
+      padding: 1rem;
+    }
 
-      .more {
-        margin-top: 1rem;
-      }
-    `,
-  ];
+    .more {
+      margin-top: 1rem;
+    }
+  `;
+
   private scrollHandler: EventListener = () => this.handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
   @query('list-filter') listFilter!: ListFilter;

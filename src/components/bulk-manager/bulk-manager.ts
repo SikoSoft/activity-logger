@@ -20,38 +20,35 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/tag-manager';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('bulk-manager')
 export class BulkManager extends MobxLitElement {
   private minLengthForSuggestion = 1;
   private state = appState;
 
-  static styles = [
-    theme,
-    css`
-      .bulk-manager {
-        position: sticky;
-        top: 0;
-        left: 0;
-        padding: 1rem;
-        box-shadow: 0 0 10px #000;
-        display: none;
+  static styles = css`
+    .bulk-manager {
+      position: sticky;
+      top: 0;
+      left: 0;
+      padding: 1rem;
+      box-shadow: 0 0 10px #000;
+      display: none;
 
-        &.shown {
-          display: block;
-        }
+      &.shown {
+        display: block;
       }
+    }
 
-      .number-selected,
-      .select-all {
-        text-align: center;
-        color: #555;
-        padding: 1rem;
-      }
-    `,
-  ];
+    .number-selected,
+    .select-all {
+      text-align: center;
+      color: #555;
+      padding: 1rem;
+    }
+  `;
 
   @state() operationType: OperationType = OperationType.ADD_TAGS;
   @state() tagValue: string = '';

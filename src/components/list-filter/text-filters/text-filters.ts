@@ -17,19 +17,16 @@ import {
 } from './text-filter/text-filter.events';
 
 import '@/components/list-filter/text-filters/text-filter/text-filter';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('text-filters')
 export class TextFilters extends LitElement {
-  static styles = [
-    theme,
-    css`
-      fieldset {
-        border-color: var(--border-color);
-      }
-    `,
-  ];
+  static styles = css`
+    fieldset {
+      border-color: var(--border-color);
+    }
+  `;
 
   @property({ type: Array })
   [TextFiltersProp.FILTERS]: TextFiltersProps[TextFiltersProp.FILTERS] =

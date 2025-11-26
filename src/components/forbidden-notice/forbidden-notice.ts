@@ -4,27 +4,24 @@ import { customElement } from 'lit/decorators.js';
 import { translate } from '@/lib/Localization';
 
 import '@/components/login-form/login-form';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('forbidden-notice')
 export class ForbiddenNotice extends LitElement {
-  static styles = [
-    theme,
-    css`
-      .forbidden {
-        text-align: center;
+  static styles = css`
+    .forbidden {
+      text-align: center;
 
-        .message {
-          padding: 1rem;
-        }
-
-        .login-form {
-          padding: 1rem;
-        }
+      .message {
+        padding: 1rem;
       }
-    `,
-  ];
+
+      .login-form {
+        padding: 1rem;
+      }
+    }
+  `;
 
   render(): TemplateResult {
     return html`

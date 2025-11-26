@@ -20,20 +20,18 @@ import {
 } from '@ss/ui/components/ss-input.events';
 import { UserLoggedInEvent } from '@/events/user-logged-in';
 
-import { theme } from '@/styles/theme';
 import { SSInput } from '@ss/ui/components/ss-input';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('login-form')
 export class LoginForm extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      .box {
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .box {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+  `;
 
   private state = appState;
 

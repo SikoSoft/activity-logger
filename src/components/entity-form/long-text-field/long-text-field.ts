@@ -12,31 +12,29 @@ import {
   LongTextFieldProps,
   longTextFieldProps,
 } from './long-text-field.models';
-import { theme } from '@/styles/theme';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('long-text-field')
 export class LongTextField extends LitElement {
-  static styles = [
-    theme,
-    css`
-      textarea {
-        width: 100%;
-        height: 100px;
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        padding: var(--padding);
-        font-size: var(--font-size);
-        color: var(--text-color);
-        background-color: var(--background-color);
-        box-sizing: border-box;
-      }
+  static styles = css`
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: var(--padding);
+      font-size: var(--font-size);
+      color: var(--text-color);
+      background-color: var(--background-color);
+      box-sizing: border-box;
+    }
 
-      textarea:focus {
-        outline: none;
-        border-color: var(--primary-color);
-      }
-    `,
-  ];
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  `;
 
   @property({ type: Number })
   [LongTextFieldProp.INSTANCE_ID]: LongTextFieldProps[LongTextFieldProp.INSTANCE_ID] =

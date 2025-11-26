@@ -14,20 +14,17 @@ import { UserLoggedOutEvent } from '@/events/user-logged-out';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('user-pane')
 export class UserPane extends MobxLitElement {
-  static styles = [
-    theme,
-    css`
-      .box {
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .box {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+  `;
 
   private state = appState;
 

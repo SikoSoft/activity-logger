@@ -11,9 +11,9 @@ import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
 import { SettingUpdatedEvent } from '@/events/setting-updated';
 
 import '@ss/ui/components/ss-toggle';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('text-setting')
 export class TextSetting extends LitElement {
   @property()
@@ -24,14 +24,11 @@ export class TextSetting extends LitElement {
   [TextSettingProp.VALUE]: TextSettingProps[TextSettingProp.VALUE] =
     textSettingProps[TextSettingProp.VALUE].default;
 
-  static styles = [
-    theme,
-    css`
-      .text-setting {
-        padding: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .text-setting {
+      padding: 1rem;
+    }
+  `;
 
   private handleInputChanged(e: InputChangedEvent): void {
     this.dispatchEvent(

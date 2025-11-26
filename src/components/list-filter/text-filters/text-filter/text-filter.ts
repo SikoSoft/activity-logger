@@ -18,19 +18,16 @@ import {
   InputChangedEvent,
   InputSubmittedEvent,
 } from '@ss/ui/components/ss-input.events';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('text-filter')
 export class TextFilter extends LitElement {
-  static styles = [
-    theme,
-    css`
-      fieldset {
-        border-color: var(--border-color);
-      }
-    `,
-  ];
+  static styles = css`
+    fieldset {
+      border-color: var(--border-color);
+    }
+  `;
 
   @property()
   [TextFilterProp.TYPE]: TextFilterProps[TextFilterProp.TYPE] =

@@ -11,32 +11,29 @@ import '@ss/ui/components/tab-pane';
 import '@/components/data-manager/export-tool/export-tool';
 import '@/components/data-manager/import-tool/import-tool';
 import '@/components/data-manager/tactical-nuke/tactical-nuke';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('data-manager')
 export class DataManager extends MobxLitElement {
   private state = appState;
 
-  static styles = [
-    theme,
-    css`
-      .data-manager {
-        padding: 1rem;
-        margin-bottom: 1rem;
+  static styles = css`
+    .data-manager {
+      padding: 1rem;
+      margin-bottom: 1rem;
 
-        .import {
-          textarea {
-            width: 100%;
-            height: 200px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            box-sizing: border-box;
-          }
+      .import {
+        textarea {
+          width: 100%;
+          height: 200px;
+          font-family: monospace;
+          font-size: 0.9rem;
+          box-sizing: border-box;
         }
       }
-    `,
-  ];
+    }
+  `;
 
   @state()
   open: boolean = this.state.collapsablePanelState['data-manager'] ?? true;

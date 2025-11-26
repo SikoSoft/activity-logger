@@ -48,7 +48,6 @@ import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
-import { theme } from '@/styles/theme';
 import {
   PropertyChangedEvent,
   PropertyClonedEvent,
@@ -60,7 +59,9 @@ import { translate } from '@/lib/Localization';
 import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 import { reaction } from 'mobx';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('entity-form')
 export class EntityForm extends ViewElement {
   private state = appState;
@@ -69,49 +70,46 @@ export class EntityForm extends ViewElement {
   private abortController: AbortController | null = null;
   private sortedIds: string[] = [];
 
-  static styles = [
-    theme,
-    css`
-      :host {
-        display: block;
-        text-align: left;
-      }
+  static styles = css`
+    :host {
+      display: block;
+      text-align: left;
+    }
 
-      form {
-        padding: 1rem;
-      }
+    form {
+      padding: 1rem;
+    }
 
-      tag-manager {
-        display: block;
-        margin-top: 1rem;
-      }
+    tag-manager {
+      display: block;
+      margin-top: 1rem;
+    }
 
-      tag-manager:part(legend) {
-        font-weight: bold;
-      }
+    tag-manager:part(legend) {
+      font-weight: bold;
+    }
 
-      .buttons {
-        margin-top: 1rem;
-      }
+    .buttons {
+      margin-top: 1rem;
+    }
 
-      property-field {
-        margin-bottom: 1rem;
-      }
+    property-field {
+      margin-bottom: 1rem;
+    }
 
-      .save-button::part(button) {
-        font-weight: bold;
-      }
+    .save-button::part(button) {
+      font-weight: bold;
+    }
 
-      .property-option {
-        cursor: pointer;
-        padding: 0.5rem;
+    .property-option {
+      cursor: pointer;
+      padding: 0.5rem;
 
-        &:hover {
-          background-color: var(--background-hover-color);
-        }
+      &:hover {
+        background-color: var(--background-hover-color);
       }
-    `,
-  ];
+    }
+  `;
 
   @property({ type: Number, reflect: true })
   [EntityFormProp.ENTITY_ID]: EntityFormProps[EntityFormProp.ENTITY_ID] =

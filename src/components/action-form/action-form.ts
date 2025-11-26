@@ -36,9 +36,9 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 import { repeat } from 'lit/directives/repeat.js';
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('action-form')
 export class ActionForm extends ViewElement {
   private state = appState;
@@ -46,35 +46,32 @@ export class ActionForm extends ViewElement {
   private suggestionTimeout: ReturnType<typeof setTimeout> | null = null;
   private abortController: AbortController | null = null;
 
-  static styles = [
-    theme,
-    css`
-      form {
-        padding: 1rem;
-      }
+  static styles = css`
+    form {
+      padding: 1rem;
+    }
 
-      tag-manager,
-      .time,
-      .type {
-        display: none;
-      }
+    tag-manager,
+    .time,
+    .type {
+      display: none;
+    }
 
-      form.advanced-mode tag-manager,
-      form.advanced-mode .time,
-      form.advanced-mode .type {
-        display: initial;
-      }
+    form.advanced-mode tag-manager,
+    form.advanced-mode .time,
+    form.advanced-mode .type {
+      display: initial;
+    }
 
-      div:last-child {
-        margin-top: 1rem;
-      }
+    div:last-child {
+      margin-top: 1rem;
+    }
 
-      .type,
-      .properties {
-        background-color: #ffeed0;
-      }
-    `,
-  ];
+    .type,
+    .properties {
+      background-color: #ffeed0;
+    }
+  `;
 
   @property({ type: Number })
   [ActionFormProp.ACTION_ID]: ActionFormProps[ActionFormProp.ACTION_ID] =

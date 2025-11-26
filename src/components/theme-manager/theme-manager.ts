@@ -22,7 +22,9 @@ import '@ss/ui/components/ss-icon';
 import { ThemesUpdatedEvent, ThemesSavedEvent } from './theme-manager.events';
 import { classMap } from 'lit/directives/class-map.js';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
+import { themed } from '@/lib/Theme';
 
+@themed()
 @customElement('theme-manager')
 export class ThemeManager extends LitElement {
   static styles = css`

@@ -59,7 +59,7 @@ export const commonStyles = css`
 export const lightStyles = [
   commonStyles,
   css`
-    :host([theme='light']) {
+    :host {
       --negative-color: #600;
       --negative-background-color: #ffc4c4;
       --positive-color: #060;
@@ -114,7 +114,7 @@ themes[ThemeName.LIGHT].sheet.replaceSync(lightStyles.join('\n'));
 export const darkStyles = [
   commonStyles,
   css`
-    :host([theme='dark']) {
+    :host {
       --negative-color: #600;
       --negative-background-color: #ffc4c4;
       --positive-color: #060;
@@ -164,8 +164,6 @@ export const darkStyles = [
 ];
 
 themes[ThemeName.DARK].sheet.replaceSync(darkStyles.join('\n'));
-
-export const theme = darkStyles;
 
 export const todoStyles = [
   commonStyles,

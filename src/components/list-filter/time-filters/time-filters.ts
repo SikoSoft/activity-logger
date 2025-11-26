@@ -15,19 +15,16 @@ import { TimeFiltersUpdatedEvent } from './time-filters.events';
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
 
 import { SSInput } from '@ss/ui/components/ss-input';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('time-filters')
 export class TimeFilters extends LitElement {
-  static styles = [
-    theme,
-    css`
-      fieldset {
-        border-color: var(--border-color);
-      }
-    `,
-  ];
+  static styles = css`
+    fieldset {
+      border-color: var(--border-color);
+    }
+  `;
 
   @property()
   [TimeFiltersProp.TIME_STR]: TimeFiltersProps[TimeFiltersProp.TIME_STR] =

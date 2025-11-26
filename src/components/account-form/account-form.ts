@@ -21,20 +21,17 @@ import {
   InputSubmittedEvent,
 } from '@ss/ui/components/ss-input.events';
 import { AccountCreatedEvent } from './account-form.events';
+import { themed } from '@/lib/Theme';
 
-import { theme } from '@/styles/theme';
-
+@themed()
 @customElement('account-form')
 export class AccountForm extends LitElement {
-  static styles = [
-    theme,
-    css`
-      .box {
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
-    `,
-  ];
+  static styles = css`
+    .box {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+  `;
 
   @state() username: string = '';
   @state() password: string = '';
