@@ -1,6 +1,8 @@
 import { ThemeName } from '@/models/Page';
 import { themes } from '@/styles/theme';
 import { LitElement } from 'lit';
+import { MobxReactionsController } from './MobxReactionController';
+import { appState } from '@/state';
 
 export class Theme {
   static getAvailableThemes(): string[] {
@@ -39,6 +41,17 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
       changedProperties: Map<string, unknown>,
     ): void {
       adoptStyles(this);
+
+      const rx = new MobxReactionsController(this);
+
+      rx.add({
+        expr: () => appState.listConfig,
+        effect: (): void => {
+          adoptStyles(this);
+        },
+        opts: { fireImmediately: true },
+      });
+
       if (originalFirstUpdated) {
         originalFirstUpdated.call(this, changedProperties);
       }
