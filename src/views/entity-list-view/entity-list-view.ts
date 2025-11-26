@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import '@/components/entity-list/entity-list';

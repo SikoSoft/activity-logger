@@ -96,13 +96,6 @@ export function setupRouter(
         keys.forEach((k, i) => {
           const val = decodeURIComponent(routeMatch[i + 1] || '');
           el.setAttribute(k, val);
-          try {
-            (el as any)[k] = val;
-          } catch {
-            console.log(
-              `Could not set property ${k} on component ${route.component}`,
-            );
-          }
         });
         outlet.appendChild(el);
         return;
@@ -175,7 +168,7 @@ export function setupRouter(
       mounted = false;
       window.removeEventListener('popstate', onPop);
       document.removeEventListener('click', onClick);
-      _navigate = (t: string) =>
+      _navigate = (t: string): void =>
         console.warn('[router] navigate() called after destroy:', t);
     },
   };

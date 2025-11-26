@@ -13,7 +13,7 @@ import { ToggleChangedEvent } from '@ss/ui/components/ss-toggle.events';
 import '@ss/ui/components/ss-toggle';
 import '@/components/user-pane/user-pane';
 
-import { Theme, ThemeName } from '@/models/Page';
+import { ThemeName } from '@/models/Page';
 import { themed } from '@/lib/Theme';
 
 @themed()

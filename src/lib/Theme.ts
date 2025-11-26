@@ -7,7 +7,7 @@ export class Theme {
     return ['light', 'dark'];
   }
 }
-function adoptStyles(element: LitElement) {
+function adoptStyles(element: LitElement): void {
   if (element.shadowRoot && 'adoptedStyleSheets' in element.shadowRoot) {
     const contentNode = document.querySelector('page-container');
     if (contentNode) {
@@ -24,8 +24,11 @@ function adoptStyles(element: LitElement) {
     }
   }
 }
-export function themed() {
-  return function <T extends new (...args: any[]) => LitElement>(
+
+export function themed(): <T extends new (...args: unknown[]) => LitElement>(
+  constructor: T,
+) => T {
+  return function <T extends new (...args: unknown[]) => LitElement>(
     constructor: T,
   ) {
     const prototype = constructor.prototype as LitElement & {
@@ -34,7 +37,7 @@ export function themed() {
     const originalFirstUpdated = prototype.firstUpdated;
     prototype.firstUpdated = function (
       changedProperties: Map<string, unknown>,
-    ) {
+    ): void {
       adoptStyles(this);
       if (originalFirstUpdated) {
         originalFirstUpdated.call(this, changedProperties);

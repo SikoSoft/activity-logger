@@ -262,7 +262,6 @@ export class EntityList extends ViewElement {
   }
 
   private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
-    console.log('handleFilterUpdated');
     storage.updateListFilter(this.state.listConfigId, this.state.listFilter);
     this.filterIsOpen = false;
     this.load();

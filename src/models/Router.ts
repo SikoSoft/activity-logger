@@ -1,7 +1,7 @@
 export type Route = {
   path: string;
   component?: string;
-  action?: () => Promise<any>;
+  action?: () => Promise<unknown>;
   redirect?: string;
 };
 

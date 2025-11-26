@@ -204,7 +204,7 @@ export class TacticalNuke extends MobxLitElement {
               <input
                 type="checkbox"
                 id="include-${type}"
-                @change=${() => this.handleCheckboxChange(type)}
+                @change=${(): void => this.handleCheckboxChange(type)}
               />
               <label for="include-${type}"
                 >${translate(`nukedDataType.${type}`)}</label

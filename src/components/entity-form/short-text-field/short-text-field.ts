@@ -70,12 +70,10 @@ export class ShortTextField extends LitElement {
   }
 
   private async requestPropertySuggestions(): Promise<void> {
-    console.log(`Requesting suggestions for value: ${this._value}`);
     if (
       !this.lastInput.hadResults &&
       this._value.startsWith(this.lastInput.value)
     ) {
-      //console.log('bail');
       this.suggestions = [];
       return;
     }

@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import '@/components/entity-form/entity-form';
@@ -14,11 +14,6 @@ export class EntityFormView extends ViewElement {
   entityForm: EntityForm | undefined;
 
   sync(reset: boolean): void {
-    console.log(
-      'EntityFormView sync called with reset=',
-      this.entityForm,
-      reset,
-    );
     if (this.entityForm) {
       this.entityForm.sync(reset);
     }

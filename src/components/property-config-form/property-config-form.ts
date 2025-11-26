@@ -44,7 +44,6 @@ import { PropertyChangedEvent } from '../entity-form/property-field/property-fie
 import { repeat } from 'lit/directives/repeat.js';
 import { translate } from '@/lib/Localization';
 import { Revision } from 'api-spec/lib/Revision';
-import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 @customElement('property-config-form')
 export class PropertyConfigForm extends LitElement {

@@ -1,4 +1,4 @@
-import { html, css, nothing, PropertyValues, TemplateResult } from 'lit';
+import { html, css, nothing, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -195,13 +195,6 @@ export class EntityForm extends ViewElement {
 
   @state()
   get availableEntityConfigs(): EntityConfig[] {
-    /*
-    console.log(
-      'availableEntityConfigs called',
-      this.state.listConfig,
-      JSON.stringify(this.state.entityConfigs),
-    );
-    */
     return this.state.entityConfigs.filter(
       config =>
         this.state.listConfig.filter.includeTypes.length === 0 ||
@@ -308,7 +301,6 @@ export class EntityForm extends ViewElement {
   }
 
   async setupProperties(): Promise<void> {
-    console.log('EntityForm setupProperties called', this.entityConfig);
     if (!this.entityConfig) {
       return;
     }

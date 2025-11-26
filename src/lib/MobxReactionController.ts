@@ -1,6 +1,7 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import { reaction, IReactionDisposer } from 'mobx';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ReactionSpec<T = any> = {
   expr: () => T;
   effect: (value: T, oldValue: T | undefined) => void;
@@ -23,8 +24,6 @@ export class MobxReactionsController implements ReactiveController {
       const p: PendingSpec = { ...spec, cancelled: false };
       this.pending.push(p);
 
-      // Return a cancellable noop disposer for the pending spec.
-      // Cast to IReactionDisposer to satisfy MobX typing (symbol property).
       const disposer: IReactionDisposer = (() => {
         p.cancelled = true;
       }) as unknown as IReactionDisposer;
@@ -49,6 +48,7 @@ export class MobxReactionsController implements ReactiveController {
 
   hostDisconnected(): void {
     while (this.disposers.length) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const d = this.disposers.pop()!;
       try {
         d();

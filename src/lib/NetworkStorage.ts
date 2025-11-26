@@ -26,33 +26,21 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async updateListSort(listConfigId: string, sort: ListSort): Promise<void> {
-    const result = await api.put<ListSort, null>(
-      `listSort/${listConfigId}`,
-      sort,
-    );
-    //return;
+    await api.put<ListSort, null>(`listSort/${listConfigId}`, sort);
   }
 
   async updateListFilter(
     listConfigId: string,
     filter: ListFilter,
   ): Promise<void> {
-    const result = await api.put<ListFilter, null>(
-      `listFilter/${listConfigId}`,
-      filter,
-    );
-    //return;
+    await api.put<ListFilter, null>(`listFilter/${listConfigId}`, filter);
   }
 
   async updateListThemes(
     listConfigId: string,
     themes: string[],
   ): Promise<void> {
-    const result = await api.put<string[], null>(
-      `listThemes/${listConfigId}`,
-      themes,
-    );
-    //return;
+    await api.put<string[], null>(`listThemes/${listConfigId}`, themes);
   }
 
   async addListConfig(): Promise<string> {
