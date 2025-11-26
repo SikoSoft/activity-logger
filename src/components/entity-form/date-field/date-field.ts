@@ -129,6 +129,10 @@ export class DateField extends LitElement {
     );
   }
 
+  focus(): void {
+    this.inputElement.focus();
+  }
+
   renderUseNow(): TemplateResult {
     return html`<span>${translate('dateField.useNow')}</span
       ><ss-button @click=${this.toggleUseNow}

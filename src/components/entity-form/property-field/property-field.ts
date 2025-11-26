@@ -162,6 +162,15 @@ export class PropertyField extends MobxLitElement {
     this.confirmationModalIsOpen = isOpen;
   }
 
+  focus(): void {
+    const input = this.renderRoot.querySelector(
+      'date-field, image-field, short-text-field, long-text-field, int-field',
+    );
+    if (input) {
+      (input as HTMLElement).focus();
+    }
+  }
+
   renderField(): TemplateResult | typeof nothing {
     let value: PropertyDataValue;
     switch (this.propertyConfig.dataType) {

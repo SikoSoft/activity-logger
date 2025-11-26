@@ -76,6 +76,12 @@ export class LongTextField extends LitElement {
     this.dispatchEvent(changedEvent);
   }
 
+  focus(): void {
+    if (this.textareaElement) {
+      this.textareaElement.focus();
+    }
+  }
+
   render(): TemplateResult {
     return html`
       <textarea

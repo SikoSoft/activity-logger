@@ -60,6 +60,7 @@ import '@ss/ui/components/sortable-list';
 import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 import { reaction } from 'mobx';
 import { themed } from '@/lib/Theme';
+import { PropertyField } from '@/components/entity-form/property-field/property-field';
 
 @themed()
 @customElement('entity-form')
@@ -253,18 +254,6 @@ export class EntityForm extends ViewElement {
       this.abortController = null;
     }
   }
-
-  /*
-  protected firstUpdated(changedProperties: PropertyValues): void {
-    super.firstUpdated(changedProperties);
-
-    console.log('EntityForm firstUpdated', this.availableEntityConfigs.length);
-
-    if (this.availableEntityConfigs.length === 1) {
-      this.type = this.availableEntityConfigs[0].id;
-    }
-  }
-    */
 
   updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties);
@@ -519,12 +508,12 @@ export class EntityForm extends ViewElement {
     this.loading = false;
   }
 
-  private reset(): void {
+  private async reset(): Promise<void> {
     this.propertiesSetup = false;
     this.propertyInstances = [];
     this.initialHash = '';
     this.instancesHash = '';
-    this.setupProperties();
+    await this.setupProperties();
 
     this.tagValue = '';
     if (!this.entityId) {
@@ -536,6 +525,18 @@ export class EntityForm extends ViewElement {
     if (this.suggestionTimeout) {
       clearTimeout(this.suggestionTimeout);
       this.suggestionTimeout = null;
+    }
+
+    this.focusFirstField();
+  }
+
+  focusFirstField(): void {
+    const firstField = this.renderRoot.querySelector(
+      'property-field',
+    ) as PropertyField | null;
+
+    if (firstField) {
+      firstField.focus();
     }
   }
 

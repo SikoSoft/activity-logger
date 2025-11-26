@@ -58,6 +58,13 @@ export class IntField extends LitElement {
     );
   }
 
+  focus(): void {
+    const input = this.renderRoot.querySelector('ss-input');
+    if (input) {
+      (input as HTMLElement).focus();
+    }
+  }
+
   render(): TemplateResult {
     return html`
       <ss-input

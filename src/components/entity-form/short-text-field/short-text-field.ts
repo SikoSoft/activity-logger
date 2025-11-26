@@ -19,6 +19,7 @@ import {
   ShortTextLastInput,
 } from './short-text-field.models';
 import { api } from '@/lib/Api';
+import { SSInput } from '@ss/ui/components/ss-input';
 
 const minLengthForSuggestion = 1;
 
@@ -109,6 +110,13 @@ export class ShortTextField extends LitElement {
     this.dispatchEvent(
       new PropertySubmittedEvent({ uiId: this[ShortTextFieldProp.UI_ID] }),
     );
+  }
+
+  focus(): void {
+    const input = this.renderRoot.querySelector('ss-input');
+    if (input) {
+      (input as SSInput).focus();
+    }
   }
 
   render(): TemplateResult {
