@@ -93,6 +93,10 @@ export class EntityListItem extends MobxLitElement {
         font-weight: normal;
       }
     }
+
+    .property-longtext .property-value {
+      white-space: pre-wrap;
+    }
   `;
   @property({ type: Number })
   [EntityListItemProp.TYPE]: EntityListItemProps[EntityListItemProp.TYPE] =
@@ -262,14 +266,18 @@ export class EntityListItem extends MobxLitElement {
 
     return html`
       <div
-        class="property property--${propertyConfig.name.toLowerCase()}"
+        class=${classMap({
+          property: true,
+          [`property-${propertyConfig.dataType.toLowerCase()}`]: true,
+          [`property--${propertyConfig.name.toLowerCase()}`]: true,
+        })}
         data-name=${propertyConfig.name}
         data-value=${value}
         slot=${propertyConfig.name}
       >
         <span class="property-name">${propertyConfig.name}</span>
-        <span class="property-value">
-          ${propertyConfig.prefix
+        <span class="property-value"
+          >${propertyConfig.prefix
             ? html`<span class="property-prefix"
                 >${propertyConfig.prefix}</span
               >`
@@ -277,8 +285,8 @@ export class EntityListItem extends MobxLitElement {
             ? html`<span class="property-suffix"
                 >${propertyConfig.suffix}</span
               >`
-            : nothing}
-        </span>
+            : nothing}</span
+        >
       </div>
     `;
   }
