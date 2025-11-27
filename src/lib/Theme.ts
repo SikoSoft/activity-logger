@@ -52,6 +52,14 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
         opts: { fireImmediately: true },
       });
 
+      rx.add({
+        expr: () => appState.theme,
+        effect: (): void => {
+          adoptStyles(this);
+        },
+        opts: { fireImmediately: true },
+      });
+
       if (originalFirstUpdated) {
         originalFirstUpdated.call(this, changedProperties);
       }
