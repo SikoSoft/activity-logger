@@ -226,6 +226,9 @@ export class EntityForm extends ViewElement {
           return;
         }
 
+        this.tags =
+          this.state.listConfig.filter.tagging[ListFilterType.CONTAINS_ALL_OF];
+
         if (this.availableEntityConfigs.length === 1) {
           this.type = this.availableEntityConfigs[0].id;
         } else {
@@ -731,7 +734,7 @@ export class EntityForm extends ViewElement {
   render(): TemplateResult {
     return html`
       <form class=${classMap(this.classes)}>
-        ${this.availableEntityConfigs.length > 1
+        ${!this.entityId && this.availableEntityConfigs.length > 1
           ? html` <div class="type">
               <ss-select
                 selected=${this.type}
