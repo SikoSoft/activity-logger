@@ -17,6 +17,11 @@ export const themes: Record<ThemeName, Theme> = {
     backgroundColor: css`#ffffff`,
     sheet: new CSSStyleSheet(),
   },
+  [ThemeName.XMAS]: {
+    name: ThemeName.XMAS,
+    backgroundColor: css`#bb0000`,
+    sheet: new CSSStyleSheet(),
+  },
 };
 
 export const commonStyles = css`
@@ -171,7 +176,31 @@ export const todoStyles = [
     .time {
       display: none;
     }
+
+    .property--priority {
+    }
   `,
 ];
 
 themes[ThemeName.TODO].sheet.replaceSync(todoStyles.join('\n'));
+
+export const xmasStyles = [
+  commonStyles,
+  darkStyles,
+  css`
+    :host {
+      --background-color: #bb0000;
+      --text-color: #fff;
+      --box-background-color: #770000;
+      --box-border-color: #660000;
+      --box-text-color: #fff;
+
+      --tabs-border-color: #249c24;
+      --tabs-header-bg-color: #050;
+      --tabs-header-hover-bg-color: #080;
+      --tabs-active-header-bg-color: #161;
+    }
+  `,
+];
+
+themes[ThemeName.XMAS].sheet.replaceSync(xmasStyles.join('\n'));

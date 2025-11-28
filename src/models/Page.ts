@@ -14,6 +14,7 @@ export enum ThemeName {
   LIGHT = 'light',
   DARK = 'dark',
   TODO = 'todo',
+  XMAS = 'xmas',
 }
 export const defaultTheme: ThemeName = ThemeName.LIGHT;
 
