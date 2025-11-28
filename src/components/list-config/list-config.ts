@@ -68,6 +68,7 @@ export class ListConfig extends MobxLitElement {
           line-height: 3rem;
           background-color: transparent;
           border-color: transparent;
+          color: var(--text-color);
         }
       }
 
@@ -77,6 +78,7 @@ export class ListConfig extends MobxLitElement {
           font-size: 2.2rem;
           border-color: var(--input-border-color);
           background-color: var(--input-background-color);
+          color: var(--input-text-color);
         }
         ss-input[unsaved]::part(input) {
           border-color: var(--input-unsaved-border-color);
