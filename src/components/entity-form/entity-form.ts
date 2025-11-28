@@ -322,7 +322,10 @@ export class EntityForm extends ViewElement {
             uiId: uuidv4(),
             value: propertyConfig.defaultValue,
             valueIsSet:
-              propertyConfig.dataType === DataType.DATE ? true : false,
+              propertyConfig.dataType === DataType.DATE ||
+              propertyConfig.dataType === DataType.INT
+                ? true
+                : false,
           }));
 
       this.propertyInstances = [...existingProperties, ...availableProperties];
