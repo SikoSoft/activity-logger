@@ -5,8 +5,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { translate } from '@/lib/Localization';
 import { PageView } from '@/models/Page';
 import { appState } from '@/state';
-import { Version } from '@/models/Version';
-import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 import { navigate, routerState } from '@/lib/Router';
 
@@ -100,12 +98,6 @@ export class PageNav extends MobxLitElement {
   setActiveView(view: PageView): void {
     const url = this.displayViews.find(v => v.id === view)?.url || '';
     navigate(url);
-  }
-
-  setVersion(e: CustomEvent): void {
-    const version = e.detail.value as Version;
-    this.state.setVersion(version);
-    storage.saveVersion(version);
   }
 
   handleTabChanged(e: TabIndexChangedEvent): void {

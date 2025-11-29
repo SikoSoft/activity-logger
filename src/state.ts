@@ -20,7 +20,6 @@ import {
   ListSortNativeProperty,
 } from 'api-spec/models/List';
 import { ActionItem } from '@/models/Action';
-import { Version } from '@/models/Version';
 import { defaultTheme, ThemeName } from './models/Page';
 
 export const defaultListFilter: ListFilter = {
@@ -145,9 +144,6 @@ export class AppState {
 
   @observable
   public entityListItems: ActionItem[] = [];
-
-  @observable
-  public version: Version = Version.V1;
 
   @observable
   public collapsablePanelState: Record<string, boolean> = {};
@@ -352,11 +348,6 @@ export class AppState {
   @action
   setLastListUrl(url: string): void {
     this.lastListUrl = url;
-  }
-
-  @action
-  setVersion(version: Version): void {
-    this.version = version;
   }
 
   @action
