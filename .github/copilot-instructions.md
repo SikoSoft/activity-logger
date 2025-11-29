@@ -97,7 +97,6 @@ The application has 23 main components organized in directories:
 
 - API endpoints configured in `src/config.json`
 - Environment variables prefixed with `APP_` (see `vite.config.ts`)
-- Mock data available in `src/mock/` for development
 
 ## File Organization Conventions
 
@@ -135,7 +134,6 @@ The application has 23 main components organized in directories:
 
 The application uses a sophisticated property system for customizable activity tracking:
 
-- Property configs in `src/mock/entity-config.ts`
 - Supports text, number, boolean data types
 - Configurable control types (text, number, boolean, select)
 - Various render types (plain text, rich text, image, video, hidden)
@@ -163,10 +161,8 @@ The application uses a sophisticated property system for customizable activity t
 
 ### Mock Data
 
-Development mock data available:
+Development mock data deprecated and no longer available:
 
-- `src/mock/entities.json` - Sample entity data
-- `src/mock/entity-config.ts` - Property configurations
 - Use for offline development and testing
 
 ## Deployment & CI/CD

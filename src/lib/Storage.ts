@@ -19,7 +19,6 @@ import {
 } from '@/models/Page';
 import { StorageItemKey, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
-import { Version } from '@/models/Version';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
@@ -376,28 +375,6 @@ export class Storage implements StorageSchema {
     _setting: Setting,
   ): Promise<boolean> {
     return Promise.resolve(true);
-  }
-
-  getVersion(): Version {
-    try {
-      const storageVersion = localStorage.getItem(StorageItemKey.VERSION);
-
-      if (storageVersion) {
-        return storageVersion as Version;
-      }
-    } catch (error) {
-      console.error(
-        `Encountered an error while trying to get version from storage: ${JSON.stringify(
-          error,
-        )}`,
-      );
-    }
-
-    return Version.V1;
-  }
-
-  saveVersion(version: Version): void {
-    localStorage.setItem(StorageItemKey.VERSION, version);
   }
 
   setWindowScrollPosition(x: number, y: number): void {

@@ -98,9 +98,7 @@ export class ShortTextField extends LitElement {
 
       this.suggestions = suggestions;
     } catch (error) {
-      console.error(
-        `Failed to get action suggestions: ${JSON.stringify(error)}`,
-      );
+      console.error(`Failed to get suggestions: ${JSON.stringify(error)}`);
     }
 
     this.lastInput.value = this._value;

@@ -62,7 +62,7 @@ export class EntityList extends ViewElement {
       border-bottom: 1px solid #ccc;
     }
 
-    .no-actions {
+    .no-items {
       padding: 1rem;
     }
 
@@ -445,7 +445,7 @@ export class EntityList extends ViewElement {
             )}
             ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing} `
           : !this.loading
-            ? html` <div class="no-actions">${translate('noItemsFound')}</div>`
+            ? html` <div class="no-items">${translate('noItemsFound')}</div>`
             : nothing}
 
         <div id="lazy-loader"></div>

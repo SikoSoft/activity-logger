@@ -1,12 +1,10 @@
-import { html, css, nothing, TemplateResult } from 'lit';
+import { html, css, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { translate } from '@/lib/Localization';
 import { PageView } from '@/models/Page';
 import { appState } from '@/state';
-import { Version } from '@/models/Version';
-import { storage } from '@/lib/Storage';
 import { PageNavProp, pageNavProps, PageNavProps } from './page-nav.models';
 import { navigate, routerState } from '@/lib/Router';
 
@@ -102,12 +100,6 @@ export class PageNav extends MobxLitElement {
     navigate(url);
   }
 
-  setVersion(e: CustomEvent): void {
-    const version = e.detail.value as Version;
-    this.state.setVersion(version);
-    storage.saveVersion(version);
-  }
-
   handleTabChanged(e: TabIndexChangedEvent): void {
     const index = e.detail.index;
     const view = this.displayViews[index];
@@ -118,17 +110,6 @@ export class PageNav extends MobxLitElement {
 
   render(): TemplateResult {
     return html`
-      ${this.state.debugMode
-        ? html` <ss-select
-            @select-changed=${this.setVersion}
-            selected=${this.state.version}
-            .options=${[
-              { value: Version.V1, label: translate('v1Classic') },
-              { value: Version.V2, label: translate('v2Experimental') },
-            ]}
-          >
-          </ss-select>`
-        : nothing}
       <nav
         class="box"
         style="--num-views: ${this.displayViews.length}"

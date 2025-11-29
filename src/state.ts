@@ -19,8 +19,6 @@ import {
   ListContextUnit,
   ListSortNativeProperty,
 } from 'api-spec/models/List';
-import { ActionItem } from '@/models/Action';
-import { Version } from '@/models/Version';
 import { defaultTheme, ThemeName } from './models/Page';
 
 export const defaultListFilter: ListFilter = {
@@ -65,13 +63,13 @@ export class AppState {
   public propertyConfigs: EntityPropertyConfig[] = [];
 
   @observable
-  public listItems: ActionItem[] = [];
+  public listItems: Entity[] = [];
 
   @observable
   public listEntities: Entity[] = [];
 
   @observable
-  public contextListItems: Record<number, ActionItem[]> = [];
+  public contextListItems: Record<number, Entity[]> = [];
 
   @observable
   public contextListEntities: Record<number, Entity[]> = {};
@@ -142,12 +140,6 @@ export class AppState {
 
   @observable
   public listContext: ListContext = structuredClone(defaultListContext);
-
-  @observable
-  public entityListItems: ActionItem[] = [];
-
-  @observable
-  public version: Version = Version.V1;
 
   @observable
   public collapsablePanelState: Record<string, boolean> = {};
@@ -299,12 +291,12 @@ export class AppState {
   }
 
   @action
-  setListItems(items: ActionItem[]): void {
+  setListItems(items: Entity[]): void {
     this.listItems = items;
   }
 
   @action
-  setContextListItems(items: Record<number, ActionItem[]>): void {
+  setContextListItems(items: Record<number, Entity[]>): void {
     this.contextListItems = items;
   }
 
@@ -352,11 +344,6 @@ export class AppState {
   @action
   setLastListUrl(url: string): void {
     this.lastListUrl = url;
-  }
-
-  @action
-  setVersion(version: Version): void {
-    this.version = version;
   }
 
   @action

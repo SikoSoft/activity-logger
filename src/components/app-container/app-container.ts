@@ -2,21 +2,17 @@ import { html, nothing, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { ListFilterType } from 'api-spec/models/List';
 import { PageView, defaultPageView } from '@/models/Page';
 import { storage } from '@/lib/Storage';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 import { api } from '@/lib/Api';
-import { Version } from '@/models/Version';
 
 import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.events';
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
 import { setupRouter } from '@/lib/Router';
 
 import '@/components/page-nav/page-nav';
-import '@/components/action-form/action-form';
-import '@/components/action-list/action-list';
 import '@/components/entity-form/entity-form';
 import '@/components/entity-list/entity-list';
 import '@/components/admin-dashboard/admin-dashboard';
@@ -117,8 +113,6 @@ export class AppContainer extends MobxLitElement {
       this.state.setCollapsableState(storage.getCollapsablePanelState());
       this.state.setTabState(storage.getTabState());
 
-      this.state.setVersion(storage.getVersion());
-
       this.state.setTheme(storage.getTheme());
 
       const view = storage.getSavedView();
@@ -169,63 +163,6 @@ export class AppContainer extends MobxLitElement {
     const { index, paneId } = e.detail;
     this.state.setTabPaneState(paneId, index);
     storage.setTabState(this.state.tabState);
-  }
-
-  activeView(): TemplateResult | typeof nothing {
-    if (!this.state.listConfig) {
-      return nothing;
-    }
-
-    if (this.view === PageView.ADMIN) {
-      return html`<admin-dashboard></admin-dashboard>`;
-    }
-
-    if (this.state.version === Version.V2) {
-      if (this.view === PageView.INPUT) {
-        return html`<entity-form
-          type=${this.state.listConfig.filter.includeTypes[0] || 0}
-          .tags=${this.state.listConfig.filter.tagging[
-            ListFilterType.CONTAINS_ALL_OF
-          ]}
-        ></entity-form>`;
-      }
-
-      return html`<entity-list></entity-list>`;
-    }
-
-    if (this.view === PageView.INPUT) {
-      return html`<action-form
-        .tags=${this.state.listConfig.filter.tagging[
-          ListFilterType.CONTAINS_ALL_OF
-        ]}
-      ></action-form>`;
-    }
-
-    return html`<action-list></action-list>`;
-  }
-
-  renderContent(): TemplateResult | typeof nothing {
-    if (this.ready && (this.state.forbidden || !this.state.authToken)) {
-      return html` <forbidden-notice></forbidden-notice> `;
-    }
-
-    return this.ready
-      ? html`
-          <list-config
-            @list-config-changed=${this.handleListConfigChanged}
-          ></list-config>
-
-          <page-nav active=${this.view}></page-nav>
-
-          <bulk-manager
-            @operation-performed=${this.handleOperationPerformed}
-          ></bulk-manager>
-
-          <main>${this.activeView()}</main>
-
-          <floating-widget></floating-widget>
-        `
-      : html`<ss-loader></ss-loader>`;
   }
 
   protected firstUpdated(): void {
