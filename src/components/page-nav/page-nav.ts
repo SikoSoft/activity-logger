@@ -1,4 +1,4 @@
-import { html, css, nothing, TemplateResult } from 'lit';
+import { html, css, TemplateResult } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
@@ -118,17 +118,6 @@ export class PageNav extends MobxLitElement {
 
   render(): TemplateResult {
     return html`
-      ${this.state.debugMode
-        ? html` <ss-select
-            @select-changed=${this.setVersion}
-            selected=${this.state.version}
-            .options=${[
-              { value: Version.V1, label: translate('v1Classic') },
-              { value: Version.V2, label: translate('v2Experimental') },
-            ]}
-          >
-          </ss-select>`
-        : nothing}
       <nav
         class="box"
         style="--num-views: ${this.displayViews.length}"
