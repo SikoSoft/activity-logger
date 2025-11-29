@@ -4,7 +4,6 @@ import { repeat } from 'lit/directives/repeat.js';
 
 import { PaginationType, SettingName } from 'api-spec/models/Setting';
 import {
-  ListContextType,
   ListSortDirection,
   ListSortNativeProperty,
 } from 'api-spec/models/List';
@@ -19,7 +18,6 @@ import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
 import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
-import { ListContextUpdatedEvent } from '@/components/list-context/list-context.events';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
@@ -81,11 +79,6 @@ export class EntityList extends ViewElement {
   @state() filterIsOpen: boolean = false;
   @state() settingIsOpen: boolean = false;
   @state() sortIsOpen: boolean = false;
-  @state() contextIsOpen: boolean = false;
-  @state() actionContextIsOpen: Map<number, boolean> = new Map<
-    number,
-    boolean
-  >();
 
   @state()
   get perPage(): number {
@@ -134,7 +127,6 @@ export class EntityList extends ViewElement {
 
     if (urlHasChanged) {
       this.state.setListEntities([]);
-      this.state.setContextListEntities([]);
     }
 
     await this.load();
@@ -202,9 +194,6 @@ export class EntityList extends ViewElement {
       ...(!this.sortIsDefault
         ? { sort: JSON.stringify(this.state.listSort) }
         : {}),
-      ...(this.state.listContextMode
-        ? { context: JSON.stringify(this.state.listContext) }
-        : {}),
     };
 
     const url = `entity${
@@ -226,7 +215,6 @@ export class EntityList extends ViewElement {
       const result = await api.get<{
         entities: Entity[];
         total: number;
-        context: Record<number, Entity[]>;
       }>(url);
 
       if (result) {
@@ -236,17 +224,6 @@ export class EntityList extends ViewElement {
               ? [...this.state.listEntities, ...result.response.entities]
               : [...result.response.entities],
           );
-        }
-
-        if (result.response.context) {
-          this.state.setContextListEntities({
-            ...this.state.contextListEntities,
-            ...result.response.context,
-          });
-          this.actionContextIsOpen = new Map<number, boolean>();
-          Object.keys(result.response.context).forEach(key => {
-            this.actionContextIsOpen.set(parseInt(key), false);
-          });
         }
 
         if (result.response.total) {
@@ -278,10 +255,6 @@ export class EntityList extends ViewElement {
     this.load();
   }
 
-  private handleContextUpdated(_e: ListContextUpdatedEvent): void {
-    this.load();
-  }
-
   private handlePageChanged(e: PageChangedEvent): void {
     this.start = e.detail.start;
     this.load();
@@ -299,20 +272,6 @@ export class EntityList extends ViewElement {
     this.sortIsOpen = !this.sortIsOpen;
   }
 
-  private toggleContext(): void {
-    this.contextIsOpen = !this.contextIsOpen;
-  }
-
-  private toggleActionContext(id: number): void {
-    const state = this.actionContextIsOpen.get(id);
-    if (state) {
-      this.actionContextIsOpen.set(id, false);
-    } else {
-      this.actionContextIsOpen.set(id, true);
-    }
-    this.requestUpdate();
-  }
-
   private handlePointerLongPress(e: PointerLongPressEvent): void {
     const listItem = e.target as EntityListItem;
     this.state.toggleActionSelection(listItem.entityId);
@@ -325,40 +284,6 @@ export class EntityList extends ViewElement {
       return;
     }
     this.state.toggleActionSelection(listItem.entityId);
-  }
-
-  private renderContextActions(
-    type: ListContextType,
-    item: Entity,
-  ): TemplateResult | typeof nothing {
-    return this.state.listContext.type === type &&
-      this.state.contextListEntities[item.id]?.length
-      ? html`
-          <ss-collapsable
-            title=${translate('showContext')}
-            @toggled=${(): void => {
-              this.toggleActionContext(item.id);
-            }}
-            ?open=${this.actionContextIsOpen.get(item.id)}
-          >
-            ${this.state.contextListEntities[item.id].map(
-              contextAction => html`
-                <entity-list-item
-                  ?debug=${this.state.debugMode}
-                  actionId=${contextAction.id}
-                  type=${contextAction.type}
-                  .tags=${contextAction.tags}
-                  ?selected=${this.state.selectedActions.includes(
-                    contextAction.id,
-                  )}
-                  @pointer-long-press=${this.handlePointerLongPress}
-                  @pointer-up=${this.handlePointerUp}
-                ></entity-list-item>
-              `,
-            )}
-          </ss-collapsable>
-        `
-      : nothing;
   }
 
   render(): TemplateResult {
@@ -394,19 +319,6 @@ export class EntityList extends ViewElement {
         <list-sort @list-sort-updated=${this.handleSortUpdated}></list-sort>
       </ss-collapsable>
 
-      ${!this.state.listFilter.includeAll
-        ? html`
-            <ss-collapsable
-              title=${translate('context')}
-              ?open=${this.contextIsOpen}
-              @toggled=${this.toggleContext}
-            >
-              <list-context
-                @list-context-updated=${this.handleContextUpdated}
-              ></list-context>
-            </ss-collapsable>
-          `
-        : nothing}
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
             <list-paginator
@@ -425,7 +337,6 @@ export class EntityList extends ViewElement {
               this.state.listEntities,
               item => item.id,
               item => html`
-                ${this.renderContextActions(ListContextType.AFTER, item)}
                 <entity-list-item
                   ?debug=${this.state.debugMode}
                   entityId=${item.id}
@@ -440,7 +351,6 @@ export class EntityList extends ViewElement {
                   @entity-item-deleted=${this.handleItemDeleted}
                   @entity-item-updated=${this.handleItemUpdated}
                 ></entity-list-item>
-                ${this.renderContextActions(ListContextType.BEFORE, item)}
               `,
             )}
             ${this.loading ? html` <ss-loader padded></ss-loader> ` : nothing} `
