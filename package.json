@@ -3,7 +3,7 @@
   "description": "Activity logger built using web components",
   "license": "MIT",
   "author": "Aaron Wright",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "lint": "eslint \"src/**/*.{ts,js}\"",
