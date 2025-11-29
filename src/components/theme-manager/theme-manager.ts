@@ -45,6 +45,10 @@ export class ThemeManager extends LitElement {
     ss-icon {
       cursor: pointer;
     }
+
+    .buttons {
+      margin-top: 1rem;
+    }
   `;
 
   @property({ type: Array })
