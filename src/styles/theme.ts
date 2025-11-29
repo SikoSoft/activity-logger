@@ -177,7 +177,46 @@ export const todoStyles = [
       display: none;
     }
 
+    .properties {
+      position: relative;
+    }
+
+    .property--description {
+      .property-name {
+        display: none;
+      }
+
+      .property-value {
+        font-size: 1.25rem;
+      }
+    }
+
+    .property--details {
+      .property-name {
+        display: none;
+      }
+
+      .property-value {
+        padding-right: 4rem;
+        opacity: 0.8;
+      }
+    }
+
     .property--priority {
+      padding: 0;
+
+      .property-name {
+        display: none;
+      }
+
+      .property-value {
+        font-weight: bold;
+        font-size: 2rem;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
   `,
 ];
