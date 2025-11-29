@@ -13,8 +13,6 @@ import { ListConfigChangedEvent } from '@/components/list-config/list-config.eve
 import { setupRouter } from '@/lib/Router';
 
 import '@/components/page-nav/page-nav';
-import '@/components/action-form/action-form';
-import '@/components/action-list/action-list';
 import '@/components/entity-form/entity-form';
 import '@/components/entity-list/entity-list';
 import '@/components/admin-dashboard/admin-dashboard';
