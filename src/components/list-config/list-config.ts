@@ -15,6 +15,10 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-carousel';
 import '@ss/ui/components/ss-select';
 import '@ss/ui/components/confirmation-modal';
+import '@ss/ui/components/pop-up';
+import '@/components/setting/setting-form/setting-form';
+import '@/components/list-filter/list-filter';
+import '@/components/list-sort/list-sort';
 import '@/components/theme-manager/theme-manager';
 
 import { InputChangedEvent } from '@ss/ui/components/ss-input.events';
@@ -26,6 +30,12 @@ import {
   ThemesSavedEvent,
 } from '../theme-manager/theme-manager.events';
 import { themed } from '@/lib/Theme';
+import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
+import { ListSortUpdatedEvent } from '../list-sort/list-sort.events';
+import {
+  EntityListLoadEvent,
+  EntityListSyncEvent,
+} from '../entity-list/entity-list.models';
 
 @themed()
 @customElement('list-config')
@@ -38,9 +48,8 @@ export class ListConfig extends MobxLitElement {
     }
 
     .list-config {
-      padding: 1rem;
       margin-bottom: 1rem;
-      position: relative;
+      //position: relative;
 
       .config {
         transition: all 0.3s;
@@ -82,6 +91,18 @@ export class ListConfig extends MobxLitElement {
         }
         ss-input[unsaved]::part(input) {
           border-color: var(--input-unsaved-border-color);
+        }
+      }
+
+      .carousel-wrapper {
+        padding: 1rem;
+        position: relative;
+      }
+
+      .collapsable-menus {
+        & > * {
+          display: block;
+          margin-top: 1rem;
         }
       }
 
@@ -165,6 +186,9 @@ export class ListConfig extends MobxLitElement {
   @state() navigationIndex: number = 0;
   @state() themeManagerIsOpen: boolean = false;
   @state() confirmDeleteIsOpen: boolean = false;
+  @state() filterIsOpen: boolean = false;
+  @state() settingIsOpen: boolean = false;
+  @state() sortIsOpen: boolean = false;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
 
@@ -314,6 +338,34 @@ export class ListConfig extends MobxLitElement {
     this.themeManagerIsOpen = false;
   }
 
+  private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
+    storage.updateListFilter(this.state.listConfigId, this.state.listFilter);
+    this.filterIsOpen = false;
+    this.dispatchEvent(new EntityListLoadEvent());
+  }
+
+  private handleSortUpdated(_e: ListSortUpdatedEvent): void {
+    storage.updateListSort(this.state.listConfigId, this.state.listSort);
+    this.sortIsOpen = false;
+    this.dispatchEvent(new EntityListSyncEvent());
+  }
+
+  private handleSettingUpdated(_e: CustomEvent): void {
+    this.dispatchEvent(new EntityListLoadEvent());
+  }
+
+  private toggleSetting(): void {
+    this.settingIsOpen = !this.settingIsOpen;
+  }
+
+  private toggleFilter(): void {
+    this.filterIsOpen = !this.filterIsOpen;
+  }
+
+  private toggleSort(): void {
+    this.sortIsOpen = !this.sortIsOpen;
+  }
+
   showConfigDeleteConfirm(): void {
     this.confirmDeleteIsOpen = true;
   }
@@ -332,78 +384,113 @@ export class ListConfig extends MobxLitElement {
 
   render(): TemplateResult {
     return html`<div class=${classMap(this.classes)}>
-      <ss-carousel
-        infinite
-        discrete
-        showButtons
-        height="180"
-        width="100%"
-        iconColor="var(--text-color, #000)"
-        navigationIndex=${this.navigationIndex}
-        @carousel-slide-changed=${this.carouselSlideChanged}
-      >
-        ${this.ready
-          ? repeat(
-              this.state.listConfigs,
-              config => config.id,
-              config =>
-                html`<div class="config-slide">
-                  <div
-                    class="close"
-                    @click=${(e: MouseEvent): void => {
-                      this.state.setSelectListConfigMode(false);
-                      this.state.setEditListConfigMode(false);
-                      e.stopPropagation();
-                    }}
-                  ></div>
+      <div class="carousel-wrapper">
+        <ss-carousel
+          infinite
+          discrete
+          showButtons
+          height="180"
+          width="100%"
+          iconColor="var(--text-color, #000)"
+          navigationIndex=${this.navigationIndex}
+          @carousel-slide-changed=${this.carouselSlideChanged}
+        >
+          ${this.ready
+            ? repeat(
+                this.state.listConfigs,
+                config => config.id,
+                config =>
+                  html`<div class="config-slide">
+                    <div
+                      class="close"
+                      @click=${(e: MouseEvent): void => {
+                        this.state.setSelectListConfigMode(false);
+                        this.state.setEditListConfigMode(false);
+                        e.stopPropagation();
+                      }}
+                    ></div>
 
-                  <div class="name">
-                    <ss-input
-                      ?unsaved=${!this.inSync}
-                      @input-changed=${this.handleNameChanged}
-                      @input-blurred=${this.handleNameBlurred}
-                      @input-submitted=${this.handleNameSubmitted}
-                      type=${InputType.TEXT}
-                      value=${config.name}
-                      @click=${this.enableEditMode}
-                    ></ss-input>
-                  </div>
-
-                  <div class="buttons">
-                    <div class="buttons-inner">
-                      <button @click=${this.addConfig}>
-                        <ss-icon
-                          name="add"
-                          color="var(--input-text-color)"
-                          size="16"
-                        ></ss-icon>
-                      </button>
-
-                      <button @click=${this.showThemeManager}>
-                        <ss-icon
-                          name="theme"
-                          color="var(--input-text-color)"
-                          size="16"
-                        ></ss-icon>
-                      </button>
-
-                      <button @click=${this.showConfigDeleteConfirm}>
-                        <ss-icon
-                          name="trash"
-                          color="var(--input-text-color)"
-                          size="16"
-                        ></ss-icon>
-                      </button>
+                    <div class="name">
+                      <ss-input
+                        ?unsaved=${!this.inSync}
+                        @input-changed=${this.handleNameChanged}
+                        @input-blurred=${this.handleNameBlurred}
+                        @input-submitted=${this.handleNameSubmitted}
+                        type=${InputType.TEXT}
+                        value=${config.name}
+                        @click=${this.enableEditMode}
+                      ></ss-input>
                     </div>
-                  </div>
-                </div>`,
-            )
-          : nothing}
 
-        <style>
-          ${this.carouselStyles}
-        </style>
-      </ss-carousel>
+                    <div class="buttons">
+                      <div class="buttons-inner">
+                        <button @click=${this.addConfig}>
+                          <ss-icon
+                            name="add"
+                            color="var(--input-text-color)"
+                            size="16"
+                          ></ss-icon>
+                        </button>
+
+                        <button @click=${this.showThemeManager}>
+                          <ss-icon
+                            name="theme"
+                            color="var(--input-text-color)"
+                            size="16"
+                          ></ss-icon>
+                        </button>
+
+                        <button @click=${this.showConfigDeleteConfirm}>
+                          <ss-icon
+                            name="trash"
+                            color="var(--input-text-color)"
+                            size="16"
+                          ></ss-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>`,
+              )
+            : nothing}
+
+          <style>
+            ${this.carouselStyles}
+          </style>
+        </ss-carousel>
+      </div>
+
+      <div class="collapsable-menus">
+        <ss-collapsable
+          title=${translate('settings')}
+          ?open=${this.settingIsOpen}
+          @toggled=${this.toggleSetting}
+        >
+          <setting-form
+            listConfigId=${this.state.listConfigId}
+            @setting-updated=${this.handleSettingUpdated}
+          ></setting-form>
+        </ss-collapsable>
+
+        <ss-collapsable
+          title=${translate('filter')}
+          ?open=${this.filterIsOpen}
+          @toggled=${this.toggleFilter}
+        >
+          <div class="filter-body">
+            <list-filter
+              @list-filter-updated=${this.handleFilterUpdated}
+            ></list-filter>
+          </div>
+        </ss-collapsable>
+
+        <ss-collapsable
+          title=${translate('sort')}
+          ?open=${this.sortIsOpen}
+          @toggled=${this.toggleSort}
+        >
+          <list-sort @list-sort-updated=${this.handleSortUpdated}></list-sort>
+        </ss-collapsable>
+      </div>
 
       <confirmation-modal
         ?open=${this.confirmDeleteIsOpen}

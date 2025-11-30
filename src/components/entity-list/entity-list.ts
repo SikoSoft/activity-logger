@@ -13,22 +13,15 @@ import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 import { translate } from '@/lib/Localization';
 
-import { ListSortUpdatedEvent } from '@/components/list-sort/list-sort.events';
 import { PointerLongPressEvent } from '@/events/pointer-long-press';
 import { PointerUpEvent } from '@/events/pointer-up';
 import { PageChangedEvent } from '@/components/list-paginator/list-paginator.events';
-import { ListFilterUpdatedEvent } from '../list-filter/list-filter.events';
 
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-loader';
 import '@ss/ui/components/ss-collapsable';
-import '@/components/list-sort/list-sort';
-import '@/components/list-context/list-context';
 import '@/components/list-paginator/list-paginator';
-import '@/components/setting/setting-form/setting-form';
 import '@/components/entity-list/entity-list-item/entity-list-item';
-import '@/components/list-filter/list-filter';
-import { ListFilter } from '@/components/list-filter/list-filter';
 import { EntityListItem } from './entity-list-item/entity-list-item';
 
 import { EntityListItemMode } from './entity-list-item/entity-list-item.models';
@@ -36,8 +29,11 @@ import {
   EntityItemDeletedEvent,
   EntityItemUpdatedEvent,
 } from '../entity-form/entity-form.events';
-import { storage } from '@/lib/Storage';
 import { themed } from '@/lib/Theme';
+import {
+  entityListLoadEventName,
+  entityListSyncEventName,
+} from './entity-list.models';
 
 @themed()
 @customElement('entity-list')
@@ -71,14 +67,11 @@ export class EntityList extends ViewElement {
 
   private scrollHandler: EventListener = () => this.handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
-  @query('list-filter') listFilter!: ListFilter;
+  //@query('list-filter') listFilter!: ListFilter;
 
   @state() start: number = 0;
   @state() total: number = 0;
   @state() loading: boolean = false;
-  @state() filterIsOpen: boolean = false;
-  @state() settingIsOpen: boolean = false;
-  @state() sortIsOpen: boolean = false;
 
   @state()
   get perPage(): number {
@@ -123,6 +116,14 @@ export class EntityList extends ViewElement {
 
     window.addEventListener('scroll', this.scrollHandler);
 
+    window.addEventListener(entityListLoadEventName, () => {
+      this.load();
+    });
+
+    window.addEventListener(entityListSyncEventName, () => {
+      this.sync();
+    });
+
     const urlHasChanged = this.state.lastListUrl !== this.getUrl();
 
     if (urlHasChanged) {
@@ -146,7 +147,7 @@ export class EntityList extends ViewElement {
       this.start = 0;
     }
 
-    this.listFilter.sync();
+    //this.listFilter.sync();
     this.load();
   }
 
@@ -238,38 +239,9 @@ export class EntityList extends ViewElement {
     }
   }
 
-  private handleFilterUpdated(_e: ListFilterUpdatedEvent): void {
-    storage.updateListFilter(this.state.listConfigId, this.state.listFilter);
-    this.filterIsOpen = false;
-    this.load();
-  }
-
-  private handleSortUpdated(_e: ListSortUpdatedEvent): void {
-    storage.updateListSort(this.state.listConfigId, this.state.listSort);
-    this.sortIsOpen = false;
-    this.start = 0;
-    this.load();
-  }
-
-  private handleSettingUpdated(_e: CustomEvent): void {
-    this.load();
-  }
-
   private handlePageChanged(e: PageChangedEvent): void {
     this.start = e.detail.start;
     this.load();
-  }
-
-  private toggleSetting(): void {
-    this.settingIsOpen = !this.settingIsOpen;
-  }
-
-  private toggleFilter(): void {
-    this.filterIsOpen = !this.filterIsOpen;
-  }
-
-  private toggleSort(): void {
-    this.sortIsOpen = !this.sortIsOpen;
   }
 
   private handlePointerLongPress(e: PointerLongPressEvent): void {
@@ -288,37 +260,6 @@ export class EntityList extends ViewElement {
 
   render(): TemplateResult {
     return html`
-      <ss-collapsable
-        title=${translate('settings')}
-        ?open=${this.settingIsOpen}
-        @toggled=${this.toggleSetting}
-      >
-        <setting-form
-          listConfigId=${this.state.listConfigId}
-          @setting-updated=${this.handleSettingUpdated}
-        ></setting-form>
-      </ss-collapsable>
-
-      <ss-collapsable
-        title=${translate('filter')}
-        ?open=${this.filterIsOpen}
-        @toggled=${this.toggleFilter}
-      >
-        <div class="filter-body">
-          <list-filter
-            @list-filter-updated=${this.handleFilterUpdated}
-          ></list-filter>
-        </div>
-      </ss-collapsable>
-
-      <ss-collapsable
-        title=${translate('sort')}
-        ?open=${this.sortIsOpen}
-        @toggled=${this.toggleSort}
-      >
-        <list-sort @list-sort-updated=${this.handleSortUpdated}></list-sort>
-      </ss-collapsable>
-
       ${this.paginationType === PaginationType.NAVIGATION
         ? html`
             <list-paginator
