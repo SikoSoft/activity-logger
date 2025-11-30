@@ -100,10 +100,16 @@ export class ListConfig extends MobxLitElement {
       }
 
       .collapsable-menus {
+        display: none;
+
         & > * {
           display: block;
           margin-top: 1rem;
         }
+      }
+
+      &.edit-mode .collapsable-menus {
+        display: block;
       }
 
       .buttons {
