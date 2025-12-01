@@ -3,28 +3,58 @@ import { themes } from '@/styles/theme';
 import { LitElement } from 'lit';
 import { MobxReactionsController } from './MobxReactionController';
 import { appState } from '@/state';
+import {
+  ThemesUpdatedEvent,
+  themesUpdatedEventName,
+} from '@/components/page-container/page-container.events';
 
-export class Theme {
-  static getAvailableThemes(): string[] {
-    return ['light', 'dark'];
+export type ThemedElement = LitElement & {
+  firstUpdated?: (changedProperties: Map<string, unknown>) => void;
+  initialAdoptStyles: CSSStyleSheet[];
+};
+
+const isValidTheme = (themeName: string): themeName is ThemeName => {
+  return Object.values(ThemeName).includes(themeName as ThemeName);
+};
+
+const isThemesUpdatedEvent = (e: Event): e is ThemesUpdatedEvent => {
+  return (e as ThemesUpdatedEvent).type === themesUpdatedEventName;
+};
+
+function adoptStyles(element: ThemedElement, themeNames: string[]): void {
+  //console.log('adoptStyles');
+  const root = element.shadowRoot as ShadowRoot | null;
+  if (!root || !('adoptedStyleSheets' in root)) {
+    return;
   }
-}
-function adoptStyles(element: LitElement): void {
-  if (element.shadowRoot && 'adoptedStyleSheets' in element.shadowRoot) {
-    const contentNode = document.querySelector('page-container');
-    if (contentNode) {
-      const classes = [...contentNode.classList];
-      if (classes.length) {
-        for (const cssClass of classes) {
-          const themeName = cssClass as ThemeName;
-          if (Object.values(ThemeName).includes(themeName)) {
-            const sheet = themes[themeName].sheet;
-            element.shadowRoot.adoptedStyleSheets.push(sheet);
-          }
-        }
-      }
+
+  //const contentNode = document.querySelector('page-container');
+  //if (contentNode) {
+  //const classes = [...contentNode.classList];
+
+  //root.adoptedStyleSheets = [];
+  const activeSheets: CSSStyleSheet[] = [];
+  for (const themeName of themeNames) {
+    //const themeName = cssClass as ThemeName;
+    if (isValidTheme(themeName)) {
+      const sheet = themes[themeName].sheet;
+      activeSheets.push(sheet);
+      //root.adoptedStyleSheets.push(sheet); // = activeSheets;
     }
   }
+  /*
+  console.log(
+    'adoptStyles activeSheets:',
+    root,
+    //JSON.stringify(activeSheets),
+    element.initialAdoptStyles.length,
+    JSON.stringify(root.adoptedStyleSheets.length),
+  );
+  */
+  root.adoptedStyleSheets = [...element.initialAdoptStyles, ...activeSheets];
+  //root.adoptedStyleSheets = activeSheets;
+  //element.requestUpdate();
+  //  }
 }
 
 export function themed(): <T extends new (...args: unknown[]) => LitElement>(
@@ -33,31 +63,29 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
   return function <T extends new (...args: unknown[]) => LitElement>(
     constructor: T,
   ) {
-    const prototype = constructor.prototype as LitElement & {
-      firstUpdated?: (changedProperties: Map<string, unknown>) => void;
-    };
+    const prototype = constructor.prototype as ThemedElement;
     const originalFirstUpdated = prototype.firstUpdated;
     prototype.firstUpdated = function (
       changedProperties: Map<string, unknown>,
     ): void {
-      adoptStyles(this);
+      this.initialAdoptStyles = this.shadowRoot
+        ? (this.shadowRoot.adoptedStyleSheets as CSSStyleSheet[])
+        : [];
 
-      const rx = new MobxReactionsController(this);
+      const contentNode = document.querySelector('page-container');
+      let classes: string[] = [];
+      if (contentNode) {
+        classes = [...contentNode.classList];
+      }
+      adoptStyles(this, classes);
 
-      rx.add({
-        expr: () => appState.listConfig,
-        effect: (): void => {
-          adoptStyles(this);
-        },
-        opts: { fireImmediately: true },
-      });
+      window.addEventListener(themesUpdatedEventName, (e: Event) => {
+        if (!isThemesUpdatedEvent(e)) {
+          return;
+        }
 
-      rx.add({
-        expr: () => appState.theme,
-        effect: (): void => {
-          adoptStyles(this);
-        },
-        opts: { fireImmediately: true },
+        console.log('themed event listener:', JSON.stringify(e.detail.themes));
+        adoptStyles(this, e.detail.themes);
       });
 
       if (originalFirstUpdated) {

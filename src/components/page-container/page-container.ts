@@ -14,6 +14,7 @@ import {
 import { reaction } from 'mobx';
 import { ThemeName, defaultTheme } from '@/models/Page';
 import { StorageItemKey } from '@/models/Storage';
+import { ThemesUpdatedEvent } from './page-container.events';
 
 @customElement('page-container')
 export class PageContainer extends MobxLitElement {
@@ -89,6 +90,7 @@ export class PageContainer extends MobxLitElement {
     const theme = this.themes[0];
     const backgroundColor = themes[theme as ThemeName].backgroundColor;
     document.body.style.backgroundColor = backgroundColor.cssText;
+    this.dispatchEvent(new ThemesUpdatedEvent({ themes: this.themes }));
   }
 
   getThemeFromStorage(): ThemeName {
@@ -106,6 +108,7 @@ export class PageContainer extends MobxLitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.setTheme(this.getThemeFromStorage());
+
     reaction(
       () => appState.theme,
       () => {
