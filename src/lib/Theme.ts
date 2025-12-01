@@ -49,7 +49,7 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
       changedProperties: Map<string, unknown>,
     ): void {
       this.initialAdoptStyles = this.shadowRoot
-        ? (this.shadowRoot.adoptedStyleSheets as CSSStyleSheet[])
+        ? ([...this.shadowRoot.adoptedStyleSheets] as CSSStyleSheet[])
         : [];
 
       const contentNode = document.querySelector('page-container');
