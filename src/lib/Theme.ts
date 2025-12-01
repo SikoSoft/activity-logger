@@ -1,8 +1,6 @@
 import { ThemeName } from '@/models/Page';
 import { themes } from '@/styles/theme';
 import { LitElement } from 'lit';
-import { MobxReactionsController } from './MobxReactionController';
-import { appState } from '@/state';
 import {
   ThemesUpdatedEvent,
   themesUpdatedEventName,
@@ -22,39 +20,21 @@ const isThemesUpdatedEvent = (e: Event): e is ThemesUpdatedEvent => {
 };
 
 function adoptStyles(element: ThemedElement, themeNames: string[]): void {
-  //console.log('adoptStyles');
   const root = element.shadowRoot as ShadowRoot | null;
   if (!root || !('adoptedStyleSheets' in root)) {
     return;
   }
 
-  //const contentNode = document.querySelector('page-container');
-  //if (contentNode) {
-  //const classes = [...contentNode.classList];
-
-  //root.adoptedStyleSheets = [];
   const activeSheets: CSSStyleSheet[] = [];
   for (const themeName of themeNames) {
-    //const themeName = cssClass as ThemeName;
     if (isValidTheme(themeName)) {
       const sheet = themes[themeName].sheet;
       activeSheets.push(sheet);
-      //root.adoptedStyleSheets.push(sheet); // = activeSheets;
     }
   }
-  /*
-  console.log(
-    'adoptStyles activeSheets:',
-    root,
-    //JSON.stringify(activeSheets),
-    element.initialAdoptStyles.length,
-    JSON.stringify(root.adoptedStyleSheets.length),
-  );
-  */
+
   root.adoptedStyleSheets = [...element.initialAdoptStyles, ...activeSheets];
-  //root.adoptedStyleSheets = activeSheets;
-  //element.requestUpdate();
-  //  }
+  element.requestUpdate();
 }
 
 export function themed(): <T extends new (...args: unknown[]) => LitElement>(
@@ -84,7 +64,6 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
           return;
         }
 
-        console.log('themed event listener:', JSON.stringify(e.detail.themes));
         adoptStyles(this, e.detail.themes);
       });
 

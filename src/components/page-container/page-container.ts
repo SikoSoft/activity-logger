@@ -69,7 +69,9 @@ export class PageContainer extends MobxLitElement {
 
   @state()
   get themes(): string[] {
-    return this.listConfigThemes.length ? this.listConfigThemes : [this.theme];
+    return this.listConfigThemes.length
+      ? Array.from(this.listConfigThemes)
+      : [this.theme];
   }
 
   @state()
