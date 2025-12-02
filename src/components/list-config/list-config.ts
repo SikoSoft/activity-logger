@@ -1,5 +1,12 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { css, CSSResult, html, nothing, TemplateResult } from 'lit';
+import {
+  css,
+  CSSResult,
+  html,
+  nothing,
+  PropertyValues,
+  TemplateResult,
+} from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -195,8 +202,11 @@ export class ListConfig extends MobxLitElement {
   @state() filterIsOpen: boolean = false;
   @state() settingIsOpen: boolean = false;
   @state() sortIsOpen: boolean = false;
+  @state() nameInFocus: boolean = false;
+  @state() menusInFocus: boolean = false;
 
   @query('#config-selector') configSelector!: HTMLSelectElement;
+  @query('.collapsable-menus') collapsableMenus!: HTMLDivElement;
 
   @state()
   get inSync(): boolean {
@@ -232,6 +242,21 @@ export class ListConfig extends MobxLitElement {
     this.setup();
   }
 
+  protected firstUpdated(changedProperties: PropertyValues): void {
+    super.firstUpdated(changedProperties);
+
+    window.addEventListener('click', (e: MouseEvent): void => {
+      if (e.composedPath().includes(this.collapsableMenus)) {
+        this.menusInFocus = true;
+      } else {
+        this.menusInFocus = false;
+        if (!this.nameInFocus) {
+          this.state.setEditListConfigMode(false);
+        }
+      }
+    });
+  }
+
   async setup(): Promise<void> {
     const listConfigs = this.state.listConfigs;
     if (!listConfigs.length) {
@@ -257,11 +282,20 @@ export class ListConfig extends MobxLitElement {
   }
 
   handleNameBlurred(): void {
+    this.nameInFocus = false;
     this.blur();
     this.saveConfig();
     setTimeout((): void => {
+      if (this.menusInFocus) {
+        return;
+      }
+
       this.state.setEditListConfigMode(false);
     }, 200);
+  }
+
+  handleNameFocused(): void {
+    this.nameInFocus = true;
   }
 
   async saveConfig(): Promise<void> {
@@ -420,6 +454,7 @@ export class ListConfig extends MobxLitElement {
                       <ss-input
                         ?unsaved=${!this.inSync}
                         @input-changed=${this.handleNameChanged}
+                        @input-focused=${this.handleNameFocused}
                         @input-blurred=${this.handleNameBlurred}
                         @input-submitted=${this.handleNameSubmitted}
                         type=${InputType.TEXT}
