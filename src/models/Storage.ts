@@ -69,4 +69,5 @@ export interface StorageSchema {
   addEntity?(entity: RequestBody): Promise<Entity.Entity | null>;
   updateEntity?(id: number, entity: RequestBody): Promise<Entity.Entity | null>;
   deleteEntity?(id: number): Promise<boolean>;
+  getTags?(tag: string): Promise<string[]>;
 }

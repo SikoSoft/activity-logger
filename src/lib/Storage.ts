@@ -571,6 +571,11 @@ export class Storage implements StorageSchema {
   async deleteEntity(_id: number): Promise<boolean> {
     return Promise.resolve(true);
   }
+
+  @delegateSource()
+  async getTags(_tag: string): Promise<string[]> {
+    return Promise.resolve([]);
+  }
 }
 
 export const storage = new Storage();

@@ -286,6 +286,15 @@ export class NetworkStorage implements StorageSchema {
     }
     return false;
   }
+
+  async getTags(tag: string): Promise<string[]> {
+    const result = await api.get<{ tags: string[] }>(`tag/${tag}`);
+
+    if (result && result.isOk) {
+      return result.response.tags;
+    }
+    return [];
+  }
 }
 
 export const networkStorage = new NetworkStorage();

@@ -9,13 +9,11 @@ import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import {
   DataType,
   EntityConfig,
-  Entity,
   EntityProperty,
   PropertyDataValue,
   EntityPropertyConfig,
 } from 'api-spec/models/Entity';
 import { appState } from '@/state';
-import { api } from '@/lib/Api';
 import { ViewElement } from '@/lib/ViewElement';
 import {
   EntityFormProp,
@@ -604,9 +602,9 @@ export class EntityForm extends ViewElement {
     let tags: string[] = [];
 
     if (value.length >= this.minLengthForSuggestion) {
-      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      const result = await storage.getTags(value);
       if (result) {
-        tags = result.response.tags;
+        tags = result;
       }
     }
 
