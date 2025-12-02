@@ -19,7 +19,11 @@ const isThemesUpdatedEvent = (e: Event): e is ThemesUpdatedEvent => {
   return (e as ThemesUpdatedEvent).type === themesUpdatedEventName;
 };
 
-function adoptStyles(element: ThemedElement, themeNames: string[]): void {
+function adoptStyles(
+  element: ThemedElement,
+  themeNames: string[],
+  requestUpdate = true,
+): void {
   const root = element.shadowRoot as ShadowRoot | null;
   if (!root || !('adoptedStyleSheets' in root)) {
     return;
@@ -34,7 +38,10 @@ function adoptStyles(element: ThemedElement, themeNames: string[]): void {
   }
 
   root.adoptedStyleSheets = [...element.initialAdoptStyles, ...activeSheets];
-  element.requestUpdate();
+
+  if (requestUpdate) {
+    element.requestUpdate();
+  }
 }
 
 export function themed(): <T extends new (...args: unknown[]) => LitElement>(
@@ -57,7 +64,7 @@ export function themed(): <T extends new (...args: unknown[]) => LitElement>(
       if (contentNode) {
         classes = [...contentNode.classList];
       }
-      adoptStyles(this, classes);
+      adoptStyles(this, classes, false);
 
       window.addEventListener(themesUpdatedEventName, (e: Event) => {
         if (!isThemesUpdatedEvent(e)) {
