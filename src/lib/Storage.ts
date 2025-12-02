@@ -23,6 +23,7 @@ import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
+import { RequestBody } from '@/components/entity-form/entity-form.models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -551,6 +552,24 @@ export class Storage implements StorageSchema {
     }
 
     return theme;
+  }
+
+  @delegateSource()
+  async addEntity(_entity: RequestBody): Promise<Entity.Entity | null> {
+    return Promise.resolve(null);
+  }
+
+  @delegateSource()
+  async updateEntity(
+    _id: number,
+    _entity: RequestBody,
+  ): Promise<Entity.Entity | null> {
+    return Promise.resolve(null);
+  }
+
+  @delegateSource()
+  async deleteEntity(_id: number): Promise<boolean> {
+    return Promise.resolve(true);
   }
 }
 

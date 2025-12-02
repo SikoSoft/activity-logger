@@ -6,6 +6,7 @@ import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
+import { RequestBody } from '@/components/entity-form/entity-form.models';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -246,6 +247,39 @@ export class NetworkStorage implements StorageSchema {
       ExportDataContents & { timeZone: number },
       null
     >('data/import', { ...data, timeZone: new Date().getTimezoneOffset() });
+
+    if (result && result.isOk) {
+      return true;
+    }
+    return false;
+  }
+
+  async addEntity(payload: RequestBody): Promise<Entity.Entity | null> {
+    const result = await api.put<RequestBody, Entity.Entity>('entity', payload);
+
+    if (result && result.isOk) {
+      return result.response;
+    }
+    return null;
+  }
+
+  async updateEntity(
+    id: number,
+    payload: RequestBody,
+  ): Promise<Entity.Entity | null> {
+    const result = await api.put<RequestBody, Entity.Entity>(
+      `entity/${id}`,
+      payload,
+    );
+
+    if (result && result.isOk) {
+      return result.response;
+    }
+    return null;
+  }
+
+  async deleteEntity(id: number): Promise<boolean> {
+    const result = await api.delete<null>(`entity/${id}`);
 
     if (result && result.isOk) {
       return true;

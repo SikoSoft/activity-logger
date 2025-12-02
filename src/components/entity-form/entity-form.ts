@@ -61,6 +61,7 @@ import { SortUpdatedEvent } from '@ss/ui/components/sortable-list.events';
 import { reaction } from 'mobx';
 import { themed } from '@/lib/Theme';
 import { PropertyField } from '@/components/entity-form/property-field/property-field';
+import { storage } from '@/lib/Storage';
 
 @themed()
 @customElement('entity-form')
@@ -476,13 +477,13 @@ export class EntityForm extends ViewElement {
         };
 
         const result = this.entityId
-          ? await api.put<RequestBody, Entity>(this.apiUrl, payload)
-          : await api.post<RequestBody, Entity>(this.apiUrl, payload);
+          ? await storage.updateEntity(this.entityId, payload)
+          : await storage.addEntity(payload);
 
         this.reset();
         this.loading = false;
 
-        if (!result || !result.isOk) {
+        if (!result) {
           addToast(translate('entityFailedToSave'), NotificationType.ERROR);
           return;
         }
@@ -491,7 +492,7 @@ export class EntityForm extends ViewElement {
           new EntityItemUpdatedEvent({
             id: this.entityId,
             tags: this.tags,
-            properties: result.response.properties,
+            properties: result.properties,
           }),
         );
 
@@ -550,7 +551,7 @@ export class EntityForm extends ViewElement {
     this.loading = true;
 
     try {
-      await api.delete(this.apiUrl);
+      await storage.deleteEntity(this.entityId);
 
       addToast(translate('removed'), NotificationType.INFO);
     } catch (error) {

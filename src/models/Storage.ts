@@ -4,6 +4,7 @@ import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { ThemeName } from './Page';
+import { RequestBody } from '@/components/entity-form/entity-form.models';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -65,4 +66,7 @@ export interface StorageSchema {
   clearData?(nukedDataTypes: NukedDataType[]): Promise<void>;
   setTheme?(theme: ThemeName): void;
   getTheme?(): ThemeName;
+  addEntity?(entity: RequestBody): Promise<Entity.Entity | null>;
+  updateEntity?(id: number, entity: RequestBody): Promise<Entity.Entity | null>;
+  deleteEntity?(id: number): Promise<boolean>;
 }
