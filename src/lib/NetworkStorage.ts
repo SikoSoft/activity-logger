@@ -1,6 +1,12 @@
-import { ListConfig, ListSort, ListFilter } from 'api-spec/models/List';
+import {
+  ListConfig,
+  ListSort,
+  ListFilter,
+  ListSortDirection,
+  ListSortNativeProperty,
+} from 'api-spec/models/List';
 import { api } from './Api';
-import { StorageSchema } from '@/models/Storage';
+import { StorageResult, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
@@ -322,6 +328,64 @@ export class NetworkStorage implements StorageSchema {
       return result.response.suggestions;
     }
     return [];
+  }
+
+  async getEntities(
+    start: number,
+    perPage: number,
+    listFilter: ListFilter,
+    listSort: ListSort,
+  ): Promise<
+    StorageResult<{
+      entities: Entity.Entity[];
+      total: number;
+    }>
+  > {
+    const sortIsDefault = (): boolean => {
+      return (
+        listSort.direction === ListSortDirection.DESC &&
+        listSort.property === ListSortNativeProperty.CREATED_AT
+      );
+    };
+
+    const getUrl = (more = false): string => {
+      if (more) {
+        start += perPage;
+      }
+
+      const queryParams = {
+        perPage: `${perPage}`,
+        ...(start > 0 ? { start: `${start}` } : {}),
+        ...(!listFilter.includeAll
+          ? { filter: JSON.stringify(listFilter) }
+          : {}),
+        ...(!sortIsDefault() ? { sort: JSON.stringify(listSort) } : {}),
+      };
+
+      const url = `entity${
+        Object.keys(queryParams).length
+          ? `?${new URLSearchParams(queryParams)}`
+          : ''
+      }`;
+
+      return url;
+    };
+
+    const result = await api.get<{ entities: Entity.Entity[]; total: number }>(
+      getUrl(),
+    );
+
+    if (result && result.isOk) {
+      return {
+        isOk: true,
+        value: {
+          entities: result.response.entities,
+          total: result.response.total,
+        },
+      };
+    }
+
+    return { isOk: false, error: new Error('Failed to fetch entities') };
   }
 }
 

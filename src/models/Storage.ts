@@ -25,6 +25,18 @@ export enum StorageItemKey {
   THEME = 'theme',
 }
 
+export type StorageOkResult<T> = {
+  isOk: true;
+  value: T;
+};
+
+export type StorageErrorResult = {
+  isOk: false;
+  error: Error;
+};
+
+export type StorageResult<T> = StorageOkResult<T> | StorageErrorResult;
+
 export interface StorageSchema {
   setAuthToken?(authToken: string): void;
   getAuthToken?(): string;
@@ -76,4 +88,15 @@ export interface StorageSchema {
     propertyConfigId: number,
     query: string,
   ): Promise<string[]>;
+  getEntities?(
+    start: number,
+    perPage: number,
+    listFilter: ListFilter,
+    listSort: ListSort,
+  ): Promise<
+    StorageResult<{
+      entities: Entity.Entity[];
+      total: number;
+    }>
+  >;
 }

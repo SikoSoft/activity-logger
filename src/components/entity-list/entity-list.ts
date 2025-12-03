@@ -34,6 +34,7 @@ import {
   entityListLoadEventName,
   entityListSyncEventName,
 } from './entity-list.models';
+import { storage } from '@/lib/Storage';
 
 @themed()
 @customElement('entity-list')
@@ -213,22 +214,24 @@ export class EntityList extends ViewElement {
       const url = this.getUrl(more);
       this.state.setLastListUrl(url);
 
-      const result = await api.get<{
-        entities: Entity[];
-        total: number;
-      }>(url);
+      const result = await storage.getEntities(
+        this.start,
+        this.perPage,
+        this.state.listFilter,
+        this.state.listSort,
+      );
 
-      if (result) {
-        if (result.response.entities) {
+      if (result.isOk) {
+        if (result.value.entities) {
           this.state.setListEntities(
             more
-              ? [...this.state.listEntities, ...result.response.entities]
-              : [...result.response.entities],
+              ? [...this.state.listEntities, ...result.value.entities]
+              : [...result.value.entities],
           );
         }
 
-        if (result.response.total) {
-          this.total = result.response.total;
+        if (result.value.total) {
+          this.total = result.value.total;
         }
       }
     } catch (error) {

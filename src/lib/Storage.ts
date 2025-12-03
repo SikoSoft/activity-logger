@@ -17,7 +17,7 @@ import {
   defaultPageView,
   defaultTheme,
 } from '@/models/Page';
-import { StorageItemKey, StorageSchema } from '@/models/Storage';
+import { StorageItemKey, StorageResult, StorageSchema } from '@/models/Storage';
 import { Setting } from 'api-spec/models/Setting';
 import { EntityConfig, EntityPropertyConfig } from 'api-spec/models/Entity';
 import { Entity } from 'api-spec/models';
@@ -589,6 +589,21 @@ export class Storage implements StorageSchema {
     _query: string,
   ): Promise<string[]> {
     return Promise.resolve([]);
+  }
+
+  @delegateSource()
+  async getEntities(
+    _start: number,
+    _perPage: number,
+    _listFilter: ListFilter,
+    _listSort: ListSort,
+  ): Promise<
+    StorageResult<{
+      entities: Entity.Entity[];
+      total: number;
+    }>
+  > {
+    return Promise.resolve({ isOk: true, value: { entities: [], total: 0 } });
   }
 }
 

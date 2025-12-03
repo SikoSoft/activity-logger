@@ -5,7 +5,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { ListFilterType } from 'api-spec/models/List';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
-import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { translate } from '@/lib/Localization';
 
@@ -16,6 +15,7 @@ import {
 import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events';
 
 import '@ss/ui/components/tag-manager';
+import { storage } from '@/lib/Storage';
 
 @customElement('tag-filters')
 export class TagFilters extends MobxLitElement {
@@ -62,9 +62,9 @@ export class TagFilters extends MobxLitElement {
     let tags: string[] = [];
 
     if (value.length >= this.minLengthForSuggestion) {
-      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      const result = await storage.getTags(value);
       if (result) {
-        tags = result.response.tags;
+        tags = result;
       }
     }
 

@@ -13,7 +13,6 @@ import {
 } from 'api-spec/models/List';
 import { translate } from '@/lib/Localization';
 
-import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { SavedListFilter, storage } from '@/lib/Storage';
 import { addToast } from '@/lib/Util';
@@ -271,9 +270,9 @@ export class ListFilter extends MobxLitElement {
     let tags: string[] = [];
 
     if (value.length >= this.minLengthForSuggestion) {
-      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      const result = await storage.getTags(value);
       if (result) {
-        tags = result.response.tags;
+        tags = result;
       }
     }
 
