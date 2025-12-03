@@ -263,7 +263,10 @@ export class NetworkStorage implements StorageSchema {
   }
 
   async addEntity(payload: RequestBody): Promise<Entity.Entity | null> {
-    const result = await api.put<RequestBody, Entity.Entity>('entity', payload);
+    const result = await api.post<RequestBody, Entity.Entity>(
+      'entity',
+      payload,
+    );
 
     if (result && result.isOk) {
       return result.response;
