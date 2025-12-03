@@ -309,6 +309,20 @@ export class NetworkStorage implements StorageSchema {
     }
     return false;
   }
+
+  async getPropertySuggestions(
+    propertyConfigId: number,
+    query: string,
+  ): Promise<string[]> {
+    const result = await api.get<{ suggestions: string[] }>(
+      `propertySuggestion/${propertyConfigId}/${query}`,
+    );
+
+    if (result && result.isOk) {
+      return result.response.suggestions;
+    }
+    return [];
+  }
 }
 
 export const networkStorage = new NetworkStorage();

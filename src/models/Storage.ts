@@ -72,4 +72,8 @@ export interface StorageSchema {
   deleteEntity?(id: number): Promise<boolean>;
   getTags?(tag: string): Promise<string[]>;
   bulkOperation?(payload: BulkOperationPayload): Promise<boolean>;
+  getPropertySuggestions?(
+    propertyConfigId: number,
+    query: string,
+  ): Promise<string[]>;
 }

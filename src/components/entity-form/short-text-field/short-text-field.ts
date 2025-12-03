@@ -18,8 +18,8 @@ import {
   shortTextFieldProps,
   ShortTextLastInput,
 } from './short-text-field.models';
-import { api } from '@/lib/Api';
 import { SSInput } from '@ss/ui/components/ss-input';
+import { storage } from '@/lib/Storage';
 
 const minLengthForSuggestion = 1;
 
@@ -84,11 +84,12 @@ export class ShortTextField extends LitElement {
       let suggestions: string[] = [];
 
       if (this._value.length >= minLengthForSuggestion) {
-        const result = await api.get<{ suggestions: string[] }>(
-          `propertySuggestion/${this.propertyConfigId}/${this._value}`,
+        const result = await storage.getPropertySuggestions(
+          this[ShortTextFieldProp.PROPERTY_CONFIG_ID],
+          this._value,
         );
         if (result) {
-          suggestions = result.response.suggestions;
+          suggestions = result;
         }
       }
 

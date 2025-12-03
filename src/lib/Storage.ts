@@ -582,6 +582,14 @@ export class Storage implements StorageSchema {
   async bulkOperation(_payload: BulkOperationPayload): Promise<boolean> {
     return Promise.resolve(true);
   }
+
+  @delegateSource()
+  async getPropertySuggestions(
+    _propertyConfigId: number,
+    _query: string,
+  ): Promise<string[]> {
+    return Promise.resolve([]);
+  }
 }
 
 export const storage = new Storage();
