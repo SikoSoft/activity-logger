@@ -7,6 +7,8 @@ import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
+import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
+import { BulkOperation } from 'api-spec/models/Operation';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -294,6 +296,18 @@ export class NetworkStorage implements StorageSchema {
       return result.response.tags;
     }
     return [];
+  }
+
+  async bulkOperation(payload: BulkOperationPayload): Promise<boolean> {
+    const result = await api.post<BulkOperationPayload, BulkOperation>(
+      'operation',
+      payload,
+    );
+
+    if (result && result.isOk) {
+      return true;
+    }
+    return false;
   }
 }
 

@@ -5,12 +5,11 @@ import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { translate } from '@/lib/Localization';
-import { BulkOperation, OperationType } from 'api-spec/models/Operation';
+import { OperationType } from 'api-spec/models/Operation';
 import { SettingName, TagSuggestions } from 'api-spec/models/Setting';
 import { addToast } from '@/lib/Util';
-import { api } from '@/lib/Api';
 import { appState } from '@/state';
-import { BulkOperationPayload, taggingOperations } from './bulk-manager.models';
+import { taggingOperations } from './bulk-manager.models';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { SelectChangedEvent } from '@ss/ui/components/ss-select.events';
@@ -21,6 +20,7 @@ import { TagSuggestionsRequestedEvent } from '@ss/ui/components/tag-input.events
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/tag-manager';
 import { themed } from '@/lib/Theme';
+import { storage } from '@/lib/Storage';
 
 @themed()
 @customElement('bulk-manager')
@@ -88,7 +88,7 @@ export class BulkManager extends MobxLitElement {
   }
 
   private async handlePerformOperation(): Promise<void> {
-    await api.post<BulkOperationPayload, BulkOperation>('operation', {
+    await storage.bulkOperation({
       operation: { tags: this.tags, type: this.operationType },
       actions: this.state.selectedActions,
     });
@@ -130,9 +130,9 @@ export class BulkManager extends MobxLitElement {
     let tags: string[] = [];
 
     if (value.length >= this.minLengthForSuggestion) {
-      const result = await api.get<{ tags: string[] }>(`tag/${value}`);
+      const result = await storage.getTags(value);
       if (result) {
-        tags = result.response.tags;
+        tags = result;
       }
     }
 

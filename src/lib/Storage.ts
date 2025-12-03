@@ -24,6 +24,7 @@ import { Entity } from 'api-spec/models';
 import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
+import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -575,6 +576,11 @@ export class Storage implements StorageSchema {
   @delegateSource()
   async getTags(_tag: string): Promise<string[]> {
     return Promise.resolve([]);
+  }
+
+  @delegateSource()
+  async bulkOperation(_payload: BulkOperationPayload): Promise<boolean> {
+    return Promise.resolve(true);
   }
 }
 

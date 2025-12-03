@@ -5,6 +5,7 @@ import { Entity } from 'api-spec/models';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { ThemeName } from './Page';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
+import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -70,4 +71,5 @@ export interface StorageSchema {
   updateEntity?(id: number, entity: RequestBody): Promise<Entity.Entity | null>;
   deleteEntity?(id: number): Promise<boolean>;
   getTags?(tag: string): Promise<string[]>;
+  bulkOperation?(payload: BulkOperationPayload): Promise<boolean>;
 }
