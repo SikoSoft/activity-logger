@@ -239,6 +239,13 @@ export const xmasStyles = [
       --tabs-header-hover-bg-color: #080;
       --tabs-active-header-bg-color: #161;
     }
+
+    .list-config .name {
+      font-size: 5rem;
+      ss-input::part(input) {
+        font-family: 'Lavishly Yours', cursive;
+      }
+    }
   `,
 ];
 
