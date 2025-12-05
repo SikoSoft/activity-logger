@@ -9,7 +9,7 @@ env:
   PACKAGE_PATH: '.'
   NODE_VERSION: '20.x'
   APP_BASE_API_URL: https://sikosoft2.azurewebsites.net/api/
-  BASE_URL: /food/
+  BASE_URL: /orbit/
 
 jobs:
   build-and-deploy:
