@@ -7,8 +7,6 @@ import {
   ListSortDirection,
   ListSortNativeProperty,
 } from 'api-spec/models/List';
-import { Entity } from 'api-spec/models/Entity';
-import { api } from '@/lib/Api';
 import { appState } from '@/state';
 import { ViewElement } from '@/lib/ViewElement';
 import { translate } from '@/lib/Localization';
@@ -35,6 +33,7 @@ import {
   entityListSyncEventName,
 } from './entity-list.models';
 import { storage } from '@/lib/Storage';
+import { reaction } from 'mobx';
 
 @themed()
 @customElement('entity-list')
@@ -125,11 +124,15 @@ export class EntityList extends ViewElement {
       this.sync();
     });
 
-    const urlHasChanged = this.state.lastListUrl !== this.getUrl();
-
-    if (urlHasChanged) {
-      this.state.setListEntities([]);
-    }
+    reaction(
+      () => this.state.listConfig,
+      () => {
+        this.state.setListEntities([]);
+      },
+      {
+        fireImmediately: true,
+      },
+    );
 
     await this.load();
 
@@ -148,7 +151,6 @@ export class EntityList extends ViewElement {
       this.start = 0;
     }
 
-    //this.listFilter.sync();
     this.load();
   }
 
@@ -182,38 +184,10 @@ export class EntityList extends ViewElement {
     }
   }
 
-  private getUrl(more = false): string {
-    if (more) {
-      this.start += this.perPage;
-    }
-
-    const queryParams = {
-      perPage: `${this.perPage}`,
-      ...(this.start > 0 ? { start: `${this.start}` } : {}),
-      ...(!this.state.listFilter.includeAll
-        ? { filter: JSON.stringify(this.state.listFilter) }
-        : {}),
-      ...(!this.sortIsDefault
-        ? { sort: JSON.stringify(this.state.listSort) }
-        : {}),
-    };
-
-    const url = `entity${
-      Object.keys(queryParams).length
-        ? `?${new URLSearchParams(queryParams)}`
-        : ''
-    }`;
-
-    return url;
-  }
-
   async load(more = false): Promise<void> {
     this.loading = true;
 
     try {
-      const url = this.getUrl(more);
-      this.state.setLastListUrl(url);
-
       const result = await storage.getEntities(
         this.start,
         this.perPage,
