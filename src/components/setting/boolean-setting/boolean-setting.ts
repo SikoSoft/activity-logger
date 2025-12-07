@@ -45,7 +45,7 @@ export class BooleanSetting extends LitElement {
         <label>${this.name}</label>
 
         <ss-toggle
-          on=${this.value}
+          ?on=${this.value}
           @toggle-changed=${this.handleToggleChanged}
         ></ss-toggle>
       </div>

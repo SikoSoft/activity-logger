@@ -39,16 +39,12 @@ export class SettingForm extends MobxLitElement {
 
   renderSetting(setting: SettingConfig): TemplateResult {
     switch (setting.control.type) {
-      /*
       case ControlType.BOOLEAN:
         return html`<boolean-setting
           name=${setting.name}
-          ?value=${setting.value}
-          @setting-updated=${(e: SettingUpdatedEvent<boolean>) => {
-            this._updateSetting({ name: setting.name, value: e.detail });
-          }}
+          .value=${this.state.listConfig.setting[setting.name]}
+          @setting-updated=${this.handleSettingUpdated}
         ></boolean-setting>`;
-        */
       case ControlType.NUMBER:
         return html`<number-setting
           name=${setting.name}

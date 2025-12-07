@@ -310,6 +310,7 @@ export class ListConfig extends MobxLitElement {
       userId: '',
       id: this.id,
       name: this.name,
+      public: false,
       filter: this.state.listFilter,
       sort: this.state.listSort,
       setting: this.state.listSetting,
