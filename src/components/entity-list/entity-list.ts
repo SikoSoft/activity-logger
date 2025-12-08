@@ -31,7 +31,7 @@ import { themed } from '@/lib/Theme';
 import {
   entityListLoadEventName,
   entityListSyncEventName,
-} from './entity-list.models';
+} from './entity-list.events';
 import { storage } from '@/lib/Storage';
 import { reaction } from 'mobx';
 

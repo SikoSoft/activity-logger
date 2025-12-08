@@ -1,27 +1,13 @@
-export const entityListLoadEventName = 'entity-list-load';
+import { PropConfigMap, PropTypes } from '@/models/Prop';
+import { Entity } from 'api-spec/models/Entity';
 
-export type EntityListLoadPayload = Record<string, never>;
+export enum EntityListProp {}
 
-export class EntityListLoadEvent extends CustomEvent<EntityListLoadPayload> {
-  constructor(detail: EntityListLoadPayload = {}) {
-    super(entityListLoadEventName, {
-      detail,
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
+export interface EntityListProps extends PropTypes {}
 
-export const entityListSyncEventName = 'entity-list-sync';
+export const entityListProps: PropConfigMap<EntityListProps> = {};
 
-export type EntityListSyncPayload = Record<string, never>;
-
-export class EntityListSyncEvent extends CustomEvent<EntityListSyncPayload> {
-  constructor(detail: EntityListSyncPayload = {}) {
-    super(entityListSyncEventName, {
-      detail,
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
+export type EntityListResult = {
+  entities: Entity[];
+  total: number;
+};

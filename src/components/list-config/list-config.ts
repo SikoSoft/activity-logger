@@ -42,7 +42,7 @@ import { ListSortUpdatedEvent } from '../list-sort/list-sort.events';
 import {
   EntityListLoadEvent,
   EntityListSyncEvent,
-} from '../entity-list/entity-list.models';
+} from '../entity-list/entity-list.events';
 
 @themed()
 @customElement('list-config')
