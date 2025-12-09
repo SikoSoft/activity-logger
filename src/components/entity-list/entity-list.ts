@@ -187,6 +187,10 @@ export class EntityList extends ViewElement {
   async load(more = false): Promise<void> {
     this.loading = true;
 
+    if (more) {
+      this.start += this.perPage;
+    }
+
     try {
       const result = await storage.getEntities(
         this.start,
