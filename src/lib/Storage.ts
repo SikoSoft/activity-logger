@@ -601,6 +601,11 @@ export class Storage implements StorageSchema {
   ): Promise<StorageResult<EntityListResult>> {
     return Promise.resolve({ isOk: true, value: { entities: [], total: 0 } });
   }
+
+  @delegateSource()
+  async getList(id: string): Promise<StorageResult<Entity.Entity[]>> {
+    return Promise.resolve({ isOk: true, value: [] });
+  }
 }
 
 export const storage = new Storage();

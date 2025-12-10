@@ -393,6 +393,19 @@ export class NetworkStorage implements StorageSchema {
 
     return { isOk: false, error: new Error('Failed to fetch entities') };
   }
+
+  async getList(id: string): Promise<StorageResult<Entity.Entity[]>> {
+    const result = await api.get<{ entities: Entity.Entity[] }>(`list/${id}`);
+
+    if (result && result.isOk) {
+      return {
+        isOk: true,
+        value: result.response.entities,
+      };
+    }
+
+    return { isOk: false, error: new Error('Failed to fetch list') };
+  }
 }
 
 export const networkStorage = new NetworkStorage();

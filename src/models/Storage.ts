@@ -99,4 +99,5 @@ export interface StorageSchema {
       total: number;
     }>
   >;
+  getList(id: string): Promise<StorageResult<Entity.Entity[]>>;
 }
