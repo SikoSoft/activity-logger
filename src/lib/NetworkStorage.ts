@@ -15,6 +15,7 @@ import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
 import { BulkOperation } from 'api-spec/models/Operation';
+import { EntityListResult } from '@/components/entity-list/entity-list.models';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -338,12 +339,14 @@ export class NetworkStorage implements StorageSchema {
     perPage: number,
     listFilter: ListFilter,
     listSort: ListSort,
-  ): Promise<
-    StorageResult<{
-      entities: Entity.Entity[];
-      total: number;
-    }>
-  > {
+  ): Promise<StorageResult<EntityListResult>> {
+    console.log('NetworkStorage.getEntities called with:', {
+      start,
+      perPage,
+      listFilter,
+      listSort,
+    });
+
     const sortIsDefault = (): boolean => {
       return (
         listSort.direction === ListSortDirection.DESC &&

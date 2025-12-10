@@ -25,6 +25,7 @@ import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
+import { EntityListResult } from '@/components/entity-list/entity-list.models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -597,12 +598,7 @@ export class Storage implements StorageSchema {
     _perPage: number,
     _listFilter: ListFilter,
     _listSort: ListSort,
-  ): Promise<
-    StorageResult<{
-      entities: Entity.Entity[];
-      total: number;
-    }>
-  > {
+  ): Promise<StorageResult<EntityListResult>> {
     return Promise.resolve({ isOk: true, value: { entities: [], total: 0 } });
   }
 }

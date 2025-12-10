@@ -34,6 +34,7 @@ import {
 } from './entity-list.events';
 import { storage } from '@/lib/Storage';
 import { reaction } from 'mobx';
+import { EntityListResult } from './entity-list.models';
 
 @themed()
 @customElement('entity-list')
@@ -67,7 +68,6 @@ export class EntityList extends ViewElement {
 
   private scrollHandler: EventListener = () => this.handleScroll();
   @query('#lazy-loader') lazyLoader!: HTMLDivElement;
-  //@query('list-filter') listFilter!: ListFilter;
 
   @state() start: number = 0;
   @state() total: number = 0;
@@ -192,32 +192,34 @@ export class EntityList extends ViewElement {
     }
 
     try {
-      const result = await storage.getEntities(
-        this.start,
-        this.perPage,
-        this.state.listFilter,
-        this.state.listSort,
+      const entityResult = await this.getEntities();
+      this.state.setListEntities(
+        more
+          ? [...this.state.listEntities, ...entityResult.entities]
+          : [...entityResult.entities],
       );
-
-      if (result.isOk) {
-        if (result.value.entities) {
-          this.state.setListEntities(
-            more
-              ? [...this.state.listEntities, ...result.value.entities]
-              : [...result.value.entities],
-          );
-        }
-
-        if (result.value.total) {
-          this.total = result.value.total;
-        }
-      }
+      this.total = entityResult.total;
     } catch (error) {
       console.error(`Failed to get list: ${JSON.stringify(error)}`);
     } finally {
       this.ready = true;
       this.loading = false;
     }
+  }
+
+  async getEntities(): Promise<EntityListResult> {
+    const result = await storage.getEntities(
+      this.start,
+      this.perPage,
+      this.state.listFilter,
+      this.state.listSort,
+    );
+
+    if (result.isOk) {
+      return result.value;
+    }
+
+    throw result.error;
   }
 
   private handlePageChanged(e: PageChangedEvent): void {
