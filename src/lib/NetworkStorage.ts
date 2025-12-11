@@ -15,7 +15,10 @@ import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
 import { BulkOperation } from 'api-spec/models/Operation';
-import { EntityListResult } from '@/components/entity-list/entity-list.models';
+import {
+  EntityListResult,
+  PublicEntityListResult,
+} from '@/components/entity-list/entity-list.models';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -394,13 +397,28 @@ export class NetworkStorage implements StorageSchema {
     return { isOk: false, error: new Error('Failed to fetch entities') };
   }
 
-  async getList(id: string): Promise<StorageResult<Entity.Entity[]>> {
-    const result = await api.get<{ entities: Entity.Entity[] }>(`list/${id}`);
+  async getList(
+    id: string,
+    start: number,
+    perPage: number,
+  ): Promise<StorageResult<PublicEntityListResult>> {
+    const queryParams = {
+      perPage: `${perPage}`,
+      ...(start > 0 ? { start: `${start}` } : {}),
+    };
+
+    const url = `list/${id}${
+      Object.keys(queryParams).length
+        ? `?${new URLSearchParams(queryParams)}`
+        : ''
+    }`;
+
+    const result = await api.get<PublicEntityListResult>(url);
 
     if (result && result.isOk) {
       return {
         isOk: true,
-        value: result.response.entities,
+        value: result.response,
       };
     }
 

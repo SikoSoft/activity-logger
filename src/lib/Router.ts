@@ -1,9 +1,15 @@
 import { Route, Router, RouterState } from '@/models/Router';
 import { observable, action } from 'mobx';
 
-export const routerState: RouterState = observable({ currentPath: '/' });
+export const routerState: RouterState = observable({
+  currentPath: '/',
+  params: {},
+});
 const setCurrentPath = action((path: string) => {
   routerState.currentPath = path;
+});
+const setParams = action((params: Record<string, string>) => {
+  routerState.params = params;
 });
 
 function pathToRegex(path: string): { regex: RegExp; keys: string[] } {
@@ -93,10 +99,14 @@ export function setupRouter(
         outlet.innerHTML = '';
         const el = document.createElement(route.component);
 
+        const params: Record<string, string> = {};
+
         keys.forEach((k, i) => {
           const val = decodeURIComponent(routeMatch[i + 1] || '');
+          params[k] = val;
           el.setAttribute(k, val);
         });
+        setParams(params);
         outlet.appendChild(el);
         return;
       }

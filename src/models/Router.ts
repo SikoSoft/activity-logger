@@ -13,4 +13,5 @@ export type Router = {
 
 export type RouterState = {
   currentPath: string;
+  params: Record<string, string>;
 };

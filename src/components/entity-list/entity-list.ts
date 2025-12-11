@@ -1,4 +1,4 @@
-import { css, html, nothing, TemplateResult } from 'lit';
+import { css, html, nothing, PropertyValues, TemplateResult } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 
@@ -133,17 +133,23 @@ export class EntityList extends ViewElement {
         fireImmediately: true,
       },
     );
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener('scroll', this.scrollHandler);
+  }
+
+  protected async firstUpdated(
+    changedProperties: PropertyValues,
+  ): Promise<void> {
+    super.firstUpdated(changedProperties);
 
     await this.load();
 
     while (this.lazyLoaderIsVisible && !this.reachedEnd) {
       await this.handleScroll();
     }
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    window.removeEventListener('scroll', this.scrollHandler);
   }
 
   sync(reset = false): void {

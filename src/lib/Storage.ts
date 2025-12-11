@@ -25,7 +25,10 @@ import { translate } from './Localization';
 import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
-import { EntityListResult } from '@/components/entity-list/entity-list.models';
+import {
+  EntityListResult,
+  PublicEntityListResult,
+} from '@/components/entity-list/entity-list.models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -603,8 +606,20 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async getList(id: string): Promise<StorageResult<Entity.Entity[]>> {
-    return Promise.resolve({ isOk: true, value: [] });
+  async getList(
+    _id: string,
+    _start: number,
+    _perPage: number,
+  ): Promise<StorageResult<PublicEntityListResult>> {
+    return Promise.resolve({
+      isOk: true,
+      value: {
+        entities: [],
+        total: 0,
+        listConfig: {} as ListConfig,
+        entityConfigs: [] as EntityConfig[],
+      },
+    });
   }
 }
 

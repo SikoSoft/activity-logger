@@ -6,6 +6,7 @@ import { ExportDataContents, NukedDataType } from 'api-spec/models/Data';
 import { ThemeName } from './Page';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
+import { EntityListResult } from '@/components/entity-list/entity-list.models';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -93,11 +94,10 @@ export interface StorageSchema {
     perPage: number,
     listFilter: ListFilter,
     listSort: ListSort,
-  ): Promise<
-    StorageResult<{
-      entities: Entity.Entity[];
-      total: number;
-    }>
-  >;
-  getList(id: string): Promise<StorageResult<Entity.Entity[]>>;
+  ): Promise<StorageResult<EntityListResult>>;
+  getList(
+    id: string,
+    start: number,
+    perPage: number,
+  ): Promise<StorageResult<EntityListResult>>;
 }
