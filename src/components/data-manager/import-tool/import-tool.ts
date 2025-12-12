@@ -132,7 +132,6 @@ export class ImportTool extends MobxLitElement {
   }
 
   handleFileSelected(event: Event): void {
-    //console.log('handleFileSelected');
     const fileInput = event.target as HTMLInputElement;
     const file = fileInput.files?.[0];
 

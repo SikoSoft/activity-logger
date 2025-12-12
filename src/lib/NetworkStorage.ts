@@ -343,13 +343,6 @@ export class NetworkStorage implements StorageSchema {
     listFilter: ListFilter,
     listSort: ListSort,
   ): Promise<StorageResult<EntityListResult>> {
-    console.log('NetworkStorage.getEntities called with:', {
-      start,
-      perPage,
-      listFilter,
-      listSort,
-    });
-
     const sortIsDefault = (): boolean => {
       return (
         listSort.direction === ListSortDirection.DESC &&
