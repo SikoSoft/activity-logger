@@ -1,5 +1,3 @@
-import { ViewElement } from '@/lib/ViewElement';
-import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { EntityList } from '@/components/entity-list/entity-list';
 import { EntityListResult } from '../entity-list/entity-list.models';
@@ -16,8 +14,6 @@ export class PublicEntityList extends EntityList {
 
   constructor() {
     super();
-
-    //this.state.setListConfigs();
 
     this.rx.add({
       expr: () => routerState.params,
