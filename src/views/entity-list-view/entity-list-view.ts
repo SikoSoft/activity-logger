@@ -5,6 +5,7 @@ import '@/components/entity-list/entity-list';
 import '@/components/login-form/login-form';
 import '@/components/logged-in/logged-in';
 import '@/components/logged-out/logged-out';
+import '@/components/user-header/user-header';
 import { ViewElement } from '@/lib/ViewElement';
 import { EntityList } from '@/components/entity-list/entity-list';
 
@@ -19,7 +20,8 @@ export class EntityListView extends ViewElement {
     }
   }
   render(): TemplateResult {
-    return html` <logged-out
+    return html` <user-header></user-header>
+      <logged-out
         ><template><login-form></login-form></template
       ></logged-out>
       <logged-in

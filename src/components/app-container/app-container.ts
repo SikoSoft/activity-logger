@@ -12,7 +12,6 @@ import { OperationPerformedEvent } from '@/components/bulk-manager/bulk-manager.
 import { ListConfigChangedEvent } from '@/components/list-config/list-config.events';
 import { setupRouter } from '@/lib/Router';
 
-import '@/components/page-nav/page-nav';
 import '@/components/entity-form/entity-form';
 import '@/components/entity-list/entity-list';
 import '@/components/admin-dashboard/admin-dashboard';
@@ -20,8 +19,6 @@ import '@/components/floating-widget/floating-widget';
 import '@/components/forbidden-notice/forbidden-notice';
 import '@/components/bulk-manager/bulk-manager';
 import '@/components/list-config/list-config';
-import '@/components/logged-in/logged-in';
-import '@/components/logged-out/logged-out';
 
 import { CollapsableToggledEvent } from '@ss/ui/components/ss-collapsable.events';
 import { TabIndexChangedEvent } from '@ss/ui/components/tab-container.events';
@@ -194,23 +191,7 @@ export class AppContainer extends MobxLitElement {
         @user-logged-in=${this.handleUserLoggedIn}
         @invalid-session=${this.clearSession}
       >
-        ${this.ready
-          ? html`
-              <logged-in>
-                <template>
-                  <list-config></list-config>
-
-                  <page-nav></page-nav>
-
-                  <bulk-manager></bulk-manager>
-
-                  <floating-widget></floating-widget>
-                </template>
-              </logged-in>
-
-              ${this.routerView}
-            `
-          : nothing}
+        ${this.ready ? this.routerView : nothing}
       </div>
     `;
   }
