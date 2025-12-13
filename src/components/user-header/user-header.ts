@@ -1,6 +1,12 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+import '@/components/logged-in/logged-in';
+import '@/components/page-nav/page-nav';
+import '@/components/list-config/list-config';
+import '@/components/bulk-manager/bulk-manager';
+import '@/components/floating-widget/floating-widget';
+
 @customElement('user-header')
 export class UserHeader extends LitElement {
   render(): TemplateResult {

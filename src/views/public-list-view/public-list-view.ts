@@ -1,15 +1,28 @@
-import { html, TemplateResult } from 'lit';
-import { customElement, query } from 'lit/decorators.js';
+import { html, nothing, TemplateResult } from 'lit';
+import { customElement, query, state } from 'lit/decorators.js';
 
+import '@/components/list-config/list-config';
 import '@/components/public-entity-list/public-entity-list';
 
 import { ViewElement } from '@/lib/ViewElement';
 import { PublicEntityList } from '@/components/public-entity-list/public-entity-list';
+import { listReadEventName } from '@/components/public-entity-list/public-entity-list.events';
 
 @customElement('public-list-view')
 export class PublicListView extends ViewElement {
+  @state()
+  listReady = false;
+
   @query('public-entity-list')
   publicEntityList: PublicEntityList | undefined;
+
+  constructor() {
+    super();
+
+    this.addEventListener(listReadEventName, () => {
+      this.listReady = true;
+    });
+  }
 
   sync(reset: boolean): void {
     if (this.publicEntityList) {
@@ -17,6 +30,8 @@ export class PublicListView extends ViewElement {
     }
   }
   render(): TemplateResult {
-    return html`<public-entity-list></public-entity-list>`;
+    return html`${this.listReady ? html`<list-config></list-config>` : nothing}
+
+      <public-entity-list></public-entity-list>`;
   }
 }
