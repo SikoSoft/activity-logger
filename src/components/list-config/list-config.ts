@@ -329,8 +329,7 @@ export class ListConfig extends MobxLitElement {
 
     this.isSaving = true;
 
-    addToast(translate('configSaved'), NotificationType.SUCCESS);
-    await storage.saveListConfig({
+    const result = await storage.saveListConfig({
       userId: '',
       id: this.id,
       name: this.name,
@@ -339,6 +338,14 @@ export class ListConfig extends MobxLitElement {
       setting: this.state.listSetting,
       themes: this.state.listConfig.themes,
     });
+
+    if (!result.isOk) {
+      addToast(translate('failedToSaveListConfig'), NotificationType.ERROR);
+      this.isSaving = false;
+      return;
+    }
+
+    addToast(translate('listConfigSaved'), NotificationType.SUCCESS);
     this.state.setListConfigs(await storage.getListConfigs());
     this.isSaving = false;
   }

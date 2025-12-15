@@ -31,11 +31,25 @@ export class NetworkStorage implements StorageSchema {
     return Promise.reject();
   }
 
-  async saveListConfig(listConfig: ListConfig): Promise<void> {
-    await api.put<ListConfig, ListConfig>(
+  async saveListConfig(
+    listConfig: ListConfig,
+  ): Promise<StorageResult<ListConfig>> {
+    const result = await api.put<ListConfig, ListConfig>(
       `listConfig/${listConfig.id}`,
       listConfig,
     );
+
+    if (result && result.isOk) {
+      return {
+        isOk: true,
+        value: result.response,
+      };
+    }
+
+    return {
+      isOk: false,
+      error: new Error('Failed to save list config'),
+    };
   }
 
   async updateListSort(listConfigId: string, sort: ListSort): Promise<void> {

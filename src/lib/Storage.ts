@@ -237,7 +237,9 @@ export class Storage implements StorageSchema {
   }
 
   @delegateSource()
-  async saveListConfig(listConfig: ListConfig): Promise<void> {
+  async saveListConfig(
+    listConfig: ListConfig,
+  ): Promise<StorageResult<ListConfig>> {
     const listConfigs = await this.getListConfigs();
 
     localStorage.setItem(
@@ -248,6 +250,8 @@ export class Storage implements StorageSchema {
         ),
       ),
     );
+
+    return { isOk: true, value: listConfig };
   }
 
   @delegateSource()

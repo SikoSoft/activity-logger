@@ -173,5 +173,7 @@
   "themesSaved": "Themes have been saved successfully.",
   "availableThemes": "Available themes",
   "activeThemes": "Active themes",
-  "noThemesActive": "No themes are currently active."
+  "noThemesActive": "No themes are currently active.",
+  "listConfigSaved": "List configuration has been saved successfully.",
+  "failedToSaveListConfig": "Failed to save list configuration. Please try again."
 }

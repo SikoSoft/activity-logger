@@ -44,7 +44,7 @@ export interface StorageSchema {
   getListConfigs?(): Promise<ListConfig[]>;
   addListConfig?(): Promise<string>;
   deleteListConfig?(id: string): Promise<boolean>;
-  saveListConfig?(listConfig: ListConfig): Promise<void>;
+  saveListConfig?(listConfig: ListConfig): Promise<StorageResult<ListConfig>>;
   updateListSort?(listConfigId: string, sort: ListSort): Promise<void>;
   updateListFilter?(listConfigId: string, filter: ListFilter): Promise<void>;
   updateListThemes?(listConfigId: string, themes: string[]): Promise<void>;
