@@ -7,7 +7,7 @@ import {
   PropertyValues,
   TemplateResult,
 } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { classMap } from 'lit/directives/class-map.js';
 
@@ -43,6 +43,11 @@ import {
   EntityListLoadEvent,
   EntityListSyncEvent,
 } from '../entity-list/entity-list.events';
+import {
+  ListConfigProp,
+  listConfigProps,
+  ListConfigProps,
+} from './list-config.models';
 
 @themed()
 @customElement('list-config')
@@ -88,8 +93,8 @@ export class ListConfig extends MobxLitElement {
         }
       }
 
-      &.edit-mode .name,
-      .name:hover {
+      &:not(.view-only).edit-mode .name,
+      &:not(.view-only) .name:hover {
         ss-input::part(input) {
           font-size: 2.2rem;
           border-color: var(--input-border-color);
@@ -98,6 +103,16 @@ export class ListConfig extends MobxLitElement {
         }
         ss-input[unsaved]::part(input) {
           border-color: var(--input-unsaved-border-color);
+        }
+      }
+
+      &.view-only .name,
+      &.view-only .name:hover {
+        ss-input::part(input) {
+          cursor: default;
+          border-color: transparent;
+          background-color: transparent;
+          pointer-events: none;
         }
       }
 
@@ -193,6 +208,10 @@ export class ListConfig extends MobxLitElement {
   private state = appState;
   private isSaving: boolean = false;
 
+  @property({ type: Boolean })
+  [ListConfigProp.VIEW_ONLY]: ListConfigProps[ListConfigProp.VIEW_ONLY] =
+    listConfigProps[ListConfigProp.VIEW_ONLY].default;
+
   @state() id: string = '';
   @state() name: string = '';
   @state() ready: boolean = false;
@@ -222,6 +241,7 @@ export class ListConfig extends MobxLitElement {
       'list-config': true,
       'config-mode': this.state.selectListConfigMode,
       'edit-mode': this.state.editListConfigMode,
+      'view-only': this[ListConfigProp.VIEW_ONLY],
     };
   }
 
@@ -268,6 +288,10 @@ export class ListConfig extends MobxLitElement {
   }
 
   enableEditMode(): void {
+    if (this[ListConfigProp.VIEW_ONLY]) {
+      return;
+    }
+
     this.state.setEditListConfigMode(true);
   }
 

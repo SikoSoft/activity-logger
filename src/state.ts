@@ -231,6 +231,14 @@ export class AppState {
   }
 
   @action
+  addListConfig(listConfig: ListConfig): void {
+    this.listConfigs = [
+      ...this.listConfigs.filter(config => config.id !== listConfig.id),
+      listConfig,
+    ];
+  }
+
+  @action
   setAdvancedMode(state: boolean): void {
     this.advancedMode = state;
   }

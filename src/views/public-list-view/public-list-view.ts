@@ -30,7 +30,9 @@ export class PublicListView extends ViewElement {
     }
   }
   render(): TemplateResult {
-    return html`${this.listReady ? html`<list-config></list-config>` : nothing}
+    return html`${this.listReady
+        ? html`<list-config viewOnly></list-config>`
+        : nothing}
 
       <public-entity-list></public-entity-list>`;
   }

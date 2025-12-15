@@ -39,7 +39,7 @@ export class PublicEntityList extends EntityList {
       );
       if (listResult.isOk) {
         this.state.setEntityConfigs(listResult.value.entityConfigs);
-        this.state.setListConfigs([listResult.value.listConfig]);
+        this.state.addListConfig(listResult.value.listConfig);
         this.state.setListConfigId(this.listConfigId);
 
         return listResult.value;
