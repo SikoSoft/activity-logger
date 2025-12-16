@@ -22,6 +22,7 @@ import {
 } from '@ss/ui/components/ss-input.events';
 import { AccountCreatedEvent } from './account-form.events';
 import { themed } from '@/lib/Theme';
+import { storage } from '@/lib/Storage';
 
 @themed()
 @customElement('account-form')
@@ -76,18 +77,15 @@ export class AccountForm extends LitElement {
     }
 
     this.loading = true;
-    const result = await api.post<
-      CreateAccountRequestBody,
-      CreateAccountResponseBody
-    >('user', {
-      username: this.username,
-      password: this.password,
-      firstName: this.firstName,
-      lastName: this.lastName,
-    });
+    const result = await storage.createAccount(
+      this.username,
+      this.password,
+      this.firstName,
+      this.lastName,
+    );
 
-    if (result && result.status !== 401) {
-      this.dispatchEvent(new AccountCreatedEvent({ id: result.response.id }));
+    if (result.isOk) {
+      this.dispatchEvent(new AccountCreatedEvent({ id: result.value.id }));
       this.reset();
     }
 

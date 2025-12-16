@@ -29,6 +29,7 @@ import {
   EntityListResult,
   PublicEntityListResult,
 } from '@/components/entity-list/entity-list.models';
+import { CreateAccountResponseBody } from '@/components/account-form/account-form.models';
 
 export interface SavedListFilter {
   filter: ListFilter;
@@ -623,6 +624,19 @@ export class Storage implements StorageSchema {
         listConfig: {} as ListConfig,
         entityConfigs: [] as EntityConfig[],
       },
+    });
+  }
+
+  @delegateSource()
+  async createAccount(
+    _username: string,
+    _password: string,
+    _firstName: string,
+    _lastName: string,
+  ): Promise<StorageResult<CreateAccountResponseBody>> {
+    return Promise.resolve({
+      isOk: false,
+      error: new Error('Not implemented'),
     });
   }
 }

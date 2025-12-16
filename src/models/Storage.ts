@@ -7,6 +7,7 @@ import { ThemeName } from './Page';
 import { RequestBody } from '@/components/entity-form/entity-form.models';
 import { BulkOperationPayload } from '@/components/bulk-manager/bulk-manager.models';
 import { EntityListResult } from '@/components/entity-list/entity-list.models';
+import { CreateAccountResponseBody } from '@/components/account-form/account-form.models';
 
 export enum StorageItemKey {
   ACTIVE_LIST_FILTER_KEY = 'listFilter',
@@ -95,9 +96,15 @@ export interface StorageSchema {
     listFilter: ListFilter,
     listSort: ListSort,
   ): Promise<StorageResult<EntityListResult>>;
-  getList(
+  getList?(
     id: string,
     start: number,
     perPage: number,
   ): Promise<StorageResult<EntityListResult>>;
+  createUser?(
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<StorageResult<CreateAccountResponseBody>>;
 }

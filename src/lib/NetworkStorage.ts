@@ -19,6 +19,10 @@ import {
   EntityListResult,
   PublicEntityListResult,
 } from '@/components/entity-list/entity-list.models';
+import {
+  CreateAccountRequestBody,
+  CreateAccountResponseBody,
+} from '@/components/account-form/account-form.models';
 
 export class NetworkStorage implements StorageSchema {
   async getListConfigs(): Promise<ListConfig[]> {
@@ -430,6 +434,35 @@ export class NetworkStorage implements StorageSchema {
     }
 
     return { isOk: false, error: new Error('Failed to fetch list') };
+  }
+
+  async createAccount(
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<StorageResult<CreateAccountResponseBody>> {
+    const result = await api.post<
+      CreateAccountRequestBody,
+      CreateAccountResponseBody
+    >('user', {
+      username,
+      password,
+      firstName,
+      lastName,
+    });
+
+    if (result && result.isOk) {
+      return {
+        isOk: true,
+        value: result.response,
+      };
+    }
+
+    return {
+      isOk: false,
+      error: new Error('Failed to create account'),
+    };
   }
 }
 
