@@ -2,12 +2,9 @@ import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { translate } from '@/lib/Localization';
 
-import { api } from '@/lib/Api';
 import {
   AccountFormField,
   AccountFormFieldName,
-  CreateAccountRequestBody,
-  CreateAccountResponseBody,
   passwordFields,
 } from './account-form.models';
 import { InputType } from '@ss/ui/components/ss-input.models';
